@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>47X Performance Benchmark | Dashboard</title>
+<meta name="description" content="47X Performance Benchmark Dashboard - Composite benchmark scoring across 9 data services">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-hover: #1a2235;
+    --bg-input: #0f1629;
+    --border: #1e293b;
+    --accent: #3b82f6;
+    --accent-light: #60a5fa;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --green: #10b981;
+    --green-light: #34d399;
+    --red: #ef4444;
+    --red-light: #f87171;
+    --amber: #f59e0b;
+    --amber-light: #fbbf24;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --purple: #8b5cf6;
+    --cyan: #06b6d4;
+    --critical: #ef4444;
+    --weak: #f59e0b;
+    --average: #3b82f6;
+    --strong: #10b981;
+    --leading: #8b5cf6;
+    --focus-ring: 0 0 0 2px var(--accent);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Skip to content link for keyboard nav */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 16px;
+    z-index: 1000;
+    font-size: 14px;
+    transition: top 0.2s;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+
+  /* Focus styles for keyboard navigation */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: 4px;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-light), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  .logo-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .header-badge {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--purple);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+  }
+  .api-status {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .api-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* ── Navigation ── */
+  .nav-tabs {
+    display: flex;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 14px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--text-secondary); }
+  .nav-tab:focus-visible { box-shadow: var(--focus-ring); }
+  .nav-tab.active { color: var(--accent-light); border-bottom-color: var(--accent); }
+
+  /* ── Layout ── */
+  .content { padding: 32px 40px; max-width: 1600px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .section-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+
+  /* ── Grid layouts ── */
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 32px; }
+  .grid-9 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: rgba(59, 130, 246, 0.3); }
+  .card-label {
+    font-size: 12px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .card-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+  .card-sm .card-value { font-size: 24px; }
+  .card-delta { font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+  .card-delta.positive { color: var(--green); }
+  .card-delta.negative { color: var(--red); }
+  .card-delta.neutral { color: var(--amber); }
+
+  /* ── Score ring ── */
+  .score-ring {
+    display: flex; flex-direction: column; align-items: center; padding: 20px;
+  }
+  .score-ring-svg { width: 200px; height: 200px; }
+  .score-number {
+    font-size: 56px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-light), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .score-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+
+  /* ── Charts ── */
+  .chart-container {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 20px;
+  }
+  .chart-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .chart-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+
+  /* ── Service dimension rows ── */
+  .dim-row {
+    display: flex; align-items: center; padding: 14px 0;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+  }
+  .dim-row:last-child { border-bottom: none; }
+  .dim-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 14px; flex-shrink: 0; }
+  .dim-info { width: 170px; flex-shrink: 0; }
+  .dim-name { font-size: 13px; font-weight: 600; }
+  .dim-desc { font-size: 11px; color: var(--text-muted); }
+  .dim-bars { flex: 1; display: flex; align-items: center; gap: 10px; }
+  .dim-bar-track { flex: 1; height: 20px; background: rgba(30, 41, 59, 0.6); border-radius: 6px; overflow: hidden; position: relative; }
+  .dim-bar { height: 100%; border-radius: 6px; transition: width 0.8s ease; position: absolute; top: 0; left: 0; }
+  .dim-bar.target { background: linear-gradient(90deg, var(--accent), var(--cyan)); z-index: 2; }
+  .dim-bar.benchmark { background: linear-gradient(90deg, var(--purple), rgba(139, 92, 246, 0.4)); z-index: 1; }
+  .dim-score { width: 48px; text-align: right; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .dim-gap { width: 68px; text-align: center; font-size: 12px; font-weight: 600; flex-shrink: 0; padding: 3px 8px; border-radius: 12px; }
+  .dim-gap.above { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+  .dim-gap.below { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+  .dim-gap.at { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+  .dim-band { width: 80px; text-align: center; font-size: 11px; font-weight: 600; flex-shrink: 0; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .band-critical { background: rgba(239, 68, 68, 0.15); color: var(--critical); }
+  .band-weak { background: rgba(245, 158, 11, 0.15); color: var(--weak); }
+  .band-average { background: rgba(59, 130, 246, 0.15); color: var(--average); }
+  .band-strong { background: rgba(16, 185, 129, 0.15); color: var(--strong); }
+  .band-leading { background: rgba(139, 92, 246, 0.15); color: var(--leading); }
+
+  /* ── Confidence indicator ── */
+  .confidence { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted); }
+  .confidence-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .conf-high { background: var(--green); }
+  .conf-med { background: var(--amber); }
+  .conf-low { background: var(--red); }
+
+  /* ── Company selector ── */
+  .company-selector { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+  .company-btn {
+    padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text-secondary); cursor: pointer;
+    font-size: 13px; font-weight: 500; transition: all 0.2s;
+  }
+  .company-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+  .company-btn:focus-visible { box-shadow: var(--focus-ring); }
+  .company-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent-light); }
+
+  /* ── Recommendation cards ── */
+  .rec-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .rec-service { font-size: 14px; font-weight: 600; }
+  .rec-priority { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .priority-critical { background: rgba(239, 68, 68, 0.15); color: var(--critical); }
+  .priority-high { background: rgba(245, 158, 11, 0.15); color: var(--weak); }
+  .priority-medium { background: rgba(59, 130, 246, 0.15); color: var(--average); }
+  .priority-low { background: rgba(16, 185, 129, 0.15); color: var(--strong); }
+  .rec-interpretation { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
+  .rec-actions { display: flex; flex-direction: column; gap: 8px; }
+  .rec-action {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px; background: rgba(15, 22, 41, 0.5); border-radius: 8px;
+    font-size: 12px;
+  }
+  .rec-action-text { flex: 1; color: var(--text-secondary); }
+  .rec-action-meta { display: flex; gap: 10px; flex-shrink: 0; }
+  .rec-action-meta span { padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; }
+  .impact-high { background: rgba(239, 68, 68, 0.12); color: var(--red-light); }
+  .impact-medium { background: rgba(245, 158, 11, 0.12); color: var(--amber-light); }
+  .impact-low { background: rgba(59, 130, 246, 0.12); color: var(--accent-light); }
+  .effort-quick { background: rgba(16, 185, 129, 0.12); color: var(--green-light); }
+  .effort-moderate { background: rgba(245, 158, 11, 0.12); color: var(--amber-light); }
+  .effort-major { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
+
+  /* ── Data collection panel ── */
+  .collect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .collect-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s;
+  }
+  .collect-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .collect-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .collect-service { font-size: 13px; font-weight: 600; }
+  .collect-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; }
+  .status-success { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+  .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+  .status-failed { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+  .status-stale { background: rgba(100, 116, 139, 0.15); color: var(--text-muted); }
+  .collect-meta { font-size: 11px; color: var(--text-muted); }
+  .collect-score { font-size: 20px; font-weight: 800; margin-top: 4px; }
+
+  /* ── Freshness indicators ── */
+  .freshness { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 6px; }
+  .fresh { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+  .stale { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+
+  /* ── Data table ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { text-align: left; padding: 10px 14px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid rgba(30, 41, 59, 0.4); }
+  .data-table tr:hover td { background: rgba(59, 130, 246, 0.03); }
+
+  /* ── API endpoint list ── */
+  .endpoint-list { display: flex; flex-direction: column; gap: 6px; }
+  .endpoint {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 14px; background: rgba(15, 22, 41, 0.5); border-radius: 8px;
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+  }
+  .endpoint-method { width: 50px; font-weight: 700; flex-shrink: 0; }
+  .method-get { color: var(--green); }
+  .method-post { color: var(--amber); }
+  .endpoint-path { color: var(--text-secondary); }
+  .endpoint-desc { color: var(--text-muted); margin-left: auto; font-family: inherit; font-size: 11px; }
+
+  /* ── Score band legend ── */
+  .band-legend { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .band-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+  .band-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  /* ── Error banner ── */
+  .error-banner {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--red-light);
+    display: none;
+  }
+  .error-banner.visible { display: block; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1200px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-9, .collect-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .header { padding: 16px 20px; }
+    .content { padding: 20px; }
+    .nav-tabs { padding: 0 20px; }
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .grid-9, .collect-grid { grid-template-columns: 1fr; }
+    .dim-row { flex-wrap: wrap; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Skip to content for keyboard users -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- HEADER -->
+<header class="header" role="banner">
+  <div class="header-left">
+    <div>
+      <div class="logo" aria-label="47X Performance Benchmark">47X</div>
+      <div class="logo-sub">Performance Benchmark</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="api-status" role="status" aria-live="polite">
+      <div class="api-dot" aria-hidden="true"></div>
+      <span>Data Engine v0.1.0</span>
+    </div>
+    <div class="header-badge" aria-label="9 Active Services">9 Active Services</div>
+    <time id="headerDate" style="color: var(--text-muted); font-size: 13px;"></time>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-tabs" role="tablist" aria-label="Dashboard sections">
+  <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="section-overview" data-section="overview" tabindex="0">Overview</button>
+  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-services" data-section="services" tabindex="-1">Service Scores</button>
+  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-benchmark" data-section="benchmark" tabindex="-1">Benchmark Comparison</button>
+  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-recommendations" data-section="recommendations" tabindex="-1">Recommendations</button>
+  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-collection" data-section="collection" tabindex="-1">Data Collection</button>
+  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-datapoints" data-section="datapoints" tabindex="-1">Data Points</button>
+  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-api" data-section="api" tabindex="-1">API Reference</button>
+</nav>
+
+<main class="content" id="main-content">
+
+<!-- Error banner for API issues -->
+<div class="error-banner" id="globalError" role="alert" aria-live="assertive"></div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: OVERVIEW -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section active" id="section-overview" role="tabpanel" aria-labelledby="tab-overview">
+  <h1 class="section-title">47X Score Overview</h1>
+  <p class="section-subtitle">Composite benchmark score comparing target company against sector peers across 9 data services</p>
+
+  <!-- Company Search -->
+  <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center;">
+    <div style="position: relative; flex: 1; max-width: 400px;">
+      <label for="companySearch" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Search companies</label>
+      <input type="text" id="companySearch" placeholder="Search companies from API..."
+        autocomplete="off"
+        style="width: 100%; padding: 10px 16px 10px 36px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 13px; outline: none;"
+        aria-label="Search companies"
+        aria-autocomplete="list"
+        aria-controls="searchDropdown"
+        aria-expanded="false">
+      <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true">&#128269;</span>
+      <div id="searchDropdown" role="listbox" aria-label="Company search results" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0 0 8px 8px; max-height: 240px; overflow-y: auto; z-index: 100;"></div>
+    </div>
+    <button id="refreshBtn" style="padding: 10px 16px; background: var(--accent-glow); border: 1px solid var(--accent); border-radius: 8px; color: var(--accent-light); cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap;" aria-label="Refresh company list from API">&#8635; Refresh from API</button>
+    <div id="apiConnectionStatus" role="status" aria-live="polite" style="font-size: 12px; color: var(--text-muted);"></div>
+  </div>
+
+  <!-- Company Selector (populated from API) -->
+  <div class="company-selector" id="companySelector" role="group" aria-label="Select a company">
+    <div style="color: var(--text-muted); font-size: 13px; padding: 10px;">Loading companies from API...</div>
+  </div>
+
+  <!-- Top metrics -->
+  <div class="grid-4">
+    <div class="card" role="group" aria-label="47X Score">
+      <div class="card-label">47X Score</div>
+      <div class="card-value" style="background: linear-gradient(135deg, var(--accent-light), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">--</div>
+      <div class="card-delta neutral">Loading...</div>
+    </div>
+    <div class="card" role="group" aria-label="Services Scored">
+      <div class="card-label">Services Scored</div>
+      <div class="card-value">-- / 9</div>
+      <div class="card-delta neutral">Loading...</div>
+    </div>
+    <div class="card" role="group" aria-label="Benchmark Group">
+      <div class="card-label">Benchmark Group</div>
+      <div class="card-value" style="font-size: 22px;">--</div>
+      <div class="card-delta neutral">Loading...</div>
+    </div>
+    <div class="card" role="group" aria-label="Data Points">
+      <div class="card-label">Data Points</div>
+      <div class="card-value">--</div>
+      <div class="card-delta neutral">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Score ring + Gap analysis side by side -->
+  <div class="grid-2">
+    <div class="chart-container">
+      <h2 class="chart-title">47X Score Breakdown</h2>
+      <p class="chart-subtitle">Target score as percentile of benchmark average, per service</p>
+      <canvas id="radarChart" height="300" aria-label="Radar chart showing 47X score breakdown by service"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2 class="chart-title">Strengths &amp; Gaps</h2>
+      <p class="chart-subtitle">Services where target exceeds or falls behind benchmark</p>
+      <canvas id="gapChart" height="300" aria-label="Bar chart showing gap between target and benchmark per service"></canvas>
+    </div>
+  </div>
+
+  <!-- Service dimension breakdown -->
+  <div class="chart-container">
+    <h2 class="chart-title">Service Score Comparison</h2>
+    <p class="chart-subtitle">Target vs Benchmark Average &mdash; Score = (target / benchmark_avg) &times; 100, capped at 100</p>
+    <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);">
+        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--cyan));" aria-hidden="true"></div> Target
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);">
+        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--purple), rgba(139, 92, 246, 0.4));" aria-hidden="true"></div> Benchmark Avg
+      </div>
+    </div>
+    <div id="dimensionRows" role="list" aria-label="Service score comparison rows"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: SERVICE SCORES -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="section-services" role="tabpanel" aria-labelledby="tab-services">
+  <h1 class="section-title">Service Score Map</h1>
+  <p class="section-subtitle">Each service produces one headline score (0-100) used for the 47X composite. Drill into each for underlying data points.</p>
+
+  <div class="band-legend" role="list" aria-label="Score band legend">
+    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--critical);" aria-hidden="true"></div> Critical (0-29)</div>
+    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--weak);" aria-hidden="true"></div> Weak (30-49)</div>
+    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--average);" aria-hidden="true"></div> Average (50-69)</div>
+    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--strong);" aria-hidden="true"></div> Strong (70-89)</div>
+    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--leading);" aria-hidden="true"></div> Leading (90-100)</div>
+  </div>
+
+  <div class="grid-9" id="serviceCards" role="list" aria-label="Service score cards"></div>
+
+  <!-- Detailed breakdown per service -->
+  <div class="chart-container" id="serviceDetail" style="display: none;">
+    <h2 class="chart-title" id="serviceDetailTitle"></h2>
+    <p class="chart-subtitle" id="serviceDetailDesc"></p>
+    <div id="serviceDetailContent"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: BENCHMARK COMPARISON -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="section-benchmark" role="tabpanel" aria-labelledby="tab-benchmark">
+  <h1 class="section-title">Benchmark Comparison</h1>
+  <p class="section-subtitle">Target company scores vs benchmark group averages across all 9 services</p>
+
+  <div class="grid-3" style="margin-bottom: 24px;">
+    <div class="card">
+      <div class="card-label">Benchmark Group</div>
+      <div class="card-value" style="font-size: 20px;">--</div>
+      <div class="card-delta neutral">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Reference Companies</div>
+      <div class="benchmark-refs" style="margin-top: 8px; font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+        Loading...
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Refresh Interval</div>
+      <div class="card-value" style="font-size: 20px;">30 days</div>
+      <div class="card-delta neutral">Last benchmarked: --</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Score Report</h2>
+    <p class="chart-subtitle">Percentile model: score = (target / benchmark_avg) &times; 100, capped at 100</p>
+    <canvas id="benchmarkBarChart" height="350" aria-label="Bar chart comparing target vs benchmark scores"></canvas>
+  </div>
+
+  <div class="grid-2">
+    <div class="chart-container">
+      <h2 class="chart-title" style="color: var(--green);">Strengths (Above Benchmark)</h2>
+      <p class="chart-subtitle">Services where target exceeds benchmark by &gt;2 points</p>
+      <div id="strengthsList" role="list" aria-label="Strength areas"></div>
+    </div>
+    <div class="chart-container">
+      <h2 class="chart-title" style="color: var(--red);">Gaps (Below Benchmark)</h2>
+      <p class="chart-subtitle">Services where target falls behind benchmark by &gt;2 points &mdash; sorted by biggest deficit</p>
+      <div id="gapsList" role="list" aria-label="Gap areas"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: RECOMMENDATIONS -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="section-recommendations" role="tabpanel" aria-labelledby="tab-recommendations">
+  <h1 class="section-title">Actionable Recommendations</h1>
+  <p class="section-subtitle">Generated from score bands and underlying data points. Each recommendation includes specific actions with impact/effort estimates.</p>
+
+  <div class="grid-3" style="margin-bottom: 24px;">
+    <div class="card">
+      <div class="card-label">Overall Band</div>
+      <div class="card-value" style="color: var(--text-muted);">--</div>
+      <div class="card-delta neutral">-- / 100 composite</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Critical Actions</div>
+      <div class="card-value" style="color: var(--red);">--</div>
+      <div class="card-delta negative">Require immediate attention</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Quick Wins</div>
+      <div class="card-value" style="color: var(--green);">--</div>
+      <div class="card-delta positive">Can be done in 1-2 weeks</div>
+    </div>
+  </div>
+
+  <div id="recommendationsList" role="list" aria-label="Recommendations"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: DATA COLLECTION -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="section-collection" role="tabpanel" aria-labelledby="tab-collection">
+  <h1 class="section-title">Data Collection Status</h1>
+  <p class="section-subtitle">9 active collectors running against target company. Click a service to trigger re-collection.</p>
+
+  <div class="collect-grid" id="collectionGrid" role="list" aria-label="Data collection status cards"></div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Collection Timeline</h2>
+    <p class="chart-subtitle">When each service was last collected and when data expires</p>
+    <canvas id="collectionTimeline" height="250" aria-label="Timeline chart showing data collection and expiry dates"></canvas>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: DATA POINTS -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="section-datapoints" role="tabpanel" aria-labelledby="tab-datapoints">
+  <h1 class="section-title">Data Points Explorer</h1>
+  <p class="section-subtitle">Every collected metric stored as a DataPoint with confidence score, expiry, and provenance</p>
+
+  <div class="grid-4" style="margin-bottom: 24px;">
+    <div class="card card-sm">
+      <div class="card-label">Total Data Points</div>
+      <div class="card-value">--</div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-label">Categories</div>
+      <div class="card-value">--</div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-label">Avg Confidence</div>
+      <div class="card-value">--</div>
+    </div>
+    <div class="card card-sm">
+      <div class="card-label">Stale Points</div>
+      <div class="card-value" style="color: var(--amber);">--</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Data Points by Service</h2>
+    <p class="chart-subtitle">Each service stores individual metrics as separate data_point rows, plus a full compound result</p>
+
+    <!-- Filter buttons -->
+    <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;" role="group" aria-label="Filter data points by service">
+      <button class="company-btn active" data-dp-filter="all" style="padding: 6px 14px; font-size: 12px;">All</button>
+      <button class="company-btn" data-dp-filter="lighthouse" style="padding: 6px 14px; font-size: 12px;">Lighthouse</button>
+      <button class="company-btn" data-dp-filter="google_ads" style="padding: 6px 14px; font-size: 12px;">Google Ads</button>
+      <button class="company-btn" data-dp-filter="opencorporates" style="padding: 6px 14px; font-size: 12px;">OpenCorporates</button>
+      <button class="company-btn" data-dp-filter="newsapi" style="padding: 6px 14px; font-size: 12px;">NewsAPI</button>
+      <button class="company-btn" data-dp-filter="techstack" style="padding: 6px 14px; font-size: 12px;">Tech Stack</button>
+      <button class="company-btn" data-dp-filter="google_maps" style="padding: 6px 14px; font-size: 12px;">Google Maps</button>
+      <button class="company-btn" data-dp-filter="social_media" style="padding: 6px 14px; font-size: 12px;">Social Media</button>
+      <button class="company-btn" data-dp-filter="glassdoor" style="padding: 6px 14px; font-size: 12px;">Glassdoor</button>
+      <button class="company-btn" data-dp-filter="brand_audit" style="padding: 6px 14px; font-size: 12px;">Brand Audit</button>
+    </div>
+
+    <table class="data-table" id="dataPointsTable" aria-label="Data points table">
+      <thead>
+        <tr>
+          <th scope="col">Service</th>
+          <th scope="col">Category</th>
+          <th scope="col">Metric</th>
+          <th scope="col">Value</th>
+          <th scope="col">Unit</th>
+          <th scope="col">Confidence</th>
+          <th scope="col">Freshness</th>
+        </tr>
+      </thead>
+      <tbody id="dataPointsBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SECTION: API REFERENCE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section" id="section-api" role="tabpanel" aria-labelledby="tab-api">
+  <h1 class="section-title">API Reference</h1>
+  <p class="section-subtitle">47X Data Engine REST API &mdash; <code style="color: var(--accent-light);">https://47x-audit-platform.truegroup.workers.dev/</code> &mdash; All responses use the standard ApiResponse envelope.</p>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Response Envelope</h2>
+    <p class="chart-subtitle">Every endpoint returns this structure</p>
+    <pre style="background: var(--bg-input); padding: 16px; border-radius: 8px; font-size: 12px; color: var(--text-secondary); overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; line-height: 1.6;" aria-label="API response envelope JSON structure"><code>{
+  "success": boolean,
+  "data": T | null,
+  "error": string | null,
+  "meta": {
+    "companyId": string,
+    "service": ServiceName | "all",
+    "collectedAt": string,     // ISO 8601
+    "confidence": number,      // 0.0 - 1.0
+    "dataPointCount": number,
+    "stale": boolean           // true if data past expiry
+  }
+}</code></pre>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Companies</h2>
+    <div class="endpoint-list" role="list" aria-label="Company API endpoints">
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies</span><span class="endpoint-desc">List all companies</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug</span><span class="endpoint-desc">Get company by slug</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies</span><span class="endpoint-desc">Create new company</span></div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Data Collection</h2>
+    <div class="endpoint-list" role="list" aria-label="Data collection API endpoints">
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/data</span><span class="endpoint-desc">Get latest data (all services)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/data?service=lighthouse</span><span class="endpoint-desc">Filter by service</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/data/:metric/history</span><span class="endpoint-desc">Metric history over time</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect</span><span class="endpoint-desc">Trigger ALL 9 services</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/lighthouse</span><span class="endpoint-desc">Google PageSpeed Insights (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/google-ads</span><span class="endpoint-desc">Ads Transparency Center (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/opencorporates</span><span class="endpoint-desc">Company registration (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/news</span><span class="endpoint-desc">NewsAPI (requires key)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/techstack</span><span class="endpoint-desc">HTML fingerprinting (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/google-maps</span><span class="endpoint-desc">Places API (requires key)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/glassdoor</span><span class="endpoint-desc">Employer profile scrape (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/social-media</span><span class="endpoint-desc">Social profile scrape (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/brand-audit</span><span class="endpoint-desc">Website quality crawl (free)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/runs/:service</span><span class="endpoint-desc">Check collection status</span></div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Benchmarking &amp; 47X Scoring</h2>
+    <div class="endpoint-list" role="list" aria-label="Benchmarking API endpoints">
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/benchmarks</span><span class="endpoint-desc">List benchmark groups</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/benchmarks</span><span class="endpoint-desc">Create benchmark group</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/benchmarks/:id</span><span class="endpoint-desc">Get benchmark group</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/benchmarks/:id/refresh</span><span class="endpoint-desc">Refresh benchmark scores</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/scores</span><span class="endpoint-desc">Quick score summary</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/score</span><span class="endpoint-desc">Generate full 47X Score Report</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/score</span><span class="endpoint-desc">Get latest cached score</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/scoring/services</span><span class="endpoint-desc">List scored services</span></div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="chart-title">Recommendations</h2>
+    <div class="endpoint-list" role="list" aria-label="Recommendations API endpoints">
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/recommendations</span><span class="endpoint-desc">Generate recommendations (re-scores first)</span></div>
+      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/recommendations</span><span class="endpoint-desc">Get from cached scores</span></div>
+    </div>
+  </div>
+</section>
+
+</main><!-- end content -->
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 47X DATA ENGINE - Live API Dashboard
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Connected to Patrick's Cloudflare Workers API
+
+const API_BASE = 'https://47x-audit-platform.truegroup.workers.dev';
+const API_TIMEOUT_MS = 8000;
+
+const SERVICE_SCORE_MAP = {
+  lighthouse:      { metric: "lh_performance_desktop", label: "Website Performance", description: "Lighthouse performance score for desktop", icon: "&#9889;", color: "#3b82f6" },
+  google_ads:      { metric: "gads_activity_score",    label: "Ad Activity",          description: "Google Ads presence and activity composite", icon: "&#128226;", color: "#f59e0b" },
+  opencorporates:  { metric: "oc_company_age_years",   label: "Corporate Maturity",   description: "Years of incorporation (capped at 100 for 20+ yrs)", icon: "&#127970;", color: "#8b5cf6" },
+  newsapi:         { metric: "news_coverage_score",    label: "Media Presence",        description: "News coverage and sentiment composite", icon: "&#128240;", color: "#06b6d4" },
+  techstack:       { metric: "ts_digital_maturity",    label: "Digital Maturity",      description: "Technology stack sophistication score", icon: "&#128187;", color: "#10b981" },
+  google_maps:     { metric: "gm_reputation_score",    label: "Reputation",            description: "Google Maps reputation composite", icon: "&#11088;", color: "#ef4444" },
+  social_media:    { metric: "sm_presence_score",      label: "Social Presence",       description: "Cross-platform social media presence", icon: "&#128242;", color: "#ec4899" },
+  glassdoor:       { metric: "gd_employer_brand_score",label: "Employer Brand",        description: "Glassdoor employer brand composite", icon: "&#128188;", color: "#14b8a6" },
+  brand_audit:     { metric: "ba_overall_brand_score", label: "Brand Quality",         description: "Brand consistency, content, and trust", icon: "&#127775;", color: "#f97316" },
+};
+
+const EXPIRY_HOURS = {
+  lighthouse: 168, google_ads: 72, opencorporates: 720, newsapi: 24,
+  techstack: 336, google_maps: 336, social_media: 72, glassdoor: 336, brand_audit: 336,
+};
+
+function getScoreBand(score) {
+  if (score === null || score === undefined || typeof score !== 'number' || isNaN(score)) return "critical";
+  if (score < 30) return "critical";
+  if (score < 50) return "weak";
+  if (score < 70) return "average";
+  if (score < 90) return "strong";
+  return "leading";
+}
+
+// ── Utility: sanitize text for safe DOM insertion ──
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  const text = String(str);
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
+// ── Utility: debounce function ──
+function debounce(fn, delay) {
+  let timer = null;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+// ── Utility: safe number extraction ──
+function safeNumber(val, fallback) {
+  if (fallback === undefined) fallback = 0;
+  const n = Number(val);
+  return isNaN(n) ? fallback : n;
+}
+
+// ── Global error display ──
+function showGlobalError(msg) {
+  const el = document.getElementById('globalError');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+function hideGlobalError() {
+  const el = document.getElementById('globalError');
+  if (!el) return;
+  el.textContent = '';
+  el.classList.remove('visible');
+}
+
+// ── API Layer ──
+const apiCache = {};
+let allCompanies = [];
+let currentCompanySlug = null;
+let currentCompanyData = null;
+let isApiOnline = false;
+
+async function apiFetch(path) {
+  const url = API_BASE + path;
+  const cacheKey = url;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(function() { controller.abort(); }, API_TIMEOUT_MS);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (!res.ok) {
+      var errBody = null;
+      try { errBody = await res.json(); } catch (_) { /* non-JSON error response */ }
+      if (res.status === 404) {
+        apiCache[cacheKey] = { data: null, status: 404, ts: Date.now() };
+        return null;
+      }
+      throw new Error('HTTP ' + res.status + (errBody && errBody.error ? ': ' + errBody.error : ''));
+    }
+    const data = await res.json();
+    apiCache[cacheKey] = { data: data, status: 200, ts: Date.now() };
+    return data;
+  } catch (e) {
+    var reason = e.name === 'AbortError' ? 'Request timed out' : e.message;
+    console.warn('API fetch failed:', url, reason);
+    if (apiCache[cacheKey] && apiCache[cacheKey].data !== undefined) return apiCache[cacheKey].data;
+    return null;
+  }
+}
+
+async function checkApiStatus() {
+  var statusEl = document.getElementById('apiConnectionStatus');
+  var dotEl = document.querySelector('.api-dot');
+  if (!statusEl || !dotEl) return false;
+  try {
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
+    var res = await fetch(API_BASE + '/api/companies', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (res.ok) {
+      isApiOnline = true;
+      statusEl.innerHTML = '<span style="color: var(--green);" aria-hidden="true">&#9679;</span> Live API connected';
+      dotEl.style.background = 'var(--green)';
+      hideGlobalError();
+      return true;
+    }
+  } catch (e) {
+    /* API unreachable */
+  }
+  isApiOnline = false;
+  statusEl.innerHTML = '<span style="color: var(--red);" aria-hidden="true">&#9679;</span> API offline - showing cached data';
+  dotEl.style.background = 'var(--red)';
+  showGlobalError('API connection failed. Showing cached data where available.');
+  return false;
+}
+
+// ── Load companies from API ──
+async function loadCompanies() {
+  var raw = await apiFetch('/api/companies');
+  // Handle both array and {data: [...]} envelope formats
+  var companies = null;
+  if (Array.isArray(raw)) {
+    companies = raw;
+  } else if (raw && typeof raw === 'object' && Array.isArray(raw.data)) {
+    companies = raw.data;
+  }
+
+  if (companies && companies.length > 0) {
+    allCompanies = companies;
+    renderCompanySelector();
+    if (!currentCompanySlug) {
+      await selectCompanyBySlug(allCompanies[0].slug);
+    }
+  } else {
+    allCompanies = [];
+    document.getElementById('companySelector').innerHTML =
+      '<div style="color: var(--amber); font-size: 13px; padding: 10px;" role="alert">&#9888; Could not load companies from API. Check connection.</div>';
+  }
+}
+
+function renderCompanySelector() {
+  var container = document.getElementById('companySelector');
+  if (!container) return;
+  if (allCompanies.length === 0) {
+    container.innerHTML = '<div style="color: var(--text-muted); font-size: 13px; padding: 10px;">No companies found in API</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < allCompanies.length; i++) {
+    var co = allCompanies[i];
+    var isActive = co.slug === currentCompanySlug ? 'active' : '';
+    var sectorText = co.sector ? escapeHtml(co.sector) : '';
+    var sectorBadge = sectorText ? '<span style="font-size: 10px; color: var(--text-muted); margin-left: 6px;">' + sectorText + '</span>' : '';
+    html += '<button class="company-btn ' + isActive + '" data-company-slug="' + escapeHtml(co.slug) + '" aria-pressed="' + (isActive ? 'true' : 'false') + '">' + escapeHtml(co.name) + sectorBadge + '</button>';
+  }
+  container.innerHTML = html;
+}
+
+var debouncedFilterCompanyList = debounce(function(query) {
+  var dropdown = document.getElementById('searchDropdown');
+  var searchInput = document.getElementById('companySearch');
+  if (!dropdown || !searchInput) return;
+  if (!query || !query.trim()) {
+    dropdown.style.display = 'none';
+    searchInput.setAttribute('aria-expanded', 'false');
+    return;
+  }
+  var q = query.toLowerCase();
+  var matches = allCompanies.filter(function(c) {
+    return (c.name || '').toLowerCase().includes(q) || (c.sector || '').toLowerCase().includes(q) || (c.slug || '').includes(q);
+  });
+  if (matches.length === 0) {
+    dropdown.innerHTML = '<div style="padding: 12px; color: var(--text-muted); font-size: 13px;">No matches</div>';
+  } else {
+    dropdown.innerHTML = matches.map(function(c) {
+      return '<div role="option" style="padding: 10px 14px; cursor: pointer; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border);" data-search-slug="' + escapeHtml(c.slug) + '" data-search-name="' + escapeHtml(c.name) + '">'
+        + '<span style="font-weight: 600;">' + escapeHtml(c.name) + '</span>'
+        + '<span style="color: var(--text-muted); font-size: 11px; margin-left: 8px;">' + escapeHtml(c.sector || '') + ' &middot; ' + escapeHtml(c.slug) + '</span>'
+        + '</div>';
+    }).join('');
+  }
+  dropdown.style.display = 'block';
+  searchInput.setAttribute('aria-expanded', 'true');
+}, 250);
+
+async function refreshCompanyList(btn) {
+  if (!btn) return;
+  btn.textContent = 'Loading...';
+  btn.disabled = true;
+  try {
+    await checkApiStatus();
+    await loadCompanies();
+  } finally {
+    btn.innerHTML = '&#8635; Refresh from API';
+    btn.disabled = false;
+  }
+}
+
+// ── Event Delegation ──
+// Company selector clicks
+document.getElementById('companySelector').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-company-slug]');
+  if (btn) selectCompanyBySlug(btn.dataset.companySlug);
+});
+
+// Search input with debounce
+document.getElementById('companySearch').addEventListener('input', function(e) {
+  debouncedFilterCompanyList(e.target.value);
+});
+document.getElementById('companySearch').addEventListener('focus', function() {
+  var dropdown = document.getElementById('searchDropdown');
+  if (dropdown && this.value.trim()) dropdown.style.display = 'block';
+});
+
+// Search dropdown click delegation
+document.getElementById('searchDropdown').addEventListener('click', function(e) {
+  var option = e.target.closest('[data-search-slug]');
+  if (option) {
+    selectCompanyBySlug(option.dataset.searchSlug);
+    document.getElementById('searchDropdown').style.display = 'none';
+    document.getElementById('companySearch').value = option.dataset.searchName || '';
+    document.getElementById('companySearch').setAttribute('aria-expanded', 'false');
+  }
+});
+// Hover effect on dropdown options
+document.getElementById('searchDropdown').addEventListener('mouseover', function(e) {
+  var option = e.target.closest('[data-search-slug]');
+  if (option) option.style.background = 'var(--bg-card-hover)';
+});
+document.getElementById('searchDropdown').addEventListener('mouseout', function(e) {
+  var option = e.target.closest('[data-search-slug]');
+  if (option) option.style.background = 'transparent';
+});
+
+// Refresh button
+document.getElementById('refreshBtn').addEventListener('click', function() {
+  refreshCompanyList(this);
+});
+
+// Close dropdown when clicking elsewhere
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#companySearch') && !e.target.closest('#searchDropdown')) {
+    var dropdown = document.getElementById('searchDropdown');
+    if (dropdown) dropdown.style.display = 'none';
+    var searchInput = document.getElementById('companySearch');
+    if (searchInput) searchInput.setAttribute('aria-expanded', 'false');
+  }
+});
+
+// Data point filter delegation
+document.querySelector('#section-datapoints [role="group"]').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-dp-filter]');
+  if (!btn) return;
+  this.querySelectorAll('.company-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderDataPoints(btn.dataset.dpFilter);
+});
+
+// ── Navigation with keyboard support ──
+var navTabs = document.querySelector('.nav-tabs');
+navTabs.addEventListener('click', function(e) {
+  var tab = e.target.closest('.nav-tab');
+  if (tab) showSection(tab.dataset.section, tab);
+});
+navTabs.addEventListener('keydown', function(e) {
+  var tabs = Array.from(navTabs.querySelectorAll('.nav-tab'));
+  var currentIndex = tabs.indexOf(document.activeElement);
+  if (currentIndex < 0) return;
+  var newIndex = -1;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    newIndex = (currentIndex + 1) % tabs.length;
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+  } else if (e.key === 'Home') {
+    newIndex = 0;
+  } else if (e.key === 'End') {
+    newIndex = tabs.length - 1;
+  }
+  if (newIndex >= 0) {
+    e.preventDefault();
+    tabs[currentIndex].setAttribute('tabindex', '-1');
+    tabs[newIndex].setAttribute('tabindex', '0');
+    tabs[newIndex].focus();
+    showSection(tabs[newIndex].dataset.section, tabs[newIndex]);
+  }
+});
+
+function showSection(id, tabEl) {
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t) {
+    t.classList.remove('active');
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  var section = document.getElementById('section-' + id);
+  if (section) section.classList.add('active');
+  if (tabEl) {
+    tabEl.classList.add('active');
+    tabEl.setAttribute('aria-selected', 'true');
+    tabEl.setAttribute('tabindex', '0');
+  }
+}
+
+// ── Transform API scores into dashboard format ──
+function transformScoresToCompanyData(companyInfo, scores) {
+  if (!companyInfo || typeof companyInfo !== 'object') {
+    companyInfo = { name: 'Unknown', slug: 'unknown' };
+  }
+  if (!scores || typeof scores !== 'object') {
+    scores = {};
+  }
+
+  // Handle envelope format: { data: { lighthouse: 80, ... } }
+  if (scores.data && typeof scores.data === 'object' && !Array.isArray(scores.data)) {
+    scores = scores.data;
+  }
+
+  var scoreValues = Object.values(scores).filter(function(v) {
+    return v !== null && v !== undefined && typeof v === 'number' && !isNaN(v);
+  });
+  var avgScore = scoreValues.length > 0 ? Math.round(scoreValues.reduce(function(a, b) { return a + b; }, 0) / scoreValues.length) : 0;
+  var scoredCount = scoreValues.length;
+
+  var serviceScores = {};
+  var totalWeightedScore = 0;
+  var totalWeight = 0;
+
+  for (var svc of Object.keys(SERVICE_SCORE_MAP)) {
+    var raw = scores[svc];
+    var target = (raw !== null && raw !== undefined && typeof raw === 'number' && !isNaN(raw)) ? raw : 0;
+    var benchmarkAvg = avgScore;
+    var gap = target - benchmarkAvg;
+    var status = gap > 2 ? 'above' : gap < -2 ? 'below' : 'at';
+    var percentile = benchmarkAvg > 0 ? Math.min(100, Math.round((target / benchmarkAvg) * 100)) : (target > 0 ? 100 : 0);
+
+    serviceScores[svc] = { target: target, benchmarkAvg: benchmarkAvg, percentile: percentile, gap: gap, status: status };
+    if (raw !== null && raw !== undefined && typeof raw === 'number' && !isNaN(raw)) {
+      totalWeightedScore += target;
+      totalWeight++;
+    }
+  }
+
+  var overallScore = totalWeight > 0 ? Math.round((totalWeightedScore / totalWeight) * 10) / 10 : 0;
+  var confidence = scoredCount / 9;
+
+  return {
+    name: companyInfo.name || 'Unknown',
+    slug: companyInfo.slug || 'unknown',
+    sector: companyInfo.sector || 'Unknown',
+    website: companyInfo.website || '',
+    hqCity: companyInfo.hqCity || '',
+    hqCountry: companyInfo.hqCountry || '',
+    yearFounded: companyInfo.yearFounded || null,
+    serviceScores: serviceScores,
+    overallScore: overallScore,
+    confidence: Math.round(confidence * 100) / 100,
+    dataPointCount: scoredCount,
+    scoredCount: scoredCount,
+    collectedAt: companyInfo.updatedAt || new Date().toISOString(),
+    _fromApi: true,
+  };
+}
+
+// ── Select company and load data ──
+async function selectCompanyBySlug(slug) {
+  if (!slug) return;
+  currentCompanySlug = slug;
+  renderCompanySelector();
+
+  // Show loading state in overview cards
+  var overviewCards = document.querySelectorAll('#section-overview .card-value');
+  if (overviewCards[0]) overviewCards[0].textContent = '...';
+  if (overviewCards[1]) overviewCards[1].textContent = '...';
+  if (overviewCards[3]) overviewCards[3].textContent = '...';
+
+  // Fetch company details and scores in parallel
+  var results = await Promise.all([
+    apiFetch('/api/companies/' + encodeURIComponent(slug)),
+    apiFetch('/api/companies/' + encodeURIComponent(slug) + '/scores')
+  ]);
+  var companyInfo = results[0];
+  var scores = results[1];
+
+  if (!companyInfo) {
+    if (overviewCards[0]) overviewCards[0].textContent = 'ERR';
+    if (overviewCards[1]) overviewCards[1].textContent = '-';
+    if (overviewCards[3]) overviewCards[3].textContent = '-';
+    showGlobalError('Could not load data for "' + slug + '". The API may be unavailable.');
+    return;
+  }
+
+  hideGlobalError();
+
+  if (scores) {
+    currentCompanyData = transformScoresToCompanyData(companyInfo, scores);
+  } else {
+    var emptyScores = {};
+    for (var svc of Object.keys(SERVICE_SCORE_MAP)) {
+      emptyScores[svc] = null;
+    }
+    currentCompanyData = transformScoresToCompanyData(companyInfo, emptyScores);
+  }
+
+  // Update all views
+  renderOverviewFromData(currentCompanyData);
+  renderServiceCards();
+  renderBenchmark();
+  renderRecommendationsFromData(currentCompanyData);
+  renderCollectionGrid();
+
+  // Try loading data points (non-blocking)
+  apiFetch('/api/companies/' + encodeURIComponent(slug) + '/data-points').then(function(dataPoints) {
+    if (dataPoints && currentCompanyData) {
+      // Handle envelope format
+      if (Array.isArray(dataPoints)) {
+        currentCompanyData._dataPoints = dataPoints;
+      } else if (dataPoints && Array.isArray(dataPoints.data)) {
+        currentCompanyData._dataPoints = dataPoints.data;
+      }
+    }
+    renderDataPoints('all');
+  });
+
+  // Try loading latest report (non-blocking)
+  apiFetch('/api/companies/' + encodeURIComponent(slug) + '/reports/latest').then(function(report) {
+    if (report && currentCompanyData) {
+      currentCompanyData._report = report;
+    }
+  });
+
+  // Update header badge
+  var badge = document.querySelector('.header-badge');
+  if (badge) badge.textContent = currentCompanyData.scoredCount + ' / 9 Services Scored';
+}
+
+// ── Render: Overview ──
+function renderOverviewFromData(data) {
+  if (!data) return;
+  var cards = document.querySelectorAll('#section-overview .card-value');
+  if (cards[0]) cards[0].textContent = data.overallScore;
+  if (cards[1]) cards[1].textContent = data.scoredCount + ' / 9';
+  if (cards[2]) cards[2].textContent = escapeHtml(data.sector || 'Unknown');
+  if (cards[3]) cards[3].textContent = data.dataPointCount;
+
+  var deltaElements = document.querySelectorAll('#section-overview .card-delta');
+  if (deltaElements[0]) {
+    if (data.overallScore >= 50) {
+      deltaElements[0].className = 'card-delta positive';
+      deltaElements[0].textContent = data._fromApi ? 'Live from API' : 'Cached data';
+    } else if (data.overallScore > 0) {
+      deltaElements[0].className = 'card-delta negative';
+      deltaElements[0].textContent = 'Below average';
+    } else {
+      deltaElements[0].className = 'card-delta neutral';
+      deltaElements[0].textContent = 'No scores yet';
+    }
+  }
+
+  renderDimensionRows(data);
+  renderRadarChart(data);
+  renderGapChart(data);
+}
+
+function renderDimensionRows(data) {
+  var container = document.getElementById('dimensionRows');
+  if (!container || !data) return;
+  var html = '';
+  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
+    var service = entry[0];
+    var info = entry[1];
+    var scores = data.serviceScores[service];
+    if (!scores) continue;
+    var band = getScoreBand(scores.target);
+    var gapClass = scores.status === 'above' ? 'above' : scores.status === 'below' ? 'below' : 'at';
+    var gapText = scores.gap > 0 ? ('+' + scores.gap) : scores.gap;
+    var noData = scores.target === 0 && data._fromApi;
+    var descText = noData ? 'Not yet collected' : (info.description.length > 40 ? info.description.substring(0, 40) + '...' : info.description);
+    html += '<div class="dim-row" role="listitem"' + (noData ? ' style="opacity: 0.5;"' : '') + '>'
+      + '<div class="dim-icon" style="background: ' + info.color + '22; color: ' + info.color + ';" aria-hidden="true">' + info.icon + '</div>'
+      + '<div class="dim-info">'
+      + '<div class="dim-name">' + escapeHtml(info.label) + '</div>'
+      + '<div class="dim-desc">' + escapeHtml(descText) + '</div>'
+      + '</div>'
+      + '<div class="dim-bars" aria-hidden="true">'
+      + '<div class="dim-bar-track">'
+      + '<div class="dim-bar benchmark" style="width: ' + safeNumber(scores.benchmarkAvg) + '%;"></div>'
+      + '<div class="dim-bar target" style="width: ' + safeNumber(scores.target) + '%;"></div>'
+      + '</div>'
+      + '</div>'
+      + '<div class="dim-score" aria-label="Score: ' + (noData ? 'no data' : scores.target) + '">' + (noData ? '-' : scores.target) + '</div>'
+      + '<div class="dim-gap ' + gapClass + '" aria-label="Gap: ' + (noData ? 'no data' : gapText) + '">' + (noData ? '-' : gapText) + '</div>'
+      + '<div class="dim-band band-' + band + '" aria-label="Band: ' + (noData ? 'not available' : band) + '">' + (noData ? 'n/a' : band) + '</div>'
+      + '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// ── Render: Service Cards ──
+function renderServiceCards() {
+  var data = currentCompanyData;
+  if (!data) return;
+  var container = document.getElementById('serviceCards');
+  if (!container) return;
+  var html = '';
+  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
+    var service = entry[0];
+    var info = entry[1];
+    var scores = data.serviceScores[service];
+    if (!scores) continue;
+    var band = getScoreBand(scores.target);
+    var confClass = data.confidence >= 0.8 ? 'conf-high' : data.confidence >= 0.5 ? 'conf-med' : 'conf-low';
+    var noData = scores.target === 0 && data._fromApi;
+    html += '<div class="card" role="listitem" style="cursor: pointer; border-left: 3px solid ' + info.color + ';' + (noData ? ' opacity: 0.6;' : '') + '" data-service-detail="' + escapeHtml(service) + '" tabindex="0" aria-label="' + escapeHtml(info.label) + ': ' + (noData ? 'no data' : 'score ' + scores.target) + '">'
+      + '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">'
+      + '<div style="font-size: 13px; font-weight: 600;">' + info.icon + ' ' + escapeHtml(info.label) + '</div>'
+      + '<div class="dim-band band-' + band + '" style="font-size: 10px;">' + (noData ? 'n/a' : band) + '</div>'
+      + '</div>'
+      + '<div style="font-size: 36px; font-weight: 800; color: ' + (noData ? 'var(--text-muted)' : info.color) + ';">' + (noData ? '-' : scores.target) + '</div>'
+      + '<div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">'
+      + (noData ? 'Not yet collected' : 'Avg: ' + scores.benchmarkAvg + ' &middot; Pctl: ' + scores.percentile + '%')
+      + '</div>'
+      + '<div class="confidence" style="margin-top: 8px;">'
+      + '<div class="confidence-dot ' + confClass + '" aria-hidden="true"></div>'
+      + (data._fromApi ? 'Live API' : 'Cached')
+      + '</div>'
+      + '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// Service cards click delegation
+document.getElementById('serviceCards').addEventListener('click', function(e) {
+  var card = e.target.closest('[data-service-detail]');
+  if (card) showServiceDetail(card.dataset.serviceDetail);
+});
+document.getElementById('serviceCards').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    var card = e.target.closest('[data-service-detail]');
+    if (card) { e.preventDefault(); showServiceDetail(card.dataset.serviceDetail); }
+  }
+});
+
+function showServiceDetail(service) {
+  var detail = document.getElementById('serviceDetail');
+  var info = SERVICE_SCORE_MAP[service];
+  if (!detail || !info) return;
+  document.getElementById('serviceDetailTitle').textContent = info.label + ' - Data Points';
+  document.getElementById('serviceDetailDesc').textContent = info.description;
+
+  var livePoints = currentCompanyData && currentCompanyData._dataPoints;
+  var points = [];
+  if (livePoints && Array.isArray(livePoints)) {
+    points = livePoints.filter(function(dp) { return dp && (dp.service === service || dp.category === service); });
+  }
+
+  if (points.length === 0) {
+    document.getElementById('serviceDetailContent').innerHTML =
+      '<div style="color: var(--text-muted); padding: 20px; text-align: center;">No data points collected for this service yet. Use the API to trigger collection.</div>';
+    detail.style.display = 'block';
+    return;
+  }
+
+  var html = '<table class="data-table" aria-label="' + escapeHtml(info.label) + ' data points"><thead><tr><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Unit</th><th scope="col">Confidence</th></tr></thead><tbody>';
+  for (var dp of points) {
+    var conf = safeNumber(dp.confidence);
+    var confClass = conf >= 0.8 ? 'conf-high' : conf >= 0.5 ? 'conf-med' : 'conf-low';
+    var displayVal;
+    if (dp.value === null || dp.value === undefined) {
+      displayVal = 'N/A';
+    } else if (typeof dp.value === 'boolean') {
+      displayVal = dp.value ? 'true' : 'false';
+    } else {
+      displayVal = escapeHtml(dp.value);
+    }
+    html += '<tr>'
+      + '<td style="font-family: \'SF Mono\', monospace; font-size: 12px;">' + escapeHtml(dp.metric || dp.key || '-') + '</td>'
+      + '<td style="font-weight: 600;">' + displayVal + '</td>'
+      + '<td style="color: var(--text-muted); font-size: 12px;">' + escapeHtml(dp.unit || '-') + '</td>'
+      + '<td><span class="confidence"><span class="confidence-dot ' + confClass + '" aria-hidden="true"></span>' + conf + '</span></td>'
+      + '</tr>';
+  }
+  html += '</tbody></table>';
+  document.getElementById('serviceDetailContent').innerHTML = html;
+  detail.style.display = 'block';
+}
+
+// ── Render: Benchmark ──
+function renderBenchmark() {
+  var data = currentCompanyData;
+  if (!data) return;
+
+  var benchCards = document.querySelectorAll('#section-benchmark .card');
+  if (benchCards[0]) {
+    var cv = benchCards[0].querySelector('.card-value');
+    var cd = benchCards[0].querySelector('.card-delta');
+    if (cv) cv.textContent = data.sector || 'Unknown';
+    if (cd) cd.textContent = 'Sector: ' + (data.sector || 'unknown').toLowerCase();
+  }
+  if (benchCards[1]) {
+    var refsEl = benchCards[1].querySelector('.benchmark-refs');
+    if (refsEl) {
+      var refNames = allCompanies.filter(function(c) { return c.slug !== data.slug; }).map(function(c) { return escapeHtml(c.name); });
+      refsEl.innerHTML = refNames.length > 0 ? refNames.join('<br>') : 'No peers yet';
+    }
+  }
+
+  renderBenchmarkBarChart(data);
+
+  // Strengths
+  var strengths = Object.entries(data.serviceScores)
+    .filter(function(e) { return e[1].status === 'above' && e[1].target > 0; })
+    .sort(function(a, b) { return b[1].gap - a[1].gap; });
+  var sHtml = '';
+  for (var entry of strengths) {
+    var svc = entry[0]; var s = entry[1];
+    sHtml += '<div class="dim-row" role="listitem">'
+      + '<div class="dim-icon" style="background: ' + SERVICE_SCORE_MAP[svc].color + '22; color: ' + SERVICE_SCORE_MAP[svc].color + ';" aria-hidden="true">' + SERVICE_SCORE_MAP[svc].icon + '</div>'
+      + '<div class="dim-info"><div class="dim-name">' + escapeHtml(SERVICE_SCORE_MAP[svc].label) + '</div></div>'
+      + '<div style="flex:1;"></div>'
+      + '<div class="dim-score" style="color: var(--green);">' + s.target + '</div>'
+      + '<div class="dim-gap above">+' + s.gap + '</div>'
+      + '</div>';
+  }
+  var strengthsEl = document.getElementById('strengthsList');
+  if (strengthsEl) strengthsEl.innerHTML = sHtml || '<div style="color: var(--text-muted); padding: 20px;">No strengths detected yet</div>';
+
+  // Gaps
+  var gaps = Object.entries(data.serviceScores)
+    .filter(function(e) { return e[1].status === 'below' && e[1].target > 0; })
+    .sort(function(a, b) { return a[1].gap - b[1].gap; });
+  var gHtml = '';
+  for (var gEntry of gaps) {
+    var gSvc = gEntry[0]; var g = gEntry[1];
+    gHtml += '<div class="dim-row" role="listitem">'
+      + '<div class="dim-icon" style="background: ' + SERVICE_SCORE_MAP[gSvc].color + '22; color: ' + SERVICE_SCORE_MAP[gSvc].color + ';" aria-hidden="true">' + SERVICE_SCORE_MAP[gSvc].icon + '</div>'
+      + '<div class="dim-info"><div class="dim-name">' + escapeHtml(SERVICE_SCORE_MAP[gSvc].label) + '</div></div>'
+      + '<div style="flex:1;"></div>'
+      + '<div class="dim-score" style="color: var(--red);">' + g.target + '</div>'
+      + '<div class="dim-gap below">' + g.gap + '</div>'
+      + '</div>';
+  }
+  var gapsEl = document.getElementById('gapsList');
+  if (gapsEl) gapsEl.innerHTML = gHtml || '<div style="color: var(--text-muted); padding: 20px;">No gaps detected yet</div>';
+}
+
+// ── Render: Recommendations ──
+function renderRecommendationsFromData(data) {
+  var container = document.getElementById('recommendationsList');
+  if (!container) return;
+  if (!data) { container.innerHTML = ''; return; }
+
+  var recs = [];
+  var criticalCount = 0;
+  var quickWins = 0;
+
+  for (var entry of Object.entries(data.serviceScores)) {
+    var svc = entry[0]; var scores = entry[1];
+    if (scores.target === 0) continue;
+    var info = SERVICE_SCORE_MAP[svc];
+    if (!info) continue;
+    var band = getScoreBand(scores.target);
+    var priority, interpretation, actions;
+
+    if (band === 'critical') {
+      priority = 'critical';
+      criticalCount++;
+      interpretation = info.label + ' score of ' + scores.target + ' is critically low. This service needs immediate attention and data collection to understand the root cause.';
+      actions = [
+        { action: 'Re-run ' + info.label + ' data collection to verify score', impact: 'high', effort: 'quick_win', timeframe: '1 day' },
+        { action: 'Investigate underlying metrics for ' + info.label, impact: 'high', effort: 'moderate', timeframe: '1-2 weeks' },
+      ];
+    } else if (band === 'weak') {
+      priority = 'high';
+      interpretation = info.label + ' score of ' + scores.target + ' is below the target threshold. Gap of ' + scores.gap + ' vs company average suggests this is an area needing investment.';
+      actions = [
+        { action: 'Develop improvement plan for ' + info.label, impact: 'high', effort: 'moderate', timeframe: '2-4 weeks' },
+        { action: 'Benchmark against top performers in ' + escapeHtml(data.sector), impact: 'medium', effort: 'quick_win', timeframe: '1 week' },
+      ];
+      quickWins++;
+    } else if (band === 'average') {
+      priority = 'medium';
+      interpretation = info.label + ' score of ' + scores.target + ' is in the average range. There is room for improvement to move into the strong band.';
+      actions = [
+        { action: 'Optimize ' + info.label + ' to push score above 70', impact: 'medium', effort: 'moderate', timeframe: '2-6 weeks' },
+      ];
+      quickWins++;
+    } else if (band === 'strong') {
+      priority = 'low';
+      interpretation = info.label + ' score of ' + scores.target + ' is strong. Maintain current performance and look for marginal gains.';
+      actions = [
+        { action: 'Monitor ' + info.label + ' for regression', impact: 'low', effort: 'quick_win', timeframe: 'Ongoing' },
+      ];
+      quickWins++;
+    } else {
+      priority = 'low';
+      interpretation = info.label + ' score of ' + scores.target + ' is in the leading band. This is a competitive advantage worth protecting.';
+      actions = [];
+    }
+
+    recs.push({
+      service: svc, serviceName: info.label, scoreBand: band,
+      targetScore: scores.target, benchmarkAvg: scores.benchmarkAvg,
+      percentile: scores.percentile, priority: priority, interpretation: interpretation, actions: actions
+    });
+  }
+
+  var priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+  recs.sort(function(a, b) { return (priorityOrder[a.priority] || 3) - (priorityOrder[b.priority] || 3); });
+
+  // Update summary cards
+  var recCards = document.querySelectorAll('#section-recommendations .card-value');
+  if (recCards[0]) {
+    var overallBand = getScoreBand(data.overallScore);
+    recCards[0].textContent = overallBand.charAt(0).toUpperCase() + overallBand.slice(1);
+    recCards[0].style.color = 'var(--' + (overallBand === 'leading' ? 'purple' : overallBand) + ')';
+  }
+  if (recCards[1]) recCards[1].textContent = criticalCount;
+  if (recCards[2]) recCards[2].textContent = quickWins;
+  var recDeltas = document.querySelectorAll('#section-recommendations .card-delta');
+  if (recDeltas[0]) recDeltas[0].textContent = data.overallScore + ' / 100 composite';
+
+  var html = '';
+  if (recs.length === 0) {
+    html = '<div style="color: var(--text-muted); padding: 20px; text-align: center;">No scores collected yet. Run data collection from the API to generate recommendations.</div>';
+  }
+  for (var rec of recs) {
+    var rInfo = SERVICE_SCORE_MAP[rec.service];
+    if (!rInfo) continue;
+    html += '<div class="rec-card" role="listitem" style="border-left: 3px solid ' + rInfo.color + ';">'
+      + '<div class="rec-header">'
+      + '<div class="rec-service">' + rInfo.icon + ' ' + escapeHtml(rec.serviceName) + ' <span class="dim-band band-' + rec.scoreBand + '" style="margin-left: 8px;">' + rec.scoreBand + '</span></div>'
+      + '<div class="rec-priority priority-' + rec.priority + '">' + escapeHtml(rec.priority) + '</div>'
+      + '</div>'
+      + '<div class="rec-interpretation">' + escapeHtml(rec.interpretation) + '</div>'
+      + '<div class="rec-actions">'
+      + rec.actions.map(function(a) {
+          var effortClass = a.effort === 'quick_win' ? 'quick' : a.effort === 'moderate' ? 'moderate' : 'major';
+          var effortLabel = (a.effort || '').replace('_', ' ');
+          return '<div class="rec-action">'
+            + '<div class="rec-action-text">' + escapeHtml(a.action) + '</div>'
+            + '<div class="rec-action-meta">'
+            + '<span class="impact-' + a.impact + '">' + escapeHtml(a.impact) + ' impact</span>'
+            + '<span class="effort-' + effortClass + '">' + escapeHtml(effortLabel) + '</span>'
+            + '<span style="color: var(--text-muted);">' + escapeHtml(a.timeframe) + '</span>'
+            + '</div></div>';
+        }).join('')
+      + '</div></div>';
+  }
+  container.innerHTML = html;
+}
+
+// ── Render: Collection Grid ──
+function renderCollectionGrid() {
+  var container = document.getElementById('collectionGrid');
+  var data = currentCompanyData;
+  if (!container || !data) return;
+  var html = '';
+  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
+    var service = entry[0]; var info = entry[1];
+    var scores = data.serviceScores[service];
+    if (!scores) continue;
+    var expiryHrs = EXPIRY_HOURS[service] || 168;
+    var needsKey = service === 'newsapi' || service === 'google_maps';
+    var noData = scores.target === 0;
+    var statusClass = noData ? 'status-pending' : 'status-success';
+    var statusText = noData ? 'pending' : 'success';
+    var freshClass = noData ? 'stale' : 'fresh';
+    var freshText = noData ? 'Not collected' : 'Fresh';
+    html += '<div class="collect-card" role="listitem">'
+      + '<div class="collect-card-header">'
+      + '<div class="collect-service">' + info.icon + ' ' + escapeHtml(info.label) + '</div>'
+      + '<div class="collect-status ' + statusClass + '">' + statusText + '</div>'
+      + '</div>'
+      + '<div class="collect-score" style="color: ' + (noData ? 'var(--text-muted)' : info.color) + ';">' + (noData ? '-' : scores.target) + '<span style="font-size: 12px; color: var(--text-muted); font-weight: 400;"> / 100</span></div>'
+      + '<div class="collect-meta">'
+      + 'Metric: ' + escapeHtml(info.metric) + '<br>'
+      + 'Expires: ' + expiryHrs + 'h &middot; ' + (needsKey ? 'Requires API key' : 'Free (no key)')
+      + '</div>'
+      + '<div style="margin-top: 8px;"><span class="freshness ' + freshClass + '">' + freshText + '</span></div>'
+      + '</div>';
+  }
+  container.innerHTML = html;
+}
+
+// ── Render: Data Points Table ──
+function renderDataPoints(serviceFilter) {
+  var tbody = document.getElementById('dataPointsBody');
+  if (!tbody) return;
+  if (!currentCompanyData) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Select a company to view data points</td></tr>';
+    return;
+  }
+
+  var livePoints = currentCompanyData._dataPoints;
+  if (livePoints && Array.isArray(livePoints) && livePoints.length > 0) {
+    var html = '';
+    var filtered = serviceFilter === 'all' ? livePoints : livePoints.filter(function(dp) { return dp && (dp.service === serviceFilter || dp.category === serviceFilter); });
+    for (var dp of filtered) {
+      var svc = dp.service || dp.category || 'unknown';
+      var info = SERVICE_SCORE_MAP[svc] || { icon: '&#9679;', color: '#94a3b8' };
+      var conf = safeNumber(dp.confidence);
+      var confClass = conf >= 0.8 ? 'conf-high' : conf >= 0.5 ? 'conf-med' : 'conf-low';
+      var displayVal;
+      if (dp.value === null || dp.value === undefined) {
+        displayVal = 'N/A';
+      } else if (typeof dp.value === 'boolean') {
+        displayVal = dp.value ? 'true' : 'false';
+      } else {
+        displayVal = escapeHtml(dp.value);
+      }
+      html += '<tr>'
+        + '<td><span style="color: ' + info.color + '; font-weight: 600;">' + info.icon + ' ' + escapeHtml(svc) + '</span></td>'
+        + '<td style="color: var(--text-muted);">' + escapeHtml(dp.category || svc) + '</td>'
+        + '<td style="font-family: \'SF Mono\', monospace; font-size: 12px;">' + escapeHtml(dp.metric || dp.key || '-') + '</td>'
+        + '<td style="font-weight: 600;">' + displayVal + '</td>'
+        + '<td style="color: var(--text-muted); font-size: 12px;">' + escapeHtml(dp.unit || '-') + '</td>'
+        + '<td><span class="confidence"><span class="confidence-dot ' + confClass + '" aria-hidden="true"></span>' + conf + '</span></td>'
+        + '<td><span class="freshness fresh">Live</span></td>'
+        + '</tr>';
+    }
+    tbody.innerHTML = html || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No data points found for this filter</td></tr>';
+    return;
+  }
+
+  // Fallback: show scores as data points
+  var fallbackHtml = '';
+  var services = serviceFilter === 'all' ? Object.keys(SERVICE_SCORE_MAP) : [serviceFilter];
+  for (var fsvc of services) {
+    var finfo = SERVICE_SCORE_MAP[fsvc];
+    if (!finfo) continue;
+    var fscores = currentCompanyData.serviceScores[fsvc];
+    if (!fscores || fscores.target === 0) continue;
+    fallbackHtml += '<tr>'
+      + '<td><span style="color: ' + finfo.color + '; font-weight: 600;">' + finfo.icon + ' ' + escapeHtml(fsvc) + '</span></td>'
+      + '<td style="color: var(--text-muted);">' + escapeHtml(finfo.label) + '</td>'
+      + '<td style="font-family: \'SF Mono\', monospace; font-size: 12px;">' + escapeHtml(finfo.metric) + '</td>'
+      + '<td style="font-weight: 600;">' + fscores.target + '</td>'
+      + '<td style="color: var(--text-muted); font-size: 12px;">score_0_100</td>'
+      + '<td><span class="confidence"><span class="confidence-dot conf-med" aria-hidden="true"></span>API</span></td>'
+      + '<td><span class="freshness fresh">Live</span></td>'
+      + '</tr>';
+  }
+  tbody.innerHTML = fallbackHtml || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No data points available. Data point collection has not been run for this company yet.</td></tr>';
+
+  // Update summary cards
+  var dpCards = document.querySelectorAll('#section-datapoints .card-value');
+  var scoredServices = Object.values(currentCompanyData.serviceScores).filter(function(s) { return s.target > 0; });
+  if (dpCards[0]) dpCards[0].textContent = scoredServices.length;
+  if (dpCards[1]) dpCards[1].textContent = currentCompanyData.scoredCount;
+  if (dpCards[2]) dpCards[2].textContent = currentCompanyData.confidence.toFixed(2);
+  if (dpCards[3]) dpCards[3].textContent = 9 - currentCompanyData.scoredCount;
+}
+
+// ── Charts ──
+function renderRadarChart(data) {
+  if (!data) return;
+  var canvas = document.getElementById('radarChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (window.radarChartInstance) window.radarChartInstance.destroy();
+
+  var labels = Object.values(SERVICE_SCORE_MAP).map(function(s) { return s.label; });
+  var targetData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].target : 0; });
+  var benchData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].benchmarkAvg : 0; });
+
+  window.radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: escapeHtml(data.name || 'Target'), data: targetData, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.15)', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#3b82f6' },
+        { label: 'Company Average', data: benchData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#8b5cf6', borderDash: [4, 4] },
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, color: '#64748b', backdropColor: 'transparent', font: { size: 10 } }, grid: { color: '#1e293b' }, angleLines: { color: '#1e293b' }, pointLabels: { color: '#94a3b8', font: { size: 11 } } } },
+      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } }
+    }
+  });
+}
+
+function renderGapChart(data) {
+  if (!data) return;
+  var canvas = document.getElementById('gapChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (window.gapChartInstance) window.gapChartInstance.destroy();
+
+  var entries = Object.entries(data.serviceScores).sort(function(a, b) { return a[1].gap - b[1].gap; });
+  var labels = entries.map(function(e) { return SERVICE_SCORE_MAP[e[0]] ? SERVICE_SCORE_MAP[e[0]].label : e[0]; });
+  var gaps = entries.map(function(e) { return e[1].gap; });
+  var colors = gaps.map(function(g) { return g > 2 ? '#10b981' : g < -2 ? '#ef4444' : '#f59e0b'; });
+
+  window.gapChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ label: 'Gap vs Average', data: gaps, backgroundColor: colors, borderRadius: 4, barThickness: 24 }] },
+    options: {
+      indexAxis: 'y', responsive: true,
+      scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }, y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } } },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function renderBenchmarkBarChart(data) {
+  if (!data) return;
+  var canvas = document.getElementById('benchmarkBarChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (window.benchmarkChartInstance) window.benchmarkChartInstance.destroy();
+
+  var labels = Object.values(SERVICE_SCORE_MAP).map(function(s) { return s.label; });
+  var targetData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].target : 0; });
+  var benchData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].benchmarkAvg : 0; });
+
+  var titleEl = document.querySelector('#section-benchmark .chart-title');
+  if (titleEl) titleEl.textContent = 'Score Report: ' + (data.name || 'Target') + ' vs Average';
+
+  window.benchmarkChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: escapeHtml(data.name || 'Target'), data: targetData, backgroundColor: 'rgba(59, 130, 246, 0.8)', borderRadius: 4 },
+        { label: 'Company Average', data: benchData, backgroundColor: 'rgba(139, 92, 246, 0.5)', borderRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }, x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } } },
+      plugins: { legend: { labels: { color: '#94a3b8' } } }
+    }
+  });
+}
+
+// ── Init ──
+document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+(async function init() {
+  try {
+    await checkApiStatus();
+    await loadCompanies();
+  } catch (e) {
+    console.error('Dashboard init error:', e);
+    showGlobalError('Failed to initialize dashboard. Please refresh the page.');
+  }
+})();
+</script>
+
+</body>
+</html>
