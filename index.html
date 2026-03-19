@@ -3,1723 +3,418 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>47X Performance Benchmark | Dashboard</title>
-<meta name="description" content="47X Performance Benchmark Dashboard - Composite benchmark scoring across 9 data services">
+<title>47X Intelligence Platform</title>
+<meta name="description" content="47X Performance Benchmark &amp; Arbitrage Intelligence — GCC company benchmarking across 9 dimensions">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F5F7;--surface:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;
+  --navy:#0B1D3A;--navy-light:#1E3A5F;
+  --text-primary:#111827;--text-secondary:#6B7280;--text-tertiary:#9CA3AF;
+  --accent:#2563EB;--accent-light:#EFF6FF;--accent-dark:#1D4ED8;
+  --green:#059669;--green-light:#ECFDF5;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --orange:#D97706;--orange-light:#FFFBEB;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.08);
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-  :root {
-    --bg-primary: #F5F5F7;
-    --bg-card: #FFFFFF;
-    --bg-card-hover: #FAFAFA;
-    --bg-input: #F0F0F2;
-    --border: #E5E7EB;
-    --accent: #1A1F36;
-    --accent-light: #2D3354;
-    --accent-glow: rgba(26, 31, 54, 0.06);
-    --green: #059669;
-    --green-light: #10b981;
-    --red: #DC2626;
-    --red-light: #EF4444;
-    --amber: #D97706;
-    --amber-light: #F59E0B;
-    --text-primary: #1A1F36;
-    --text-secondary: #4B5563;
-    --text-muted: #9CA3AF;
-    --purple: #7C3AED;
-    --cyan: #0891B2;
-    --gold: #B8860B;
-    --gold-light: #DAA520;
-    --critical: #DC2626;
-    --weak: #D97706;
-    --average: #2563EB;
-    --strong: #059669;
-    --leading: #7C3AED;
-    --focus-ring: 0 0 0 2px rgba(26, 31, 54, 0.3);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.06);
-  }
+.header{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:36px;height:36px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:-0.5px}
+.logo-text{font-size:18px;font-weight:700;letter-spacing:-0.3px;color:var(--navy)}
+.logo-text span{color:var(--text-tertiary);font-weight:400;font-size:13px;margin-left:8px}
+.nav-tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px}
+.nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;white-space:nowrap;font-family:inherit}
+.nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
+.nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+.header-right{display:flex;align-items:center;gap:14px}
+.company-selector{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text-primary);background:var(--surface);cursor:pointer;min-width:200px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.api-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.api-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
+.api-dot.live{background:var(--green)}.api-dot.offline{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+.main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
+.section{margin-bottom:32px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
+.level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.level-1{background:var(--accent-light);color:var(--accent)}.level-2{background:var(--purple-light);color:var(--purple)}.level-3{background:var(--green-light);color:var(--green)}
 
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.card-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:16px}
 
-  /* Skip to content link for keyboard nav */
-  .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--accent);
-    color: #fff;
-    padding: 8px 16px;
-    z-index: 1000;
-    font-size: 14px;
-    transition: top 0.2s;
-  }
-  .skip-link:focus {
-    top: 0;
-  }
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
 
-  /* Focus styles for keyboard navigation */
-  :focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-    border-radius: 4px;
-  }
+.score-ring{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin:0 auto 10px;position:relative;letter-spacing:-1px}
+.score-ring::before{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid var(--border-light)}
+.score-critical{color:var(--red)}.score-critical::before{border-color:rgba(220,38,38,0.2)}
+.score-weak{color:var(--orange)}.score-weak::before{border-color:rgba(217,119,6,0.2)}
+.score-average{color:var(--orange)}.score-average::before{border-color:rgba(217,119,6,0.2)}
+.score-strong{color:var(--green)}.score-strong::before{border-color:rgba(5,150,105,0.2)}
+.score-leading{color:var(--accent)}.score-leading::before{border-color:rgba(37,99,235,0.2)}
 
-  /* ── Header ── */
-  .header {
-    background: #FFFFFF;
-    border-bottom: 1px solid var(--border);
-    padding: 24px 40px;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .header-left { display: flex; align-items: center; gap: 16px; }
-  .logo {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
-  }
-  .logo-sub {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 2px;
-  }
-  .header-right { display: flex; align-items: center; gap: 20px; }
-  .header-badge {
-    background: rgba(26, 31, 54, 0.06);
-    color: var(--text-primary);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    border: 1px solid var(--border);
-  }
-  .api-status {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text-muted);
-  }
-  .api-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--green); animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.kpi-card{text-align:center;padding:20px}
+.kpi-value{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+.kpi-change{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;margin-top:6px;padding:2px 10px;border-radius:100px}
+.kpi-change.up{background:var(--green-light);color:var(--green)}.kpi-change.down{background:var(--red-light);color:var(--red)}
 
-  /* ── Navigation ── */
-  .nav-tabs {
-    display: flex;
-    background: #FFFFFF;
-    border-bottom: 1px solid var(--border);
-    padding: 0 40px;
-    gap: 0;
-    overflow-x: auto;
-  }
-  .nav-tab {
-    padding: 14px 24px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    cursor: pointer;
-    border: none;
-    background: none;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    white-space: nowrap;
-    user-select: none;
-  }
-  .nav-tab:hover { color: var(--text-primary); }
-  .nav-tab:focus-visible { box-shadow: var(--focus-ring); }
-  .nav-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); font-weight: 600; }
+.service-bar{margin-bottom:12px}
+.service-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.service-name{font-size:13px;font-weight:500;color:var(--text-primary)}
+.service-score{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace}
+.bar-track{height:6px;background:var(--border-light);border-radius:100px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:100px;transition:width 1s ease}
+.bar-benchmark{position:absolute;top:-4px;width:2px;height:14px;background:var(--text-primary);border-radius:1px;opacity:0.2}
 
-  /* ── Layout ── */
-  .content { padding: 32px 40px; max-width: 1600px; margin: 0 auto; }
-  .section { display: none; }
-  .section.active { display: block; }
-  .section-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-  .section-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+.scorecard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.scorecard-cell{text-align:center;padding:12px 8px;border-radius:var(--radius-sm);background:var(--bg);transition:all 0.2s}
+.scorecard-cell:hover{background:var(--accent-light)}
+.scorecard-cell .sc-score{font-size:22px;font-weight:800;letter-spacing:-0.5px;font-family:'JetBrains Mono',monospace;line-height:1}
+.scorecard-cell .sc-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;color:var(--text-secondary);margin-top:4px;line-height:1.2}
+.scorecard-cell .sc-bar{height:3px;border-radius:2px;margin-top:6px;background:var(--border-light);overflow:hidden}
+.scorecard-cell .sc-bar-fill{height:100%;border-radius:2px;transition:width 0.8s ease}
 
-  /* ── Grid layouts ── */
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
-  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 32px; }
-  .grid-9 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+.signal-item{padding:12px 0;border-bottom:1px solid var(--border-light);display:flex;gap:12px;align-items:flex-start}
+.signal-item:last-child{border-bottom:none}
+.signal-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.signal-icon.negative{background:var(--red-light)}.signal-icon.positive{background:var(--green-light)}
+.signal-icon.neutral{background:var(--accent-light)}.signal-icon.warning{background:var(--orange-light)}
+.signal-content{flex:1}
+.signal-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.signal-detail{font-size:12px;color:var(--text-secondary);line-height:1.4}
 
-  /* ── Cards ── */
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
-  }
-  .card:hover { border-color: #D1D5DB; box-shadow: var(--shadow-md); }
-  .card-label {
-    font-size: 12px; color: var(--text-muted);
-    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
-  }
-  .card-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
-  .card-sm .card-value { font-size: 24px; }
-  .card-delta { font-size: 13px; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
-  .card-delta.positive { color: var(--green); }
-  .card-delta.negative { color: var(--red); }
-  .card-delta.neutral { color: var(--amber); }
+.arb-card{border-left:3px solid var(--green);padding:20px;background:linear-gradient(135deg,var(--green-light) 0%,var(--surface) 100%)}
+.arb-card .card-title{color:var(--green);display:flex;align-items:center;gap:8px}
+.arb-urgency{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.urgency-high{background:var(--red-light);color:var(--red)}.urgency-medium{background:var(--orange-light);color:var(--orange)}.urgency-low{background:var(--accent-light);color:var(--accent)}
+.arb-metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(5,150,105,0.08);font-size:13px}
+.arb-metric:last-child{border-bottom:none}
+.arb-metric-label{color:var(--text-secondary)}.arb-metric-value{font-weight:600}
 
-  /* ── Score ring ── */
-  .score-ring {
-    display: flex; flex-direction: column; align-items: center; padding: 20px;
-  }
-  .score-ring-svg { width: 200px; height: 200px; }
-  .score-number {
-    font-size: 56px; font-weight: 800;
-    color: var(--text-primary);
-  }
-  .score-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+.opp-score{display:flex;align-items:center;gap:20px;padding:24px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--radius);color:#fff;margin-bottom:16px}
+.opp-score-value{font-size:52px;font-weight:800;line-height:1;letter-spacing:-2px;background:linear-gradient(135deg,#34D399,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.opp-score-label{font-size:14px;font-weight:500;color:rgba(255,255,255,0.7)}
+.opp-score-detail{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
 
-  /* ── Charts ── */
-  .chart-container {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm);
-  }
-  .chart-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-  .chart-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+.timeline-item{display:flex;gap:14px;padding:10px 0;position:relative}
+.timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;position:relative;z-index:1}
+.timeline-item:not(:last-child) .timeline-dot::after{content:'';position:absolute;left:4px;top:10px;width:2px;height:calc(100% + 10px);background:var(--border-light)}
+.timeline-text{font-size:13px;color:var(--text-secondary)}.timeline-text strong{color:var(--text-primary);font-weight:600}
+.timeline-date{font-size:11px;color:var(--text-tertiary);margin-top:2px}
 
-  /* ── Service dimension rows ── */
-  .dim-row {
-    display: flex; align-items: center; padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .dim-row:last-child { border-bottom: none; }
-  .dim-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 14px; flex-shrink: 0; }
-  .dim-info { width: 170px; flex-shrink: 0; }
-  .dim-name { font-size: 13px; font-weight: 600; }
-  .dim-desc { font-size: 11px; color: var(--text-muted); }
-  .dim-bars { flex: 1; display: flex; align-items: center; gap: 10px; }
-  .dim-bar-track { flex: 1; height: 20px; background: #F0F0F2; border-radius: 6px; overflow: hidden; position: relative; }
-  .dim-bar { height: 100%; border-radius: 6px; transition: width 0.8s ease; position: absolute; top: 0; left: 0; }
-  .dim-bar.target { background: linear-gradient(90deg, #1A1F36, #2D3354); z-index: 2; }
-  .dim-bar.benchmark { background: linear-gradient(90deg, #D1D5DB, #E5E7EB); z-index: 1; }
-  .dim-score { width: 48px; text-align: right; font-size: 14px; font-weight: 700; flex-shrink: 0; }
-  .dim-gap { width: 68px; text-align: center; font-size: 12px; font-weight: 600; flex-shrink: 0; padding: 3px 8px; border-radius: 12px; }
-  .dim-gap.above { background: rgba(16, 185, 129, 0.15); color: var(--green); }
-  .dim-gap.below { background: rgba(239, 68, 68, 0.15); color: var(--red); }
-  .dim-gap.at { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
-  .dim-band { width: 80px; text-align: center; font-size: 11px; font-weight: 600; flex-shrink: 0; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .band-critical { background: rgba(239, 68, 68, 0.15); color: var(--critical); }
-  .band-weak { background: rgba(245, 158, 11, 0.15); color: var(--weak); }
-  .band-average { background: rgba(59, 130, 246, 0.15); color: var(--average); }
-  .band-strong { background: rgba(16, 185, 129, 0.15); color: var(--strong); }
-  .band-leading { background: rgba(139, 92, 246, 0.15); color: var(--leading); }
+.action-step{display:flex;gap:14px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;align-items:flex-start}
+.action-number{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.action-text{font-size:13px;color:var(--text-primary);line-height:1.5}
+.action-text strong{font-weight:600}
+.action-text .impact{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;color:var(--green)}
 
-  /* ── Confidence indicator ── */
-  .confidence { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted); }
-  .confidence-dot { width: 6px; height: 6px; border-radius: 50%; }
-  .conf-high { background: var(--green); }
-  .conf-med { background: var(--amber); }
-  .conf-low { background: var(--red); }
+.comp-table{width:100%;border-collapse:collapse;font-size:13px}
+.comp-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.comp-table tbody td{padding:12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.comp-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
+.comp-table tbody tr:hover{background:var(--bg)}
+.comp-table .score-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
+.comp-table .trend-up{color:var(--green)}.comp-table .trend-down{color:var(--red)}
 
-  /* ── Company selector ── */
-  .company-selector { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
-  .company-btn {
-    padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 10px; color: var(--text-secondary); cursor: pointer;
-    font-size: 13px; font-weight: 500; transition: all 0.2s; box-shadow: var(--shadow-sm);
-  }
-  .company-btn:hover { border-color: #D1D5DB; color: var(--text-primary); box-shadow: var(--shadow-md); }
-  .company-btn:focus-visible { box-shadow: var(--focus-ring); }
-  .company-btn.active { background: var(--text-primary); border-color: var(--text-primary); color: #FFFFFF; }
+.macro-strip{display:flex;gap:20px;padding:12px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow-sm)}
+.macro-item{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.macro-item-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+.macro-item-value{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text-primary)}
+.macro-item-change{font-size:12px;font-weight:600}
+.macro-item-change.up{color:var(--green)}.macro-item-change.down{color:var(--red)}
+.macro-divider{width:1px;background:var(--border);align-self:stretch}
 
-  /* ── Recommendation cards ── */
-  .rec-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
-  }
-  .rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .rec-service { font-size: 14px; font-weight: 600; }
-  .rec-priority { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .priority-critical { background: rgba(239, 68, 68, 0.15); color: var(--critical); }
-  .priority-high { background: rgba(245, 158, 11, 0.15); color: var(--weak); }
-  .priority-medium { background: rgba(59, 130, 246, 0.15); color: var(--average); }
-  .priority-low { background: rgba(16, 185, 129, 0.15); color: var(--strong); }
-  .rec-interpretation { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
-  .rec-actions { display: flex; flex-direction: column; gap: 8px; }
-  .rec-action {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 14px; background: var(--bg-primary); border-radius: 8px;
-    font-size: 12px;
-  }
-  .rec-action-text { flex: 1; color: var(--text-secondary); }
-  .rec-action-meta { display: flex; gap: 10px; flex-shrink: 0; }
-  .rec-action-meta span { padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; }
-  .impact-high { background: rgba(239, 68, 68, 0.12); color: var(--red-light); }
-  .impact-medium { background: rgba(245, 158, 11, 0.12); color: var(--amber-light); }
-  .impact-low { background: rgba(59, 130, 246, 0.12); color: var(--accent-light); }
-  .effort-quick { background: rgba(16, 185, 129, 0.12); color: var(--green-light); }
-  .effort-moderate { background: rgba(245, 158, 11, 0.12); color: var(--amber-light); }
-  .effort-major { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
+.company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+.company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px}
+.company-info h1{font-size:26px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--navy)}
+.company-info .company-meta{font-size:13px;color:var(--text-secondary)}
+.company-info .company-meta strong{color:var(--text-primary)}
 
-  /* ── Data collection panel ── */
-  .collect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-  .collect-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 16px; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm);
-  }
-  .collect-card:hover { border-color: #D1D5DB; transform: translateY(-1px); box-shadow: var(--shadow-md); }
-  .collect-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .collect-service { font-size: 13px; font-weight: 600; }
-  .collect-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; }
-  .status-success { background: rgba(16, 185, 129, 0.15); color: var(--green); }
-  .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
-  .status-failed { background: rgba(239, 68, 68, 0.15); color: var(--red); }
-  .status-stale { background: rgba(100, 116, 139, 0.15); color: var(--text-muted); }
-  .collect-meta { font-size: 11px; color: var(--text-muted); }
-  .collect-score { font-size: 20px; font-weight: 800; margin-top: 4px; }
+.chart-container{position:relative;height:260px;margin-top:12px}
+.chart-container-tall{position:relative;height:320px;margin-top:12px}
 
-  /* ── Freshness indicators ── */
-  .freshness { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 6px; }
-  .fresh { background: rgba(16, 185, 129, 0.1); color: var(--green); }
-  .stale { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+.overlay-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:13px}
+.overlay-row:last-child{border-bottom:none}
+.overlay-label{color:var(--text-secondary)}.overlay-value{font-weight:600;font-family:'JetBrains Mono',monospace}
 
-  /* ── Data table ── */
-  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .data-table th { text-align: left; padding: 10px 14px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
-  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .data-table tr:hover td { background: rgba(26, 31, 54, 0.02); }
+.event-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);align-items:center}
+.event-item:last-child{border-bottom:none}
+.event-date-box{width:42px;height:42px;border-radius:8px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.event-date-month{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--red)}
+.event-date-day{font-size:15px;font-weight:700;line-height:1}
+.event-name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.event-location{font-size:11px;color:var(--text-secondary)}
 
-  /* ── API endpoint list ── */
-  .endpoint-list { display: flex; flex-direction: column; gap: 6px; }
-  .endpoint {
-    display: flex; align-items: center; gap: 12px;
-    padding: 8px 14px; background: var(--bg-primary); border-radius: 8px;
-    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
-  }
-  .endpoint-method { width: 50px; font-weight: 700; flex-shrink: 0; }
-  .method-get { color: var(--green); }
-  .method-post { color: var(--amber); }
-  .endpoint-path { color: var(--text-secondary); }
-  .endpoint-desc { color: var(--text-muted); margin-left: auto; font-family: inherit; font-size: 11px; }
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pricing-card{border-radius:var(--radius);padding:28px 24px;text-align:center;border:1px solid var(--border);background:var(--surface);position:relative;overflow:hidden}
+.pricing-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-lg)}
+.pricing-card.featured::before{content:'RECOMMENDED';position:absolute;top:0;left:0;right:0;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 0}
+.pricing-card.featured .pricing-header{margin-top:20px}
+.pricing-header h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.pricing-header .price{font-size:36px;font-weight:800;letter-spacing:-1px;margin:12px 0 4px}
+.pricing-header .price span{font-size:14px;font-weight:400;color:var(--text-secondary)}
+.pricing-features{list-style:none;text-align:left;margin-top:16px}
+.pricing-features li{padding:6px 0;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
+.pricing-features li::before{content:'\2713';color:var(--green);font-weight:700;font-size:12px}
 
-  /* ── Score band legend ── */
-  .band-legend { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
-  .band-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
-  .band-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.insight-box{background:linear-gradient(135deg,var(--accent-light),rgba(124,58,237,0.05));border:1px solid rgba(37,99,235,0.15);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+.insight-box .insight-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px}
+.insight-box .insight-text{font-size:13px;color:var(--text-primary);line-height:1.5}
+.insight-box .insight-source{font-size:11px;color:var(--text-tertiary);margin-top:6px}
 
-  /* ── Error banner ── */
-  .error-banner {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    font-size: 13px;
-    color: var(--red-light);
-    display: none;
-  }
-  .error-banner.visible { display: block; }
+.tab-content{display:none}.tab-content.active{display:block}
+.section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
 
-  /* ── Small Multiples ── */
-  .sm-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    text-align: center;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
-  }
-  .sm-card:hover { box-shadow: var(--shadow-md); }
-  .sm-icon { font-size: 20px; margin-bottom: 6px; }
-  .sm-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .sm-score { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
-  .sm-bar-wrap { height: 6px; background: #F0F0F2; border-radius: 3px; overflow: hidden; margin: 8px 0 6px; position: relative; }
-  .sm-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
-  .sm-meta { font-size: 10px; color: var(--text-muted); }
-  .sm-band { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+@media(max-width:1024px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-2-1{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}
+  .header-inner{flex-wrap:wrap;height:auto;padding:12px 0;gap:8px}
+  .nav-tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start}
+  .main{padding:20px}
+}
+@media(max-width:768px){
+  .header{padding:0 16px}.main{padding:16px}
+  .grid-4,.grid-3,.grid-2{grid-template-columns:1fr}
+  .company-hero{flex-direction:column;text-align:center;gap:12px}
+  .company-info h1{font-size:22px}
+  .macro-strip{flex-wrap:wrap;gap:12px}
+  .opp-score{flex-direction:column;text-align:center}
+}
 
-  /* ── Responsive ── */
-  /* iPad landscape (1024-1180px) */
-  @media (max-width: 1200px) {
-    .grid-4 { grid-template-columns: repeat(2, 1fr); }
-    .grid-3 { grid-template-columns: repeat(2, 1fr); }
-    .grid-9, .collect-grid { grid-template-columns: repeat(3, 1fr); }
-    .header { padding: 20px 24px; }
-    .content { padding: 24px; }
-    .nav-tabs { padding: 0 24px; }
-  }
-  /* iPad portrait / tablet */
-  @media (max-width: 834px) {
-    .grid-9, .collect-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 768px) {
-    .header { padding: 16px 20px; }
-    .content { padding: 20px; }
-    .nav-tabs { padding: 0 20px; }
-    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-    .grid-9, .collect-grid { grid-template-columns: 1fr; }
-    .dim-row { flex-wrap: wrap; gap: 8px; }
-  }
+.fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
+@keyframes fadeIn{to{opacity:1}}
+.fade-in:nth-child(1){animation-delay:0s}.fade-in:nth-child(2){animation-delay:0.05s}.fade-in:nth-child(3){animation-delay:0.1s}
+.fade-in:nth-child(4){animation-delay:0.15s}.fade-in:nth-child(5){animation-delay:0.2s}.fade-in:nth-child(6){animation-delay:0.25s}
+
+.footer{max-width:1440px;margin:0 auto;padding:32px 40px;text-align:center;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:12px}
+.footer a{color:var(--accent);text-decoration:none}
 </style>
 </head>
 <body>
-
-<!-- Skip to content for keyboard users -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
-<!-- HEADER -->
-<header class="header" role="banner">
-  <div class="header-left">
-    <div>
-      <div class="logo" aria-label="47X Performance Benchmark">47X</div>
-      <div class="logo-sub">Performance Benchmark</div>
-    </div>
+<div class="header"><div class="header-inner">
+  <div class="logo"><div class="logo-mark">47X</div><div class="logo-text">Intelligence Platform <span>by TrueGroup</span></div></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
+    <button class="nav-tab" onclick="switchTab('benchmarking',this)">Benchmarking</button>
+    <button class="nav-tab" onclick="switchTab('signals',this)">Signal Intelligence</button>
+    <button class="nav-tab" onclick="switchTab('arbitrage',this)">Arbitrage</button>
+    <button class="nav-tab" onclick="switchTab('macro',this)">Macro Overlay</button>
+    <button class="nav-tab" onclick="switchTab('pricing',this)">Platform &amp; Pricing</button>
   </div>
   <div class="header-right">
-    <div class="api-status" role="status" aria-live="polite">
-      <div class="api-dot" aria-hidden="true"></div>
-      <span>Data Engine v0.1.0</span>
-    </div>
-    <div class="header-badge" aria-label="9 Active Services">9 Active Services</div>
-    <time id="headerDate" style="color: var(--text-muted); font-size: 13px;"></time>
+    <select class="company-selector" id="companySelector" onchange="switchCompany(this.value)">
+      <option value="ega">Emirates Global Aluminium</option>
+      <option value="fab">First Abu Dhabi Bank</option>
+      <option value="aldar">Aldar Properties</option>
+    </select>
+    <div class="api-badge"><div class="api-dot" id="apiDot"></div><span id="apiLabel">Connecting...</span></div>
   </div>
-</header>
+</div></div>
 
-<!-- NAV -->
-<nav class="nav-tabs" role="tablist" aria-label="Dashboard sections">
-  <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="section-overview" data-section="overview" tabindex="0">Overview</button>
-  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-services" data-section="services" tabindex="-1">Service Scores</button>
-  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-benchmark" data-section="benchmark" tabindex="-1">Benchmark Comparison</button>
-  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-recommendations" data-section="recommendations" tabindex="-1">Recommendations</button>
-  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-collection" data-section="collection" tabindex="-1">Data Collection</button>
-  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-datapoints" data-section="datapoints" tabindex="-1">Data Points</button>
-  <button class="nav-tab" role="tab" aria-selected="false" aria-controls="section-api" data-section="api" tabindex="-1">API Reference</button>
-</nav>
-
-<main class="content" id="main-content">
-
-<!-- Error banner for API issues -->
-<div class="error-banner" id="globalError" role="alert" aria-live="assertive"></div>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: OVERVIEW -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section active" id="section-overview" role="tabpanel" aria-labelledby="tab-overview">
-  <h1 class="section-title">47X Score Overview</h1>
-  <p class="section-subtitle">Composite benchmark score comparing target company against sector peers across 9 data services</p>
-
-  <!-- Company Search -->
-  <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center;">
-    <div style="position: relative; flex: 1; max-width: 400px;">
-      <label for="companySearch" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Search companies</label>
-      <input type="text" id="companySearch" placeholder="Search companies from API..."
-        autocomplete="off"
-        style="width: 100%; padding: 10px 16px 10px 36px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 13px; outline: none; font-family: 'Inter', sans-serif;"
-        aria-label="Search companies"
-        aria-autocomplete="list"
-        aria-controls="searchDropdown"
-        aria-expanded="false">
-      <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true">&#128269;</span>
-      <div id="searchDropdown" role="listbox" aria-label="Company search results" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #FFFFFF; border: 1px solid var(--border); border-radius: 0 0 10px 10px; max-height: 240px; overflow-y: auto; z-index: 100; box-shadow: var(--shadow-md);"></div>
-    </div>
-    <button id="refreshBtn" style="padding: 10px 16px; background: var(--text-primary); border: 1px solid var(--text-primary); border-radius: 10px; color: #FFFFFF; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; font-family: 'Inter', sans-serif;" aria-label="Refresh company list from API">&#8635; Refresh from API</button>
-    <div id="apiConnectionStatus" role="status" aria-live="polite" style="font-size: 12px; color: var(--text-muted);"></div>
+<div class="main">
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="macro-strip">
+    <div class="macro-item"><div><div class="macro-item-label">Brent Crude</div><div class="macro-item-value">$102.14 <span class="macro-item-change up">+8.6%</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">UAE GDP Growth</div><div class="macro-item-value">5.0% <span class="macro-item-change up">+0.2pp</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">MSCI UAE</div><div class="macro-item-value">18.42 <span class="macro-item-change up">+2.8%</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">AED/USD</div><div class="macro-item-value">3.6725 <span class="macro-item-change" style="color:var(--text-tertiary)">Pegged</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">LME Aluminium</div><div class="macro-item-value">$3,397 <span class="macro-item-change up">+37% YoY</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">Next Event</div><div class="macro-item-value" style="font-family:inherit;font-size:13px">ADIPEC 2026 <span style="color:var(--text-tertiary);font-size:11px">Nov 2</span></div></div></div>
   </div>
-
-  <!-- Company Selector (populated from API) -->
-  <div class="company-selector" id="companySelector" role="group" aria-label="Select a company">
-    <div style="color: var(--text-muted); font-size: 13px; padding: 10px;">Loading companies from API...</div>
+  <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div></div></div>
+  <div class="grid-3 section">
+    <div class="card fade-in" style="border-top:3px solid var(--accent)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-1">Level 1</span> Benchmarking</div><div class="kpi-card"><div class="score-ring score-average" id="overviewScore">58</div><div class="kpi-label">47X Composite Score</div><div class="kpi-change down" id="overviewScoreChange">-4 vs Q3</div></div><div style="font-size:13px;color:var(--text-secondary);text-align:center;margin-top:8px" id="overviewScoreSummary">Below sector average (71). Weak in social presence and employer brand.</div></div>
+    <div class="card fade-in" style="border-top:3px solid var(--purple)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-2">Level 2</span> Context</div><div style="padding:4px 0"><div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon1">&loz;</div><div class="signal-content"><div class="signal-title" id="ctxSignal1Title">Guinea Crisis Write-Down</div><div class="signal-detail" id="ctxSignal1Detail">$765M impairment driving negative sentiment shift</div></div></div><div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon2">&darr;</div><div class="signal-content"><div class="signal-title" id="ctxSignal2Title">Talent Leak Detected</div><div class="signal-detail" id="ctxSignal2Detail">14 senior engineers departed in 6 months</div></div></div><div class="signal-item" style="padding:8px 0"><div class="signal-icon warning" id="ctxIcon3">&sim;</div><div class="signal-content"><div class="signal-title" id="ctxSignal3Title">Sentiment Shift</div><div class="signal-detail" id="ctxSignal3Detail">News sentiment: +0.4 to -0.2 in 90 days</div></div></div></div></div>
+    <div class="card fade-in" style="border-top:3px solid var(--green)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-3">Level 3</span> Arbitrage</div><div class="opp-score" style="margin:0"><div><div class="opp-score-value" id="overviewOppScore">87</div><div class="opp-score-label">Opportunity Score</div></div><div><div class="opp-score-label" id="overviewOppDesc">Competitor talent acquisition window. EGA engineering team actively seeking exit.</div><div class="opp-score-detail" id="overviewOppWindow">Window closes: ~Sept 2026</div></div></div></div>
   </div>
+  <div class="section" id="liveApiSection" style="display:none"><div class="section-header"><div class="section-title">Live API Data <span class="level-badge level-1">Real-Time</span></div></div><div class="grid-4" id="liveApiCards"></div></div>
+  <div class="section"><div class="section-header"><div class="section-title">Peer Comparison &mdash; Composite Scores</div></div><div class="card"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div>
+</div>
 
-  <!-- Top metrics -->
-  <div class="grid-4">
-    <div class="card" role="group" aria-label="47X Score">
-      <div class="card-label">47X Score</div>
-      <div class="card-value" style="color: var(--text-primary);">--</div>
-      <div class="card-delta neutral">Loading...</div>
-    </div>
-    <div class="card" role="group" aria-label="Services Scored">
-      <div class="card-label">Services Scored</div>
-      <div class="card-value">-- / 9</div>
-      <div class="card-delta neutral">Loading...</div>
-    </div>
-    <div class="card" role="group" aria-label="Benchmark Group">
-      <div class="card-label">Benchmark Group</div>
-      <div class="card-value" style="font-size: 22px;">--</div>
-      <div class="card-delta neutral">Loading...</div>
-    </div>
-    <div class="card" role="group" aria-label="Data Points">
-      <div class="card-label">Data Points</div>
-      <div class="card-value">--</div>
-      <div class="card-delta neutral">Loading...</div>
-    </div>
+<!-- BENCHMARKING -->
+<div class="tab-content" id="tab-benchmarking">
+  <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-1">Level 1</span> Service Score Breakdown</div></div>
+    <div class="grid-2-1"><div class="card"><div class="card-title" id="benchCompanyName">Emirates Global Aluminium</div><div class="card-subtitle">Score vs Sector Average (dashed line)</div><div id="serviceBars"></div></div>
+    <div><div class="card" style="margin-bottom:16px"><div class="card-title">9-Dimension Scorecard</div><div class="card-subtitle">Small multiples view &mdash; score vs benchmark</div><div class="scorecard-grid" id="scorecardGrid"></div></div><div class="card"><div class="card-title">Score Band</div><div style="text-align:center;padding:12px 0"><div class="kpi-value" id="benchBand" style="color:var(--orange)">Average</div><div class="kpi-label">50-69 points</div></div></div></div></div></div>
+  <div class="section"><div class="card"><div class="card-title">Score History &mdash; 12 Month Trend</div><div class="card-subtitle">Composite 47X score vs sector average</div><div class="chart-container-tall"><canvas id="historyChart"></canvas></div></div></div>
+</div>
+
+<!-- SIGNAL INTELLIGENCE -->
+<div class="tab-content" id="tab-signals">
+  <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-2">Level 2</span> Contextual Intelligence</div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Signal Timeline</div><div class="card-subtitle" id="ctxTimelineSub">Key events affecting EGA's score trajectory</div><div id="signalTimeline"></div></div><div class="card"><div class="card-title">News Sentiment Analysis</div><div class="card-subtitle">Rolling 30-day sentiment score (-1 to +1)</div><div class="chart-container-tall"><canvas id="sentimentChart"></canvas></div></div></div></div>
+  <div class="section"><div class="grid-3"><div class="card"><div class="card-title">Talent Signals</div><div class="card-subtitle">LinkedIn intelligence proxy</div><div id="talentSignals"></div></div><div class="card"><div class="card-title">Financial Proxies</div><div class="card-subtitle">Estimated from public signals</div><div id="financialSignals"></div></div><div class="card"><div class="card-title">Market Context</div><div class="card-subtitle">Sector and macro factors</div><div id="marketContext"></div></div></div></div>
+  <div class="section"><div class="card"><div class="card-title">Competitor Movement Tracker</div><div class="card-subtitle" id="ctxCompMoveSub">Score changes across EGA's competitive set in the last 90 days</div><div class="chart-container-tall"><canvas id="competitorMovementChart"></canvas></div></div></div>
+</div>
+
+<!-- ARBITRAGE -->
+<div class="tab-content" id="tab-arbitrage">
+  <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-3">Level 3</span> Arbitrage Opportunities</div></div>
+    <div class="opp-score"><div><div class="opp-score-value" id="arbOppScore">87</div></div><div><div class="opp-score-label" id="arbOppHeadline">Active Arbitrage Window Detected</div><div class="opp-score-detail" id="arbOppFormula">Urgency (9/10) x Impact (8/10) x Feasibility (7/10) = 87/100</div></div></div>
+    <div class="grid-2" style="margin-bottom:20px"><div class="card arb-card"><div class="card-title"><span id="arbOpp1Title">Talent Acquisition Window</span><span class="arb-urgency urgency-high" id="arbOpp1Urgency">High Urgency</span></div><div class="card-subtitle" id="arbOpp1Desc"></div><div id="arbOpp1Metrics"></div></div><div class="card arb-card"><div class="card-title"><span id="arbOpp2Title">Client Migration</span><span class="arb-urgency urgency-medium" id="arbOpp2Urgency">Medium Urgency</span></div><div class="card-subtitle" id="arbOpp2Desc"></div><div id="arbOpp2Metrics"></div></div></div>
+    <div class="card" style="margin-bottom:20px"><div class="card-title">Recommended Action Plan</div><div class="card-subtitle" id="arbActionSub">Sequenced actions to exploit the current arbitrage window</div><div id="actionPlan" style="margin-top:16px"></div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Timing Window Analysis</div><div class="card-subtitle">When to act and why</div><div class="chart-container-tall"><canvas id="timingChart"></canvas></div></div><div class="card"><div class="card-title">Cross-Signal Correlation</div><div class="card-subtitle" id="arbCorrSub">How EGA's weaknesses create opportunities</div><div id="correlationSignals"></div></div></div></div>
+</div>
+
+<!-- MACRO OVERLAY -->
+<div class="tab-content" id="tab-macro">
+  <div class="section"><div class="section-header"><div class="section-title">GCC Macro Overlay</div></div>
+    <div class="insight-box"><div class="insight-label">Intelligence Briefing &mdash; March 2026</div><div class="insight-text">ADQ and Terna Energy announced a <strong>&euro;2.7B joint investment in Greek energy infrastructure</strong>, signalling GCC sovereign wealth funds expanding EU bridge strategies. This validates the 47X thesis: outside-in signals detect capital deployment patterns before they reach mainstream analysis. Separately, Stargate UAE ($100B AI campus) and PIF's Alat subsidiary ($100B domestic AI mandate) confirm GCC is deploying at scale into AI infrastructure.</div><div class="insight-source">Sources: Reuters, Financial Times, PIF Annual Report 2025</div></div>
+    <div class="grid-3" style="margin-bottom:20px"><div class="card kpi-card"><div class="kpi-value" style="color:var(--green)">5.0%</div><div class="kpi-label">UAE GDP Growth (2026E)</div><div class="kpi-change up">+0.2pp vs 2025</div></div><div class="card kpi-card"><div class="kpi-value" style="color:var(--accent)">$102.14</div><div class="kpi-label">Brent Crude (USD/bbl)</div><div class="kpi-change up">+8.6% WoW</div></div><div class="card kpi-card"><div class="kpi-value" style="color:var(--purple)">$4.8B</div><div class="kpi-label">GCC Consulting Market</div><div class="kpi-change up">+9% YoY</div></div></div>
+    <div class="grid-2" style="margin-bottom:20px"><div class="card"><div class="card-title">Oil Price vs GCC Corporate Sentiment</div><div class="card-subtitle">12-month correlation analysis</div><div class="chart-container-tall"><canvas id="oilChart"></canvas></div></div><div class="card"><div class="card-title">Regional Investment Flows</div><div class="card-subtitle">FDI and SWF activity by sector (2025-2026)</div><div class="chart-container-tall"><canvas id="investmentChart"></canvas></div></div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Key Economic Indicators</div><div class="card-subtitle">UAE and broader GCC</div><div class="overlay-row"><span class="overlay-label">UAE Non-Oil GDP Growth</span><span class="overlay-value" style="color:var(--green)">5.2%</span></div><div class="overlay-row"><span class="overlay-label">Saudi GDP Growth</span><span class="overlay-value" style="color:var(--green)">3.8%</span></div><div class="overlay-row"><span class="overlay-label">UAE PMI (Composite)</span><span class="overlay-value">55.0</span></div><div class="overlay-row"><span class="overlay-label">UAE Inflation (CPI)</span><span class="overlay-value">2.1%</span></div><div class="overlay-row"><span class="overlay-label">UAE Corporate Tax Rate</span><span class="overlay-value">9%</span></div><div class="overlay-row"><span class="overlay-label">CBUAE Base Rate</span><span class="overlay-value">3.65%</span></div><div class="overlay-row"><span class="overlay-label">UAE FDI Inflows (2025)</span><span class="overlay-value" style="color:var(--green)">$33.2B</span></div><div class="overlay-row"><span class="overlay-label">Mubadala AUM</span><span class="overlay-value">$358B</span></div></div><div class="card"><div class="card-title">GCC Events &amp; Trade Show Calendar</div><div class="card-subtitle">Key decision-making windows</div><div id="eventCalendar"></div></div></div>
+    <div class="section-divider"></div><div class="section-header"><div class="section-title">Regulatory Intelligence</div></div>
+    <div class="grid-2"><div class="insight-box" style="margin-bottom:0"><div class="insight-label">EU AI Act &mdash; High-Risk Obligations</div><div class="insight-text">The EU AI Act's "high-risk" classification obligations activate <strong>August 2026</strong>. Any AI system used for credit scoring, employment decisions, or critical infrastructure management in EU jurisdictions will require: (1) conformity assessments, (2) human oversight documentation, (3) audit trails. The 47X scoring engine is positioned as a <strong>white-box, explainable</strong> alternative to black-box AI tools &mdash; a significant compliance advantage.</div><div class="insight-source">Source: EUR-Lex, European Commission AI Office</div></div><div class="insight-box" style="margin-bottom:0"><div class="insight-label">NBIM Proof-of-Concept Anchor</div><div class="insight-text">Norges Bank Investment Management (NBIM), managing Norway's <strong>$2.2 trillion</strong> sovereign wealth fund, has deployed Claude AI for ESG screening of portfolio companies. This validates institutional-grade AI for investment analysis and provides a powerful proof-of-concept reference for the 47X platform. Additional EU regulatory frameworks &mdash; DORA and FiDA &mdash; create further compliance tailwinds.</div><div class="insight-source">Source: NBIM Annual Report, SaaSpocalypse Feb 2026 analysis</div></div></div>
   </div>
+</div>
 
-  <!-- 3x3 Small Multiples Scorecard -->
-  <div class="chart-container">
-    <h2 class="chart-title">Service Scorecard</h2>
-    <p class="chart-subtitle">9 dimensions scored 0-100. Each mini chart shows target vs benchmark average.</p>
-    <div class="grid-9" id="smallMultiples" role="list" aria-label="Small multiples scorecard"></div>
+<!-- PLATFORM & PRICING -->
+<div class="tab-content" id="tab-pricing">
+  <div class="section"><div class="section-header"><div class="section-title">Platform Architecture &amp; Pricing</div></div>
+    <div class="insight-box"><div class="insight-label">Sovereign Cloud Deployment</div><div class="insight-text">The 47X Intelligence Platform is designed for <strong>sovereign cloud deployment</strong>, ensuring all data processing occurs within jurisdiction-compliant infrastructure. For GCC clients, data residency in UAE or Saudi datacentres. For EU clients, GDPR-compliant hosting with no cross-border data transfer. The platform operates as <strong>Infrastructure-as-a-Service (IaaS)</strong>, not SaaS &mdash; clients own their data, models, and outputs entirely.</div></div>
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="card fade-in" style="border-top:3px solid var(--accent)"><div class="section-title" style="margin-bottom:12px"><span class="level-badge level-1">Level 1</span></div><h3 style="font-size:18px;font-weight:700;margin-bottom:6px">Benchmarking</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px">9-dimension scoring across website, social, media, employer brand, advertising, tech stack, brand, reviews, and corporate registration. Composite score with sector percentile ranking.</p><div style="font-size:12px;color:var(--text-tertiary)"><strong style="color:var(--text-primary)">181</strong> data points per company<br><strong style="color:var(--text-primary)">9</strong> automated services<br><strong style="color:var(--text-primary)">Real-time</strong> collection &amp; scoring</div></div>
+      <div class="card fade-in" style="border-top:3px solid var(--purple)"><div class="section-title" style="margin-bottom:12px"><span class="level-badge level-2">Level 2</span></div><h3 style="font-size:18px;font-weight:700;margin-bottom:6px">Signal Intelligence</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px">Contextual layer adding talent signals, financial proxies, news sentiment, and competitor movement tracking. Transforms static scores into dynamic intelligence with temporal awareness.</p><div style="font-size:12px;color:var(--text-tertiary)"><strong style="color:var(--text-primary)">5</strong> signal categories<br><strong style="color:var(--text-primary)">12-month</strong> sentiment tracking<br><strong style="color:var(--text-primary)">Cross-signal</strong> correlation</div></div>
+      <div class="card fade-in" style="border-top:3px solid var(--green)"><div class="section-title" style="margin-bottom:12px"><span class="level-badge level-3">Level 3</span></div><h3 style="font-size:18px;font-weight:700;margin-bottom:6px">Arbitrage Intelligence</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px">Actionable opportunity identification with urgency scoring, timing windows, and sequenced action plans. Turns intelligence into competitive advantage with specific, measurable recommendations.</p><div style="font-size:12px;color:var(--text-tertiary)"><strong style="color:var(--text-primary)">Opportunity</strong> scoring (U x I x F)<br><strong style="color:var(--text-primary)">Timing</strong> window analysis<br><strong style="color:var(--text-primary)">Action</strong> plans with ROI</div></div>
+    </div>
+    <div class="section-header"><div class="section-title">3-Tier IaaS Pricing Model</div></div>
+    <div class="pricing-grid">
+      <div class="pricing-card"><div class="pricing-header"><h3>Base Platform</h3><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">Level 1 Benchmarking</div><div class="price">$2,500<span>/mo</span></div></div><ul class="pricing-features"><li>Up to 50 company profiles</li><li>9-dimension automated scoring</li><li>181 data points per company</li><li>Quarterly refresh cycle</li><li>Sector benchmark comparison</li><li>PDF export &amp; API access</li><li>Sovereign cloud hosting</li></ul></div>
+      <div class="pricing-card featured"><div class="pricing-header"><h3>Intelligence Suite</h3><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">Levels 1 + 2 + 3</div><div class="price">$7,500<span>/mo</span></div><div style="font-size:12px;color:var(--accent)">+ $0.50 per query</div></div><ul class="pricing-features"><li>Unlimited company profiles</li><li>All Level 1 features</li><li>Signal intelligence layer</li><li>Arbitrage opportunity scoring</li><li>Action plan generation</li><li>Weekly refresh cycle</li><li>Dedicated analyst support</li><li>Custom sector models</li></ul></div>
+      <div class="pricing-card"><div class="pricing-header"><h3>Outcome Partnership</h3><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">Full Platform + Upside</div><div class="price">Custom</div><div style="font-size:12px;color:var(--green)">Base + outcome-linked upside</div></div><ul class="pricing-features"><li>Everything in Intelligence Suite</li><li>Real-time continuous monitoring</li><li>Bespoke financial proxy models</li><li>Board-ready reporting</li><li>Embedded analyst team</li><li>Outcome-linked fee structure</li><li>White-label deployment option</li><li>EU AI Act compliance package</li></ul></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="insight-box"><div class="insight-label">Case Study: GCC-EU Bridge</div><div class="insight-text">ADQ's joint venture with Terna Energy for <strong>&euro;2.7B in Greek energy infrastructure</strong> exemplifies the GCC-EU investment bridge. The 47X platform uniquely serves this corridor: (1) outside-in benchmarking of target companies, (2) EU AI Act compliance documentation, (3) sovereign cloud deployment in both jurisdictions. <strong>PIF tracks 60% local procurement</strong> through its Alat subsidiary &mdash; a Localization Score dimension is being developed for the 47X framework.</div><div class="insight-source">Sources: Reuters, PIF Annual Report 2025, ADQ public filings</div></div>
   </div>
+</div>
+</div>
 
-  <!-- Gap analysis -->
-  <div class="chart-container">
-    <h2 class="chart-title">Strengths &amp; Gaps</h2>
-    <p class="chart-subtitle">Services where target exceeds or falls behind benchmark</p>
-    <canvas id="gapChart" height="300" aria-label="Bar chart showing gap between target and benchmark per service"></canvas>
-  </div>
-
-  <!-- Service dimension breakdown -->
-  <div class="chart-container">
-    <h2 class="chart-title">Service Score Comparison</h2>
-    <p class="chart-subtitle">Target vs Benchmark Average &mdash; Score = (target / benchmark_avg) &times; 100, capped at 100</p>
-    <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);">
-        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, #1A1F36, #2D3354);" aria-hidden="true"></div> Target
-      </div>
-      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);">
-        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, #D1D5DB, #E5E7EB);" aria-hidden="true"></div> Benchmark Avg
-      </div>
-    </div>
-    <div id="dimensionRows" role="list" aria-label="Service score comparison rows"></div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: SERVICE SCORES -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section" id="section-services" role="tabpanel" aria-labelledby="tab-services">
-  <h1 class="section-title">Service Score Map</h1>
-  <p class="section-subtitle">Each service produces one headline score (0-100) used for the 47X composite. Drill into each for underlying data points.</p>
-
-  <div class="band-legend" role="list" aria-label="Score band legend">
-    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--critical);" aria-hidden="true"></div> Critical (0-29)</div>
-    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--weak);" aria-hidden="true"></div> Weak (30-49)</div>
-    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--average);" aria-hidden="true"></div> Average (50-69)</div>
-    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--strong);" aria-hidden="true"></div> Strong (70-89)</div>
-    <div class="band-legend-item" role="listitem"><div class="band-legend-dot" style="background: var(--leading);" aria-hidden="true"></div> Leading (90-100)</div>
-  </div>
-
-  <div class="grid-9" id="serviceCards" role="list" aria-label="Service score cards"></div>
-
-  <!-- Detailed breakdown per service -->
-  <div class="chart-container" id="serviceDetail" style="display: none;">
-    <h2 class="chart-title" id="serviceDetailTitle"></h2>
-    <p class="chart-subtitle" id="serviceDetailDesc"></p>
-    <div id="serviceDetailContent"></div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: BENCHMARK COMPARISON -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section" id="section-benchmark" role="tabpanel" aria-labelledby="tab-benchmark">
-  <h1 class="section-title">Benchmark Comparison</h1>
-  <p class="section-subtitle">Target company scores vs benchmark group averages across all 9 services</p>
-
-  <div class="grid-3" style="margin-bottom: 24px;">
-    <div class="card">
-      <div class="card-label">Benchmark Group</div>
-      <div class="card-value" style="font-size: 20px;">--</div>
-      <div class="card-delta neutral">Loading...</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Reference Companies</div>
-      <div class="benchmark-refs" style="margin-top: 8px; font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
-        Loading...
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-label">Refresh Interval</div>
-      <div class="card-value" style="font-size: 20px;">30 days</div>
-      <div class="card-delta neutral">Last benchmarked: --</div>
-    </div>
-  </div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Score Report</h2>
-    <p class="chart-subtitle">Percentile model: score = (target / benchmark_avg) &times; 100, capped at 100</p>
-    <canvas id="benchmarkBarChart" height="350" aria-label="Bar chart comparing target vs benchmark scores"></canvas>
-  </div>
-
-  <div class="grid-2">
-    <div class="chart-container">
-      <h2 class="chart-title" style="color: var(--green);">Strengths (Above Benchmark)</h2>
-      <p class="chart-subtitle">Services where target exceeds benchmark by &gt;2 points</p>
-      <div id="strengthsList" role="list" aria-label="Strength areas"></div>
-    </div>
-    <div class="chart-container">
-      <h2 class="chart-title" style="color: var(--red);">Gaps (Below Benchmark)</h2>
-      <p class="chart-subtitle">Services where target falls behind benchmark by &gt;2 points &mdash; sorted by biggest deficit</p>
-      <div id="gapsList" role="list" aria-label="Gap areas"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: RECOMMENDATIONS -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section" id="section-recommendations" role="tabpanel" aria-labelledby="tab-recommendations">
-  <h1 class="section-title">Actionable Recommendations</h1>
-  <p class="section-subtitle">Generated from score bands and underlying data points. Each recommendation includes specific actions with impact/effort estimates.</p>
-
-  <div class="grid-3" style="margin-bottom: 24px;">
-    <div class="card">
-      <div class="card-label">Overall Band</div>
-      <div class="card-value" style="color: var(--text-muted);">--</div>
-      <div class="card-delta neutral">-- / 100 composite</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Critical Actions</div>
-      <div class="card-value" style="color: var(--red);">--</div>
-      <div class="card-delta negative">Require immediate attention</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Quick Wins</div>
-      <div class="card-value" style="color: var(--green);">--</div>
-      <div class="card-delta positive">Can be done in 1-2 weeks</div>
-    </div>
-  </div>
-
-  <div id="recommendationsList" role="list" aria-label="Recommendations"></div>
-</section>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: DATA COLLECTION -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section" id="section-collection" role="tabpanel" aria-labelledby="tab-collection">
-  <h1 class="section-title">Data Collection Status</h1>
-  <p class="section-subtitle">9 active collectors running against target company. Click a service to trigger re-collection.</p>
-
-  <div class="collect-grid" id="collectionGrid" role="list" aria-label="Data collection status cards"></div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Collection Timeline</h2>
-    <p class="chart-subtitle">When each service was last collected and when data expires</p>
-    <canvas id="collectionTimeline" height="250" aria-label="Timeline chart showing data collection and expiry dates"></canvas>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: DATA POINTS -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section" id="section-datapoints" role="tabpanel" aria-labelledby="tab-datapoints">
-  <h1 class="section-title">Data Points Explorer</h1>
-  <p class="section-subtitle">Every collected metric stored as a DataPoint with confidence score, expiry, and provenance</p>
-
-  <div class="grid-4" style="margin-bottom: 24px;">
-    <div class="card card-sm">
-      <div class="card-label">Total Data Points</div>
-      <div class="card-value">--</div>
-    </div>
-    <div class="card card-sm">
-      <div class="card-label">Categories</div>
-      <div class="card-value">--</div>
-    </div>
-    <div class="card card-sm">
-      <div class="card-label">Avg Confidence</div>
-      <div class="card-value">--</div>
-    </div>
-    <div class="card card-sm">
-      <div class="card-label">Stale Points</div>
-      <div class="card-value" style="color: var(--amber);">--</div>
-    </div>
-  </div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Data Points by Service</h2>
-    <p class="chart-subtitle">Each service stores individual metrics as separate data_point rows, plus a full compound result</p>
-
-    <!-- Filter buttons -->
-    <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;" role="group" aria-label="Filter data points by service">
-      <button class="company-btn active" data-dp-filter="all" style="padding: 6px 14px; font-size: 12px;">All</button>
-      <button class="company-btn" data-dp-filter="lighthouse" style="padding: 6px 14px; font-size: 12px;">Lighthouse</button>
-      <button class="company-btn" data-dp-filter="google_ads" style="padding: 6px 14px; font-size: 12px;">Google Ads</button>
-      <button class="company-btn" data-dp-filter="opencorporates" style="padding: 6px 14px; font-size: 12px;">OpenCorporates</button>
-      <button class="company-btn" data-dp-filter="newsapi" style="padding: 6px 14px; font-size: 12px;">NewsAPI</button>
-      <button class="company-btn" data-dp-filter="techstack" style="padding: 6px 14px; font-size: 12px;">Tech Stack</button>
-      <button class="company-btn" data-dp-filter="google_maps" style="padding: 6px 14px; font-size: 12px;">Google Maps</button>
-      <button class="company-btn" data-dp-filter="social_media" style="padding: 6px 14px; font-size: 12px;">Social Media</button>
-      <button class="company-btn" data-dp-filter="glassdoor" style="padding: 6px 14px; font-size: 12px;">Glassdoor</button>
-      <button class="company-btn" data-dp-filter="brand_audit" style="padding: 6px 14px; font-size: 12px;">Brand Audit</button>
-    </div>
-
-    <table class="data-table" id="dataPointsTable" aria-label="Data points table">
-      <thead>
-        <tr>
-          <th scope="col">Service</th>
-          <th scope="col">Category</th>
-          <th scope="col">Metric</th>
-          <th scope="col">Value</th>
-          <th scope="col">Unit</th>
-          <th scope="col">Confidence</th>
-          <th scope="col">Freshness</th>
-        </tr>
-      </thead>
-      <tbody id="dataPointsBody"></tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════ -->
-<!-- SECTION: API REFERENCE -->
-<!-- ══════════════════════════════════════════════ -->
-<section class="section" id="section-api" role="tabpanel" aria-labelledby="tab-api">
-  <h1 class="section-title">API Reference</h1>
-  <p class="section-subtitle">47X Data Engine REST API &mdash; <code style="color: var(--text-primary); font-weight: 600;">https://47x-audit-platform.truegroup.workers.dev/</code> &mdash; All responses use the standard ApiResponse envelope.</p>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Response Envelope</h2>
-    <p class="chart-subtitle">Every endpoint returns this structure</p>
-    <pre style="background: #F0F0F2; padding: 16px; border-radius: 10px; font-size: 12px; color: var(--text-secondary); overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; line-height: 1.6;" aria-label="API response envelope JSON structure"><code>{
-  "success": boolean,
-  "data": T | null,
-  "error": string | null,
-  "meta": {
-    "companyId": string,
-    "service": ServiceName | "all",
-    "collectedAt": string,     // ISO 8601
-    "confidence": number,      // 0.0 - 1.0
-    "dataPointCount": number,
-    "stale": boolean           // true if data past expiry
-  }
-}</code></pre>
-  </div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Companies</h2>
-    <div class="endpoint-list" role="list" aria-label="Company API endpoints">
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies</span><span class="endpoint-desc">List all companies</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug</span><span class="endpoint-desc">Get company by slug</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies</span><span class="endpoint-desc">Create new company</span></div>
-    </div>
-  </div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Data Collection</h2>
-    <div class="endpoint-list" role="list" aria-label="Data collection API endpoints">
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/data</span><span class="endpoint-desc">Get latest data (all services)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/data?service=lighthouse</span><span class="endpoint-desc">Filter by service</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/data/:metric/history</span><span class="endpoint-desc">Metric history over time</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect</span><span class="endpoint-desc">Trigger ALL 9 services</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/lighthouse</span><span class="endpoint-desc">Google PageSpeed Insights (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/google-ads</span><span class="endpoint-desc">Ads Transparency Center (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/opencorporates</span><span class="endpoint-desc">Company registration (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/news</span><span class="endpoint-desc">NewsAPI (requires key)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/techstack</span><span class="endpoint-desc">HTML fingerprinting (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/google-maps</span><span class="endpoint-desc">Places API (requires key)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/glassdoor</span><span class="endpoint-desc">Employer profile scrape (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/social-media</span><span class="endpoint-desc">Social profile scrape (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/collect/brand-audit</span><span class="endpoint-desc">Website quality crawl (free)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/runs/:service</span><span class="endpoint-desc">Check collection status</span></div>
-    </div>
-  </div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Benchmarking &amp; 47X Scoring</h2>
-    <div class="endpoint-list" role="list" aria-label="Benchmarking API endpoints">
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/benchmarks</span><span class="endpoint-desc">List benchmark groups</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/benchmarks</span><span class="endpoint-desc">Create benchmark group</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/benchmarks/:id</span><span class="endpoint-desc">Get benchmark group</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/benchmarks/:id/refresh</span><span class="endpoint-desc">Refresh benchmark scores</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/scores</span><span class="endpoint-desc">Quick score summary</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/score</span><span class="endpoint-desc">Generate full 47X Score Report</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/score</span><span class="endpoint-desc">Get latest cached score</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/scoring/services</span><span class="endpoint-desc">List scored services</span></div>
-    </div>
-  </div>
-
-  <div class="chart-container">
-    <h2 class="chart-title">Recommendations</h2>
-    <div class="endpoint-list" role="list" aria-label="Recommendations API endpoints">
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/companies/:slug/recommendations</span><span class="endpoint-desc">Generate recommendations (re-scores first)</span></div>
-      <div class="endpoint" role="listitem"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/companies/:slug/recommendations</span><span class="endpoint-desc">Get from cached scores</span></div>
-    </div>
-  </div>
-</section>
-
-</main><!-- end content -->
+<div class="footer">47X Intelligence Platform &copy; 2026 &mdash; Built by <a href="https://truegroup.agency" target="_blank">TrueGroup</a> &bull; API: <a href="https://47x-audit-platform.truegroup.workers.dev/" target="_blank">Live Endpoint</a> &bull; Sovereign Cloud Ready</div>
 
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 47X DATA ENGINE - Live API Dashboard
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Connected to Patrick's Cloudflare Workers API
+var API_BASE='https://47x-audit-platform.truegroup.workers.dev';
+var companies={
+ega:{name:'Emirates Global Aluminium',short:'EGA',sector:'Industrial / Aluminium',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$8.7B Revenue',score:58,scoreBand:'Average',scoreBandColor:'#D97706',scoreChange:{value:-4,label:'-4 vs Q3',direction:'down'},
+services:[{name:'Website Performance',score:72,benchmark:71,color:'#2563EB'},{name:'Social Media',score:38,benchmark:65,color:'#DC2626'},{name:'Media Coverage',score:68,benchmark:62,color:'#2563EB'},{name:'Employer Brand',score:42,benchmark:70,color:'#DC2626'},{name:'Google Ads',score:55,benchmark:58,color:'#D97706'},{name:'Tech Stack',score:61,benchmark:67,color:'#D97706'},{name:'Brand Audit',score:65,benchmark:68,color:'#D97706'},{name:'Reviews & Maps',score:71,benchmark:64,color:'#059669'},{name:'Registration',score:82,benchmark:78,color:'#059669'}],
+history:[64,63,62,60,61,59,58,57,58,56,57,58],sectorAvg:[71,71,72,71,70,71,71,72,72,71,71,71],
+contextSignals:{headline1:{title:'Guinea Crisis Write-Down',detail:'$765M impairment driving negative sentiment shift',iconClass:'negative',icon:'\u26A0'},headline2:{title:'Talent Leak Detected',detail:'14 senior engineers departed in 6 months',iconClass:'negative',icon:'\u2193'},headline3:{title:'Sentiment Shift',detail:'News sentiment: +0.4 to -0.2 in 90 days',iconClass:'warning',icon:'\u223C'}},
+timeline:[{date:'Mar 2026',text:'<strong>Glassdoor drops to 3.2</strong> from 3.8 \u2014 correlates with Guinea write-down',color:'#DC2626'},{date:'Feb 2026',text:'<strong>14 senior engineers</strong> update LinkedIn to "open to work"',color:'#DC2626'},{date:'Jan 2026',text:'<strong>$765M write-down</strong> announced on Guinea assets',color:'#DC2626'},{date:'Dec 2025',text:'<strong>Ad spend paused</strong> \u2014 Google Ads activity dropped to zero',color:'#D97706'},{date:'Nov 2025',text:'<strong>Guinea political instability</strong> escalates \u2014 supply chain risk flagged',color:'#D97706'},{date:'Sep 2025',text:'<strong>Record H1 sales</strong> reported but profit margins compress 12%',color:'#059669'}],
+sentiment:[0.4,0.35,0.3,0.2,0.1,-0.05,-0.1,-0.15,-0.2,-0.18,-0.2,-0.15],
+talent:[{label:'Engineers departed (6mo)',value:'14',trend:'negative'},{label:'Open roles posted',value:'8',trend:'neutral'},{label:'"Open to work" signals',value:'23',trend:'negative'},{label:'Avg tenure (departures)',value:'6.2 yrs',trend:'negative'},{label:'Glassdoor rating',value:'3.2 / 5.0',trend:'negative'},{label:'CEO approval',value:'58%',trend:'negative'}],
+financial:[{label:'Revenue (est.)',value:'$8.7B',trend:'positive'},{label:'Revenue growth',value:'+14%',trend:'positive'},{label:'Profit margin (est.)',value:'6.6%',trend:'negative'},{label:'Write-down impact',value:'-$765M',trend:'negative'},{label:'Employee count',value:'~7,200',trend:'neutral'},{label:'Revenue per employee',value:'$1.21M',trend:'positive'}],
+market:[{label:'LME Aluminium price',value:'$3,397/t',trend:'positive'},{label:'Aluminium demand growth',value:'+3.1%',trend:'positive'},{label:'Guinea bauxite share',value:'28% global',trend:'negative'},{label:'UAE industrial policy',value:'Expansionary',trend:'positive'},{label:'Competitor capacity adds',value:'+2.4Mt',trend:'negative'},{label:'Energy cost trend (UAE)',value:'Stable',trend:'neutral'}],
+competitorMovement:{labels:['EGA','Alba (Bahrain)',"Ma'aden (Saudi)",'Hindalco','Rusal'],current:[58,72,68,64,51],previous:[64,69,65,62,55]},
+peers:[{name:'Emirates Global Aluminium',score:58,website:72,social:38,media:68,employer:42,financial:62,trend:'down'},{name:'Alba (Bahrain)',score:72,website:78,social:65,media:71,employer:74,financial:68,trend:'up'},{name:"Ma'aden (Saudi)",score:68,website:70,social:62,media:65,employer:68,financial:72,trend:'up'}],
+arbOppScore:87,arbOppHeadline:'Active Arbitrage Window Detected',arbOppFormula:'Urgency (9/10) \u00d7 Impact (8/10) \u00d7 Feasibility (7/10) \u2192 Weighted: 87/100',arbOppWindow:'Window closes: ~Sept 2026',
+arbOpp1:{title:'Talent Acquisition Window',urgency:'High Urgency',urgencyClass:'urgency-high',desc:"EGA's engineering talent is actively updating LinkedIn profiles and accepting recruiter calls. Guinea crisis and write-down have shaken confidence.",metrics:[{label:'Available engineers (senior)',value:'14+'},{label:'Avg years experience',value:'6.2'},{label:'Typical salary band',value:'$120-180K'},{label:'Estimated hire cost',value:'60% of market rate'},{label:'Window duration',value:'3-6 months'}]},
+arbOpp2:{title:'Client Migration Opportunity',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:"EGA's supply chain uncertainty from Guinea operations is making downstream clients nervous. Position as a stable alternative supplier.",metrics:[{label:'At-risk client contracts',value:'~$420M'},{label:'Client switching cost',value:'Low-Medium'},{label:'Lead time to supply',value:'8-12 weeks'},{label:'Price premium opportunity',value:'+4-6%'},{label:'Win probability',value:'35-50%'}]},
+actionPlan:[{text:'<strong>Week 1-2: Map the talent.</strong> Identify the 14+ senior engineers who have signalled availability. Cross-reference with LinkedIn skills. Prioritise smelting process engineers and automation specialists.',impact:'Impact: Acquire 5+ years of institutional knowledge per hire'},{text:"<strong>Week 2-4: Approach EGA's top 3 nervous clients.</strong> Automotive OEMs and construction material suppliers dependent on Guinea-sourced aluminium. Lead with supply stability messaging.",impact:'Impact: $50-150M incremental contract value'},{text:"<strong>Week 3-6: Increase digital visibility.</strong> EGA has paused Google Ads. Their branded search terms are now available at 40% lower CPC. Run targeted campaigns in UAE and Saudi.",impact:'Impact: 3x impression share in category at reduced cost'},{text:'<strong>Month 2-3: Position PR narrative.</strong> Publish thought leadership on supply chain resilience. Reference Guinea situation without naming EGA.',impact:'Impact: Brand perception lift of 15-20 points'},{text:'<strong>Month 3-6: Monitor EGA stabilisation.</strong> Set automated alerts for: new CEO appointment, Guinea resolution, Glassdoor recovery above 3.5, resumed ad spend.',impact:'Impact: Know precisely when to shift from offence to defence'}],
+correlations:[{from:'Guinea Write-Down ($765M)',to:'Glassdoor drops to 3.2',label:'Employees lose confidence in leadership',color:'#DC2626'},{from:'Glassdoor drops to 3.2',to:'14 engineers signal "open to work"',label:'Talent retention failure',color:'#DC2626'},{from:'Talent departures',to:'Innovation pipeline slows',label:'R&D output drops ~30% (patent proxy)',color:'#D97706'},{from:'Guinea supply uncertainty',to:'Client contracts at risk',label:'Downstream buyers seek alternatives',color:'#D97706'},{from:'Google Ads paused',to:'Branded search available',label:'Competitor CPC drops 40%',color:'#059669'},{from:'Negative news sentiment',to:'Investor caution',label:'Stock/valuation pressure',color:'#DC2626'}],
+timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[40,55,72,87,90,85,70,50,30],risk:[20,25,30,35,40,50,60,70,80]}},
 
-const API_BASE = 'https://47x-audit-platform.truegroup.workers.dev';
-const API_TIMEOUT_MS = 8000;
+fab:{name:'First Abu Dhabi Bank',short:'FAB',sector:'Financial Services / Banking',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$10.0B Revenue',score:78,scoreBand:'Strong',scoreBandColor:'#059669',scoreChange:{value:3,label:'+3 vs Q3',direction:'up'},
+services:[{name:'Website Performance',score:85,benchmark:76,color:'#059669'},{name:'Social Media',score:82,benchmark:70,color:'#059669'},{name:'Media Coverage',score:88,benchmark:72,color:'#059669'},{name:'Employer Brand',score:71,benchmark:68,color:'#059669'},{name:'Google Ads',score:78,benchmark:65,color:'#059669'},{name:'Tech Stack',score:74,benchmark:70,color:'#059669'},{name:'Brand Audit',score:80,benchmark:72,color:'#059669'},{name:'Reviews & Maps',score:65,benchmark:68,color:'#D97706'},{name:'Registration',score:90,benchmark:82,color:'#059669'}],
+history:[72,73,74,74,75,76,76,77,77,78,78,78],sectorAvg:[68,68,69,69,70,70,70,70,71,71,71,71],
+contextSignals:{headline1:{title:'Digital Banking Push',detail:'Launched new mobile platform, user growth +45% QoQ',iconClass:'positive',icon:'\u2191'},headline2:{title:'ESG Leadership',detail:'First GCC bank to issue green bond \u2014 $600M raised',iconClass:'positive',icon:'\u2713'},headline3:{title:'Hiring Acceleration',detail:'120+ tech roles posted in last 60 days',iconClass:'positive',icon:'\u2197'}},
+timeline:[{date:'Mar 2026',text:'<strong>120+ tech roles</strong> posted \u2014 largest hiring wave in 2 years',color:'#059669'},{date:'Feb 2026',text:'<strong>$600M green bond</strong> issued \u2014 first in GCC banking',color:'#059669'},{date:'Jan 2026',text:'<strong>Mobile app relaunch</strong> drives 45% user growth',color:'#059669'},{date:'Dec 2025',text:'<strong>Q4 earnings beat</strong> consensus by 8%',color:'#059669'},{date:'Nov 2025',text:'<strong>New CTO hired</strong> from Standard Chartered',color:'#059669'},{date:'Oct 2025',text:'<strong>Branch footprint reduced</strong> 12% \u2014 digital-first strategy',color:'#D97706'}],
+sentiment:[0.3,0.32,0.35,0.38,0.4,0.42,0.45,0.5,0.52,0.55,0.58,0.6],
+talent:[{label:'New hires (6mo)',value:'340+',trend:'positive'},{label:'Open roles posted',value:'120',trend:'positive'},{label:'Tech team growth',value:'+22%',trend:'positive'},{label:'Avg tenure (current)',value:'4.8 yrs',trend:'neutral'},{label:'Glassdoor rating',value:'3.9 / 5.0',trend:'positive'},{label:'CEO approval',value:'78%',trend:'positive'}],
+financial:[{label:'Revenue (est.)',value:'$10.0B',trend:'positive'},{label:'Revenue growth',value:'+16%',trend:'positive'},{label:'Net interest margin',value:'2.8%',trend:'positive'},{label:'Cost-to-income ratio',value:'28.5%',trend:'positive'},{label:'Employee count',value:'~6,900',trend:'positive'},{label:'Digital adoption rate',value:'72%',trend:'positive'}],
+market:[{label:'UAE banking sector growth',value:'+8.2%',trend:'positive'},{label:'Digital banking penetration',value:'64%',trend:'positive'},{label:'CBUAE base rate',value:'3.65%',trend:'neutral'},{label:'Regulatory environment',value:'Supportive',trend:'positive'},{label:'Fintech competition',value:'Moderate',trend:'neutral'},{label:'Vision 2031 alignment',value:'Strong',trend:'positive'}],
+competitorMovement:{labels:['FAB','ENBD','ADCB','Mashreq','DIB'],current:[78,74,65,61,58],previous:[75,72,66,63,56]},
+peers:[{name:'First Abu Dhabi Bank',score:78,website:85,social:82,media:88,employer:71,financial:82,trend:'up'},{name:'Emirates NBD',score:74,website:80,social:78,media:75,employer:68,financial:78,trend:'up'},{name:'ADCB',score:65,website:68,social:58,media:62,employer:64,financial:72,trend:'down'}],
+arbOppScore:62,arbOppHeadline:'Moderate Arbitrage Opportunities Detected',arbOppFormula:'Urgency (6/10) \u00d7 Impact (7/10) \u00d7 Feasibility (8/10) \u2192 Weighted: 62/100',arbOppWindow:'Ongoing opportunity window',
+arbOpp1:{title:'ADCB Digital Gap',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:'ADCB is lagging in digital transformation. Their mobile app has a 2.8-star rating. FAB can poach their digitally-savvy customers.',metrics:[{label:'ADCB digital adoption',value:'41%'},{label:'Customer churn signal',value:'Rising'},{label:'App store rating',value:'2.8 / 5.0'},{label:'Switchable deposit base',value:'~$4.2B'},{label:'Marketing gap',value:'No active campaigns'}]},
+arbOpp2:{title:'Fintech Partnership Window',urgency:'Low Urgency',urgencyClass:'urgency-low',desc:'Three UAE-based fintech startups are seeking banking partners for embedded finance. Early mover advantage available.',metrics:[{label:'Fintech targets',value:'3 identified'},{label:'Combined users',value:'~280K'},{label:'Partnership cost',value:'$2-5M'},{label:'Revenue potential',value:'$15-30M/yr'},{label:'ENBD timeline',value:'~4 months out'}]},
+actionPlan:[{text:'<strong>Week 1-2: Launch targeted switch campaign.</strong> Identify ADCB customers through social listening and offer frictionless account migration with sign-up bonuses.',impact:'Impact: Capture 5-8% of ADCB digital-ready customer base'},{text:'<strong>Week 2-4: Engage the 3 fintech targets.</strong> Offer sandbox API access and co-development funding. Move before ENBD closes exclusives.',impact:'Impact: Lock in 280K+ users into FAB ecosystem'},{text:'<strong>Month 1-2: Amplify ESG positioning.</strong> Green bond success gives credibility. Run thought leadership targeting ESG-mandate institutional clients.',impact:'Impact: Attract $1-2B in ESG-linked deposits'},{text:'<strong>Month 2-4: Build digital moat.</strong> Accelerate AI-powered advisory features. ADCB is 18+ months behind.',impact:'Impact: Sustainable competitive advantage in digital banking'}],
+correlations:[{from:'ADCB digital lag',to:'Customer dissatisfaction rising',label:'2.8 app rating, social complaints +60%',color:'#059669'},{from:'Customer dissatisfaction',to:'Switch propensity increasing',label:'~$4.2B in mobile deposits',color:'#059669'},{from:'FAB mobile relaunch',to:'Brand perception lift',label:'+45% user growth validates platform',color:'#059669'},{from:'Green bond success',to:'ESG leadership position',label:'Institutional mandate alignment',color:'#2563EB'},{from:'CTO hire from StanChart',to:'Tech talent magnet effect',label:'Senior hires attract more senior hires',color:'#059669'}],
+timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[50,55,60,62,60,55,50,45,40],risk:[15,18,20,25,30,35,40,45,50]}},
 
-const SERVICE_SCORE_MAP = {
-  lighthouse:      { metric: "lh_performance_desktop", label: "Website Performance", description: "Lighthouse performance score for desktop", icon: "&#9889;", color: "#3b82f6" },
-  google_ads:      { metric: "gads_activity_score",    label: "Ad Activity",          description: "Google Ads presence and activity composite", icon: "&#128226;", color: "#f59e0b" },
-  opencorporates:  { metric: "oc_company_age_years",   label: "Corporate Maturity",   description: "Years of incorporation (capped at 100 for 20+ yrs)", icon: "&#127970;", color: "#8b5cf6" },
-  newsapi:         { metric: "news_coverage_score",    label: "Media Presence",        description: "News coverage and sentiment composite", icon: "&#128240;", color: "#06b6d4" },
-  techstack:       { metric: "ts_digital_maturity",    label: "Digital Maturity",      description: "Technology stack sophistication score", icon: "&#128187;", color: "#10b981" },
-  google_maps:     { metric: "gm_reputation_score",    label: "Reputation",            description: "Google Maps reputation composite", icon: "&#11088;", color: "#ef4444" },
-  social_media:    { metric: "sm_presence_score",      label: "Social Presence",       description: "Cross-platform social media presence", icon: "&#128242;", color: "#ec4899" },
-  glassdoor:       { metric: "gd_employer_brand_score",label: "Employer Brand",        description: "Glassdoor employer brand composite", icon: "&#128188;", color: "#14b8a6" },
-  brand_audit:     { metric: "ba_overall_brand_score", label: "Brand Quality",         description: "Brand consistency, content, and trust", icon: "&#127775;", color: "#f97316" },
+aldar:{name:'Aldar Properties',short:'ALD',sector:'Real Estate / Development',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$9.2B Revenue',score:71,scoreBand:'Strong',scoreBandColor:'#059669',scoreChange:{value:6,label:'+6 vs Q3',direction:'up'},
+services:[{name:'Website Performance',score:80,benchmark:72,color:'#059669'},{name:'Social Media',score:78,benchmark:68,color:'#059669'},{name:'Media Coverage',score:85,benchmark:70,color:'#059669'},{name:'Employer Brand',score:62,benchmark:65,color:'#D97706'},{name:'Google Ads',score:72,benchmark:60,color:'#059669'},{name:'Tech Stack',score:58,benchmark:68,color:'#DC2626'},{name:'Brand Audit',score:75,benchmark:70,color:'#059669'},{name:'Reviews & Maps',score:68,benchmark:62,color:'#059669'},{name:'Registration',score:88,benchmark:80,color:'#059669'}],
+history:[62,63,64,65,66,67,68,68,69,70,70,71],sectorAvg:[65,65,66,66,66,67,67,67,68,68,68,68],
+contextSignals:{headline1:{title:'Yas Island Expansion',detail:'$2.8B masterplan announced, sales pipeline +35%',iconClass:'positive',icon:'\u2191'},headline2:{title:'Tech Stack Lag',detail:'Legacy CRM and website tech 3+ years behind competitors',iconClass:'warning',icon:'\u26A0'},headline3:{title:'Talent Gap in PropTech',detail:'Struggling to hire data/AI roles, 45-day avg time-to-fill',iconClass:'warning',icon:'\u2026'}},
+timeline:[{date:'Mar 2026',text:'<strong>Sales pipeline +35%</strong> \u2014 strongest Q1 in company history',color:'#059669'},{date:'Feb 2026',text:'<strong>Yas Island Phase 3</strong> masterplan launched ($2.8B)',color:'#059669'},{date:'Jan 2026',text:'<strong>PropTech roles unfilled</strong> \u2014 8 data science positions open 45+ days',color:'#D97706'},{date:'Dec 2025',text:'<strong>Q4 sales record</strong> driven by international buyer demand',color:'#059669'},{date:'Nov 2025',text:'<strong>Website refresh delayed</strong> \u2014 legacy tech stack causing bottlenecks',color:'#DC2626'},{date:'Oct 2025',text:'<strong>Strategic land acquisitions</strong> in Saadiyat and Reem Islands',color:'#059669'}],
+sentiment:[0.3,0.35,0.38,0.4,0.42,0.45,0.48,0.5,0.52,0.54,0.56,0.58],
+talent:[{label:'Open roles',value:'42',trend:'neutral'},{label:'PropTech roles unfilled',value:'8',trend:'negative'},{label:'Avg time-to-fill (tech)',value:'45 days',trend:'negative'},{label:'Sales team growth',value:'+18%',trend:'positive'},{label:'Glassdoor rating',value:'3.6 / 5.0',trend:'neutral'},{label:'CEO approval',value:'72%',trend:'positive'}],
+financial:[{label:'Revenue (est.)',value:'$9.2B',trend:'positive'},{label:'Revenue growth',value:'+47%',trend:'positive'},{label:'Net margin',value:'26.0%',trend:'positive'},{label:'Landbank value',value:'$12.4B',trend:'positive'},{label:'Employee count',value:'~3,400',trend:'positive'},{label:'Revenue per employee',value:'$2.71M',trend:'positive'}],
+market:[{label:'Abu Dhabi property prices',value:'+14% YoY',trend:'positive'},{label:'Transaction volumes',value:'+28%',trend:'positive'},{label:'International buyer share',value:'38%',trend:'positive'},{label:'Mortgage rates (avg)',value:'4.2%',trend:'neutral'},{label:'New supply (units)',value:'12,400',trend:'neutral'},{label:'Golden Visa impact',value:'Strong',trend:'positive'}],
+competitorMovement:{labels:['Aldar','Emaar','DAMAC','Nakheel','Bloom'],current:[71,82,68,55,48],previous:[65,80,70,56,45]},
+peers:[{name:'Aldar Properties',score:71,website:80,social:78,media:85,employer:62,financial:78,trend:'up'},{name:'Emaar Properties',score:82,website:88,social:85,media:82,employer:75,financial:80,trend:'up'},{name:'DAMAC Properties',score:68,website:72,social:74,media:65,employer:55,financial:70,trend:'down'}],
+arbOppScore:74,arbOppHeadline:'Strong Arbitrage Opportunities Detected',arbOppFormula:'Urgency (7/10) \u00d7 Impact (8/10) \u00d7 Feasibility (8/10) \u2192 Weighted: 74/100',arbOppWindow:'Window: 6-12 months (DAMAC weakening)',
+arbOpp1:{title:'DAMAC Client Capture',urgency:'High Urgency',urgencyClass:'urgency-high',desc:"DAMAC's employer brand is declining (Glassdoor 2.9) and delivery delays are eroding buyer confidence. International buyers actively seeking alternatives.",metrics:[{label:'DAMAC Glassdoor',value:'2.9 / 5.0'},{label:'Delivery delays reported',value:'6-12 months'},{label:'Buyer confidence index',value:'Falling'},{label:'Switchable pipeline',value:'~$600M'},{label:'International buyer interest',value:'High'}]},
+arbOpp2:{title:'PropTech First-Mover',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:'No major UAE developer has deployed AI-powered property matching or virtual staging at scale. First-mover advantage in PropTech.',metrics:[{label:'Tech-savvy buyer segment',value:'~35%'},{label:'Conversion lift potential',value:'+25-40%'},{label:'Investment required',value:'$3-5M'},{label:'Competitor readiness',value:'18+ months behind'},{label:'ROI timeline',value:'6-9 months'}]},
+actionPlan:[{text:"<strong>Week 1-2: Mine DAMAC's dissatisfied buyers.</strong> Social listening for complaints. Offer Aldar's track record of on-time delivery as the key differentiator.",impact:'Impact: Capture $100-200M from DAMAC pipeline'},{text:'<strong>Week 2-4: Fast-track PropTech build.</strong> Hire 3-4 senior engineers from EGA (cross-arbitrage play) to build AI property matching.',impact:'Impact: Category-defining PropTech capability'},{text:'<strong>Month 1-2: Fix the tech stack.</strong> Legacy CRM scoring 58 on tech stack \u2014 below sector avg. Migrate to modern stack.',impact:'Impact: +10-15 point score improvement on tech dimension'},{text:'<strong>Month 2-4: International buyer push.</strong> Leverage Yas Island Phase 3 launch with targeted digital campaigns in India, UK, and China.',impact:'Impact: Increase international buyer share from 38% to 45%+'}],
+correlations:[{from:'DAMAC delivery delays',to:'Buyer confidence eroding',label:'Social complaints up 60%',color:'#059669'},{from:'Buyer confidence drop',to:'Active buyer migration',label:'Search for "DAMAC alternative" +120%',color:'#059669'},{from:'Aldar Yas Island launch',to:'Pipeline +35%',label:'Perfectly timed to capture migrating buyers',color:'#059669'},{from:'Tech stack lag (score: 58)',to:'PropTech opportunity',label:'Weakness is also the biggest opportunity',color:'#D97706'},{from:'EGA talent availability',to:'Cross-sector hire opportunity',label:'Senior engineers available at 60% cost',color:'#2563EB'}],
+timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[45,50,60,74,78,75,68,60,50],risk:[10,12,15,20,25,30,35,40,50]}}
 };
 
-const EXPIRY_HOURS = {
-  lighthouse: 168, google_ads: 72, opencorporates: 720, newsapi: 24,
-  techstack: 336, google_maps: 336, social_media: 72, glassdoor: 336, brand_audit: 336,
-};
-
-function getScoreBand(score) {
-  if (score === null || score === undefined || typeof score !== 'number' || isNaN(score)) return "critical";
-  if (score < 30) return "critical";
-  if (score < 50) return "weak";
-  if (score < 70) return "average";
-  if (score < 90) return "strong";
-  return "leading";
-}
-
-// ── Utility: sanitize text for safe DOM insertion ──
-function escapeHtml(str) {
-  if (str === null || str === undefined) return '';
-  const text = String(str);
-  const div = document.createElement('div');
-  div.appendChild(document.createTextNode(text));
-  return div.innerHTML;
-}
-
-// ── Utility: debounce function ──
-function debounce(fn, delay) {
-  let timer = null;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
-// ── Utility: safe number extraction ──
-function safeNumber(val, fallback) {
-  if (fallback === undefined) fallback = 0;
-  const n = Number(val);
-  return isNaN(n) ? fallback : n;
-}
-
-// ── Global error display ──
-function showGlobalError(msg) {
-  const el = document.getElementById('globalError');
-  if (!el) return;
-  el.textContent = msg;
-  el.classList.add('visible');
-}
-function hideGlobalError() {
-  const el = document.getElementById('globalError');
-  if (!el) return;
-  el.textContent = '';
-  el.classList.remove('visible');
-}
-
-// ── API Layer ──
-const apiCache = {};
-let allCompanies = [];
-let currentCompanySlug = null;
-let currentCompanyData = null;
-let isApiOnline = false;
-
-async function apiFetch(path) {
-  const url = API_BASE + path;
-  const cacheKey = url;
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(function() { controller.abort(); }, API_TIMEOUT_MS);
-    const res = await fetch(url, { signal: controller.signal });
-    clearTimeout(timeoutId);
-    if (!res.ok) {
-      var errBody = null;
-      try { errBody = await res.json(); } catch (_) { /* non-JSON error response */ }
-      if (res.status === 404) {
-        apiCache[cacheKey] = { data: null, status: 404, ts: Date.now() };
-        return null;
-      }
-      throw new Error('HTTP ' + res.status + (errBody && errBody.error ? ': ' + errBody.error : ''));
-    }
-    const data = await res.json();
-    apiCache[cacheKey] = { data: data, status: 200, ts: Date.now() };
-    return data;
-  } catch (e) {
-    var reason = e.name === 'AbortError' ? 'Request timed out' : e.message;
-    console.warn('API fetch failed:', url, reason);
-    if (apiCache[cacheKey] && apiCache[cacheKey].data !== undefined) return apiCache[cacheKey].data;
-    return null;
-  }
-}
-
-async function checkApiStatus() {
-  var statusEl = document.getElementById('apiConnectionStatus');
-  var dotEl = document.querySelector('.api-dot');
-  if (!statusEl || !dotEl) return false;
-  try {
-    var controller = new AbortController();
-    var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
-    var res = await fetch(API_BASE + '/api/companies', { signal: controller.signal });
-    clearTimeout(timeoutId);
-    if (res.ok) {
-      isApiOnline = true;
-      statusEl.innerHTML = '<span style="color: var(--green);" aria-hidden="true">&#9679;</span> Live API connected';
-      dotEl.style.background = 'var(--green)';
-      hideGlobalError();
-      return true;
-    }
-  } catch (e) {
-    /* API unreachable */
-  }
-  isApiOnline = false;
-  statusEl.innerHTML = '<span style="color: var(--red);" aria-hidden="true">&#9679;</span> API offline - showing cached data';
-  dotEl.style.background = 'var(--red)';
-  showGlobalError('API connection failed. Showing cached data where available.');
-  return false;
-}
-
-// ── Load companies from API ──
-async function loadCompanies() {
-  var raw = await apiFetch('/api/companies');
-  // Handle both array and {data: [...]} envelope formats
-  var companies = null;
-  if (Array.isArray(raw)) {
-    companies = raw;
-  } else if (raw && typeof raw === 'object' && Array.isArray(raw.data)) {
-    companies = raw.data;
-  }
-
-  if (companies && companies.length > 0) {
-    allCompanies = companies;
-    renderCompanySelector();
-    if (!currentCompanySlug) {
-      await selectCompanyBySlug(allCompanies[0].slug);
-    }
-  } else {
-    allCompanies = [];
-    document.getElementById('companySelector').innerHTML =
-      '<div style="color: var(--amber); font-size: 13px; padding: 10px;" role="alert">&#9888; Could not load companies from API. Check connection.</div>';
-  }
-}
-
-function renderCompanySelector() {
-  var container = document.getElementById('companySelector');
-  if (!container) return;
-  if (allCompanies.length === 0) {
-    container.innerHTML = '<div style="color: var(--text-muted); font-size: 13px; padding: 10px;">No companies found in API</div>';
-    return;
-  }
-  var html = '';
-  for (var i = 0; i < allCompanies.length; i++) {
-    var co = allCompanies[i];
-    var isActive = co.slug === currentCompanySlug ? 'active' : '';
-    var sectorText = co.sector ? escapeHtml(co.sector) : '';
-    var sectorBadge = sectorText ? '<span style="font-size: 10px; color: var(--text-muted); margin-left: 6px;">' + sectorText + '</span>' : '';
-    html += '<button class="company-btn ' + isActive + '" data-company-slug="' + escapeHtml(co.slug) + '" aria-pressed="' + (isActive ? 'true' : 'false') + '">' + escapeHtml(co.name) + sectorBadge + '</button>';
-  }
-  container.innerHTML = html;
-}
-
-var debouncedFilterCompanyList = debounce(function(query) {
-  var dropdown = document.getElementById('searchDropdown');
-  var searchInput = document.getElementById('companySearch');
-  if (!dropdown || !searchInput) return;
-  if (!query || !query.trim()) {
-    dropdown.style.display = 'none';
-    searchInput.setAttribute('aria-expanded', 'false');
-    return;
-  }
-  var q = query.toLowerCase();
-  var matches = allCompanies.filter(function(c) {
-    return (c.name || '').toLowerCase().includes(q) || (c.sector || '').toLowerCase().includes(q) || (c.slug || '').includes(q);
-  });
-  if (matches.length === 0) {
-    dropdown.innerHTML = '<div style="padding: 12px; color: var(--text-muted); font-size: 13px;">No matches</div>';
-  } else {
-    dropdown.innerHTML = matches.map(function(c) {
-      return '<div role="option" style="padding: 10px 14px; cursor: pointer; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border);" data-search-slug="' + escapeHtml(c.slug) + '" data-search-name="' + escapeHtml(c.name) + '">'
-        + '<span style="font-weight: 600;">' + escapeHtml(c.name) + '</span>'
-        + '<span style="color: var(--text-muted); font-size: 11px; margin-left: 8px;">' + escapeHtml(c.sector || '') + ' &middot; ' + escapeHtml(c.slug) + '</span>'
-        + '</div>';
-    }).join('');
-  }
-  dropdown.style.display = 'block';
-  searchInput.setAttribute('aria-expanded', 'true');
-}, 250);
-
-async function refreshCompanyList(btn) {
-  if (!btn) return;
-  btn.textContent = 'Loading...';
-  btn.disabled = true;
-  try {
-    await checkApiStatus();
-    await loadCompanies();
-  } finally {
-    btn.innerHTML = '&#8635; Refresh from API';
-    btn.disabled = false;
-  }
-}
-
-// ── Event Delegation ──
-// Company selector clicks
-document.getElementById('companySelector').addEventListener('click', function(e) {
-  var btn = e.target.closest('[data-company-slug]');
-  if (btn) selectCompanyBySlug(btn.dataset.companySlug);
-});
-
-// Search input with debounce
-document.getElementById('companySearch').addEventListener('input', function(e) {
-  debouncedFilterCompanyList(e.target.value);
-});
-document.getElementById('companySearch').addEventListener('focus', function() {
-  var dropdown = document.getElementById('searchDropdown');
-  if (dropdown && this.value.trim()) dropdown.style.display = 'block';
-});
-
-// Search dropdown click delegation
-document.getElementById('searchDropdown').addEventListener('click', function(e) {
-  var option = e.target.closest('[data-search-slug]');
-  if (option) {
-    selectCompanyBySlug(option.dataset.searchSlug);
-    document.getElementById('searchDropdown').style.display = 'none';
-    document.getElementById('companySearch').value = option.dataset.searchName || '';
-    document.getElementById('companySearch').setAttribute('aria-expanded', 'false');
-  }
-});
-// Hover effect on dropdown options
-document.getElementById('searchDropdown').addEventListener('mouseover', function(e) {
-  var option = e.target.closest('[data-search-slug]');
-  if (option) option.style.background = 'var(--bg-card-hover)';
-});
-document.getElementById('searchDropdown').addEventListener('mouseout', function(e) {
-  var option = e.target.closest('[data-search-slug]');
-  if (option) option.style.background = 'transparent';
-});
-
-// Refresh button
-document.getElementById('refreshBtn').addEventListener('click', function() {
-  refreshCompanyList(this);
-});
-
-// Close dropdown when clicking elsewhere
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('#companySearch') && !e.target.closest('#searchDropdown')) {
-    var dropdown = document.getElementById('searchDropdown');
-    if (dropdown) dropdown.style.display = 'none';
-    var searchInput = document.getElementById('companySearch');
-    if (searchInput) searchInput.setAttribute('aria-expanded', 'false');
-  }
-});
-
-// Data point filter delegation
-document.querySelector('#section-datapoints [role="group"]').addEventListener('click', function(e) {
-  var btn = e.target.closest('[data-dp-filter]');
-  if (!btn) return;
-  this.querySelectorAll('.company-btn').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-  renderDataPoints(btn.dataset.dpFilter);
-});
-
-// ── Navigation with keyboard support ──
-var navTabs = document.querySelector('.nav-tabs');
-navTabs.addEventListener('click', function(e) {
-  var tab = e.target.closest('.nav-tab');
-  if (tab) showSection(tab.dataset.section, tab);
-});
-navTabs.addEventListener('keydown', function(e) {
-  var tabs = Array.from(navTabs.querySelectorAll('.nav-tab'));
-  var currentIndex = tabs.indexOf(document.activeElement);
-  if (currentIndex < 0) return;
-  var newIndex = -1;
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-    newIndex = (currentIndex + 1) % tabs.length;
-  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-    newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-  } else if (e.key === 'Home') {
-    newIndex = 0;
-  } else if (e.key === 'End') {
-    newIndex = tabs.length - 1;
-  }
-  if (newIndex >= 0) {
-    e.preventDefault();
-    tabs[currentIndex].setAttribute('tabindex', '-1');
-    tabs[newIndex].setAttribute('tabindex', '0');
-    tabs[newIndex].focus();
-    showSection(tabs[newIndex].dataset.section, tabs[newIndex]);
-  }
-});
-
-function showSection(id, tabEl) {
-  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
-  document.querySelectorAll('.nav-tab').forEach(function(t) {
-    t.classList.remove('active');
-    t.setAttribute('aria-selected', 'false');
-    t.setAttribute('tabindex', '-1');
-  });
-  var section = document.getElementById('section-' + id);
-  if (section) section.classList.add('active');
-  if (tabEl) {
-    tabEl.classList.add('active');
-    tabEl.setAttribute('aria-selected', 'true');
-    tabEl.setAttribute('tabindex', '0');
-  }
-}
-
-// ── Transform API scores into dashboard format ──
-function transformScoresToCompanyData(companyInfo, scores) {
-  if (!companyInfo || typeof companyInfo !== 'object') {
-    companyInfo = { name: 'Unknown', slug: 'unknown' };
-  }
-  if (!scores || typeof scores !== 'object') {
-    scores = {};
-  }
-
-  // Handle envelope format: { data: { lighthouse: 80, ... } }
-  if (scores.data && typeof scores.data === 'object' && !Array.isArray(scores.data)) {
-    scores = scores.data;
-  }
-
-  var scoreValues = Object.values(scores).filter(function(v) {
-    return v !== null && v !== undefined && typeof v === 'number' && !isNaN(v);
-  });
-  var avgScore = scoreValues.length > 0 ? Math.round(scoreValues.reduce(function(a, b) { return a + b; }, 0) / scoreValues.length) : 0;
-  var scoredCount = scoreValues.length;
-
-  var serviceScores = {};
-  var totalWeightedScore = 0;
-  var totalWeight = 0;
-
-  for (var svc of Object.keys(SERVICE_SCORE_MAP)) {
-    var raw = scores[svc];
-    var target = (raw !== null && raw !== undefined && typeof raw === 'number' && !isNaN(raw)) ? raw : 0;
-    var benchmarkAvg = avgScore;
-    var gap = target - benchmarkAvg;
-    var status = gap > 2 ? 'above' : gap < -2 ? 'below' : 'at';
-    var percentile = benchmarkAvg > 0 ? Math.min(100, Math.round((target / benchmarkAvg) * 100)) : (target > 0 ? 100 : 0);
-
-    serviceScores[svc] = { target: target, benchmarkAvg: benchmarkAvg, percentile: percentile, gap: gap, status: status };
-    if (raw !== null && raw !== undefined && typeof raw === 'number' && !isNaN(raw)) {
-      totalWeightedScore += target;
-      totalWeight++;
-    }
-  }
-
-  var overallScore = totalWeight > 0 ? Math.round((totalWeightedScore / totalWeight) * 10) / 10 : 0;
-  var confidence = scoredCount / 9;
-
-  return {
-    name: companyInfo.name || 'Unknown',
-    slug: companyInfo.slug || 'unknown',
-    sector: companyInfo.sector || 'Unknown',
-    website: companyInfo.website || '',
-    hqCity: companyInfo.hqCity || '',
-    hqCountry: companyInfo.hqCountry || '',
-    yearFounded: companyInfo.yearFounded || null,
-    serviceScores: serviceScores,
-    overallScore: overallScore,
-    confidence: Math.round(confidence * 100) / 100,
-    dataPointCount: scoredCount,
-    scoredCount: scoredCount,
-    collectedAt: companyInfo.updatedAt || new Date().toISOString(),
-    _fromApi: true,
-  };
-}
-
-// ── Select company and load data ──
-async function selectCompanyBySlug(slug) {
-  if (!slug) return;
-  currentCompanySlug = slug;
-  renderCompanySelector();
-
-  // Show loading state in overview cards
-  var overviewCards = document.querySelectorAll('#section-overview .card-value');
-  if (overviewCards[0]) overviewCards[0].textContent = '...';
-  if (overviewCards[1]) overviewCards[1].textContent = '...';
-  if (overviewCards[3]) overviewCards[3].textContent = '...';
-
-  // Fetch company details and scores in parallel
-  var results = await Promise.all([
-    apiFetch('/api/companies/' + encodeURIComponent(slug)),
-    apiFetch('/api/companies/' + encodeURIComponent(slug) + '/scores')
-  ]);
-  var companyInfo = results[0];
-  var scores = results[1];
-
-  if (!companyInfo) {
-    if (overviewCards[0]) overviewCards[0].textContent = 'ERR';
-    if (overviewCards[1]) overviewCards[1].textContent = '-';
-    if (overviewCards[3]) overviewCards[3].textContent = '-';
-    showGlobalError('Could not load data for "' + slug + '". The API may be unavailable.');
-    return;
-  }
-
-  hideGlobalError();
-
-  if (scores) {
-    currentCompanyData = transformScoresToCompanyData(companyInfo, scores);
-  } else {
-    var emptyScores = {};
-    for (var svc of Object.keys(SERVICE_SCORE_MAP)) {
-      emptyScores[svc] = null;
-    }
-    currentCompanyData = transformScoresToCompanyData(companyInfo, emptyScores);
-  }
-
-  // Update all views
-  renderOverviewFromData(currentCompanyData);
-  renderServiceCards();
-  renderBenchmark();
-  renderRecommendationsFromData(currentCompanyData);
-  renderCollectionGrid();
-
-  // Try loading data points (non-blocking)
-  apiFetch('/api/companies/' + encodeURIComponent(slug) + '/data-points').then(function(dataPoints) {
-    if (dataPoints && currentCompanyData) {
-      // Handle envelope format
-      if (Array.isArray(dataPoints)) {
-        currentCompanyData._dataPoints = dataPoints;
-      } else if (dataPoints && Array.isArray(dataPoints.data)) {
-        currentCompanyData._dataPoints = dataPoints.data;
-      }
-    }
-    renderDataPoints('all');
-  });
-
-  // Try loading latest report (non-blocking)
-  apiFetch('/api/companies/' + encodeURIComponent(slug) + '/reports/latest').then(function(report) {
-    if (report && currentCompanyData) {
-      currentCompanyData._report = report;
-    }
-  });
-
-  // Update header badge
-  var badge = document.querySelector('.header-badge');
-  if (badge) badge.textContent = currentCompanyData.scoredCount + ' / 9 Services Scored';
-}
-
-// ── Render: Overview ──
-function renderOverviewFromData(data) {
-  if (!data) return;
-  var cards = document.querySelectorAll('#section-overview .card-value');
-  if (cards[0]) cards[0].textContent = data.overallScore;
-  if (cards[1]) cards[1].textContent = data.scoredCount + ' / 9';
-  if (cards[2]) cards[2].textContent = escapeHtml(data.sector || 'Unknown');
-  if (cards[3]) cards[3].textContent = data.dataPointCount;
-
-  var deltaElements = document.querySelectorAll('#section-overview .card-delta');
-  if (deltaElements[0]) {
-    if (data.overallScore >= 50) {
-      deltaElements[0].className = 'card-delta positive';
-      deltaElements[0].textContent = data._fromApi ? 'Live from API' : 'Cached data';
-    } else if (data.overallScore > 0) {
-      deltaElements[0].className = 'card-delta negative';
-      deltaElements[0].textContent = 'Below average';
-    } else {
-      deltaElements[0].className = 'card-delta neutral';
-      deltaElements[0].textContent = 'No scores yet';
-    }
-  }
-
-  renderDimensionRows(data);
-  renderSmallMultiples(data);
-  renderGapChart(data);
-}
-
-function renderDimensionRows(data) {
-  var container = document.getElementById('dimensionRows');
-  if (!container || !data) return;
-  var html = '';
-  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
-    var service = entry[0];
-    var info = entry[1];
-    var scores = data.serviceScores[service];
-    if (!scores) continue;
-    var band = getScoreBand(scores.target);
-    var gapClass = scores.status === 'above' ? 'above' : scores.status === 'below' ? 'below' : 'at';
-    var gapText = scores.gap > 0 ? ('+' + scores.gap) : scores.gap;
-    var noData = scores.target === 0 && data._fromApi;
-    var descText = noData ? 'Not yet collected' : (info.description.length > 40 ? info.description.substring(0, 40) + '...' : info.description);
-    html += '<div class="dim-row" role="listitem"' + (noData ? ' style="opacity: 0.5;"' : '') + '>'
-      + '<div class="dim-icon" style="background: ' + info.color + '22; color: ' + info.color + ';" aria-hidden="true">' + info.icon + '</div>'
-      + '<div class="dim-info">'
-      + '<div class="dim-name">' + escapeHtml(info.label) + '</div>'
-      + '<div class="dim-desc">' + escapeHtml(descText) + '</div>'
-      + '</div>'
-      + '<div class="dim-bars" aria-hidden="true">'
-      + '<div class="dim-bar-track">'
-      + '<div class="dim-bar benchmark" style="width: ' + safeNumber(scores.benchmarkAvg) + '%;"></div>'
-      + '<div class="dim-bar target" style="width: ' + safeNumber(scores.target) + '%;"></div>'
-      + '</div>'
-      + '</div>'
-      + '<div class="dim-score" aria-label="Score: ' + (noData ? 'no data' : scores.target) + '">' + (noData ? '-' : scores.target) + '</div>'
-      + '<div class="dim-gap ' + gapClass + '" aria-label="Gap: ' + (noData ? 'no data' : gapText) + '">' + (noData ? '-' : gapText) + '</div>'
-      + '<div class="dim-band band-' + band + '" aria-label="Band: ' + (noData ? 'not available' : band) + '">' + (noData ? 'n/a' : band) + '</div>'
-      + '</div>';
-  }
-  container.innerHTML = html;
-}
-
-// ── Render: Service Cards ──
-function renderServiceCards() {
-  var data = currentCompanyData;
-  if (!data) return;
-  var container = document.getElementById('serviceCards');
-  if (!container) return;
-  var html = '';
-  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
-    var service = entry[0];
-    var info = entry[1];
-    var scores = data.serviceScores[service];
-    if (!scores) continue;
-    var band = getScoreBand(scores.target);
-    var confClass = data.confidence >= 0.8 ? 'conf-high' : data.confidence >= 0.5 ? 'conf-med' : 'conf-low';
-    var noData = scores.target === 0 && data._fromApi;
-    html += '<div class="card" role="listitem" style="cursor: pointer; border-left: 3px solid ' + info.color + ';' + (noData ? ' opacity: 0.6;' : '') + '" data-service-detail="' + escapeHtml(service) + '" tabindex="0" aria-label="' + escapeHtml(info.label) + ': ' + (noData ? 'no data' : 'score ' + scores.target) + '">'
-      + '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">'
-      + '<div style="font-size: 13px; font-weight: 600;">' + info.icon + ' ' + escapeHtml(info.label) + '</div>'
-      + '<div class="dim-band band-' + band + '" style="font-size: 10px;">' + (noData ? 'n/a' : band) + '</div>'
-      + '</div>'
-      + '<div style="font-size: 36px; font-weight: 800; color: ' + (noData ? 'var(--text-muted)' : info.color) + ';">' + (noData ? '-' : scores.target) + '</div>'
-      + '<div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">'
-      + (noData ? 'Not yet collected' : 'Avg: ' + scores.benchmarkAvg + ' &middot; Pctl: ' + scores.percentile + '%')
-      + '</div>'
-      + '<div class="confidence" style="margin-top: 8px;">'
-      + '<div class="confidence-dot ' + confClass + '" aria-hidden="true"></div>'
-      + (data._fromApi ? 'Live API' : 'Cached')
-      + '</div>'
-      + '</div>';
-  }
-  container.innerHTML = html;
-}
-
-// Service cards click delegation
-document.getElementById('serviceCards').addEventListener('click', function(e) {
-  var card = e.target.closest('[data-service-detail]');
-  if (card) showServiceDetail(card.dataset.serviceDetail);
-});
-document.getElementById('serviceCards').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' || e.key === ' ') {
-    var card = e.target.closest('[data-service-detail]');
-    if (card) { e.preventDefault(); showServiceDetail(card.dataset.serviceDetail); }
-  }
-});
-
-function showServiceDetail(service) {
-  var detail = document.getElementById('serviceDetail');
-  var info = SERVICE_SCORE_MAP[service];
-  if (!detail || !info) return;
-  document.getElementById('serviceDetailTitle').textContent = info.label + ' - Data Points';
-  document.getElementById('serviceDetailDesc').textContent = info.description;
-
-  var livePoints = currentCompanyData && currentCompanyData._dataPoints;
-  var points = [];
-  if (livePoints && Array.isArray(livePoints)) {
-    points = livePoints.filter(function(dp) { return dp && (dp.service === service || dp.category === service); });
-  }
-
-  if (points.length === 0) {
-    document.getElementById('serviceDetailContent').innerHTML =
-      '<div style="color: var(--text-muted); padding: 20px; text-align: center;">No data points collected for this service yet. Use the API to trigger collection.</div>';
-    detail.style.display = 'block';
-    return;
-  }
-
-  var html = '<table class="data-table" aria-label="' + escapeHtml(info.label) + ' data points"><thead><tr><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Unit</th><th scope="col">Confidence</th></tr></thead><tbody>';
-  for (var dp of points) {
-    var conf = safeNumber(dp.confidence);
-    var confClass = conf >= 0.8 ? 'conf-high' : conf >= 0.5 ? 'conf-med' : 'conf-low';
-    var displayVal;
-    if (dp.value === null || dp.value === undefined) {
-      displayVal = 'N/A';
-    } else if (typeof dp.value === 'boolean') {
-      displayVal = dp.value ? 'true' : 'false';
-    } else {
-      displayVal = escapeHtml(dp.value);
-    }
-    html += '<tr>'
-      + '<td style="font-family: \'SF Mono\', monospace; font-size: 12px;">' + escapeHtml(dp.metric || dp.key || '-') + '</td>'
-      + '<td style="font-weight: 600;">' + displayVal + '</td>'
-      + '<td style="color: var(--text-muted); font-size: 12px;">' + escapeHtml(dp.unit || '-') + '</td>'
-      + '<td><span class="confidence"><span class="confidence-dot ' + confClass + '" aria-hidden="true"></span>' + conf + '</span></td>'
-      + '</tr>';
-  }
-  html += '</tbody></table>';
-  document.getElementById('serviceDetailContent').innerHTML = html;
-  detail.style.display = 'block';
-}
-
-// ── Render: Benchmark ──
-function renderBenchmark() {
-  var data = currentCompanyData;
-  if (!data) return;
-
-  var benchCards = document.querySelectorAll('#section-benchmark .card');
-  if (benchCards[0]) {
-    var cv = benchCards[0].querySelector('.card-value');
-    var cd = benchCards[0].querySelector('.card-delta');
-    if (cv) cv.textContent = data.sector || 'Unknown';
-    if (cd) cd.textContent = 'Sector: ' + (data.sector || 'unknown').toLowerCase();
-  }
-  if (benchCards[1]) {
-    var refsEl = benchCards[1].querySelector('.benchmark-refs');
-    if (refsEl) {
-      var refNames = allCompanies.filter(function(c) { return c.slug !== data.slug; }).map(function(c) { return escapeHtml(c.name); });
-      refsEl.innerHTML = refNames.length > 0 ? refNames.join('<br>') : 'No peers yet';
-    }
-  }
-
-  renderBenchmarkBarChart(data);
-
-  // Strengths
-  var strengths = Object.entries(data.serviceScores)
-    .filter(function(e) { return e[1].status === 'above' && e[1].target > 0; })
-    .sort(function(a, b) { return b[1].gap - a[1].gap; });
-  var sHtml = '';
-  for (var entry of strengths) {
-    var svc = entry[0]; var s = entry[1];
-    sHtml += '<div class="dim-row" role="listitem">'
-      + '<div class="dim-icon" style="background: ' + SERVICE_SCORE_MAP[svc].color + '22; color: ' + SERVICE_SCORE_MAP[svc].color + ';" aria-hidden="true">' + SERVICE_SCORE_MAP[svc].icon + '</div>'
-      + '<div class="dim-info"><div class="dim-name">' + escapeHtml(SERVICE_SCORE_MAP[svc].label) + '</div></div>'
-      + '<div style="flex:1;"></div>'
-      + '<div class="dim-score" style="color: var(--green);">' + s.target + '</div>'
-      + '<div class="dim-gap above">+' + s.gap + '</div>'
-      + '</div>';
-  }
-  var strengthsEl = document.getElementById('strengthsList');
-  if (strengthsEl) strengthsEl.innerHTML = sHtml || '<div style="color: var(--text-muted); padding: 20px;">No strengths detected yet</div>';
-
-  // Gaps
-  var gaps = Object.entries(data.serviceScores)
-    .filter(function(e) { return e[1].status === 'below' && e[1].target > 0; })
-    .sort(function(a, b) { return a[1].gap - b[1].gap; });
-  var gHtml = '';
-  for (var gEntry of gaps) {
-    var gSvc = gEntry[0]; var g = gEntry[1];
-    gHtml += '<div class="dim-row" role="listitem">'
-      + '<div class="dim-icon" style="background: ' + SERVICE_SCORE_MAP[gSvc].color + '22; color: ' + SERVICE_SCORE_MAP[gSvc].color + ';" aria-hidden="true">' + SERVICE_SCORE_MAP[gSvc].icon + '</div>'
-      + '<div class="dim-info"><div class="dim-name">' + escapeHtml(SERVICE_SCORE_MAP[gSvc].label) + '</div></div>'
-      + '<div style="flex:1;"></div>'
-      + '<div class="dim-score" style="color: var(--red);">' + g.target + '</div>'
-      + '<div class="dim-gap below">' + g.gap + '</div>'
-      + '</div>';
-  }
-  var gapsEl = document.getElementById('gapsList');
-  if (gapsEl) gapsEl.innerHTML = gHtml || '<div style="color: var(--text-muted); padding: 20px;">No gaps detected yet</div>';
-}
-
-// ── Render: Recommendations ──
-function renderRecommendationsFromData(data) {
-  var container = document.getElementById('recommendationsList');
-  if (!container) return;
-  if (!data) { container.innerHTML = ''; return; }
-
-  var recs = [];
-  var criticalCount = 0;
-  var quickWins = 0;
-
-  for (var entry of Object.entries(data.serviceScores)) {
-    var svc = entry[0]; var scores = entry[1];
-    if (scores.target === 0) continue;
-    var info = SERVICE_SCORE_MAP[svc];
-    if (!info) continue;
-    var band = getScoreBand(scores.target);
-    var priority, interpretation, actions;
-
-    if (band === 'critical') {
-      priority = 'critical';
-      criticalCount++;
-      interpretation = info.label + ' score of ' + scores.target + ' is critically low. This service needs immediate attention and data collection to understand the root cause.';
-      actions = [
-        { action: 'Re-run ' + info.label + ' data collection to verify score', impact: 'high', effort: 'quick_win', timeframe: '1 day' },
-        { action: 'Investigate underlying metrics for ' + info.label, impact: 'high', effort: 'moderate', timeframe: '1-2 weeks' },
-      ];
-    } else if (band === 'weak') {
-      priority = 'high';
-      interpretation = info.label + ' score of ' + scores.target + ' is below the target threshold. Gap of ' + scores.gap + ' vs company average suggests this is an area needing investment.';
-      actions = [
-        { action: 'Develop improvement plan for ' + info.label, impact: 'high', effort: 'moderate', timeframe: '2-4 weeks' },
-        { action: 'Benchmark against top performers in ' + escapeHtml(data.sector), impact: 'medium', effort: 'quick_win', timeframe: '1 week' },
-      ];
-      quickWins++;
-    } else if (band === 'average') {
-      priority = 'medium';
-      interpretation = info.label + ' score of ' + scores.target + ' is in the average range. There is room for improvement to move into the strong band.';
-      actions = [
-        { action: 'Optimize ' + info.label + ' to push score above 70', impact: 'medium', effort: 'moderate', timeframe: '2-6 weeks' },
-      ];
-      quickWins++;
-    } else if (band === 'strong') {
-      priority = 'low';
-      interpretation = info.label + ' score of ' + scores.target + ' is strong. Maintain current performance and look for marginal gains.';
-      actions = [
-        { action: 'Monitor ' + info.label + ' for regression', impact: 'low', effort: 'quick_win', timeframe: 'Ongoing' },
-      ];
-      quickWins++;
-    } else {
-      priority = 'low';
-      interpretation = info.label + ' score of ' + scores.target + ' is in the leading band. This is a competitive advantage worth protecting.';
-      actions = [];
-    }
-
-    recs.push({
-      service: svc, serviceName: info.label, scoreBand: band,
-      targetScore: scores.target, benchmarkAvg: scores.benchmarkAvg,
-      percentile: scores.percentile, priority: priority, interpretation: interpretation, actions: actions
-    });
-  }
-
-  var priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-  recs.sort(function(a, b) { return (priorityOrder[a.priority] || 3) - (priorityOrder[b.priority] || 3); });
-
-  // Update summary cards
-  var recCards = document.querySelectorAll('#section-recommendations .card-value');
-  if (recCards[0]) {
-    var overallBand = getScoreBand(data.overallScore);
-    recCards[0].textContent = overallBand.charAt(0).toUpperCase() + overallBand.slice(1);
-    recCards[0].style.color = 'var(--' + (overallBand === 'leading' ? 'purple' : overallBand) + ')';
-  }
-  if (recCards[1]) recCards[1].textContent = criticalCount;
-  if (recCards[2]) recCards[2].textContent = quickWins;
-  var recDeltas = document.querySelectorAll('#section-recommendations .card-delta');
-  if (recDeltas[0]) recDeltas[0].textContent = data.overallScore + ' / 100 composite';
-
-  var html = '';
-  if (recs.length === 0) {
-    html = '<div style="color: var(--text-muted); padding: 20px; text-align: center;">No scores collected yet. Run data collection from the API to generate recommendations.</div>';
-  }
-  for (var rec of recs) {
-    var rInfo = SERVICE_SCORE_MAP[rec.service];
-    if (!rInfo) continue;
-    html += '<div class="rec-card" role="listitem" style="border-left: 3px solid ' + rInfo.color + ';">'
-      + '<div class="rec-header">'
-      + '<div class="rec-service">' + rInfo.icon + ' ' + escapeHtml(rec.serviceName) + ' <span class="dim-band band-' + rec.scoreBand + '" style="margin-left: 8px;">' + rec.scoreBand + '</span></div>'
-      + '<div class="rec-priority priority-' + rec.priority + '">' + escapeHtml(rec.priority) + '</div>'
-      + '</div>'
-      + '<div class="rec-interpretation">' + escapeHtml(rec.interpretation) + '</div>'
-      + '<div class="rec-actions">'
-      + rec.actions.map(function(a) {
-          var effortClass = a.effort === 'quick_win' ? 'quick' : a.effort === 'moderate' ? 'moderate' : 'major';
-          var effortLabel = (a.effort || '').replace('_', ' ');
-          return '<div class="rec-action">'
-            + '<div class="rec-action-text">' + escapeHtml(a.action) + '</div>'
-            + '<div class="rec-action-meta">'
-            + '<span class="impact-' + a.impact + '">' + escapeHtml(a.impact) + ' impact</span>'
-            + '<span class="effort-' + effortClass + '">' + escapeHtml(effortLabel) + '</span>'
-            + '<span style="color: var(--text-muted);">' + escapeHtml(a.timeframe) + '</span>'
-            + '</div></div>';
-        }).join('')
-      + '</div></div>';
-  }
-  container.innerHTML = html;
-}
-
-// ── Render: Collection Grid ──
-function renderCollectionGrid() {
-  var container = document.getElementById('collectionGrid');
-  var data = currentCompanyData;
-  if (!container || !data) return;
-  var html = '';
-  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
-    var service = entry[0]; var info = entry[1];
-    var scores = data.serviceScores[service];
-    if (!scores) continue;
-    var expiryHrs = EXPIRY_HOURS[service] || 168;
-    var needsKey = service === 'newsapi' || service === 'google_maps';
-    var noData = scores.target === 0;
-    var statusClass = noData ? 'status-pending' : 'status-success';
-    var statusText = noData ? 'pending' : 'success';
-    var freshClass = noData ? 'stale' : 'fresh';
-    var freshText = noData ? 'Not collected' : 'Fresh';
-    html += '<div class="collect-card" role="listitem">'
-      + '<div class="collect-card-header">'
-      + '<div class="collect-service">' + info.icon + ' ' + escapeHtml(info.label) + '</div>'
-      + '<div class="collect-status ' + statusClass + '">' + statusText + '</div>'
-      + '</div>'
-      + '<div class="collect-score" style="color: ' + (noData ? 'var(--text-muted)' : info.color) + ';">' + (noData ? '-' : scores.target) + '<span style="font-size: 12px; color: var(--text-muted); font-weight: 400;"> / 100</span></div>'
-      + '<div class="collect-meta">'
-      + 'Metric: ' + escapeHtml(info.metric) + '<br>'
-      + 'Expires: ' + expiryHrs + 'h &middot; ' + (needsKey ? 'Requires API key' : 'Free (no key)')
-      + '</div>'
-      + '<div style="margin-top: 8px;"><span class="freshness ' + freshClass + '">' + freshText + '</span></div>'
-      + '</div>';
-  }
-  container.innerHTML = html;
-}
-
-// ── Render: Data Points Table ──
-function renderDataPoints(serviceFilter) {
-  var tbody = document.getElementById('dataPointsBody');
-  if (!tbody) return;
-  if (!currentCompanyData) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Select a company to view data points</td></tr>';
-    return;
-  }
-
-  var livePoints = currentCompanyData._dataPoints;
-  if (livePoints && Array.isArray(livePoints) && livePoints.length > 0) {
-    var html = '';
-    var filtered = serviceFilter === 'all' ? livePoints : livePoints.filter(function(dp) { return dp && (dp.service === serviceFilter || dp.category === serviceFilter); });
-    for (var dp of filtered) {
-      var svc = dp.service || dp.category || 'unknown';
-      var info = SERVICE_SCORE_MAP[svc] || { icon: '&#9679;', color: '#94a3b8' };
-      var conf = safeNumber(dp.confidence);
-      var confClass = conf >= 0.8 ? 'conf-high' : conf >= 0.5 ? 'conf-med' : 'conf-low';
-      var displayVal;
-      if (dp.value === null || dp.value === undefined) {
-        displayVal = 'N/A';
-      } else if (typeof dp.value === 'boolean') {
-        displayVal = dp.value ? 'true' : 'false';
-      } else {
-        displayVal = escapeHtml(dp.value);
-      }
-      html += '<tr>'
-        + '<td><span style="color: ' + info.color + '; font-weight: 600;">' + info.icon + ' ' + escapeHtml(svc) + '</span></td>'
-        + '<td style="color: var(--text-muted);">' + escapeHtml(dp.category || svc) + '</td>'
-        + '<td style="font-family: \'SF Mono\', monospace; font-size: 12px;">' + escapeHtml(dp.metric || dp.key || '-') + '</td>'
-        + '<td style="font-weight: 600;">' + displayVal + '</td>'
-        + '<td style="color: var(--text-muted); font-size: 12px;">' + escapeHtml(dp.unit || '-') + '</td>'
-        + '<td><span class="confidence"><span class="confidence-dot ' + confClass + '" aria-hidden="true"></span>' + conf + '</span></td>'
-        + '<td><span class="freshness fresh">Live</span></td>'
-        + '</tr>';
-    }
-    tbody.innerHTML = html || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No data points found for this filter</td></tr>';
-    return;
-  }
-
-  // Fallback: show scores as data points
-  var fallbackHtml = '';
-  var services = serviceFilter === 'all' ? Object.keys(SERVICE_SCORE_MAP) : [serviceFilter];
-  for (var fsvc of services) {
-    var finfo = SERVICE_SCORE_MAP[fsvc];
-    if (!finfo) continue;
-    var fscores = currentCompanyData.serviceScores[fsvc];
-    if (!fscores || fscores.target === 0) continue;
-    fallbackHtml += '<tr>'
-      + '<td><span style="color: ' + finfo.color + '; font-weight: 600;">' + finfo.icon + ' ' + escapeHtml(fsvc) + '</span></td>'
-      + '<td style="color: var(--text-muted);">' + escapeHtml(finfo.label) + '</td>'
-      + '<td style="font-family: \'SF Mono\', monospace; font-size: 12px;">' + escapeHtml(finfo.metric) + '</td>'
-      + '<td style="font-weight: 600;">' + fscores.target + '</td>'
-      + '<td style="color: var(--text-muted); font-size: 12px;">score_0_100</td>'
-      + '<td><span class="confidence"><span class="confidence-dot conf-med" aria-hidden="true"></span>API</span></td>'
-      + '<td><span class="freshness fresh">Live</span></td>'
-      + '</tr>';
-  }
-  tbody.innerHTML = fallbackHtml || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No data points available. Data point collection has not been run for this company yet.</td></tr>';
-
-  // Update summary cards
-  var dpCards = document.querySelectorAll('#section-datapoints .card-value');
-  var scoredServices = Object.values(currentCompanyData.serviceScores).filter(function(s) { return s.target > 0; });
-  if (dpCards[0]) dpCards[0].textContent = scoredServices.length;
-  if (dpCards[1]) dpCards[1].textContent = currentCompanyData.scoredCount;
-  if (dpCards[2]) dpCards[2].textContent = currentCompanyData.confidence.toFixed(2);
-  if (dpCards[3]) dpCards[3].textContent = 9 - currentCompanyData.scoredCount;
-}
-
-// ── Charts ──
-function renderSmallMultiples(data) {
-  if (!data) return;
-  var container = document.getElementById('smallMultiples');
-  if (!container) return;
-
-  var bandColors = { critical: '#DC2626', weak: '#D97706', average: '#2563EB', strong: '#059669', leading: '#7C3AED' };
-  var bandBgs = { critical: 'rgba(220,38,38,0.1)', weak: 'rgba(217,119,6,0.1)', average: 'rgba(37,99,235,0.1)', strong: 'rgba(5,150,105,0.1)', leading: 'rgba(124,58,237,0.1)' };
-  var html = '';
-  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
-    var svc = entry[0]; var info = entry[1];
-    var scores = data.serviceScores[svc];
-    if (!scores) continue;
-    var band = getScoreBand(scores.target);
-    var noData = scores.target === 0 && data._fromApi;
-    var barColor = bandColors[band] || '#9CA3AF';
-    html += '<div class="sm-card" role="listitem"' + (noData ? ' style="opacity:0.5;"' : '') + '>'
-      + '<div class="sm-icon" aria-hidden="true">' + info.icon + '</div>'
-      + '<div class="sm-label">' + escapeHtml(info.label) + '</div>'
-      + '<div class="sm-score" style="color: ' + (noData ? '#9CA3AF' : barColor) + ';">' + (noData ? '-' : scores.target) + '</div>'
-      + '<div class="sm-bar-wrap"><div class="sm-bar-fill" style="width: ' + (noData ? 0 : scores.target) + '%; background: ' + barColor + ';"></div></div>'
-      + '<div class="sm-band" style="background: ' + (bandBgs[band] || 'transparent') + '; color: ' + barColor + ';">' + (noData ? 'n/a' : band) + '</div>'
-      + '<div class="sm-meta">' + (noData ? 'Not collected' : 'Avg: ' + scores.benchmarkAvg) + '</div>'
-      + '</div>';
-  }
-  container.innerHTML = html;
-}
-
-function renderGapChart(data) {
-  if (!data) return;
-  var canvas = document.getElementById('gapChart');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  if (window.gapChartInstance) window.gapChartInstance.destroy();
-
-  var entries = Object.entries(data.serviceScores).sort(function(a, b) { return a[1].gap - b[1].gap; });
-  var labels = entries.map(function(e) { return SERVICE_SCORE_MAP[e[0]] ? SERVICE_SCORE_MAP[e[0]].label : e[0]; });
-  var gaps = entries.map(function(e) { return e[1].gap; });
-  var colors = gaps.map(function(g) { return g > 2 ? '#059669' : g < -2 ? '#DC2626' : '#D97706'; });
-
-  window.gapChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: labels, datasets: [{ label: 'Gap vs Average', data: gaps, backgroundColor: colors, borderRadius: 4, barThickness: 24 }] },
-    options: {
-      indexAxis: 'y', responsive: true,
-      scales: { x: { grid: { color: '#E5E7EB' }, ticks: { color: '#9CA3AF' } }, y: { grid: { display: false }, ticks: { color: '#4B5563', font: { size: 11 } } } },
-      plugins: { legend: { display: false } }
-    }
-  });
-}
-
-function renderBenchmarkBarChart(data) {
-  if (!data) return;
-  var canvas = document.getElementById('benchmarkBarChart');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  if (window.benchmarkChartInstance) window.benchmarkChartInstance.destroy();
-
-  var labels = Object.values(SERVICE_SCORE_MAP).map(function(s) { return s.label; });
-  var targetData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].target : 0; });
-  var benchData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].benchmarkAvg : 0; });
-
-  var titleEl = document.querySelector('#section-benchmark .chart-title');
-  if (titleEl) titleEl.textContent = 'Score Report: ' + (data.name || 'Target') + ' vs Average';
-
-  window.benchmarkChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: escapeHtml(data.name || 'Target'), data: targetData, backgroundColor: '#1A1F36', borderRadius: 6 },
-        { label: 'Company Average', data: benchData, backgroundColor: '#D1D5DB', borderRadius: 6 },
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: { y: { min: 0, max: 100, grid: { color: '#E5E7EB' }, ticks: { color: '#9CA3AF' } }, x: { grid: { display: false }, ticks: { color: '#4B5563', font: { size: 11 } } } },
-      plugins: { legend: { labels: { color: '#4B5563' } } }
-    }
-  });
-}
-
-// ── Init ──
-document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
-(async function init() {
-  try {
-    await checkApiStatus();
-    await loadCompanies();
-  } catch (e) {
-    console.error('Dashboard init error:', e);
-    showGlobalError('Failed to initialize dashboard. Please refresh the page.');
-  }
-})();
+var currentCompany='ega',charts={};
+
+async function checkApi(){try{var r=await fetch(API_BASE+'/api/companies',{signal:AbortSignal.timeout(5000)});if(r.ok){var d=await r.json();document.getElementById('apiDot').className='api-dot live';document.getElementById('apiLabel').textContent='API Live';document.getElementById('apiLabel').style.color='var(--green)';if(d&&d.length>0)renderLiveApiCards(d)}else throw 0}catch(e){document.getElementById('apiDot').className='api-dot offline';document.getElementById('apiLabel').textContent='Demo Mode';document.getElementById('apiLabel').style.color='var(--text-tertiary)'}}
+
+async function renderLiveApiCards(list){var s=document.getElementById('liveApiSection'),c=document.getElementById('liveApiCards');s.style.display='block';var h='';for(var i=0;i<Math.min(list.length,4);i++){var co=list[i],sh='<span style="color:var(--text-tertiary)">No scores</span>';try{var r=await fetch(API_BASE+'/api/companies/'+co.slug+'/scores',{signal:AbortSignal.timeout(5000)});if(r.ok){var sc=await r.json();if(sc&&sc.composite!==undefined){var b=sc.composite>=90?'leading':sc.composite>=70?'strong':sc.composite>=50?'average':sc.composite>=30?'weak':'critical';var bc=b==='leading'?'var(--accent)':b==='strong'?'var(--green)':b==='average'?'var(--orange)':'var(--red)';sh='<div style="font-size:28px;font-weight:800;color:'+bc+';letter-spacing:-1px">'+Math.round(sc.composite)+'</div><div class="kpi-label">'+b.charAt(0).toUpperCase()+b.slice(1)+'</div>'}}}catch(e){}h+='<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+co.name+'</div>'+sh+'</div>'}c.innerHTML=h}
+
+function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');b.classList.add('active');setTimeout(function(){renderAllCharts()},50)}
+function switchCompany(k){currentCompany=k;renderAll()}
+
+function renderAll(){var c=companies[currentCompany];
+document.getElementById('heroLogo').textContent=c.short;document.getElementById('heroName').textContent=c.name;document.getElementById('heroMeta').innerHTML=c.sector+' &bull; '+c.location+' &bull; '+c.portfolio+' &bull; <strong>'+c.revenue+'</strong>';
+var sr=document.getElementById('overviewScore');sr.textContent=c.score;sr.className='score-ring score-'+c.scoreBand.toLowerCase();
+var ce=document.getElementById('overviewScoreChange');ce.textContent=c.scoreChange.label;ce.className='kpi-change '+c.scoreChange.direction;
+document.getElementById('overviewScoreSummary').textContent=c.score<60?'Below sector average. Weak areas identified in social and employer brand.':c.score<75?'Above sector average. Strong digital presence with room for improvement.':'Leading position. Strong across most dimensions.';
+['1','2','3'].forEach(function(n){var s=c.contextSignals['headline'+n];document.getElementById('ctxSignal'+n+'Title').textContent=s.title;document.getElementById('ctxSignal'+n+'Detail').textContent=s.detail;document.getElementById('ctxIcon'+n).className='signal-icon '+s.iconClass;document.getElementById('ctxIcon'+n).textContent=s.icon});
+document.getElementById('overviewOppScore').textContent=c.arbOppScore;document.getElementById('overviewOppDesc').textContent=c.arbOpp1.desc.substring(0,120)+'...';document.getElementById('overviewOppWindow').textContent=c.arbOppWindow;
+renderPeerTable(c);document.getElementById('benchCompanyName').textContent=c.name;document.getElementById('benchBand').textContent=c.scoreBand;document.getElementById('benchBand').style.color=c.scoreBandColor;renderServiceBars(c);renderScorecard(c);
+document.getElementById('ctxTimelineSub').textContent='Key events affecting '+c.short+"'s score trajectory";renderTimeline(c);renderSignalCards(c);document.getElementById('ctxCompMoveSub').textContent='Score changes across '+c.short+"'s competitive set in the last 90 days";
+document.getElementById('arbOppScore').textContent=c.arbOppScore;document.getElementById('arbOppHeadline').textContent=c.arbOppHeadline;document.getElementById('arbOppFormula').textContent=c.arbOppFormula;
+document.getElementById('arbOpp1Title').textContent=c.arbOpp1.title;document.getElementById('arbOpp1Urgency').textContent=c.arbOpp1.urgency;document.getElementById('arbOpp1Urgency').className='arb-urgency '+c.arbOpp1.urgencyClass;document.getElementById('arbOpp1Desc').textContent=c.arbOpp1.desc;
+document.getElementById('arbOpp2Title').textContent=c.arbOpp2.title;document.getElementById('arbOpp2Urgency').textContent=c.arbOpp2.urgency;document.getElementById('arbOpp2Urgency').className='arb-urgency '+c.arbOpp2.urgencyClass;document.getElementById('arbOpp2Desc').textContent=c.arbOpp2.desc;
+document.getElementById('arbActionSub').textContent='Sequenced actions to exploit the current '+c.short+' arbitrage window';document.getElementById('arbCorrSub').textContent='How '+c.short+"'s signals create opportunities";
+renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);renderEventCalendar();renderAllCharts()}
+
+function renderPeerTable(c){document.querySelector('#peerTable tbody').innerHTML=c.peers.map(function(p){return'<tr><td>'+p.name+'</td><td class="score-cell">'+p.score+'</td><td class="score-cell">'+p.website+'</td><td class="score-cell">'+p.social+'</td><td class="score-cell">'+p.media+'</td><td class="score-cell">'+p.employer+'</td><td class="score-cell">'+p.financial+'</td><td class="'+(p.trend==='up'?'trend-up':'trend-down')+'">'+(p.trend==='up'?'\u25B2 Up':'\u25BC Down')+'</td></tr>'}).join('')}
+function renderServiceBars(c){document.getElementById('serviceBars').innerHTML=c.services.map(function(s){return'<div class="service-bar"><div class="service-bar-header"><span class="service-name">'+s.name+'</span><span class="service-score" style="color:'+s.color+'">'+s.score+'</span></div><div class="bar-track"><div class="bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div><div class="bar-benchmark" style="left:'+s.benchmark+'%" title="Sector Avg: '+s.benchmark+'"></div></div></div>'}).join('')}
+function renderScorecard(c){document.getElementById('scorecardGrid').innerHTML=c.services.map(function(s){var d=s.score-s.benchmark,dc=d>0?'var(--green)':d<0?'var(--red)':'var(--text-secondary)',ds=d>0?'+':'';return'<div class="scorecard-cell"><div class="sc-score" style="color:'+s.color+'">'+s.score+'</div><div class="sc-label">'+s.name+'</div><div style="font-size:10px;font-weight:600;color:'+dc+';margin-top:2px">'+ds+d+' vs avg</div><div class="sc-bar"><div class="sc-bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div></div></div>'}).join('')}
+function renderTimeline(c){document.getElementById('signalTimeline').innerHTML=c.timeline.map(function(t){return'<div class="timeline-item"><div class="timeline-dot" style="background:'+t.color+'"></div><div><div class="timeline-text">'+t.text+'</div><div class="timeline-date">'+t.date+'</div></div></div>'}).join('')}
+function renderSignalCards(c){function r(id,d){document.getElementById(id).innerHTML=d.map(function(x){return'<div class="overlay-row"><span class="overlay-label">'+x.label+'</span><span class="overlay-value" style="color:'+(x.trend==='positive'?'var(--green)':x.trend==='negative'?'var(--red)':'var(--text-primary)')+'">'+x.value+'</span></div>'}).join('')}r('talentSignals',c.talent);r('financialSignals',c.financial);r('marketContext',c.market)}
+function renderArbMetrics(c){['arbOpp1Metrics','arbOpp2Metrics'].forEach(function(id,i){var o=i===0?c.arbOpp1:c.arbOpp2;document.getElementById(id).innerHTML=o.metrics.map(function(m){return'<div class="arb-metric"><span class="arb-metric-label">'+m.label+'</span><span class="arb-metric-value">'+m.value+'</span></div>'}).join('')})}
+function renderActionPlan(c){document.getElementById('actionPlan').innerHTML=c.actionPlan.map(function(a,i){return'<div class="action-step"><div class="action-number">'+(i+1)+'</div><div class="action-text">'+a.text+'<br><span class="impact">'+a.impact+'</span></div></div>'}).join('')}
+function renderCorrelations(c){document.getElementById('correlationSignals').innerHTML=c.correlations.map(function(r){return'<div class="signal-item"><div class="signal-icon" style="background:'+r.color+'12;color:'+r.color+';font-size:14px">\u2192</div><div class="signal-content"><div class="signal-title" style="font-size:12px">'+r.from+' \u2192 '+r.to+'</div><div class="signal-detail">'+r.label+'</div></div></div>'}).join('')}
+function renderEventCalendar(){var ev=[{month:'MAR',day:'23',name:'Brussels TrueGroup Event',location:'Brussels, Belgium'},{month:'APR',day:'28',name:'STEP Conference',location:'Dubai Internet City'},{month:'MAY',day:'12',name:'Future Investment Initiative',location:'Riyadh, Saudi Arabia'},{month:'JUN',day:'02',name:'Cityscape Abu Dhabi',location:'Abu Dhabi (ADNEC)'},{month:'AUG',day:'01',name:'EU AI Act High-Risk Deadline',location:'European Union'},{month:'SEP',day:'08',name:'Saudi Vision 2030 Summit',location:'Riyadh, Saudi Arabia'},{month:'OCT',day:'14',name:'GITEX Global 2026',location:'Dubai World Trade Centre'},{month:'NOV',day:'02',name:'ADIPEC 2026',location:'Abu Dhabi (ADNEC)'}];document.getElementById('eventCalendar').innerHTML=ev.map(function(e){return'<div class="event-item"><div class="event-date-box"><div class="event-date-month">'+e.month+'</div><div class="event-date-day">'+e.day+'</div></div><div><div class="event-name">'+e.name+'</div><div class="event-location">'+e.location+'</div></div></div>'}).join('')}
+
+var gC='#F3F4F6',lO={position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}};
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k]}}
+function renderAllCharts(){var c=companies[currentCompany],mo=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+destroyChart('history');var h=document.getElementById('historyChart');if(h&&h.offsetParent!==null){charts.history=new Chart(h,{type:'line',data:{labels:mo,datasets:[{label:c.short+' Score',data:c.history,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2563EB'},{label:'Sector Average',data:c.sectorAvg,borderColor:'#9CA3AF',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:40,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+destroyChart('sentiment');var s=document.getElementById('sentimentChart');if(s&&s.offsetParent!==null){var ls=c.sentiment[c.sentiment.length-1];charts.sentiment=new Chart(s,{type:'line',data:{labels:mo,datasets:[{label:'News Sentiment',data:c.sentiment,borderColor:ls>=0?'#059669':'#DC2626',backgroundColor:ls>=0?'rgba(5,150,105,0.06)':'rgba(220,38,38,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:c.sentiment.map(function(v){return v>=0?'#059669':'#DC2626'})}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:-0.5,max:0.8,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v.toFixed(1)}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+destroyChart('competitorMovement');var cm=document.getElementById('competitorMovementChart');if(cm&&cm.offsetParent!==null){var cd=c.competitorMovement;charts.competitorMovement=new Chart(cm,{type:'bar',data:{labels:cd.labels,datasets:[{label:'90 Days Ago',data:cd.previous,backgroundColor:'rgba(156,163,175,0.25)',borderRadius:6},{label:'Current',data:cd.current,backgroundColor:cd.current.map(function(v,i){return v>cd.previous[i]?'rgba(5,150,105,0.65)':'rgba(220,38,38,0.65)'}),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+destroyChart('timing');var tm=document.getElementById('timingChart');if(tm&&tm.offsetParent!==null){charts.timing=new Chart(tm,{type:'line',data:{labels:c.timingData.labels,datasets:[{label:'Opportunity Window',data:c.timingData.opportunity,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#059669'},{label:'Risk of Closure',data:c.timingData.risk,borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,0.04)',fill:true,tension:0.4,borderWidth:2,borderDash:[4,4],pointRadius:3,pointBackgroundColor:'#DC2626'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v+'%'}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+destroyChart('oil');var ol=document.getElementById('oilChart');if(ol&&ol.offsetParent!==null){charts.oil=new Chart(ol,{type:'line',data:{labels:mo,datasets:[{label:'Brent Crude ($/bbl)',data:[78,76,74,79,82,85,81,77,80,88,94,102],borderColor:'#0B1D3A',borderWidth:2.5,tension:0.4,pointRadius:3,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'GCC Corp Sentiment',data:[62,60,58,63,66,68,65,62,64,67,66,68],borderColor:'#2563EB',borderWidth:2,borderDash:[4,4],tension:0.4,pointRadius:3,pointBackgroundColor:'#2563EB',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{position:'left',min:60,max:120,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Oil ($/bbl)',font:{size:10}}},y1:{position:'right',min:40,max:80,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'Sentiment',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+destroyChart('investment');var iv=document.getElementById('investmentChart');if(iv&&iv.offsetParent!==null){charts.investment=new Chart(iv,{type:'bar',data:{labels:['Technology','Energy','Real Estate','Healthcare','Tourism','Financial'],datasets:[{label:'FDI (USD B)',data:[5.2,4.8,3.9,2.1,3.4,4.0],backgroundColor:'rgba(37,99,235,0.65)',borderRadius:6},{label:'SWF (USD B)',data:[3.8,6.2,2.5,1.8,1.2,2.8],backgroundColor:'rgba(124,58,237,0.65)',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v+'B'}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}}
+
+document.addEventListener('DOMContentLoaded',function(){renderAll();checkApi()});
 </script>
-
 </body>
 </html>
