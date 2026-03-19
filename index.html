@@ -7,42 +7,50 @@
 <meta name="description" content="47X Performance Benchmark Dashboard - Composite benchmark scoring across 9 data services">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
   :root {
-    --bg-primary: #0a0e1a;
-    --bg-card: #111827;
-    --bg-card-hover: #1a2235;
-    --bg-input: #0f1629;
-    --border: #1e293b;
-    --accent: #3b82f6;
-    --accent-light: #60a5fa;
-    --accent-glow: rgba(59, 130, 246, 0.15);
-    --green: #10b981;
-    --green-light: #34d399;
-    --red: #ef4444;
-    --red-light: #f87171;
-    --amber: #f59e0b;
-    --amber-light: #fbbf24;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --purple: #8b5cf6;
-    --cyan: #06b6d4;
-    --critical: #ef4444;
-    --weak: #f59e0b;
-    --average: #3b82f6;
-    --strong: #10b981;
-    --leading: #8b5cf6;
-    --focus-ring: 0 0 0 2px var(--accent);
+    --bg-primary: #F5F5F7;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #FAFAFA;
+    --bg-input: #F0F0F2;
+    --border: #E5E7EB;
+    --accent: #1A1F36;
+    --accent-light: #2D3354;
+    --accent-glow: rgba(26, 31, 54, 0.06);
+    --green: #059669;
+    --green-light: #10b981;
+    --red: #DC2626;
+    --red-light: #EF4444;
+    --amber: #D97706;
+    --amber-light: #F59E0B;
+    --text-primary: #1A1F36;
+    --text-secondary: #4B5563;
+    --text-muted: #9CA3AF;
+    --purple: #7C3AED;
+    --cyan: #0891B2;
+    --gold: #B8860B;
+    --gold-light: #DAA520;
+    --critical: #DC2626;
+    --weak: #D97706;
+    --average: #2563EB;
+    --strong: #059669;
+    --leading: #7C3AED;
+    --focus-ring: 0 0 0 2px rgba(26, 31, 54, 0.3);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.06);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Skip to content link for keyboard nav */
@@ -70,9 +78,10 @@
 
   /* ── Header ── */
   .header {
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    background: #FFFFFF;
     border-bottom: 1px solid var(--border);
     padding: 24px 40px;
+    box-shadow: var(--shadow-sm);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -81,10 +90,7 @@
   .logo {
     font-size: 28px;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--accent-light), var(--purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
     letter-spacing: -0.5px;
   }
   .logo-sub {
@@ -96,13 +102,13 @@
   }
   .header-right { display: flex; align-items: center; gap: 20px; }
   .header-badge {
-    background: rgba(139, 92, 246, 0.15);
-    color: var(--purple);
+    background: rgba(26, 31, 54, 0.06);
+    color: var(--text-primary);
     padding: 6px 14px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border);
   }
   .api-status {
     display: flex; align-items: center; gap: 6px;
@@ -117,7 +123,7 @@
   /* ── Navigation ── */
   .nav-tabs {
     display: flex;
-    background: var(--bg-card);
+    background: #FFFFFF;
     border-bottom: 1px solid var(--border);
     padding: 0 40px;
     gap: 0;
@@ -136,9 +142,9 @@
     white-space: nowrap;
     user-select: none;
   }
-  .nav-tab:hover { color: var(--text-secondary); }
+  .nav-tab:hover { color: var(--text-primary); }
   .nav-tab:focus-visible { box-shadow: var(--focus-ring); }
-  .nav-tab.active { color: var(--accent-light); border-bottom-color: var(--accent); }
+  .nav-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); font-weight: 600; }
 
   /* ── Layout ── */
   .content { padding: 32px 40px; max-width: 1600px; margin: 0 auto; }
@@ -157,11 +163,12 @@
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 24px;
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
   }
-  .card:hover { border-color: rgba(59, 130, 246, 0.3); }
+  .card:hover { border-color: #D1D5DB; box-shadow: var(--shadow-md); }
   .card-label {
     font-size: 12px; color: var(--text-muted);
     text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
@@ -180,16 +187,14 @@
   .score-ring-svg { width: 200px; height: 200px; }
   .score-number {
     font-size: 56px; font-weight: 800;
-    background: linear-gradient(135deg, var(--accent-light), var(--cyan));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
   }
   .score-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
 
   /* ── Charts ── */
   .chart-container {
     background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 24px; margin-bottom: 20px;
+    border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm);
   }
   .chart-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
   .chart-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
@@ -197,7 +202,7 @@
   /* ── Service dimension rows ── */
   .dim-row {
     display: flex; align-items: center; padding: 14px 0;
-    border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+    border-bottom: 1px solid var(--border);
   }
   .dim-row:last-child { border-bottom: none; }
   .dim-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 14px; flex-shrink: 0; }
@@ -205,10 +210,10 @@
   .dim-name { font-size: 13px; font-weight: 600; }
   .dim-desc { font-size: 11px; color: var(--text-muted); }
   .dim-bars { flex: 1; display: flex; align-items: center; gap: 10px; }
-  .dim-bar-track { flex: 1; height: 20px; background: rgba(30, 41, 59, 0.6); border-radius: 6px; overflow: hidden; position: relative; }
+  .dim-bar-track { flex: 1; height: 20px; background: #F0F0F2; border-radius: 6px; overflow: hidden; position: relative; }
   .dim-bar { height: 100%; border-radius: 6px; transition: width 0.8s ease; position: absolute; top: 0; left: 0; }
-  .dim-bar.target { background: linear-gradient(90deg, var(--accent), var(--cyan)); z-index: 2; }
-  .dim-bar.benchmark { background: linear-gradient(90deg, var(--purple), rgba(139, 92, 246, 0.4)); z-index: 1; }
+  .dim-bar.target { background: linear-gradient(90deg, #1A1F36, #2D3354); z-index: 2; }
+  .dim-bar.benchmark { background: linear-gradient(90deg, #D1D5DB, #E5E7EB); z-index: 1; }
   .dim-score { width: 48px; text-align: right; font-size: 14px; font-weight: 700; flex-shrink: 0; }
   .dim-gap { width: 68px; text-align: center; font-size: 12px; font-weight: 600; flex-shrink: 0; padding: 3px 8px; border-radius: 12px; }
   .dim-gap.above { background: rgba(16, 185, 129, 0.15); color: var(--green); }
@@ -232,17 +237,17 @@
   .company-selector { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
   .company-btn {
     padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 8px; color: var(--text-secondary); cursor: pointer;
-    font-size: 13px; font-weight: 500; transition: all 0.2s;
+    border-radius: 10px; color: var(--text-secondary); cursor: pointer;
+    font-size: 13px; font-weight: 500; transition: all 0.2s; box-shadow: var(--shadow-sm);
   }
-  .company-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+  .company-btn:hover { border-color: #D1D5DB; color: var(--text-primary); box-shadow: var(--shadow-md); }
   .company-btn:focus-visible { box-shadow: var(--focus-ring); }
-  .company-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent-light); }
+  .company-btn.active { background: var(--text-primary); border-color: var(--text-primary); color: #FFFFFF; }
 
   /* ── Recommendation cards ── */
   .rec-card {
     background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+    border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
   }
   .rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
   .rec-service { font-size: 14px; font-weight: 600; }
@@ -255,7 +260,7 @@
   .rec-actions { display: flex; flex-direction: column; gap: 8px; }
   .rec-action {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 14px; background: rgba(15, 22, 41, 0.5); border-radius: 8px;
+    padding: 10px 14px; background: var(--bg-primary); border-radius: 8px;
     font-size: 12px;
   }
   .rec-action-text { flex: 1; color: var(--text-secondary); }
@@ -272,9 +277,9 @@
   .collect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
   .collect-card {
     background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s;
+    border-radius: 16px; padding: 16px; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm);
   }
-  .collect-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .collect-card:hover { border-color: #D1D5DB; transform: translateY(-1px); box-shadow: var(--shadow-md); }
   .collect-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .collect-service { font-size: 13px; font-weight: 600; }
   .collect-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; }
@@ -293,14 +298,14 @@
   /* ── Data table ── */
   .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .data-table th { text-align: left; padding: 10px 14px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
-  .data-table td { padding: 10px 14px; border-bottom: 1px solid rgba(30, 41, 59, 0.4); }
-  .data-table tr:hover td { background: rgba(59, 130, 246, 0.03); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .data-table tr:hover td { background: rgba(26, 31, 54, 0.02); }
 
   /* ── API endpoint list ── */
   .endpoint-list { display: flex; flex-direction: column; gap: 6px; }
   .endpoint {
     display: flex; align-items: center; gap: 12px;
-    padding: 8px 14px; background: rgba(15, 22, 41, 0.5); border-radius: 8px;
+    padding: 8px 14px; background: var(--bg-primary); border-radius: 8px;
     font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
   }
   .endpoint-method { width: 50px; font-weight: 700; flex-shrink: 0; }
@@ -327,10 +332,37 @@
   }
   .error-banner.visible { display: block; }
 
+  /* ── Small Multiples ── */
+  .sm-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .sm-card:hover { box-shadow: var(--shadow-md); }
+  .sm-icon { font-size: 20px; margin-bottom: 6px; }
+  .sm-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sm-score { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+  .sm-bar-wrap { height: 6px; background: #F0F0F2; border-radius: 3px; overflow: hidden; margin: 8px 0 6px; position: relative; }
+  .sm-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+  .sm-meta { font-size: 10px; color: var(--text-muted); }
+  .sm-band { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
   /* ── Responsive ── */
+  /* iPad landscape (1024-1180px) */
   @media (max-width: 1200px) {
     .grid-4 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-9, .collect-grid { grid-template-columns: repeat(3, 1fr); }
+    .header { padding: 20px 24px; }
+    .content { padding: 24px; }
+    .nav-tabs { padding: 0 24px; }
+  }
+  /* iPad portrait / tablet */
+  @media (max-width: 834px) {
     .grid-9, .collect-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 768px) {
@@ -395,15 +427,15 @@
       <label for="companySearch" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Search companies</label>
       <input type="text" id="companySearch" placeholder="Search companies from API..."
         autocomplete="off"
-        style="width: 100%; padding: 10px 16px 10px 36px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 13px; outline: none;"
+        style="width: 100%; padding: 10px 16px 10px 36px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 13px; outline: none; font-family: 'Inter', sans-serif;"
         aria-label="Search companies"
         aria-autocomplete="list"
         aria-controls="searchDropdown"
         aria-expanded="false">
       <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true">&#128269;</span>
-      <div id="searchDropdown" role="listbox" aria-label="Company search results" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0 0 8px 8px; max-height: 240px; overflow-y: auto; z-index: 100;"></div>
+      <div id="searchDropdown" role="listbox" aria-label="Company search results" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #FFFFFF; border: 1px solid var(--border); border-radius: 0 0 10px 10px; max-height: 240px; overflow-y: auto; z-index: 100; box-shadow: var(--shadow-md);"></div>
     </div>
-    <button id="refreshBtn" style="padding: 10px 16px; background: var(--accent-glow); border: 1px solid var(--accent); border-radius: 8px; color: var(--accent-light); cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap;" aria-label="Refresh company list from API">&#8635; Refresh from API</button>
+    <button id="refreshBtn" style="padding: 10px 16px; background: var(--text-primary); border: 1px solid var(--text-primary); border-radius: 10px; color: #FFFFFF; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; font-family: 'Inter', sans-serif;" aria-label="Refresh company list from API">&#8635; Refresh from API</button>
     <div id="apiConnectionStatus" role="status" aria-live="polite" style="font-size: 12px; color: var(--text-muted);"></div>
   </div>
 
@@ -416,7 +448,7 @@
   <div class="grid-4">
     <div class="card" role="group" aria-label="47X Score">
       <div class="card-label">47X Score</div>
-      <div class="card-value" style="background: linear-gradient(135deg, var(--accent-light), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">--</div>
+      <div class="card-value" style="color: var(--text-primary);">--</div>
       <div class="card-delta neutral">Loading...</div>
     </div>
     <div class="card" role="group" aria-label="Services Scored">
@@ -436,18 +468,18 @@
     </div>
   </div>
 
-  <!-- Score ring + Gap analysis side by side -->
-  <div class="grid-2">
-    <div class="chart-container">
-      <h2 class="chart-title">47X Score Breakdown</h2>
-      <p class="chart-subtitle">Target score as percentile of benchmark average, per service</p>
-      <canvas id="radarChart" height="300" aria-label="Radar chart showing 47X score breakdown by service"></canvas>
-    </div>
-    <div class="chart-container">
-      <h2 class="chart-title">Strengths &amp; Gaps</h2>
-      <p class="chart-subtitle">Services where target exceeds or falls behind benchmark</p>
-      <canvas id="gapChart" height="300" aria-label="Bar chart showing gap between target and benchmark per service"></canvas>
-    </div>
+  <!-- 3x3 Small Multiples Scorecard -->
+  <div class="chart-container">
+    <h2 class="chart-title">Service Scorecard</h2>
+    <p class="chart-subtitle">9 dimensions scored 0-100. Each mini chart shows target vs benchmark average.</p>
+    <div class="grid-9" id="smallMultiples" role="list" aria-label="Small multiples scorecard"></div>
+  </div>
+
+  <!-- Gap analysis -->
+  <div class="chart-container">
+    <h2 class="chart-title">Strengths &amp; Gaps</h2>
+    <p class="chart-subtitle">Services where target exceeds or falls behind benchmark</p>
+    <canvas id="gapChart" height="300" aria-label="Bar chart showing gap between target and benchmark per service"></canvas>
   </div>
 
   <!-- Service dimension breakdown -->
@@ -456,10 +488,10 @@
     <p class="chart-subtitle">Target vs Benchmark Average &mdash; Score = (target / benchmark_avg) &times; 100, capped at 100</p>
     <div style="display: flex; gap: 16px; margin-bottom: 16px;">
       <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);">
-        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--cyan));" aria-hidden="true"></div> Target
+        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, #1A1F36, #2D3354);" aria-hidden="true"></div> Target
       </div>
       <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted);">
-        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, var(--purple), rgba(139, 92, 246, 0.4));" aria-hidden="true"></div> Benchmark Avg
+        <div style="width: 20px; height: 10px; border-radius: 3px; background: linear-gradient(90deg, #D1D5DB, #E5E7EB);" aria-hidden="true"></div> Benchmark Avg
       </div>
     </div>
     <div id="dimensionRows" role="list" aria-label="Service score comparison rows"></div>
@@ -647,12 +679,12 @@
 <!-- ══════════════════════════════════════════════ -->
 <section class="section" id="section-api" role="tabpanel" aria-labelledby="tab-api">
   <h1 class="section-title">API Reference</h1>
-  <p class="section-subtitle">47X Data Engine REST API &mdash; <code style="color: var(--accent-light);">https://47x-audit-platform.truegroup.workers.dev/</code> &mdash; All responses use the standard ApiResponse envelope.</p>
+  <p class="section-subtitle">47X Data Engine REST API &mdash; <code style="color: var(--text-primary); font-weight: 600;">https://47x-audit-platform.truegroup.workers.dev/</code> &mdash; All responses use the standard ApiResponse envelope.</p>
 
   <div class="chart-container">
     <h2 class="chart-title">Response Envelope</h2>
     <p class="chart-subtitle">Every endpoint returns this structure</p>
-    <pre style="background: var(--bg-input); padding: 16px; border-radius: 8px; font-size: 12px; color: var(--text-secondary); overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; line-height: 1.6;" aria-label="API response envelope JSON structure"><code>{
+    <pre style="background: #F0F0F2; padding: 16px; border-radius: 10px; font-size: 12px; color: var(--text-secondary); overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; line-height: 1.6;" aria-label="API response envelope JSON structure"><code>{
   "success": boolean,
   "data": T | null,
   "error": string | null,
@@ -1199,7 +1231,7 @@ function renderOverviewFromData(data) {
   }
 
   renderDimensionRows(data);
-  renderRadarChart(data);
+  renderSmallMultiples(data);
   renderGapChart(data);
 }
 
@@ -1594,32 +1626,31 @@ function renderDataPoints(serviceFilter) {
 }
 
 // ── Charts ──
-function renderRadarChart(data) {
+function renderSmallMultiples(data) {
   if (!data) return;
-  var canvas = document.getElementById('radarChart');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  if (window.radarChartInstance) window.radarChartInstance.destroy();
+  var container = document.getElementById('smallMultiples');
+  if (!container) return;
 
-  var labels = Object.values(SERVICE_SCORE_MAP).map(function(s) { return s.label; });
-  var targetData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].target : 0; });
-  var benchData = Object.keys(SERVICE_SCORE_MAP).map(function(k) { return data.serviceScores[k] ? data.serviceScores[k].benchmarkAvg : 0; });
-
-  window.radarChartInstance = new Chart(ctx, {
-    type: 'radar',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: escapeHtml(data.name || 'Target'), data: targetData, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.15)', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#3b82f6' },
-        { label: 'Company Average', data: benchData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#8b5cf6', borderDash: [4, 4] },
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, color: '#64748b', backdropColor: 'transparent', font: { size: 10 } }, grid: { color: '#1e293b' }, angleLines: { color: '#1e293b' }, pointLabels: { color: '#94a3b8', font: { size: 11 } } } },
-      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } }
-    }
-  });
+  var bandColors = { critical: '#DC2626', weak: '#D97706', average: '#2563EB', strong: '#059669', leading: '#7C3AED' };
+  var bandBgs = { critical: 'rgba(220,38,38,0.1)', weak: 'rgba(217,119,6,0.1)', average: 'rgba(37,99,235,0.1)', strong: 'rgba(5,150,105,0.1)', leading: 'rgba(124,58,237,0.1)' };
+  var html = '';
+  for (var entry of Object.entries(SERVICE_SCORE_MAP)) {
+    var svc = entry[0]; var info = entry[1];
+    var scores = data.serviceScores[svc];
+    if (!scores) continue;
+    var band = getScoreBand(scores.target);
+    var noData = scores.target === 0 && data._fromApi;
+    var barColor = bandColors[band] || '#9CA3AF';
+    html += '<div class="sm-card" role="listitem"' + (noData ? ' style="opacity:0.5;"' : '') + '>'
+      + '<div class="sm-icon" aria-hidden="true">' + info.icon + '</div>'
+      + '<div class="sm-label">' + escapeHtml(info.label) + '</div>'
+      + '<div class="sm-score" style="color: ' + (noData ? '#9CA3AF' : barColor) + ';">' + (noData ? '-' : scores.target) + '</div>'
+      + '<div class="sm-bar-wrap"><div class="sm-bar-fill" style="width: ' + (noData ? 0 : scores.target) + '%; background: ' + barColor + ';"></div></div>'
+      + '<div class="sm-band" style="background: ' + (bandBgs[band] || 'transparent') + '; color: ' + barColor + ';">' + (noData ? 'n/a' : band) + '</div>'
+      + '<div class="sm-meta">' + (noData ? 'Not collected' : 'Avg: ' + scores.benchmarkAvg) + '</div>'
+      + '</div>';
+  }
+  container.innerHTML = html;
 }
 
 function renderGapChart(data) {
@@ -1632,14 +1663,14 @@ function renderGapChart(data) {
   var entries = Object.entries(data.serviceScores).sort(function(a, b) { return a[1].gap - b[1].gap; });
   var labels = entries.map(function(e) { return SERVICE_SCORE_MAP[e[0]] ? SERVICE_SCORE_MAP[e[0]].label : e[0]; });
   var gaps = entries.map(function(e) { return e[1].gap; });
-  var colors = gaps.map(function(g) { return g > 2 ? '#10b981' : g < -2 ? '#ef4444' : '#f59e0b'; });
+  var colors = gaps.map(function(g) { return g > 2 ? '#059669' : g < -2 ? '#DC2626' : '#D97706'; });
 
   window.gapChartInstance = new Chart(ctx, {
     type: 'bar',
     data: { labels: labels, datasets: [{ label: 'Gap vs Average', data: gaps, backgroundColor: colors, borderRadius: 4, barThickness: 24 }] },
     options: {
       indexAxis: 'y', responsive: true,
-      scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }, y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } } },
+      scales: { x: { grid: { color: '#E5E7EB' }, ticks: { color: '#9CA3AF' } }, y: { grid: { display: false }, ticks: { color: '#4B5563', font: { size: 11 } } } },
       plugins: { legend: { display: false } }
     }
   });
@@ -1664,14 +1695,14 @@ function renderBenchmarkBarChart(data) {
     data: {
       labels: labels,
       datasets: [
-        { label: escapeHtml(data.name || 'Target'), data: targetData, backgroundColor: 'rgba(59, 130, 246, 0.8)', borderRadius: 4 },
-        { label: 'Company Average', data: benchData, backgroundColor: 'rgba(139, 92, 246, 0.5)', borderRadius: 4 },
+        { label: escapeHtml(data.name || 'Target'), data: targetData, backgroundColor: '#1A1F36', borderRadius: 6 },
+        { label: 'Company Average', data: benchData, backgroundColor: '#D1D5DB', borderRadius: 6 },
       ]
     },
     options: {
       responsive: true,
-      scales: { y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }, x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } } },
-      plugins: { legend: { labels: { color: '#94a3b8' } } }
+      scales: { y: { min: 0, max: 100, grid: { color: '#E5E7EB' }, ticks: { color: '#9CA3AF' } }, x: { grid: { display: false }, ticks: { color: '#4B5563', font: { size: 11 } } } },
+      plugins: { legend: { labels: { color: '#4B5563' } } }
     }
   });
 }
