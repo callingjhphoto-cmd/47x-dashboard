@@ -10,6 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 :root{
   --bg:#F5F5F7;--surface:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;
   --navy:#0B1D3A;--navy-light:#1E3A5F;
@@ -51,15 +52,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
 .main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
-.section{margin-bottom:40px}
+.section{margin-bottom:44px}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
 .level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
 .level-1{background:var(--accent-light);color:var(--accent)}.level-2{background:var(--purple-light);color:var(--purple)}.level-3{background:var(--green-light);color:var(--green)}
 
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
 .card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
-.card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
 .card-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:16px}
 
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -133,14 +134,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .action-text .impact{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;color:var(--green)}
 
 .comp-table{width:100%;border-collapse:collapse;font-size:13px}
-.comp-table thead th{text-align:left;padding:12px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
-.comp-table tbody td{padding:14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.comp-table thead th{text-align:left;padding:14px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.comp-table tbody td{padding:14px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
 .comp-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
 .comp-table tbody tr:hover{background:var(--bg)}
 .comp-table .score-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
 .comp-table .trend-up{color:var(--green)}.comp-table .trend-down{color:var(--red)}
 
-.macro-strip{display:flex;gap:20px;padding:12px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow-sm)}
+.macro-strip{display:flex;gap:20px;padding:12px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow-sm);position:relative;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,black 90%,transparent);-webkit-mask-image:linear-gradient(to right,black 90%,transparent)}
 .macro-item{display:flex;align-items:center;gap:8px;white-space:nowrap}
 .macro-item-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
 .macro-item-value{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text-primary)}
@@ -162,8 +163,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .company-info .company-meta{font-size:13px;color:var(--text-secondary)}
 .company-info .company-meta strong{color:var(--text-primary)}
 
-.chart-container{position:relative;height:260px;margin-top:12px}
-.chart-container-tall{position:relative;height:320px;margin-top:12px}
+.chart-container{position:relative;height:260px;margin-top:12px;contain:layout style}
+.chart-container-tall{position:relative;height:320px;margin-top:12px;contain:layout style}
 
 .overlay-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:13px}
 .overlay-row:last-child{border-bottom:none}
@@ -194,7 +195,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .insight-box .insight-text{font-size:13px;color:var(--text-primary);line-height:1.5}
 .insight-box .insight-source{font-size:11px;color:var(--text-tertiary);margin-top:6px}
 
-.tab-content{display:none}.tab-content.active{display:block}
+.tab-content{display:none;opacity:0}.tab-content.active{display:block;animation:tabFadeIn 0.25s ease forwards}
+@keyframes tabFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
 
 /* NEW STYLES for Macro Overlay, SWF, Sectoral, Stress, Composite tabs */
@@ -268,7 +270,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .oil-sim-band{font-size:16px;font-weight:700;padding:4px 16px;border-radius:100px;display:inline-block;margin-top:8px;transition:all 0.3s}
 
 .oil-slider-container{position:relative;padding:36px 0 40px;margin:0 0 28px}
-.oil-slider{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:5px;outline:none;cursor:pointer;transition:background 0.3s;position:relative;z-index:2}
+.oil-slider{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:7px;outline:none;cursor:pointer;transition:background 0.3s;position:relative;z-index:2}
 .oil-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:44px;height:44px;border-radius:50%;background:var(--navy);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15);transition:transform 0.15s}
 .oil-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .oil-slider::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:var(--navy);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15)}
@@ -278,7 +280,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .oil-slider-brent::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid var(--navy)}
 
 .oil-sim-panel{display:grid;grid-template-columns:1fr 1fr;gap:20px;transition:opacity 0.2s}
-.oil-sim-description{grid-column:1/-1;background:var(--bg);border-radius:var(--radius-sm);padding:16px 20px;font-size:14px;color:var(--text-primary);line-height:1.6;border-left:4px solid var(--navy);transition:border-color 0.3s}
+.oil-sim-description{grid-column:1/-1;background:var(--bg);border-radius:var(--radius-sm);padding:16px 20px;font-size:14px;color:var(--text-primary);line-height:1.6;border-left:4px solid var(--navy);transition:border-color 0.3s,opacity 0.2s}
 
 .oil-fiscal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .oil-fiscal-card{background:var(--bg);border-radius:var(--radius-sm);padding:14px;text-align:center;transition:all 0.3s}
@@ -315,7 +317,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* Bottom Sheet Infrastructure */
 .bottom-sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:199;opacity:0;pointer-events:none;transition:opacity 0.25s ease}
 .bottom-sheet-backdrop.open{opacity:1;pointer-events:auto}
-.bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-height:70vh;overflow-y:auto;z-index:200;box-shadow:0 -8px 32px rgba(0,0,0,0.12);padding:0 0 env(safe-area-inset-bottom)}
+.bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-height:70vh;overflow-y:auto;z-index:200;box-shadow:0 -8px 32px rgba(0,0,0,0.12);padding:0 0 env(safe-area-inset-bottom);will-change:transform}
 .bottom-sheet.open{transform:translateY(0)}
 .bottom-sheet-handle{display:flex;justify-content:center;padding:12px 0 8px;cursor:grab}
 .bottom-sheet-handle::before{content:'';width:36px;height:4px;border-radius:2px;background:var(--border)}
@@ -327,7 +329,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .search-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:flex-start;justify-content:center;padding-top:min(20vh,160px);opacity:0;pointer-events:none;transition:opacity 0.25s ease}
 .search-overlay.open{opacity:1;pointer-events:auto}
 .search-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.search-modal{position:relative;width:min(580px,90vw);background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(0,0,0,0.05);overflow:hidden;transform:translateY(-12px) scale(0.97);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-height:60vh;display:flex;flex-direction:column}
+.search-modal{position:relative;width:min(580px,90vw);background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(0,0,0,0.05);overflow:hidden;transform:translateY(-12px) scale(0.97);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-height:60vh;display:flex;flex-direction:column;will-change:transform}
 .search-overlay.open .search-modal{transform:translateY(0) scale(1)}
 .search-input-wrapper{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border-light);gap:12px}
 .search-input{flex:1;border:none;outline:none;font-size:16px;font-family:inherit;color:var(--text-primary);background:transparent}
@@ -342,7 +344,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 /* Company selector button */
 .company-selector-btn{padding:8px 14px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text-primary);background:var(--surface);cursor:pointer;min-width:200px;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:all 0.15s}
-.company-selector-btn:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08)}
+.company-selector-btn:hover,.company-selector-btn:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08);outline:none}
 .company-selector-btn .kbd{font-size:10px;color:var(--text-tertiary);background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border-light)}
 
 /* Entity linking */
@@ -420,6 +422,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 /* Accessible traffic light symbols */
 .tl-symbol{font-weight:700;margin-right:2px}
+.traffic-light.tl-green::before{content:'\25B2 ';font-size:0.8em}
+.traffic-light.tl-amber::before{content:'\2014 ';font-size:0.8em}
+.traffic-light.tl-red::before{content:'\25BC ';font-size:0.8em}
 
 /* Hero grid for composite on overview */
 .grid-hero{display:grid;grid-template-columns:2fr 1fr;gap:16px}
@@ -432,7 +437,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .footer a:hover{color:var(--accent-dark)}
 
 /* Smooth card transitions */
-.card{transition:box-shadow 0.25s ease,transform 0.25s ease}
+.card{transition:box-shadow 0.25s ease,transform 0.25s ease;will-change:transform,box-shadow}
 .swf-card{cursor:pointer;transition:all 0.25s}
 .swf-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
 .macro-indicator-card{cursor:pointer;transition:all 0.25s}
@@ -486,6 +491,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .main{padding:16px 16px 100px}
   .oil-sim-price{font-size:36px}
   .grid-hero{grid-template-columns:1fr}
+  .chart-container{height:200px}
+  .chart-container-tall{height:240px}
+  .swf-filter-bar{gap:6px}
+  .swf-filter-group{flex-wrap:wrap}
+  .swf-search-input{width:100%}
 }
 
 .fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
@@ -617,7 +627,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
   </div>
   <div class="section" id="liveApiSection" style="display:none"><div class="section-header"><div class="section-title">Live API Data <span class="level-badge level-1">Real-Time</span></div></div><div class="grid-4" id="liveApiCards"></div></div>
-  <div class="section"><div class="section-header"><div class="section-title">Peer Comparison &mdash; Composite Scores</div></div><div class="card"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div>
+  <div class="section"><div class="card"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="section-title" style="margin:0">Peer Comparison &mdash; Composite Scores</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="table-scroll" style="margin-top:12px"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div></div></div>
 </div>
 
 <!-- BENCHMARKING -->
@@ -641,8 +651,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-3">Level 3</span> Arbitrage Opportunities</div></div>
     <div class="opp-score"><div><div class="opp-score-value" id="arbOppScore">87</div></div><div><div class="opp-score-label" id="arbOppHeadline">Active Arbitrage Window Detected</div><div class="opp-score-detail" id="arbOppFormula">Urgency (9/10) x Impact (8/10) x Feasibility (7/10) = 87/100</div></div></div>
     <div class="grid-2" style="margin-bottom:20px"><div class="card arb-card"><div class="card-title"><span id="arbOpp1Title">Talent Acquisition Window</span><span class="arb-urgency urgency-high" id="arbOpp1Urgency">High Urgency</span></div><div class="card-subtitle" id="arbOpp1Desc"></div><div id="arbOpp1Metrics"></div></div><div class="card arb-card"><div class="card-title"><span id="arbOpp2Title">Client Migration</span><span class="arb-urgency urgency-medium" id="arbOpp2Urgency">Medium Urgency</span></div><div class="card-subtitle" id="arbOpp2Desc"></div><div id="arbOpp2Metrics"></div></div></div>
-    <div class="card" style="margin-bottom:20px"><div class="card-title">Recommended Action Plan</div><div class="card-subtitle" id="arbActionSub">Sequenced actions to exploit the current arbitrage window</div><div id="actionPlan" style="margin-top:16px"></div></div>
-    <div class="grid-2"><div class="card"><div class="card-title">Timing Window Analysis</div><div class="card-subtitle">When to act and why</div><div class="chart-container-tall"><canvas id="timingChart"></canvas></div></div><div class="card"><div class="card-title">Cross-Signal Correlation</div><div class="card-subtitle" id="arbCorrSub">How EGA's weaknesses create opportunities</div><div id="correlationSignals"></div></div></div></div>
+    <div class="card" style="margin-bottom:20px"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Recommended Action Plan</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="card-subtitle" style="margin-top:12px" id="arbActionSub">Sequenced actions to exploit the current arbitrage window</div><div id="actionPlan" style="margin-top:16px"></div></div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Timing Window Analysis</div><div class="card-subtitle">When to act and why</div><div class="chart-container-tall"><canvas id="timingChart"></canvas></div></div><div class="card"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Cross-Signal Correlation</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="card-subtitle" style="margin-top:12px" id="arbCorrSub">How EGA's weaknesses create opportunities</div><div id="correlationSignals"></div></div></div></div></div>
 </div>
 
 <!-- ====== NEW TAB 1: MACRO OVERLAY PANEL ====== -->
@@ -924,7 +934,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="card">
         <div class="card-title">Recent Allocation Shifts by Sector</div>
         <div class="card-subtitle">Major moves detected (2025-2026)</div>
-        <table class="comp-table" style="margin-top:8px">
+        <div class="table-scroll"><table class="comp-table" style="margin-top:8px">
           <thead><tr><th>Fund</th><th>Sector</th><th>Move</th><th>Signal</th><th>Conviction</th></tr></thead>
           <tbody>
             <tr><td>PIF</td><td>AI / Electronics</td><td style="color:var(--green);font-weight:600">+$100B (Alat)</td><td>New subsidiary</td><td><span class="conviction-badge conv-very-high">Very High</span></td></tr>
@@ -936,7 +946,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <tr><td>ADQ</td><td>Food Security</td><td style="color:var(--green);font-weight:600">Aggressive</td><td>LDC stake</td><td><span class="conviction-badge conv-high">High</span></td></tr>
             <tr><td>PIF</td><td>Sports / Ent</td><td style="color:var(--text-tertiary);font-weight:600">Maintained</td><td>Newcastle, LIV</td><td><span class="conviction-badge conv-medium-high">Med-High</span></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
   </div>
@@ -945,8 +955,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="section">
     <div class="grid-2">
       <div class="card">
-        <div class="card-title">Signal Conviction Ranking System</div>
-        <div class="card-subtitle">How to interpret SWF signals (6-tier framework)</div>
+        <div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Signal Conviction Ranking System</div><span class="collapse-icon">+</span></div>
+        <div class="collapsible-content">
+        <div class="card-subtitle" style="margin-top:12px">How to interpret SWF signals (6-tier framework)</div>
         <div style="margin-top:8px">
           <div class="signal-item"><div class="signal-icon" style="background:#059669;color:#fff;font-size:11px;font-weight:800">5</div><div class="signal-content"><div class="signal-title">New Subsidiary Created <span class="conviction-badge conv-very-high">Very High</span></div><div class="signal-detail">Multi-year commitment, dedicated capital + talent. Example: PIF creates Alat ($100B+ electronics)</div></div></div>
           <div class="signal-item"><div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div><div class="signal-content"><div class="signal-title">JV with Global Partner <span class="conviction-badge conv-high">High</span></div><div class="signal-detail">Operational commitment beyond just capital. Example: ADQ + Terna Energy JV</div></div></div>
@@ -954,6 +965,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="signal-item"><div class="signal-icon" style="background:var(--orange-light);color:var(--orange);font-size:11px;font-weight:800">2</div><div class="signal-content"><div class="signal-title">Bond with Sector Earmark <span class="conviction-badge conv-medium">Medium</span></div><div class="signal-detail">Capital raising signals deployment intent. Check proceeds allocation.</div></div></div>
           <div class="signal-item"><div class="signal-icon" style="background:var(--border-light);color:var(--text-secondary);font-size:11px;font-weight:800">1</div><div class="signal-content"><div class="signal-title">Public Statement <span class="conviction-badge conv-low">Low</span></div><div class="signal-detail">Aspiration vs. execution gap common. Track if capital follows rhetoric within 12-18 months.</div></div></div>
           <div class="signal-item"><div class="signal-icon" style="background:var(--red-light);color:var(--red);font-size:11px;font-weight:800">-1</div><div class="signal-content"><div class="signal-title">Position Exit / Subsidiary Dissolved <span class="conviction-badge conv-exit">Exit Signal</span></div><div class="signal-detail">Sector may be out of favor. Check if other SWFs are also pulling back. Fire-sale pricing possible.</div></div></div>
+        </div>
         </div>
       </div>
       <div class="card">
@@ -995,7 +1007,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="grid-3" id="sectoralGrid">
       <!-- Banking -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#127974;</span> Banking <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--accent);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--accent-light);border-radius:6px">B</span> Banking <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">6/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Net Interest Margin</span><span class="sfp-value" style="color:var(--green)">2.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -1011,7 +1023,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- Real Estate -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#127970;</span> Real Estate <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--purple);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--purple-light);border-radius:6px">RE</span> Real Estate <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">7/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">NAV Discount</span><span class="sfp-value" style="color:var(--green)">-8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -1027,7 +1039,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- Energy -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#9981;</span> Energy <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--green);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--green-light);border-radius:6px">E</span> Energy <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">7/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Breakeven Oil</span><span class="sfp-value" style="color:var(--green)">$48/bbl <span class="traffic-light tl-green" style="font-size:9px">Low-cost</span></span></div>
@@ -1043,7 +1055,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- Industrial -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#9874;</span> Industrial <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--orange);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--orange-light);border-radius:6px">I</span> Industrial <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-amber" style="font-size:10px">1/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Capacity Utilisation</span><span class="sfp-value" style="color:var(--orange)">78% <span class="traffic-light tl-amber" style="font-size:9px">Watch</span></span></div>
@@ -1059,7 +1071,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- Telecom -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#128225;</span> Telecom <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--navy);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--border-light);border-radius:6px">T</span> Telecom <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">5/6 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">ARPU</span><span class="sfp-value" style="color:var(--green)">$38/mo <span class="traffic-light tl-green" style="font-size:9px">Premium</span></span></div>
@@ -1074,7 +1086,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- Healthcare -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#127973;</span> Healthcare <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--red);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--red-light);border-radius:6px">H</span> Healthcare <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">5/6 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Revenue/Bed</span><span class="sfp-value" style="color:var(--green)">$480K <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -1089,7 +1101,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <!-- Logistics -->
       <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
-        <div class="sfp-title"><span style="font-size:18px">&#128674;</span> Logistics <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-title"><span style="font-size:14px;color:var(--accent-dark);font-weight:800;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:var(--accent-light);border-radius:6px">L</span> Logistics <span class="sfp-toggle" style="margin-left:auto">+</span></div>
         <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">5/6 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
         <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Throughput Growth</span><span class="sfp-value" style="color:var(--green)">+5.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -1105,10 +1117,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 
   <div class="section">
-    <div class="section-header"><div class="section-title">Cross-Sector Early Warning Matrix</div></div>
     <div class="card">
-      <div class="card-subtitle">Macro shock transmission &mdash; how shocks cascade across sectors</div>
-      <table class="comp-table" style="margin-top:8px;font-size:11px">
+      <div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="section-title" style="margin:0">Cross-Sector Early Warning Matrix</div><span class="collapse-icon">+</span></div>
+      <div class="collapsible-content">
+      <div class="card-subtitle" style="margin-top:12px">Macro shock transmission &mdash; how shocks cascade across sectors</div>
+      <div class="table-scroll"><table class="comp-table" style="margin-top:8px;font-size:11px">
         <thead><tr><th>Warning Signal</th><th>Banking</th><th>Real Estate</th><th>Energy</th><th>Industrial</th><th>Telecom</th><th>Healthcare</th><th>Logistics</th></tr></thead>
         <tbody>
           <tr><td>Oil crash ($50/bbl)</td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-amber">Medium</span></td></tr>
@@ -1117,19 +1130,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <tr><td>Regional conflict</td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Med</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">High</span></td></tr>
           <tr><td>Peg pressure</td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Med-Hi</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Medium</span></td></tr>
         </tbody>
-      </table>
+      </table></div>
+      </div>
     </div>
   </div>
 
   <div class="section">
     <div class="card">
-      <div class="card-title">Early Distress Sequence Alerts</div>
+      <div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Early Distress Sequence Alerts</div><span class="collapse-icon">+</span></div>
+      <div class="collapsible-content">
       <div class="card-subtitle">Signals to monitor in order of appearance &mdash; each stage typically precedes the next by 1-2 quarters</div>
       <div style="margin-top:12px">
         <div class="cascade-item"><span class="cascade-sector" style="color:var(--green)">Stage 1</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">Working capital deterioration (DSO rising), auditor change, related-party increase</span><span class="traffic-light tl-green" style="margin-left:auto">Early</span></div>
         <div class="cascade-item"><span class="cascade-sector" style="color:var(--orange)">Stage 2</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">NPL coverage declining, government deposits drop, capex cuts disguised as efficiency</span><span class="traffic-light tl-amber" style="margin-left:auto">Warning</span></div>
         <div class="cascade-item"><span class="cascade-sector" style="color:var(--orange)">Stage 3</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">Management turnover (CFO departure strongest signal), debt covenant proximity</span><span class="traffic-light tl-amber" style="margin-left:auto">Serious</span></div>
         <div class="cascade-item"><span class="cascade-sector" style="color:var(--red)">Stage 4</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">Dividend cut/suspension, provisions increase, M&amp;A rumours, rating downgrade</span><span class="traffic-light tl-red" style="margin-left:auto">Critical</span></div>
+      </div>
       </div>
     </div>
   </div>
@@ -1276,9 +1292,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
   <div class="section">
     <div class="card">
-      <div class="card-title">Company Macro Sensitivity Profiles</div>
-      <div class="card-subtitle">Vulnerability mapping across all 5 scenarios</div>
-      <table class="comp-table" style="margin-top:8px">
+      <div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Company Macro Sensitivity Profiles</div><span class="collapse-icon">+</span></div>
+      <div class="collapsible-content">
+      <div class="card-subtitle" style="margin-top:12px">Vulnerability mapping across all 5 scenarios</div>
+      <div class="table-scroll"><table class="comp-table" style="margin-top:8px">
         <thead><tr><th>Company</th><th>Oil</th><th>Rates</th><th>China</th><th>Conflict</th><th>Peg</th><th>Resilience</th><th>Primary Risk</th></tr></thead>
         <tbody>
           <tr><td>EGA</td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td style="font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">35</td><td style="font-size:11px">China + Oil</td></tr>
@@ -1288,7 +1305,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <tr><td>ADNOC</td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td style="font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace">58</td><td style="font-size:11px">Oil + China</td></tr>
           <tr><td>DP World</td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Moderate</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td style="font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace">48</td><td style="font-size:11px">China trade</td></tr>
         </tbody>
-      </table>
+      </table></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1399,8 +1417,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
-<!-- MACRO OVERLAY (original, kept as hidden fallback) -->
-<div class="tab-content" id="tab-macro" style="display:none"></div>
+<!-- Dead macro fallback removed in Loop 1 -->
 
 <!-- PLATFORM & PRICING -->
 <div class="tab-content" id="tab-pricing">
@@ -1487,6 +1504,7 @@ composite:{opScore:65,finScore:62,resScore:41,total:56,band:'Average'}}
 };
 
 var currentCompany='ega',charts={};
+var liveMarketData={brent:{price:102.14},dxy:{price:103.8},yield10:{price:4.28},gold:{price:2184},fed:{price:4.50}};
 
 // Stress testing scenario data
 var scenarios=[
@@ -1591,7 +1609,7 @@ function renderSignalCards(c){function r(id,d){document.getElementById(id).inner
 function renderArbMetrics(c){['arbOpp1Metrics','arbOpp2Metrics'].forEach(function(id,i){var o=i===0?c.arbOpp1:c.arbOpp2;document.getElementById(id).innerHTML=o.metrics.map(function(m){return'<div class="arb-metric"><span class="arb-metric-label">'+m.label+'</span><span class="arb-metric-value">'+m.value+'</span></div>'}).join('')})}
 function renderActionPlan(c){document.getElementById('actionPlan').innerHTML=c.actionPlan.map(function(a,i){return'<div class="action-step"><div class="action-number">'+(i+1)+'</div><div class="action-text">'+a.text+'<br><span class="impact">'+a.impact+'</span></div></div>'}).join('')}
 function renderCorrelations(c){document.getElementById('correlationSignals').innerHTML=c.correlations.map(function(r){return'<div class="signal-item"><div class="signal-icon" style="background:'+r.color+'12;color:'+r.color+';font-size:14px">\u2192</div><div class="signal-content"><div class="signal-title" style="font-size:12px">'+r.from+' \u2192 '+r.to+'</div><div class="signal-detail">'+r.label+'</div></div></div>'}).join('')}
-function renderEventCalendar(){var ev=[{month:'MAR',day:'23',name:'Brussels TrueGroup Event',location:'Brussels, Belgium'},{month:'APR',day:'28',name:'STEP Conference',location:'Dubai Internet City'},{month:'MAY',day:'12',name:'Future Investment Initiative',location:'Riyadh, Saudi Arabia'},{month:'JUN',day:'02',name:'Cityscape Abu Dhabi',location:'Abu Dhabi (ADNEC)'},{month:'AUG',day:'01',name:'EU AI Act High-Risk Deadline',location:'European Union'},{month:'SEP',day:'08',name:'Saudi Vision 2030 Summit',location:'Riyadh, Saudi Arabia'},{month:'OCT',day:'14',name:'GITEX Global 2026',location:'Dubai World Trade Centre'},{month:'NOV',day:'02',name:'ADIPEC 2026',location:'Abu Dhabi (ADNEC)'}];document.getElementById('eventCalendar').innerHTML=ev.map(function(e){return'<div class="event-item"><div class="event-date-box"><div class="event-date-month">'+e.month+'</div><div class="event-date-day">'+e.day+'</div></div><div><div class="event-name">'+e.name+'</div><div class="event-location">'+e.location+'</div></div></div>'}).join('')}
+// renderEventCalendar removed (dead code - no container element)
 
 var gC='#F3F4F6',lO={position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}};
 function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k]}}
@@ -1702,9 +1720,9 @@ function updateOilSim(price){
   bandEl.textContent=band.name;
   bandEl.style.background=band.bandBg;
   bandEl.style.color=band.bandText;
-  // Description
+  // Description with fade transition
   var descEl=document.getElementById('oilSimDesc');
-  descEl.textContent=band.desc;
+  if(descEl.textContent!==band.desc){descEl.style.opacity='0.4';setTimeout(function(){descEl.textContent=band.desc;descEl.style.opacity='1'},120)}
   descEl.style.borderLeftColor=band.color;
   // Slider gradient
   var slider=document.getElementById('oilSlider');
