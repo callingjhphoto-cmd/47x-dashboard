@@ -471,13 +471,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="nav-tab" onclick="switchTab('sectoral',this)">Sectoral</button>
     <button class="nav-tab" onclick="switchTab('stress',this)">Stress Test</button>
     <button class="nav-tab" onclick="switchTab('composite',this)">Composite</button>
-    <button class="nav-tab" onclick="switchTab('pricing',this)">Pricing</button>
+    <!-- Pricing tab hidden for SWF demo — content preserved in tab-pricing div -->
+    <!-- <button class="nav-tab" onclick="switchTab('pricing',this)">Pricing</button> -->
   </div>
   <div class="header-right">
     <button class="company-selector-btn" onclick="openSearch()" id="companySelectorBtn">
       <span id="companySelectorLabel">Emirates Global Aluminium</span>
       <span class="kbd">&#8984;K</span>
     </button>
+    <div style="font-size:10px;color:var(--text-tertiary);letter-spacing:0.3px;white-space:nowrap">50+ GCC entities scanned &bull; 3 deep-dive profiles</div>
     <div class="api-badge"><div class="api-dot" id="apiDot"></div><span id="apiLabel">Connecting...</span></div>
   </div>
 </div></div>
@@ -546,7 +548,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </script>
     </div>
   </div>
-  <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div></div></div>
+  <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div><div style="margin-top:6px;font-size:11px;color:var(--text-tertiary);letter-spacing:0.3px">Intelligence coverage: 50+ GCC entities scanned &bull; 3 deep-dive profiles loaded &bull; 7 sectors &bull; 4 SWFs tracked</div></div></div>
   <div class="section">
     <div class="grid-hero">
       <div class="card fade-in" style="padding:28px">
@@ -820,8 +822,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="section">
     <div class="grid-3" id="sectoralGrid">
       <!-- Banking -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#127974;</span> Banking</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#127974;</span> Banking <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">6/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Net Interest Margin</span><span class="sfp-value" style="color:var(--green)">2.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Cost-to-Income</span><span class="sfp-value" style="color:var(--green)">28.5% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">NPL Ratio</span><span class="sfp-value" style="color:var(--green)">3.2% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -830,11 +834,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">ROE</span><span class="sfp-value" style="color:var(--green)">15.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Govt Deposit Share</span><span class="sfp-value" style="color:var(--orange)">42% <span class="traffic-light tl-amber" style="font-size:9px">Watch</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: FAB | Healthy: 2.5-3.5% NIM, &lt;40% C/I, &lt;4% NPL</div>
+        </div>
       </div>
 
       <!-- Real Estate -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#127970;</span> Real Estate</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#127970;</span> Real Estate <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">7/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">NAV Discount</span><span class="sfp-value" style="color:var(--green)">-8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Land Bank (yrs)</span><span class="sfp-value" style="color:var(--green)">5.2 <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Pre-Sales Ratio</span><span class="sfp-value" style="color:var(--green)">52% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -843,11 +850,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">Recurring Rev %</span><span class="sfp-value" style="color:var(--green)">38% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Occupancy Rate</span><span class="sfp-value" style="color:var(--green)">89% <span class="traffic-light tl-green" style="font-size:9px">Strong</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: Aldar | Healthy: 0-20% NAV disc, 3-7yr land, &gt;85% occ</div>
+        </div>
       </div>
 
       <!-- Energy -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#9981;</span> Energy</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#9981;</span> Energy <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">7/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Breakeven Oil</span><span class="sfp-value" style="color:var(--green)">$48/bbl <span class="traffic-light tl-green" style="font-size:9px">Low-cost</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Reserve Replacement</span><span class="sfp-value" style="color:var(--green)">112% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Lifting Cost</span><span class="sfp-value" style="color:var(--green)">$8.20/bbl <span class="traffic-light tl-green" style="font-size:9px">Low</span></span></div>
@@ -856,11 +866,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">FCF Yield</span><span class="sfp-value" style="color:var(--green)">11.2% <span class="traffic-light tl-green" style="font-size:9px">Strong</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Net Debt/EBITDA</span><span class="sfp-value" style="color:var(--green)">0.8x <span class="traffic-light tl-green" style="font-size:9px">Low</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: ADNOC | Healthy: &lt;$50 breakeven, &gt;100% RRR, &lt;$12 lift</div>
+        </div>
       </div>
 
       <!-- Industrial -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#9874;</span> Industrial</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#9874;</span> Industrial <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-amber" style="font-size:10px">1/7 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Capacity Utilisation</span><span class="sfp-value" style="color:var(--orange)">78% <span class="traffic-light tl-amber" style="font-size:9px">Watch</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Input Cost/Rev</span><span class="sfp-value" style="color:var(--orange)">58% <span class="traffic-light tl-amber" style="font-size:9px">Elevated</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Export Concentration</span><span class="sfp-value" style="color:var(--red)">Top 3: 54% <span class="traffic-light tl-red" style="font-size:9px">Risk</span></span></div>
@@ -869,11 +882,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">EBITDA Margin</span><span class="sfp-value" style="color:var(--orange)">18% <span class="traffic-light tl-amber" style="font-size:9px">Below avg</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Customer Conc.</span><span class="sfp-value" style="color:var(--green)">Top 5: 24% <span class="traffic-light tl-green" style="font-size:9px">Diverse</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: EGA | Healthy: &gt;85% util, &lt;55% input, 20-30% EBITDA</div>
+        </div>
       </div>
 
       <!-- Telecom -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#128225;</span> Telecom</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#128225;</span> Telecom <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">5/6 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">ARPU</span><span class="sfp-value" style="color:var(--green)">$38/mo <span class="traffic-light tl-green" style="font-size:9px">Premium</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Capex/Revenue</span><span class="sfp-value" style="color:var(--orange)">22% <span class="traffic-light tl-amber" style="font-size:9px">5G cycle</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">EBITDA Margin</span><span class="sfp-value" style="color:var(--green)">42% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
@@ -881,11 +897,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">Net Debt/EBITDA</span><span class="sfp-value" style="color:var(--green)">1.4x <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Digital Rev %</span><span class="sfp-value" style="color:var(--green)">16% <span class="traffic-light tl-green" style="font-size:9px">Growing</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: e&amp; | Healthy: $25-45 ARPU, 35-45% EBITDA, &lt;2.0x leverage</div>
+        </div>
       </div>
 
       <!-- Healthcare -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#127973;</span> Healthcare</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#127973;</span> Healthcare <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">5/6 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Revenue/Bed</span><span class="sfp-value" style="color:var(--green)">$480K <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Occupancy</span><span class="sfp-value" style="color:var(--green)">74% <span class="traffic-light tl-green" style="font-size:9px">Good</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Insured Payer Mix</span><span class="sfp-value" style="color:var(--green)">78% <span class="traffic-light tl-green" style="font-size:9px">Stable</span></span></div>
@@ -893,11 +912,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">Staff Cost/Rev</span><span class="sfp-value" style="color:var(--green)">48% <span class="traffic-light tl-green" style="font-size:9px">Normal</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">EBITDA Margin</span><span class="sfp-value" style="color:var(--green)">19% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: Mubadala Health | Healthy: $300-600K/bed, &gt;65% occ, 15-22% EBITDA</div>
+        </div>
       </div>
 
       <!-- Logistics -->
-      <div class="sector-fp-card fade-in">
-        <div class="sfp-title"><span style="font-size:18px">&#128674;</span> Logistics</div>
+      <div class="sector-fp-card fade-in" onclick="toggleSector(this)">
+        <div class="sfp-title"><span style="font-size:18px">&#128674;</span> Logistics <span class="sfp-toggle" style="margin-left:auto">+</span></div>
+        <div class="sfp-summary"><span class="traffic-light tl-green" style="font-size:10px">5/6 Healthy</span> <span style="font-size:11px;color:var(--text-tertiary)">Click to expand</span></div>
+        <div class="sfp-detail">
         <div class="sfp-row"><span class="sfp-ratio">Throughput Growth</span><span class="sfp-value" style="color:var(--green)">+5.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Revenue/TEU</span><span class="sfp-value" style="color:var(--green)">$108 <span class="traffic-light tl-green" style="font-size:9px">Stable</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Concession Life</span><span class="sfp-value" style="color:var(--green)">22 yrs <span class="traffic-light tl-green" style="font-size:9px">Long</span></span></div>
@@ -905,6 +927,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <div class="sfp-row"><span class="sfp-ratio">Net Debt/EBITDA</span><span class="sfp-value" style="color:var(--orange)">3.1x <span class="traffic-light tl-amber" style="font-size:9px">Sector norm</span></span></div>
         <div class="sfp-row"><span class="sfp-ratio">Geo Diversification</span><span class="sfp-value" style="color:var(--green)">Top: 28% <span class="traffic-light tl-green" style="font-size:9px">Diverse</span></span></div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: DP World | Healthy: 3-8% growth, &gt;15yr concession, 8-12% ROIC</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1271,24 +1294,24 @@ correlations:[{from:'ADCB digital lag',to:'Customer dissatisfaction rising',labe
 timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[50,55,60,62,60,55,50,45,40],risk:[15,18,20,25,30,35,40,45,50]},
 composite:{opScore:78,finScore:72,resScore:52,total:67,band:'Strong'}},
 
-aldar:{name:'Aldar Properties',short:'ALD',sector:'Real Estate / Development',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$9.2B Revenue',score:71,scoreBand:'Strong',scoreBandColor:'#059669',scoreChange:{value:6,label:'+6 vs Q3',direction:'up'},
-services:[{name:'Website Performance',score:80,benchmark:72,color:'#059669'},{name:'Social Media',score:78,benchmark:68,color:'#059669'},{name:'Media Coverage',score:85,benchmark:70,color:'#059669'},{name:'Employer Brand',score:62,benchmark:65,color:'#D97706'},{name:'Google Ads',score:72,benchmark:60,color:'#059669'},{name:'Tech Stack',score:58,benchmark:68,color:'#DC2626'},{name:'Brand Audit',score:75,benchmark:70,color:'#059669'},{name:'Reviews & Maps',score:68,benchmark:62,color:'#059669'},{name:'Registration',score:88,benchmark:80,color:'#059669'}],
-history:[62,63,64,65,66,67,68,68,69,70,70,71],sectorAvg:[65,65,66,66,66,67,67,67,68,68,68,68],
+aldar:{name:'Aldar Properties',short:'ALD',sector:'Real Estate / Development',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$9.2B Revenue',score:65,scoreBand:'Average',scoreBandColor:'#D97706',scoreChange:{value:4,label:'+4 vs Q3',direction:'up'},
+services:[{name:'Website Performance',score:74,benchmark:72,color:'#059669'},{name:'Social Media',score:72,benchmark:68,color:'#059669'},{name:'Media Coverage',score:78,benchmark:70,color:'#059669'},{name:'Employer Brand',score:55,benchmark:65,color:'#DC2626'},{name:'Google Ads',score:62,benchmark:60,color:'#059669'},{name:'Tech Stack',score:52,benchmark:68,color:'#DC2626'},{name:'Brand Audit',score:68,benchmark:70,color:'#D97706'},{name:'Reviews & Maps',score:62,benchmark:62,color:'#D97706'},{name:'Registration',score:82,benchmark:80,color:'#059669'}],
+history:[56,57,58,59,60,61,62,62,63,64,64,65],sectorAvg:[65,65,66,66,66,67,67,67,68,68,68,68],
 contextSignals:{headline1:{title:'Yas Island Expansion',detail:'$2.8B masterplan announced, sales pipeline +35%',iconClass:'positive',icon:'\u2191'},headline2:{title:'Tech Stack Lag',detail:'Legacy CRM and website tech 3+ years behind competitors',iconClass:'warning',icon:'\u26A0'},headline3:{title:'Talent Gap in PropTech',detail:'Struggling to hire data/AI roles, 45-day avg time-to-fill',iconClass:'warning',icon:'\u2026'}},
 timeline:[{date:'Mar 2026',text:'<strong>Sales pipeline +35%</strong> \u2014 strongest Q1 in company history',color:'#059669'},{date:'Feb 2026',text:'<strong>Yas Island Phase 3</strong> masterplan launched ($2.8B)',color:'#059669'},{date:'Jan 2026',text:'<strong>PropTech roles unfilled</strong> \u2014 8 data science positions open 45+ days',color:'#D97706'},{date:'Dec 2025',text:'<strong>Q4 sales record</strong> driven by international buyer demand',color:'#059669'},{date:'Nov 2025',text:'<strong>Website refresh delayed</strong> \u2014 legacy tech stack causing bottlenecks',color:'#DC2626'},{date:'Oct 2025',text:'<strong>Strategic land acquisitions</strong> in Saadiyat and Reem Islands',color:'#059669'}],
 sentiment:[0.3,0.35,0.38,0.4,0.42,0.45,0.48,0.5,0.52,0.54,0.56,0.58],
 talent:[{label:'Open roles',value:'42',trend:'neutral'},{label:'PropTech roles unfilled',value:'8',trend:'negative'},{label:'Avg time-to-fill (tech)',value:'45 days',trend:'negative'},{label:'Sales team growth',value:'+18%',trend:'positive'},{label:'Glassdoor rating',value:'3.6 / 5.0',trend:'neutral'},{label:'CEO approval',value:'72%',trend:'positive'}],
 financial:[{label:'Revenue (est.)',value:'$9.2B',trend:'positive'},{label:'Revenue growth',value:'+47%',trend:'positive'},{label:'Net margin',value:'26.0%',trend:'positive'},{label:'Landbank value',value:'$12.4B',trend:'positive'},{label:'Employee count',value:'~3,400',trend:'positive'},{label:'Revenue per employee',value:'$2.71M',trend:'positive'}],
 market:[{label:'Abu Dhabi property prices',value:'+14% YoY',trend:'positive'},{label:'Transaction volumes',value:'+28%',trend:'positive'},{label:'International buyer share',value:'38%',trend:'positive'},{label:'Mortgage rates (avg)',value:'4.2%',trend:'neutral'},{label:'New supply (units)',value:'12,400',trend:'neutral'},{label:'Golden Visa impact',value:'Strong',trend:'positive'}],
-competitorMovement:{labels:['Aldar','Emaar','DAMAC','Nakheel','Bloom'],current:[71,82,68,55,48],previous:[65,80,70,56,45]},
-peers:[{name:'Aldar Properties',score:71,website:80,social:78,media:85,employer:62,financial:78,trend:'up'},{name:'Emaar Properties',score:82,website:88,social:85,media:82,employer:75,financial:80,trend:'up'},{name:'DAMAC Properties',score:68,website:72,social:74,media:65,employer:55,financial:70,trend:'down'}],
+competitorMovement:{labels:['Aldar','Emaar','DAMAC','Nakheel','Bloom'],current:[65,82,68,55,48],previous:[61,80,70,56,45]},
+peers:[{name:'Aldar Properties',score:65,website:74,social:72,media:78,employer:55,financial:68,trend:'up'},{name:'Emaar Properties',score:82,website:88,social:85,media:82,employer:75,financial:80,trend:'up'},{name:'DAMAC Properties',score:68,website:72,social:74,media:65,employer:55,financial:70,trend:'down'}],
 arbOppScore:74,arbOppHeadline:'Strong Arbitrage Opportunities Detected',arbOppFormula:'Urgency (7/10) \u00d7 Impact (8/10) \u00d7 Feasibility (8/10) \u2192 Weighted: 74/100',arbOppWindow:'Window: 6-12 months (DAMAC weakening)',
 arbOpp1:{title:'DAMAC Client Capture',urgency:'High Urgency',urgencyClass:'urgency-high',desc:"DAMAC's employer brand is declining (Glassdoor 2.9) and delivery delays are eroding buyer confidence. International buyers actively seeking alternatives.",metrics:[{label:'DAMAC Glassdoor',value:'2.9 / 5.0'},{label:'Delivery delays reported',value:'6-12 months'},{label:'Buyer confidence index',value:'Falling'},{label:'Switchable pipeline',value:'~$600M'},{label:'International buyer interest',value:'High'}]},
 arbOpp2:{title:'PropTech First-Mover',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:'No major UAE developer has deployed AI-powered property matching or virtual staging at scale. First-mover advantage in PropTech.',metrics:[{label:'Tech-savvy buyer segment',value:'~35%'},{label:'Conversion lift potential',value:'+25-40%'},{label:'Investment required',value:'$3-5M'},{label:'Competitor readiness',value:'18+ months behind'},{label:'ROI timeline',value:'6-9 months'}]},
 actionPlan:[{text:"<strong>Week 1-2: Mine DAMAC's dissatisfied buyers.</strong> Social listening for complaints. Offer Aldar's track record of on-time delivery as the key differentiator.",impact:'Impact: Capture $100-200M from DAMAC pipeline'},{text:'<strong>Week 2-4: Fast-track PropTech build.</strong> Hire 3-4 senior engineers from EGA (cross-arbitrage play) to build AI property matching.',impact:'Impact: Category-defining PropTech capability'},{text:'<strong>Month 1-2: Fix the tech stack.</strong> Legacy CRM scoring 58 on tech stack \u2014 below sector avg. Migrate to modern stack.',impact:'Impact: +10-15 point score improvement on tech dimension'},{text:'<strong>Month 2-4: International buyer push.</strong> Leverage Yas Island Phase 3 launch with targeted digital campaigns in India, UK, and China.',impact:'Impact: Increase international buyer share from 38% to 45%+'}],
 correlations:[{from:'DAMAC delivery delays',to:'Buyer confidence eroding',label:'Social complaints up 60%',color:'#059669'},{from:'Buyer confidence drop',to:'Active buyer migration',label:'Search for "DAMAC alternative" +120%',color:'#059669'},{from:'Aldar Yas Island launch',to:'Pipeline +35%',label:'Perfectly timed to capture migrating buyers',color:'#059669'},{from:'Tech stack lag (score: 58)',to:'PropTech opportunity',label:'Weakness is also the biggest opportunity',color:'#D97706'},{from:'EGA talent availability',to:'Cross-sector hire opportunity',label:'Senior engineers available at 60% cost',color:'#2563EB'}],
 timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[45,50,60,74,78,75,68,60,50],risk:[10,12,15,20,25,30,35,40,50]},
-composite:{opScore:71,finScore:68,resScore:41,total:60,band:'Average'}}
+composite:{opScore:65,finScore:62,resScore:41,total:56,band:'Average'}}
 };
 
 var currentCompany='ega',charts={};
@@ -1640,7 +1663,7 @@ if(oilSliderEl) renderOilNonlinearChart(parseInt(oilSliderEl.value));
 
 // Composite comparison chart
 destroyChart('compositeComparison');var cc=document.getElementById('compositeComparisonChart');
-if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'bar',data:{labels:['EGA','FAB','Aldar','e&','ADNOC','DP World'],datasets:[{label:'Operational (L1)',data:[58,78,71,82,74,69],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4},{label:'Financial (L2)',data:[42,72,68,65,78,62],backgroundColor:'rgba(124,58,237,0.7)',borderRadius:4},{label:'Resilience (L3)',data:[35,52,41,72,58,48],backgroundColor:'rgba(5,150,105,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'bar',data:{labels:['EGA','FAB','Aldar','e&','ADNOC','DP World'],datasets:[{label:'Operational (L1)',data:[58,78,65,82,74,69],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4},{label:'Financial (L2)',data:[42,72,62,65,78,62],backgroundColor:'rgba(124,58,237,0.7)',borderRadius:4},{label:'Resilience (L3)',data:[35,52,41,72,58,48],backgroundColor:'rgba(5,150,105,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
 
 // Composite radar chart
 destroyChart('compositeRadar');var cr=document.getElementById('compositeRadarChart');
