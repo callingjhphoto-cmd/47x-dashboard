@@ -748,13 +748,25 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <!-- ====== NEW TAB 2: SWF TRACKER ====== -->
 <div class="tab-content" id="tab-swftracker">
+  <!-- KPI Summary Row -->
   <div class="section">
-    <div class="section-header"><div class="section-title">Sovereign Wealth Fund Flow Tracker <span class="level-badge level-3">Level 3</span></div></div>
+    <div class="section-header"><div class="section-title">GCC Investment Fund Tracker <span class="level-badge level-3">50 Funds</span></div></div>
+    <div class="grid-5">
+      <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--navy)">50</div><div class="kpi-label">Funds Tracked</div></div>
+      <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--accent)">$5.6T+</div><div class="kpi-label">Combined AUM</div></div>
+      <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--green)">6</div><div class="kpi-label">GCC Countries</div></div>
+      <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--purple)">5</div><div class="kpi-label">Fund Types</div></div>
+      <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--orange)">$137B+</div><div class="kpi-label">Deals (18mo)</div></div>
+    </div>
+  </div>
+
+  <!-- Top 4 SWF Hero Cards -->
+  <div class="section">
     <div class="grid-4" id="swfCards">
       <div class="swf-card fade-in" onclick="openEntitySheet('swf','pif')">
         <div class="swf-name">PIF</div>
         <div class="swf-country">Saudi Arabia</div>
-        <div class="swf-aum">$1.15T</div>
+        <div class="swf-aum">$1.15T+</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
           <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Giga-projects, AI, EV</span></div>
@@ -762,26 +774,26 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="overlay-row"><span class="overlay-label">2026 Signal</span><span class="overlay-value" style="font-size:11px;color:var(--green)">Alat $100B+</span></div>
         </div>
       </div>
-      <div class="swf-card fade-in" onclick="openEntitySheet('swf','mubadala')">
-        <div class="swf-name">Mubadala</div>
-        <div class="swf-country">UAE (Abu Dhabi)</div>
-        <div class="swf-aum">$350B</div>
+      <div class="swf-card fade-in" onclick="openEntitySheet('swf','adia')">
+        <div class="swf-name">ADIA</div>
+        <div class="swf-country">Abu Dhabi</div>
+        <div class="swf-aum">$1.1T+</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
-          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Tech, Semi, Health</span></div>
-          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">8/10</span></div>
-          <div class="overlay-row"><span class="overlay-label">Key Asset</span><span class="overlay-value" style="font-size:11px;color:var(--accent)">GlobalFoundries</span></div>
+          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Global diversified</span></div>
+          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">5/10</span></div>
+          <div class="overlay-row"><span class="overlay-label">Strategy</span><span class="overlay-value" style="font-size:11px;color:var(--accent)">Long-term value</span></div>
         </div>
       </div>
-      <div class="swf-card fade-in" onclick="openEntitySheet('swf','adq')">
-        <div class="swf-name">ADQ</div>
-        <div class="swf-country">UAE (Abu Dhabi)</div>
-        <div class="swf-aum">$157B</div>
+      <div class="swf-card fade-in" onclick="openEntitySheet('swf','kia')">
+        <div class="swf-name">KIA</div>
+        <div class="swf-country">Kuwait</div>
+        <div class="swf-aum">$1.02T</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
-          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Food, Pharma, Digital</span></div>
-          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">3/10</span></div>
-          <div class="overlay-row"><span class="overlay-label">2026 Signal</span><span class="overlay-value" style="font-size:11px;color:var(--green)">EU acquisitions</span></div>
+          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Global equities, RE</span></div>
+          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">4/10</span></div>
+          <div class="overlay-row"><span class="overlay-label">Key Asset</span><span class="overlay-value" style="font-size:11px;color:var(--purple)">Mercedes-Benz 7%</span></div>
         </div>
       </div>
       <div class="swf-card fade-in" onclick="openEntitySheet('swf','qia')">
@@ -798,8 +810,117 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
   </div>
 
+  <!-- Searchable Fund Table -->
+  <div class="section">
+    <div class="card" style="padding:20px 24px">
+      <div class="card-title">All 50 GCC Investment Funds</div>
+      <div class="card-subtitle">Ranked by Assets Under Management</div>
+      <div class="swf-filter-bar" style="margin-top:12px">
+        <div class="swf-filter-group">
+          <span class="swf-filter-label">Type</span>
+          <button class="swf-filter-btn active" onclick="filterFundType('all',this)">All</button>
+          <button class="swf-filter-btn" onclick="filterFundType('SWF',this)">SWF</button>
+          <button class="swf-filter-btn" onclick="filterFundType('State',this)">State-Backed</button>
+          <button class="swf-filter-btn" onclick="filterFundType('PE',this)">PE/VC</button>
+          <button class="swf-filter-btn" onclick="filterFundType('FO',this)">Family Office</button>
+          <button class="swf-filter-btn" onclick="filterFundType('AM',this)">Asset Mgr</button>
+          <button class="swf-filter-btn" onclick="filterFundType('Pension',this)">Pension</button>
+        </div>
+        <div style="width:1px;height:24px;background:var(--border);margin:0 4px"></div>
+        <div class="swf-filter-group">
+          <span class="swf-filter-label">Country</span>
+          <button class="swf-filter-btn active" onclick="filterFundCountry('all',this)">All</button>
+          <button class="swf-filter-btn" onclick="filterFundCountry('Saudi',this)">Saudi</button>
+          <button class="swf-filter-btn" onclick="filterFundCountry('UAE',this)">UAE</button>
+          <button class="swf-filter-btn" onclick="filterFundCountry('Qatar',this)">Qatar</button>
+          <button class="swf-filter-btn" onclick="filterFundCountry('Kuwait',this)">Kuwait</button>
+          <button class="swf-filter-btn" onclick="filterFundCountry('Bahrain',this)">Bahrain</button>
+          <button class="swf-filter-btn" onclick="filterFundCountry('Oman',this)">Oman</button>
+        </div>
+        <div style="width:1px;height:24px;background:var(--border);margin:0 4px"></div>
+        <input class="swf-search-input" type="text" placeholder="Search funds..." oninput="searchFunds(this.value)" id="swfSearchInput">
+      </div>
+      <div class="table-scroll">
+        <table class="swf-fund-table" id="swfFundTable">
+          <thead><tr>
+            <th onclick="sortFundTable('rank')">#</th>
+            <th onclick="sortFundTable('name')">Fund Name</th>
+            <th onclick="sortFundTable('country')">Country</th>
+            <th onclick="sortFundTable('type')">Type</th>
+            <th onclick="sortFundTable('aum')">AUM</th>
+            <th>Key Sectors</th>
+          </tr></thead>
+          <tbody id="swfFundTableBody"></tbody>
+        </table>
+      </div>
+      <button class="swf-expand-btn" id="swfExpandBtn" onclick="toggleFundTableExpand()">
+        <span id="swfExpandLabel">View all 50 funds</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Top 20 AUM Bar Chart + Sector Heatmap -->
   <div class="section">
     <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Top 20 Funds by AUM</div>
+        <div class="card-subtitle">Assets under management ($B)</div>
+        <div style="position:relative;height:420px;margin-top:12px"><canvas id="swfAumBarChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sector Allocation Heatmap</div>
+        <div class="card-subtitle">Top 10 funds - investment intensity by sector (1-5 scale)</div>
+        <div id="swfHeatmapContainer" style="margin-top:12px;overflow-x:auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions Timeline + Allocation Shifts -->
+  <div class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Major Transactions Timeline</div>
+        <div class="card-subtitle">Key deals in the last 18 months</div>
+        <div class="swf-timeline" style="margin-top:12px">
+          <div class="swf-timeline-item mega">
+            <div class="swf-timeline-date">Sep 2024</div>
+            <div class="swf-timeline-title">PIF / Silver Lake &mdash; EA Take-Private</div>
+            <div class="swf-timeline-detail">Consortium-led acquisition of Electronic Arts. Largest gaming deal in history.</div>
+            <div class="swf-timeline-value">$55B</div>
+          </div>
+          <div class="swf-timeline-item mega">
+            <div class="swf-timeline-date">Oct 2024</div>
+            <div class="swf-timeline-title">ADQ &mdash; Ras El Hekma (Egypt)</div>
+            <div class="swf-timeline-detail">Mega development project on Egypt's Mediterranean coast. Largest FDI into Egypt.</div>
+            <div class="swf-timeline-value">$35B</div>
+          </div>
+          <div class="swf-timeline-item mega">
+            <div class="swf-timeline-date">Jul 2025</div>
+            <div class="swf-timeline-title">Mubadala / KIA / BlackRock &mdash; Aligned Data Centers</div>
+            <div class="swf-timeline-detail">Joint acquisition of data center platform. Reflects AI infrastructure conviction.</div>
+            <div class="swf-timeline-value">$40B</div>
+          </div>
+          <div class="swf-timeline-item mega">
+            <div class="swf-timeline-date">May 2025</div>
+            <div class="swf-timeline-title">QIA &mdash; US Tech Pledge</div>
+            <div class="swf-timeline-detail">10-year commitment to US technology sector investments including AI and semiconductors.</div>
+            <div class="swf-timeline-value">$500B (10yr)</div>
+          </div>
+          <div class="swf-timeline-item">
+            <div class="swf-timeline-date">Dec 2025</div>
+            <div class="swf-timeline-title">ADQ &mdash; Global Bond Issuance</div>
+            <div class="swf-timeline-detail">Multi-tranche bond to fund international expansion. Proceeds earmarked for EU and MENA.</div>
+            <div class="swf-timeline-value">$7B</div>
+          </div>
+          <div class="swf-timeline-item">
+            <div class="swf-timeline-date">Feb 2026</div>
+            <div class="swf-timeline-title">Investcorp / SNB Capital &mdash; Strategic JV</div>
+            <div class="swf-timeline-detail">Cross-border JV combining Saudi asset management with Bahraini PE expertise.</div>
+            <div class="swf-timeline-value">Strategic</div>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <div class="card-title">Recent Allocation Shifts by Sector</div>
         <div class="card-subtitle">Major moves detected (2025-2026)</div>
@@ -817,6 +938,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Signal Conviction + Pie Charts -->
+  <div class="section">
+    <div class="grid-2">
       <div class="card">
         <div class="card-title">Signal Conviction Ranking System</div>
         <div class="card-subtitle">How to interpret SWF signals (6-tier framework)</div>
@@ -829,9 +956,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="signal-item"><div class="signal-icon" style="background:var(--red-light);color:var(--red);font-size:11px;font-weight:800">-1</div><div class="signal-content"><div class="signal-title">Position Exit / Subsidiary Dissolved <span class="conviction-badge conv-exit">Exit Signal</span></div><div class="signal-detail">Sector may be out of favor. Check if other SWFs are also pulling back. Fire-sale pricing possible.</div></div></div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-title">Fund AUM by Country</div>
+        <div class="card-subtitle">Geographic distribution of tracked capital</div>
+        <div class="chart-container-tall"><canvas id="swfCountryPieChart"></canvas></div>
+      </div>
     </div>
   </div>
 
+  <!-- PIF + Mubadala Sector Pies -->
   <div class="section">
     <div class="grid-2">
       <div class="card">
@@ -1687,6 +1820,12 @@ if(mr&&mr.offsetParent!==null){charts.macroRate=new Chart(mr,{type:'line',data:{
 destroyChart('macroBreakeven');var mb=document.getElementById('macroBreakevenChart');
 if(mb&&mb.offsetParent!==null){var _brentSpot=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _brentMax=Math.max(120,_brentSpot+20);charts.macroBreakeven=new Chart(mb,{type:'bar',data:{labels:['UAE','Qatar','Oman','Kuwait','Saudi','Bahrain'],datasets:[{label:'Fiscal Breakeven',data:[63,50,75,82,91,105],backgroundColor:['rgba(5,150,105,0.7)','rgba(5,150,105,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(220,38,38,0.7)'],borderRadius:6},{label:'Brent Spot ($'+_brentSpot+')',data:[_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot],type:'line',borderColor:'#0B1D3A',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:_brentMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
 
+// SWF Fund Table + Charts
+renderSwfFundTable();
+renderSwfAumChart();
+renderSwfHeatmap();
+renderSwfCountryPie();
+
 // SWF Pie Charts
 destroyChart('swfPifPie');var pp=document.getElementById('swfPifPieChart');
 if(pp&&pp.offsetParent!==null){charts.swfPifPie=new Chart(pp,{type:'doughnut',data:{labels:['Giga-projects','Technology & AI','Entertainment & Sports','Energy & Mining','Automotive & EV','Financial Services','Real Estate','Other'],datasets:[{data:[25,18,12,14,8,10,8,5],backgroundColor:['#0B1D3A','#2563EB','#7C3AED','#059669','#D97706','#DC2626','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}
@@ -1708,6 +1847,231 @@ if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'ba
 destroyChart('compositeRadar');var cr=document.getElementById('compositeRadarChart');
 if(cr&&cr.offsetParent!==null){var comp=c.composite;charts.compositeRadar=new Chart(cr,{type:'radar',data:{labels:['Website','Social','Media','Employer','Ads','Tech Stack','Brand','Reviews','Registry','Financial','Resilience'],datasets:[{label:c.short,data:[c.services[0].score,c.services[1].score,c.services[2].score,c.services[3].score,c.services[4].score,c.services[5].score,c.services[6].score,c.services[7].score,c.services[8].score,comp.finScore,comp.resScore],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3},{label:'Sector Average',data:[71,65,62,68,58,67,68,64,78,65,55],borderColor:'#9CA3AF',backgroundColor:'rgba(156,163,175,0.05)',borderWidth:1.5,borderDash:[4,4],pointBackgroundColor:'#9CA3AF',pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:20},pointLabels:{font:{size:10,family:"'Inter'"}},grid:{color:gC}}}}})}}
 
+
+// ====== SWF FUND TRACKER DATA + FUNCTIONS ======
+var swfFunds=[
+{rank:1,name:'PIF',country:'Saudi Arabia',type:'SWF',aum:1150,aumLabel:'$1.15T+',sectors:'Giga-projects, AI, EV, Sports, Entertainment'},
+{rank:2,name:'ADIA',country:'Abu Dhabi',type:'SWF',aum:1100,aumLabel:'$1.1T+',sectors:'Global diversified, Equities, RE, Infrastructure'},
+{rank:3,name:'KIA',country:'Kuwait',type:'SWF',aum:1020,aumLabel:'$1.02T',sectors:'Global equities, Real estate, Infrastructure'},
+{rank:4,name:'QIA',country:'Qatar',type:'SWF',aum:560,aumLabel:'$560B',sectors:'RE, Luxury, Sports, Tech, Infrastructure'},
+{rank:5,name:'ICD',country:'Dubai',type:'State',aum:429,aumLabel:'$429B',sectors:'Financial services, Hospitality, Real estate'},
+{rank:6,name:'GOSI',country:'Saudi Arabia',type:'Pension',aum:374,aumLabel:'$374B',sectors:'Saudi equities, Fixed income, Real estate'},
+{rank:7,name:'Mubadala',country:'Abu Dhabi',type:'SWF',aum:350,aumLabel:'$350B',sectors:'Tech, Semiconductors, Healthcare, Energy transition'},
+{rank:8,name:'Hassana',country:'Saudi Arabia',type:'Pension',aum:320,aumLabel:'$320B',sectors:'Saudi equities, Global diversified, Real estate'},
+{rank:9,name:'Royal Group',country:'Abu Dhabi',type:'FO',aum:164,aumLabel:'$164B',sectors:'Healthcare, Hospitality, Media, Real estate'},
+{rank:10,name:'ADQ',country:'Abu Dhabi',type:'State',aum:157,aumLabel:'$157B',sectors:'Food, Pharma, Digital, Energy, Logistics'},
+{rank:11,name:'Lunate',country:'Abu Dhabi',type:'AM',aum:115,aumLabel:'$115B',sectors:'Alternative assets, Private equity, Credit'},
+{rank:12,name:'SNB Capital',country:'Saudi Arabia',type:'AM',aum:65,aumLabel:'$65B',sectors:'Asset management, Brokerage, Investment banking'},
+{rank:13,name:'OIA',country:'Oman',type:'SWF',aum:53,aumLabel:'$53B',sectors:'Energy, Tourism, Logistics, Mining'},
+{rank:14,name:'Investcorp',country:'Bahrain',type:'PE',aum:53,aumLabel:'$53B',sectors:'PE, Real estate, Credit, Infrastructure, Tech'},
+{rank:15,name:'Dubai Holding',country:'Dubai',type:'FO',aum:35,aumLabel:'$35B',sectors:'Real estate, Hospitality, Tech, Media'},
+{rank:16,name:'Al Rajhi Capital',country:'Saudi Arabia',type:'AM',aum:33,aumLabel:'$33B',sectors:'Islamic finance, Equities, Real estate funds'},
+{rank:17,name:'Jadwa Investment',country:'Saudi Arabia',type:'PE',aum:30,aumLabel:'$30B',sectors:'PE, Real estate, Public markets, Advisory'},
+{rank:18,name:'GFH Financial',country:'Bahrain',type:'AM',aum:22,aumLabel:'$22B',sectors:'PE, Real estate, Infrastructure, Financial services'},
+{rank:19,name:'NBK Wealth',country:'Kuwait',type:'AM',aum:22,aumLabel:'$22B',sectors:'Wealth management, UHNW advisory, Public markets'},
+{rank:20,name:'Abu Dhabi Capital Group',country:'Abu Dhabi',type:'FO',aum:20,aumLabel:'$20B',sectors:'Real estate, Hospitality, Healthcare'},
+{rank:21,name:'YBA Kanoo',country:'Bahrain',type:'FO',aum:20,aumLabel:'$20B',sectors:'Shipping, Travel, Logistics, Industrial'},
+{rank:22,name:'Mumtalakat',country:'Bahrain',type:'SWF',aum:18,aumLabel:'$18B',sectors:'Aluminium (Alba), Manufacturing, Healthcare'},
+{rank:23,name:'National Investments Co',country:'Kuwait',type:'AM',aum:16,aumLabel:'$16B',sectors:'Asset management, Real estate, Direct investments'},
+{rank:24,name:'KIPCO',country:'Kuwait',type:'State',aum:15,aumLabel:'$15B',sectors:'Financial services, Media, Real estate, Industrial'},
+{rank:25,name:'Al Masah Capital',country:'Dubai',type:'AM',aum:14,aumLabel:'$14B',sectors:'Healthcare, Education, F&B, Logistics'},
+{rank:26,name:'Olayan Group',country:'Saudi Arabia',type:'FO',aum:14,aumLabel:'$14B',sectors:'Consumer, Industrial, Real estate, Financial'},
+{rank:27,name:'SEDCO Holding',country:'Saudi Arabia',type:'FO',aum:13,aumLabel:'$13B',sectors:'Islamic finance, RE, PE, Ethical investing'},
+{rank:28,name:'Wafra International',country:'Kuwait',type:'AM',aum:12,aumLabel:'$12B',sectors:'Real estate, Agriculture, Infrastructure'},
+{rank:29,name:'Dallah Albaraka',country:'Saudi Arabia',type:'FO',aum:12,aumLabel:'$12B',sectors:'Healthcare, Islamic banking, RE, Agriculture'},
+{rank:30,name:'Gulf Investment Corp',country:'Kuwait',type:'State',aum:11,aumLabel:'$11B',sectors:'Project finance, PE, Asset management'},
+{rank:31,name:'Al Ghurair Group',country:'Dubai',type:'FO',aum:10,aumLabel:'$10B',sectors:'Food, Resources, Construction, Real estate'},
+{rank:32,name:'Bahrain Mumtalakat (EWA)',country:'Bahrain',type:'State',aum:9,aumLabel:'$9B',sectors:'Utilities, Power, Water infrastructure'},
+{rank:33,name:'Ithmaar Holding',country:'Bahrain',type:'AM',aum:8,aumLabel:'$8B',sectors:'Islamic banking, Financial services, Real estate'},
+{rank:34,name:'Saudi Aramco Ventures',country:'Saudi Arabia',type:'PE',aum:7,aumLabel:'$7B',sectors:'Energy tech, Sustainability, Industrial IoT'},
+{rank:35,name:'Riyad Capital',country:'Saudi Arabia',type:'AM',aum:7,aumLabel:'$7B',sectors:'Asset management, Brokerage, Investment banking'},
+{rank:36,name:'Al Faisal Holding',country:'Qatar',type:'FO',aum:6,aumLabel:'$6B',sectors:'Real estate, Hospitality, Entertainment'},
+{rank:37,name:'Tamasuk Holding',country:'Saudi Arabia',type:'PE',aum:5.5,aumLabel:'$5.5B',sectors:'Healthcare, Education, Logistics'},
+{rank:38,name:'Qatar Development Bank',country:'Qatar',type:'State',aum:5,aumLabel:'$5B',sectors:'SME financing, Entrepreneurship, Innovation'},
+{rank:39,name:'National Technology Fund',country:'Saudi Arabia',type:'PE',aum:4,aumLabel:'$4B',sectors:'Deep tech, AI, Cybersecurity, Cloud'},
+{rank:40,name:'Sanabil Investments',country:'Saudi Arabia',type:'PE',aum:4,aumLabel:'$4B',sectors:'Venture capital, Technology, Early-stage'},
+{rank:41,name:'Taameer Jordan',country:'Kuwait',type:'PE',aum:3.5,aumLabel:'$3.5B',sectors:'Real estate development, Mixed-use projects'},
+{rank:42,name:'Osool Asset Mgmt',country:'Oman',type:'AM',aum:3,aumLabel:'$3B',sectors:'Oman equities, Fixed income, Balanced funds'},
+{rank:43,name:'Gulf Capital',country:'Abu Dhabi',type:'PE',aum:2.4,aumLabel:'$2.4B',sectors:'PE, Credit, Growth capital, Healthcare'},
+{rank:44,name:'Alkhabeer Capital',country:'Saudi Arabia',type:'AM',aum:2.2,aumLabel:'$2.2B',sectors:'Islamic PE, Real estate, Sharia funds'},
+{rank:45,name:'Dhaman Capital',country:'Saudi Arabia',type:'PE',aum:2,aumLabel:'$2B',sectors:'Fintech, Healthcare, Logistics tech'},
+{rank:46,name:'STV',country:'Saudi Arabia',type:'PE',aum:1.4,aumLabel:'$1.4B',sectors:'Tech VC, MENA startups, Growth equity'},
+{rank:47,name:'Shorooq Partners',country:'Abu Dhabi',type:'PE',aum:1.2,aumLabel:'$1.2B',sectors:'Early-stage VC, Fintech, SaaS'},
+{rank:48,name:'BECO Capital',country:'Dubai',type:'PE',aum:1,aumLabel:'$1B',sectors:'Venture capital, Tech startups, Marketplaces'},
+{rank:49,name:'Global Ventures',country:'Dubai',type:'PE',aum:0.8,aumLabel:'$800M',sectors:'VC, Emerging markets, Impact investing'},
+{rank:50,name:'Nuwa Capital',country:'Dubai',type:'PE',aum:0.6,aumLabel:'$600M',sectors:'Pre-seed/Seed VC, Deep tech, Climate'}
+];
+
+var swfTableExpanded=false;
+var swfFilterType='all';
+var swfFilterCountry='all';
+var swfSearchQuery='';
+var swfSortField='rank';
+var swfSortAsc=true;
+
+function getCountryGroup(c){
+  if(c==='Saudi Arabia')return'Saudi';
+  if(c==='Abu Dhabi'||c==='Dubai')return'UAE';
+  return c;
+}
+
+function getTypeClass(t){
+  var m={'SWF':'swf','State':'state','PE':'pe','FO':'fo','AM':'am','Pension':'pension'};
+  return 'swf-type-'+(m[t]||'swf');
+}
+
+function getTypeLabel(t){
+  var m={'SWF':'SWF','State':'State Holding','PE':'PE/VC','FO':'Family Office','AM':'Asset Mgr','Pension':'Pension'};
+  return m[t]||t;
+}
+
+function formatAumShort(aum){
+  if(aum>=1000)return '$'+((aum/1000).toFixed(aum%1000===0?0:2))+'T';
+  if(aum>=1)return '$'+aum+'B';
+  return '$'+(aum*1000)+'M';
+}
+
+function getFilteredFunds(){
+  var f=swfFunds.slice();
+  if(swfFilterType!=='all')f=f.filter(function(d){return d.type===swfFilterType});
+  if(swfFilterCountry!=='all')f=f.filter(function(d){return getCountryGroup(d.country)===swfFilterCountry});
+  if(swfSearchQuery){var q=swfSearchQuery.toLowerCase();f=f.filter(function(d){return d.name.toLowerCase().indexOf(q)>-1||d.country.toLowerCase().indexOf(q)>-1||d.sectors.toLowerCase().indexOf(q)>-1})}
+  // Sort
+  f.sort(function(a,b){
+    var va=a[swfSortField],vb=b[swfSortField];
+    if(typeof va==='string')va=va.toLowerCase();
+    if(typeof vb==='string')vb=vb.toLowerCase();
+    if(va<vb)return swfSortAsc?-1:1;
+    if(va>vb)return swfSortAsc?1:-1;
+    return 0;
+  });
+  return f;
+}
+
+function renderSwfFundTable(){
+  var tbody=document.getElementById('swfFundTableBody');
+  if(!tbody)return;
+  var f=getFilteredFunds();
+  var limit=swfTableExpanded?f.length:Math.min(10,f.length);
+  var html='';
+  for(var i=0;i<limit;i++){
+    var d=f[i];
+    html+='<tr><td style="color:var(--text-tertiary);font-family:JetBrains Mono,monospace;font-size:11px">'+d.rank+'</td>';
+    html+='<td>'+d.name+'</td>';
+    html+='<td>'+d.country+'</td>';
+    html+='<td><span class="swf-type-badge '+getTypeClass(d.type)+'">'+getTypeLabel(d.type)+'</span></td>';
+    html+='<td class="aum-cell">'+d.aumLabel+'</td>';
+    html+='<td style="white-space:normal;max-width:240px;font-size:11px">'+d.sectors+'</td></tr>';
+  }
+  tbody.innerHTML=html;
+  var btn=document.getElementById('swfExpandBtn');
+  var lbl=document.getElementById('swfExpandLabel');
+  if(btn){
+    if(f.length<=10){btn.style.display='none'}
+    else{btn.style.display='flex';lbl.textContent=swfTableExpanded?'Show top 10':'View all '+f.length+' funds'}
+  }
+}
+
+function filterFundType(t,btn){
+  swfFilterType=t;
+  btn.parentElement.querySelectorAll('.swf-filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  swfTableExpanded=false;
+  renderSwfFundTable();
+}
+
+function filterFundCountry(c,btn){
+  swfFilterCountry=c;
+  btn.parentElement.querySelectorAll('.swf-filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  swfTableExpanded=false;
+  renderSwfFundTable();
+}
+
+function searchFunds(q){
+  swfSearchQuery=q;
+  swfTableExpanded=false;
+  renderSwfFundTable();
+}
+
+function sortFundTable(field){
+  if(swfSortField===field){swfSortAsc=!swfSortAsc}else{swfSortField=field;swfSortAsc=field==='rank'||field==='name'}
+  renderSwfFundTable();
+}
+
+function toggleFundTableExpand(){
+  swfTableExpanded=!swfTableExpanded;
+  renderSwfFundTable();
+}
+
+function renderSwfAumChart(){
+  destroyChart('swfAumBar');
+  var el=document.getElementById('swfAumBarChart');
+  if(!el||el.offsetParent===null)return;
+  var top20=swfFunds.slice(0,20);
+  var labels=top20.map(function(d){return d.name});
+  var data=top20.map(function(d){return d.aum});
+  var colors=top20.map(function(d){
+    if(d.type==='SWF')return'rgba(37,99,235,0.75)';
+    if(d.type==='State')return'rgba(124,58,237,0.75)';
+    if(d.type==='Pension')return'rgba(3,105,161,0.75)';
+    if(d.type==='FO')return'rgba(217,119,6,0.75)';
+    if(d.type==='AM')return'rgba(220,38,38,0.75)';
+    return'rgba(5,150,105,0.75)';
+  });
+  charts.swfAumBar=new Chart(el,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var v=ctx.parsed.x;return v>=1000?'$'+(v/1000).toFixed(2)+'T':'$'+v+'B'}}}},scales:{x:{grid:{color:'rgba(229,231,235,0.5)'},ticks:{font:{size:10},callback:function(v){return v>=1000?(v/1000)+'T':v+'B'}}},y:{grid:{display:false},ticks:{font:{size:10,family:"'Inter'"}}}}}});
+}
+
+function renderSwfHeatmap(){
+  var container=document.getElementById('swfHeatmapContainer');
+  if(!container)return;
+  var sectors=['Tech/AI','Energy','RE','Finance','Health','Infra','Sports','Food'];
+  var heatData=[
+    {name:'PIF',scores:[5,4,4,3,2,5,4,2]},
+    {name:'ADIA',scores:[4,3,5,5,3,4,1,2]},
+    {name:'KIA',scores:[3,2,5,4,2,4,1,1]},
+    {name:'QIA',scores:[4,2,5,3,2,4,5,1]},
+    {name:'ICD',scores:[2,1,4,5,1,2,2,1]},
+    {name:'GOSI',scores:[2,3,4,5,2,2,0,1]},
+    {name:'Mubadala',scores:[5,5,2,3,5,3,1,1]},
+    {name:'Hassana',scores:[2,3,4,4,2,2,0,1]},
+    {name:'Royal Group',scores:[2,1,4,2,5,2,2,3]},
+    {name:'ADQ',scores:[3,4,2,2,4,4,0,5]}
+  ];
+  function heatColor(v){
+    if(v===0)return{bg:'var(--bg)',text:'var(--text-tertiary)'};
+    if(v===1)return{bg:'#EFF6FF',text:'#93C5FD'};
+    if(v===2)return{bg:'#DBEAFE',text:'#60A5FA'};
+    if(v===3)return{bg:'#BFDBFE',text:'#2563EB'};
+    if(v===4)return{bg:'#93C5FD',text:'#1D4ED8'};
+    return{bg:'#2563EB',text:'#FFFFFF'};
+  }
+  var html='<div class="swf-heatmap-grid">';
+  html+='<div class="swf-heatmap-header"></div>';
+  for(var s=0;s<sectors.length;s++){html+='<div class="swf-heatmap-header">'+sectors[s]+'</div>'}
+  for(var i=0;i<heatData.length;i++){
+    html+='<div class="swf-heatmap-fund">'+heatData[i].name+'</div>';
+    for(var j=0;j<sectors.length;j++){
+      var v=heatData[i].scores[j];
+      var c=heatColor(v);
+      html+='<div class="swf-heatmap-cell" style="background:'+c.bg+';color:'+c.text+'">'+(v>0?v:'-')+'</div>';
+    }
+  }
+  html+='</div>';
+  container.innerHTML=html;
+}
+
+function renderSwfCountryPie(){
+  destroyChart('swfCountryPie');
+  var el=document.getElementById('swfCountryPieChart');
+  if(!el||el.offsetParent===null)return;
+  // Aggregate by country group
+  var groups={};
+  swfFunds.forEach(function(d){var g=getCountryGroup(d.country);groups[g]=(groups[g]||0)+d.aum});
+  var labels=Object.keys(groups);
+  var data=labels.map(function(k){return groups[k]});
+  charts.swfCountryPie=new Chart(el,{type:'doughnut',data:{labels:labels,datasets:[{data:data,backgroundColor:['#0B1D3A','#2563EB','#7C3AED','#059669','#D97706','#DC2626'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}},tooltip:{callbacks:{label:function(ctx){var v=ctx.parsed;return ctx.label+': '+(v>=1000?'$'+(v/1000).toFixed(1)+'T':'$'+v+'B')}}}}}});
+}
 
 // Search overlay
 function openSearch(){document.getElementById('searchOverlay').classList.add('open');document.getElementById('searchInput').value='';document.getElementById('searchInput').focus();renderSearchResults('')}
@@ -1731,7 +2095,7 @@ function closeBottomSheet(){document.getElementById('bsBackdrop').classList.remo
 
 // Entity sheets
 function openEntitySheet(type,id){
-if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | AUM: $1.15T+',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary).'},mubadala:{n:'Mubadala Investment Company',c:'UAE | AUM: $350B+',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target.'},adq:{n:'Abu Dhabi Developmental Holding',c:'UAE | AUM: $157B',s:'Newest major GCC SWF. Terna Energy JV ($2.9B). LDC stake for food security. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | AUM: $560B+',s:'Diversified global investor. PSG, Harrods. Post-World Cup pivot toward tech and sustainability.'}};
+if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | AUM: $1.15T+',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary). EA take-private with Silver Lake ($55B).'},adia:{n:'Abu Dhabi Investment Authority (ADIA)',c:'Abu Dhabi | AUM: $1.1T+',s:'World\'s second-largest SWF. Long-term, diversified global portfolio spanning equities, fixed income, real estate, infrastructure and alternatives. Known for patience and discretion.'},kia:{n:'Kuwait Investment Authority (KIA)',c:'Kuwait | AUM: $1.02T',s:'World\'s oldest SWF (est. 1953). Manages the Future Generations Fund and General Reserve Fund. Major stakes in Mercedes-Benz (~7%), BP. Key investor in Aligned Data Centers ($40B deal with Mubadala/BlackRock).'},mubadala:{n:'Mubadala Investment Company',c:'Abu Dhabi | AUM: $350B+',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target. Key partner in $40B Aligned Data Centers deal.'},adq:{n:'Abu Dhabi Developmental Holding',c:'Abu Dhabi | AUM: $157B',s:'Fast-growing Abu Dhabi state holder. Ras El Hekma $35B Egypt mega-project. Terna Energy JV ($2.9B). $7B global bond. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | AUM: $560B+',s:'Diversified global investor. PSG, Harrods, The Shard. $500B US tech pledge over 10 years. Post-World Cup pivot toward tech and sustainability.'}};
 var s=d[id];if(s)openBottomSheet(s.n,s.c,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+s.s+'</div>')}}
 
 // Macro bottom sheet - first definition (overridden below with live-aware version)
