@@ -356,6 +356,45 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .collapsible-content{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1)}
 .collapsible-content.expanded{max-height:2000px}
 
+/* SWF Tracker Enhanced */
+.swf-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.swf-filter-group{display:flex;gap:4px;align-items:center}
+.swf-filter-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-right:4px}
+.swf-filter-btn{padding:5px 12px;border:1px solid var(--border);border-radius:100px;font-size:11px;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;background:var(--surface);transition:all 0.15s}
+.swf-filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.swf-filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.swf-search-input{padding:6px 14px;border:1px solid var(--border);border-radius:100px;font-size:12px;font-family:inherit;color:var(--text-primary);background:var(--surface);outline:none;width:200px;transition:border-color 0.15s}
+.swf-search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08)}
+.swf-fund-table{width:100%;border-collapse:collapse;font-size:12px}
+.swf-fund-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-tertiary);border-bottom:2px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
+.swf-fund-table thead th:hover{color:var(--accent)}
+.swf-fund-table tbody td{padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary);white-space:nowrap}
+.swf-fund-table tbody td:nth-child(2){font-weight:600;color:var(--text-primary)}
+.swf-fund-table tbody tr:hover{background:var(--accent-light)}
+.swf-fund-table .aum-cell{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent)}
+.swf-type-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px}
+.swf-type-swf{background:#EFF6FF;color:#2563EB}
+.swf-type-state{background:#F5F3FF;color:#7C3AED}
+.swf-type-pe{background:#ECFDF5;color:#059669}
+.swf-type-fo{background:#FFFBEB;color:#D97706}
+.swf-type-am{background:#FEF2F2;color:#DC2626}
+.swf-type-pension{background:#F0F9FF;color:#0369A1}
+.swf-expand-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 20px;border:1px solid var(--border);border-radius:100px;font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;background:var(--surface);transition:all 0.15s;margin:12px auto 0}
+.swf-expand-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.swf-heatmap-grid{display:grid;grid-template-columns:140px repeat(8,1fr);gap:1px;font-size:11px}
+.swf-heatmap-cell{padding:8px 6px;text-align:center;border-radius:4px;font-weight:600;font-family:'JetBrains Mono',monospace;transition:all 0.2s}
+.swf-heatmap-header{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;color:var(--text-tertiary);padding:8px 6px;text-align:center}
+.swf-heatmap-fund{font-size:12px;font-weight:600;color:var(--text-primary);padding:8px 6px;text-align:left}
+.swf-timeline{position:relative;padding-left:20px}
+.swf-timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border-light)}
+.swf-timeline-item{position:relative;padding:12px 0 12px 20px;border-bottom:none}
+.swf-timeline-item::before{content:'';position:absolute;left:-16px;top:18px;width:12px;height:12px;border-radius:50%;border:3px solid var(--accent);background:var(--surface);z-index:1}
+.swf-timeline-item.mega::before{border-color:var(--green);background:var(--green)}
+.swf-timeline-date{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
+.swf-timeline-title{font-size:14px;font-weight:700;color:var(--text-primary);margin:2px 0}
+.swf-timeline-detail{font-size:12px;color:var(--text-secondary);line-height:1.4}
+.swf-timeline-value{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent);margin-top:2px}
+
 /* Collapsible sector cards */
 .sector-fp-card{cursor:pointer;transition:all 0.25s}
 .sector-fp-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
@@ -715,7 +754,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="swf-card fade-in" onclick="openEntitySheet('swf','pif')">
         <div class="swf-name">PIF</div>
         <div class="swf-country">Saudi Arabia</div>
-        <div class="swf-aum">$930B</div>
+        <div class="swf-aum">$1.15T</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
           <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Giga-projects, AI, EV</span></div>
@@ -726,7 +765,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="swf-card fade-in" onclick="openEntitySheet('swf','mubadala')">
         <div class="swf-name">Mubadala</div>
         <div class="swf-country">UAE (Abu Dhabi)</div>
-        <div class="swf-aum">$302B</div>
+        <div class="swf-aum">$350B</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
           <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Tech, Semi, Health</span></div>
@@ -737,7 +776,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="swf-card fade-in" onclick="openEntitySheet('swf','adq')">
         <div class="swf-name">ADQ</div>
         <div class="swf-country">UAE (Abu Dhabi)</div>
-        <div class="swf-aum">$200B+</div>
+        <div class="swf-aum">$157B</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
           <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Food, Pharma, Digital</span></div>
@@ -748,7 +787,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="swf-card fade-in" onclick="openEntitySheet('swf','qia')">
         <div class="swf-name">QIA</div>
         <div class="swf-country">Qatar</div>
-        <div class="swf-aum">$510B</div>
+        <div class="swf-aum">$560B</div>
         <div class="swf-aum-label">Assets Under Management</div>
         <div style="margin-top:12px">
           <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">RE, Luxury, Sports</span></div>
@@ -1678,7 +1717,7 @@ function renderSearchResults(query){
 var results=document.getElementById('searchResults');var q=query.toLowerCase();
 var html='<div class="search-group-label">Companies</div>';
 Object.keys(companies).forEach(function(k){var c=companies[k];if(!q||c.name.toLowerCase().includes(q)||c.short.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="switchCompany(\''+k+'\')"><div class="sri-icon" style="background:var(--navy);color:#fff">'+c.short+'</div><div><div class="sri-name">'+c.name+'</div><div class="sri-meta">'+c.sector+' | Score: '+c.score+'</div></div></div>'}});
-var swfs=[{id:'pif',name:'PIF',m:'Saudi Arabia | $930B'},{id:'mubadala',name:'Mubadala',m:'UAE | $302B'},{id:'adq',name:'ADQ',m:'UAE | $200B+'},{id:'qia',name:'QIA',m:'Qatar | $510B'}];
+var swfs=[{id:'pif',name:'PIF',m:'Saudi Arabia | $1.15T'},{id:'mubadala',name:'Mubadala',m:'UAE | $350B'},{id:'adq',name:'ADQ',m:'UAE | $157B'},{id:'qia',name:'QIA',m:'Qatar | $560B'}];
 html+='<div class="search-group-label">Sovereign Wealth Funds</div>';
 swfs.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="openEntitySheet(\'swf\',\''+s.id+'\')"><div class="sri-icon" style="background:var(--accent-light);color:var(--accent)">'+s.name.substring(0,3)+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">'+s.m+'</div></div></div>'}});
 results.innerHTML=html}
@@ -1692,7 +1731,7 @@ function closeBottomSheet(){document.getElementById('bsBackdrop').classList.remo
 
 // Entity sheets
 function openEntitySheet(type,id){
-if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | $930B AUM',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary).'},mubadala:{n:'Mubadala Investment Company',c:'UAE | $302B AUM',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target.'},adq:{n:'Abu Dhabi Developmental Holding',c:'UAE | $200B+ AUM',s:'Newest major GCC SWF. Terna Energy JV ($2.9B). LDC stake for food security. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | $510B AUM',s:'Diversified global investor. PSG, Harrods. Post-World Cup pivot toward tech and sustainability.'}};
+if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | AUM: $1.15T+',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary).'},mubadala:{n:'Mubadala Investment Company',c:'UAE | AUM: $350B+',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target.'},adq:{n:'Abu Dhabi Developmental Holding',c:'UAE | AUM: $157B',s:'Newest major GCC SWF. Terna Energy JV ($2.9B). LDC stake for food security. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | AUM: $560B+',s:'Diversified global investor. PSG, Harrods. Post-World Cup pivot toward tech and sustainability.'}};
 var s=d[id];if(s)openBottomSheet(s.n,s.c,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+s.s+'</div>')}}
 
 // Macro bottom sheet - first definition (overridden below with live-aware version)
