@@ -35,42 +35,50 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
 .header{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--header-accent,var(--navy));transition:background 0.4s ease}
 .header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-mark{width:36px;height:36px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:-0.5px}
+.logo-mark{width:38px;height:38px;background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;letter-spacing:-0.5px;box-shadow:0 2px 8px rgba(11,29,58,0.2)}
 .logo-text{font-size:18px;font-weight:700;letter-spacing:-0.3px;color:var(--navy)}
 .logo-text span{color:var(--text-tertiary);font-weight:400;font-size:13px;margin-left:8px}
 .nav-tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px}
-.nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;white-space:nowrap;font-family:inherit}
+.nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease;border:none;background:none;white-space:nowrap;font-family:inherit;position:relative}
 .nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
-.nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+.nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm);font-weight:600}
 .header-right{display:flex;align-items:center;gap:14px}
 
 .api-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
 .api-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
 .api-dot.live{background:var(--green);animation:none}.api-dot.offline{background:var(--red)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.85)}}
 
 .main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
-.section{margin-bottom:44px}
+.section{margin-bottom:48px}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
 .level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
 .level-1{background:var(--accent-light);color:var(--accent)}.level-2{background:var(--purple-light);color:var(--purple)}.level-3{background:var(--green-light);color:var(--green)}
 
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
-.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
-.card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-sm);transition:box-shadow 0.25s ease,transform 0.25s ease,border-color 0.25s ease}
+.card.interactive:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);border-color:var(--accent)}
+.card:not(.interactive):hover{box-shadow:var(--shadow-md)}
+.card-title{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:6px;letter-spacing:-0.2px}
 .card-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:16px}
 
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:18px}
 .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
 
 .score-ring{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin:0 auto 10px;position:relative;letter-spacing:-1px}
 .score-ring::before{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid var(--border-light)}
+
+/* Animated score rings */
+.dr-score{position:relative;transition:color 0.4s ease}
+.dr-score::before{content:'';position:absolute;inset:0;border-radius:50%;border:5px solid var(--border-light);transition:all 0.6s ease}
+.dr-score::after{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(currentColor var(--ring-pct,0%),transparent var(--ring-pct,0%));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4.5px));opacity:0.25;transition:opacity 0.6s ease}
+@keyframes ringFill{from{--ring-pct:0%}}
 .score-critical{color:var(--red)}.score-critical::before{border-color:rgba(220,38,38,0.2)}
 .score-weak{color:var(--orange)}.score-weak::before{border-color:rgba(217,119,6,0.2)}
 .score-average{color:var(--orange)}.score-average::before{border-color:rgba(217,119,6,0.2)}
@@ -134,10 +142,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .action-text .impact{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;color:var(--green)}
 
 .comp-table{width:100%;border-collapse:collapse;font-size:13px}
-.comp-table thead th{text-align:left;padding:14px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
-.comp-table tbody td{padding:14px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.comp-table thead th{text-align:left;padding:12px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.comp-table tbody td{padding:12px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary);transition:background 0.15s}
 .comp-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
-.comp-table tbody tr:hover{background:var(--bg)}
+.comp-table tbody tr:hover{background:var(--accent-light)}
 .comp-table .score-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
 .comp-table .trend-up{color:var(--green)}.comp-table .trend-down{color:var(--red)}
 
@@ -157,14 +165,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .tv-mini-card .tv-mini-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px}
 .tv-mini-card .tradingview-widget-copyright{display:none!important}
 
-.company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px}
-.company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px}
+.company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px;padding:24px 28px;background:linear-gradient(135deg,rgba(11,29,58,0.02),rgba(37,99,235,0.03));border-radius:var(--radius);border:1px solid var(--border-light)}
+.company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px;box-shadow:0 4px 12px rgba(11,29,58,0.2);transition:background 0.3s ease}
 .company-info h1{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--navy)}
 .company-info .company-meta{font-size:13px;color:var(--text-secondary)}
 .company-info .company-meta strong{color:var(--text-primary)}
 
-.chart-container{position:relative;height:260px;margin-top:12px;contain:layout style}
-.chart-container-tall{position:relative;height:320px;margin-top:12px;contain:layout style}
+.chart-container{position:relative;height:260px;margin-top:12px}
+.chart-container-tall{position:relative;height:320px;margin-top:12px}
 
 .overlay-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:13px}
 .overlay-row:last-child{border-bottom:none}
@@ -190,13 +198,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .pricing-features li{padding:6px 0;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
 .pricing-features li::before{content:'\2713';color:var(--green);font-weight:700;font-size:12px}
 
-.insight-box{background:var(--accent-light);border:1px solid rgba(37,99,235,0.12);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+.insight-box{background:var(--accent-light);border:1px solid rgba(37,99,235,0.12);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;border-left:4px solid var(--accent);transition:box-shadow 0.25s ease}
+.insight-box:hover{box-shadow:var(--shadow-sm)}
 .insight-box .insight-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px}
 .insight-box .insight-text{font-size:13px;color:var(--text-primary);line-height:1.5}
 .insight-box .insight-source{font-size:11px;color:var(--text-tertiary);margin-top:6px}
 
-.tab-content{display:none;opacity:0}.tab-content.active{display:block;animation:tabFadeIn 0.25s ease forwards}
-@keyframes tabFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.tab-content{display:none;opacity:0}.tab-content.active{display:block;animation:tabFadeIn 0.35s ease forwards}
+@keyframes tabFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
 
 /* NEW STYLES for Macro Overlay, SWF, Sectoral, Stress, Composite tabs */
@@ -217,7 +226,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .swf-card .swf-aum{font-size:28px;font-weight:800;letter-spacing:-1px;font-family:'JetBrains Mono',monospace;color:var(--accent);margin-bottom:4px}
 .swf-card .swf-aum-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
 
-.conviction-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.conviction-badge{display:inline-flex;padding:4px 12px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
 .conv-very-high{background:#059669;color:#fff}
 .conv-high{background:var(--green-light);color:var(--green)}
 .conv-medium-high{background:var(--accent-light);color:var(--accent)}
@@ -234,7 +243,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .scenario-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;cursor:pointer;transition:all 0.3s}
 .scenario-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
-.scenario-card.scenario-active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,0.2),var(--shadow-md)}
+.scenario-card.scenario-active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.15),var(--shadow-md);background:var(--accent-light)}
 .scenario-card .sc-title{font-size:15px;font-weight:700;margin-bottom:4px}
 .scenario-card .sc-prob{font-size:11px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px}
 .scenario-card .sc-desc{font-size:12px;color:var(--text-secondary);line-height:1.4}
@@ -271,16 +280,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .oil-slider-container{position:relative;padding:36px 0 40px;margin:0 0 28px}
 .oil-slider{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:7px;outline:none;cursor:pointer;transition:background 0.3s;position:relative;z-index:2}
-.oil-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:44px;height:44px;border-radius:50%;background:var(--navy);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15);transition:transform 0.15s}
-.oil-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
-.oil-slider::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:var(--navy);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15)}
+.oil-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:32px;height:32px;border-radius:50%;background:var(--navy);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 3px rgba(11,29,58,0.12);transition:transform 0.15s}
+.oil-slider::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.oil-slider::-moz-range-thumb{width:32px;height:32px;border-radius:50%;background:var(--navy);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 3px rgba(11,29,58,0.12)}
 .oil-slider-labels{display:flex;justify-content:space-between;margin-top:8px;position:relative}
 .oil-slider-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-align:center}
 .oil-slider-brent{position:absolute;top:-8px;transform:translateX(-50%);pointer-events:none;transition:left 0.05s linear;background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;z-index:1}
 .oil-slider-brent::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid var(--navy)}
 
 .oil-sim-panel{display:grid;grid-template-columns:1fr 1fr;gap:20px;transition:opacity 0.2s}
-.oil-sim-description{grid-column:1/-1;background:var(--bg);border-radius:var(--radius-sm);padding:16px 20px;font-size:14px;color:var(--text-primary);line-height:1.6;border-left:4px solid var(--navy);transition:border-color 0.3s,opacity 0.2s}
+.oil-sim-description{grid-column:1/-1;background:var(--bg);border-radius:var(--radius-sm);padding:20px 24px;font-size:14px;color:var(--text-primary);line-height:1.7;border-left:4px solid var(--navy);transition:border-color 0.3s,opacity 0.2s;letter-spacing:-0.01em}
 
 .oil-fiscal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .oil-fiscal-card{background:var(--bg);border-radius:var(--radius-sm);padding:14px;text-align:center;transition:all 0.3s}
@@ -321,7 +330,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .bottom-sheet.open{transform:translateY(0)}
 .bottom-sheet-handle{display:flex;justify-content:center;padding:12px 0 8px;cursor:grab}
 .bottom-sheet-handle::before{content:'';width:36px;height:4px;border-radius:2px;background:var(--border)}
-.bottom-sheet-content{padding:0 28px 28px;max-width:800px;margin:0 auto}
+.bottom-sheet-content{padding:0 32px 32px;max-width:860px;margin:0 auto}
 .bottom-sheet-title{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
 .bottom-sheet-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
 
@@ -368,8 +377,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .swf-search-input{padding:6px 14px;border:1px solid var(--border);border-radius:100px;font-size:12px;font-family:inherit;color:var(--text-primary);background:var(--surface);outline:none;width:200px;transition:border-color 0.15s}
 .swf-search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08)}
 .swf-fund-table{width:100%;border-collapse:collapse;font-size:12px}
-.swf-fund-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-tertiary);border-bottom:2px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
+.swf-fund-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-tertiary);border-bottom:2px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none;transition:color 0.15s}
 .swf-fund-table thead th:hover{color:var(--accent)}
+.swf-fund-table thead th::after{content:' \u2195';font-size:8px;opacity:0.3}
 .swf-fund-table tbody td{padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary);white-space:nowrap}
 .swf-fund-table tbody td:nth-child(2){font-weight:600;color:var(--text-primary)}
 .swf-fund-table tbody tr:hover{background:var(--accent-light)}
@@ -390,8 +400,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .swf-timeline{position:relative;padding-left:20px}
 .swf-timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border-light)}
 .swf-timeline-item{position:relative;padding:12px 0 12px 20px;border-bottom:none}
-.swf-timeline-item::before{content:'';position:absolute;left:-16px;top:18px;width:12px;height:12px;border-radius:50%;border:3px solid var(--accent);background:var(--surface);z-index:1}
-.swf-timeline-item.mega::before{border-color:var(--green);background:var(--green)}
+.swf-timeline-item::before{content:'';position:absolute;left:-16px;top:18px;width:14px;height:14px;border-radius:50%;border:3px solid var(--accent);background:var(--surface);z-index:1;transition:transform 0.2s}
+.swf-timeline-item.mega::before{border-color:var(--green);background:var(--green);width:16px;height:16px;left:-17px;top:17px;box-shadow:0 0 0 4px rgba(5,150,105,0.15)}
+.swf-timeline-item:hover::before{transform:scale(1.2)}
 .swf-timeline-date{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
 .swf-timeline-title{font-size:14px;font-weight:700;color:var(--text-primary);margin:2px 0}
 .swf-timeline-detail{font-size:12px;color:var(--text-secondary);line-height:1.4}
@@ -420,6 +431,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .bottom-nav-item.active svg{color:var(--accent)}
 .bottom-nav-item.active span{color:var(--accent)}
 
+/* Focus states for accessibility */
+.nav-tab:focus-visible,.swf-filter-btn:focus-visible,.company-selector-btn:focus-visible,.scenario-card:focus-visible,.bottom-nav-item:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Chart tooltip custom styling */
+.chartjs-tooltip{background:var(--surface)!important;border:1px solid var(--border)!important;border-radius:10px!important;box-shadow:var(--shadow-md)!important;padding:10px 14px!important;font-family:'Inter',sans-serif!important}
+
 /* Accessible traffic light symbols */
 .tl-symbol{font-weight:700;margin-right:2px}
 .traffic-light.tl-green::before{content:'\25B2 ';font-size:0.8em}
@@ -437,9 +455,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .footer a:hover{color:var(--accent-dark)}
 
 /* Smooth card transitions */
-.card{transition:box-shadow 0.25s ease,transform 0.25s ease;will-change:transform,box-shadow}
-.swf-card{cursor:pointer;transition:all 0.25s}
+.card{transition:box-shadow 0.25s ease,transform 0.25s ease}
+.swf-card{cursor:pointer;transition:all 0.25s;position:relative}
+.swf-card::after{content:'\2192';position:absolute;top:20px;right:20px;font-size:16px;color:var(--text-tertiary);transition:all 0.25s;opacity:0.4}
 .swf-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
+.swf-card:hover::after{color:var(--accent);opacity:1;transform:translateX(3px)}
 .macro-indicator-card{cursor:pointer;transition:all 0.25s}
 .macro-indicator-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
 
@@ -481,8 +501,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @media(max-width:768px){
   .header{padding:0 16px}.main{padding:16px}
   .grid-4,.grid-3,.grid-2,.grid-5{grid-template-columns:1fr}
-  .company-hero{flex-direction:column;text-align:center;gap:12px}
+  .company-hero{flex-direction:column;text-align:center;gap:12px;padding:20px 16px}
   .company-info h1{font-size:22px}
+  .dual-ring{flex-wrap:wrap;gap:12px;padding:8px 0}
+  .dr-plus,.dr-equals{font-size:18px}
   .macro-strip{flex-wrap:wrap;gap:12px}
   .opp-score{flex-direction:column;text-align:center}
   .dual-ring{flex-direction:column;gap:16px}
@@ -502,9 +524,35 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @keyframes fadeIn{to{opacity:1}}
 .fade-in:nth-child(1){animation-delay:0s}.fade-in:nth-child(2){animation-delay:0.05s}.fade-in:nth-child(3){animation-delay:0.1s}
 .fade-in:nth-child(4){animation-delay:0.15s}.fade-in:nth-child(5){animation-delay:0.2s}.fade-in:nth-child(6){animation-delay:0.25s}
+.fade-in:nth-child(7){animation-delay:0.3s}.fade-in:nth-child(8){animation-delay:0.35s}.fade-in:nth-child(9){animation-delay:0.4s}
+
+@media(prefers-reduced-motion:reduce){
+  .fade-in{animation:none;opacity:1}
+  .card{transition:none}
+  .collapsible-content{transition:none}
+  .oil-slider::-webkit-slider-thumb{transition:none}
+}
+
+/* Scroll to top button */
+.scroll-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:90;opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;font-size:16px}
+.scroll-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+.scroll-top:hover{background:var(--accent);transform:translateY(-2px)}
+@media(max-width:768px){.scroll-top{bottom:80px;right:16px}}
+
+/* Data freshness badge */
+.freshness-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:var(--text-tertiary);letter-spacing:0.3px;padding:4px 10px;background:var(--bg);border-radius:100px;border:1px solid var(--border-light)}
+.freshness-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
 
 .footer{max-width:1440px;margin:0 auto;padding:32px 40px;text-align:center;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:12px}
 .footer a{color:var(--accent);text-decoration:none}
+
+@media print{
+  .header,.bottom-nav,.scroll-top,.search-overlay,.bottom-sheet-backdrop,.bottom-sheet{display:none!important}
+  .tab-content{display:block!important;opacity:1!important;page-break-inside:avoid}
+  .main{padding:0;max-width:none}
+  .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
@@ -528,7 +576,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <span id="companySelectorLabel">Emirates Global Aluminium</span>
       <span class="kbd">&#8984;K</span>
     </button>
-    <div style="font-size:10px;color:var(--text-tertiary);letter-spacing:0.3px;white-space:nowrap">50+ GCC entities scanned &bull; 3 deep-dive profiles</div>
+    <div class="freshness-badge"><span class="freshness-dot"></span> Data as of March 2026 &bull; 50+ entities</div>
     <div class="api-badge"><div class="api-dot" id="apiDot"></div><span id="apiLabel">Connecting...</span></div>
   </div>
 </div></div>
@@ -571,6 +619,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </button>
 </div>
 
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&uarr;</button>
 <div class="main">
 <!-- OVERVIEW -->
 <div class="tab-content active" id="tab-overview">
@@ -609,7 +658,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="dr-plus">+</div>
           <div class="dual-ring-item"><div class="dr-score" id="heroResScore" style="color:var(--red)"><span style="position:relative;z-index:1">35</span></div><div class="dr-label">Resilience</div></div>
           <div class="dr-equals">=</div>
-          <div class="dual-ring-item"><div class="dr-score" id="heroTotalScore" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff"><span style="position:relative;z-index:1">45</span></div><div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite</div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="heroTotalBand">Below Average</div></div>
+          <div class="dual-ring-item"><div class="dr-score" id="heroTotalScore" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff"><span style="position:relative;z-index:1">45</span></div><div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite</div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="heroTotalBand">Below Average</div><div class="kpi-change down" id="heroScoreChange" style="margin-top:4px">&darr; -4 vs Q3</div></div>
         </div>
       </div>
       <div class="card fade-in" style="border-left:3px solid var(--accent)">
@@ -627,7 +676,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
   </div>
   <div class="section" id="liveApiSection" style="display:none"><div class="section-header"><div class="section-title">Live API Data <span class="level-badge level-1">Real-Time</span></div></div><div class="grid-4" id="liveApiCards"></div></div>
-  <div class="section"><div class="card"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="section-title" style="margin:0">Peer Comparison &mdash; Composite Scores</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="table-scroll" style="margin-top:12px"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div></div></div>
+  <div class="section"><div class="card"><div class="section-title" style="margin-bottom:14px">Peer Comparison &mdash; Composite Scores</div><div class="table-scroll"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div></div>
 </div>
 
 <!-- BENCHMARKING -->
@@ -763,7 +812,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="section-header"><div class="section-title">GCC Investment Fund Tracker <span class="level-badge level-3">50 Funds</span></div></div>
     <div class="grid-5">
       <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--navy)">50</div><div class="kpi-label">Funds Tracked</div></div>
-      <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--accent)">$5.6T+</div><div class="kpi-label">Combined AUM</div></div>
+      <div class="card kpi-card fade-in" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));border-color:var(--navy)"><div class="kpi-value" style="color:#fff;font-size:36px">$5.6T+</div><div class="kpi-label" style="color:rgba(255,255,255,0.7)">Combined AUM</div></div>
       <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--green)">6</div><div class="kpi-label">GCC Countries</div></div>
       <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--purple)">5</div><div class="kpi-label">Fund Types</div></div>
       <div class="card kpi-card fade-in"><div class="kpi-value" style="color:var(--orange)">$137B+</div><div class="kpi-label">Deals (18mo)</div></div>
@@ -880,8 +929,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
       <div class="card">
         <div class="card-title">Sector Allocation Heatmap</div>
-        <div class="card-subtitle">Top 10 funds - investment intensity by sector (1-5 scale)</div>
-        <div id="swfHeatmapContainer" style="margin-top:12px;overflow-x:auto"></div>
+        <div class="card-subtitle">Top 10 funds - investment intensity by sector</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:8px;margin-bottom:4px;font-size:10px;font-weight:600;color:var(--text-tertiary)">
+          <span>Intensity:</span>
+          <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:14px;height:14px;border-radius:3px;background:#EFF6FF;border:1px solid #DBEAFE"></span>1 Low</span>
+          <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:14px;height:14px;border-radius:3px;background:#BFDBFE"></span>3 Med</span>
+          <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:14px;height:14px;border-radius:3px;background:#2563EB"></span>5 High</span>
+        </div>
+        <div id="swfHeatmapContainer" style="margin-top:8px;overflow-x:auto"></div>
       </div>
     </div>
   </div>
@@ -1173,6 +1228,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="oil-sim-price" id="oilSimPrice">$102</div>
           <div class="oil-sim-price-label">per barrel (Brent)</div>
           <div class="oil-sim-band" id="oilSimBand">GCC Sweet Spot</div>
+          <button onclick="document.getElementById('oilSlider').value=102;debouncedOilUpdate(102)" style="margin-top:8px;padding:4px 14px;border:1px solid var(--border);border-radius:100px;font-size:10px;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;background:var(--surface);transition:all 0.15s">Reset to $102</button>
         </div>
       </div>
 
@@ -1440,7 +1496,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 </div>
 
-<div class="footer">47X Intelligence Platform &copy; 2026 &mdash; Built by <a href="https://truegroup.agency" target="_blank">TrueGroup</a> &bull; API: <a href="https://47x-audit-platform.truegroup.workers.dev/" target="_blank">Live Endpoint</a> &bull; Sovereign Cloud Ready</div>
+<div class="footer">
+  <div style="font-weight:700;font-size:14px;color:var(--navy);margin-bottom:6px;letter-spacing:-0.3px">47X Intelligence Platform</div>
+  <div>&copy; 2026 <a href="https://truegroup.agency" target="_blank">TrueGroup</a> &bull; <a href="https://47x-audit-platform.truegroup.workers.dev/" target="_blank">API Endpoint</a> &bull; Sovereign Cloud &bull; GCC-EU Compliant</div>
+</div>
 
 <script>
 var API_BASE='https://47x-audit-platform.truegroup.workers.dev';
@@ -1541,8 +1600,8 @@ async function checkApi(){try{var r=await fetch(API_BASE+'/api/companies',{signa
 
 async function renderLiveApiCards(list){var s=document.getElementById('liveApiSection'),c=document.getElementById('liveApiCards');s.style.display='block';var h='';for(var i=0;i<Math.min(list.length,4);i++){var co=list[i],sh='<span style="color:var(--text-tertiary)">No scores</span>';try{var r=await fetch(API_BASE+'/api/companies/'+co.slug+'/scores',{signal:AbortSignal.timeout(5000)});if(r.ok){var sc=await r.json();if(sc&&sc.composite!==undefined){var b=sc.composite>=90?'leading':sc.composite>=70?'strong':sc.composite>=50?'average':sc.composite>=30?'weak':'critical';var bc=b==='leading'?'var(--accent)':b==='strong'?'var(--green)':b==='average'?'var(--orange)':'var(--red)';sh='<div style="font-size:28px;font-weight:800;color:'+bc+';letter-spacing:-1px">'+Math.round(sc.composite)+'</div><div class="kpi-label">'+b.charAt(0).toUpperCase()+b.slice(1)+'</div>'}}}catch(e){}h+='<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+co.name+'</div>'+sh+'</div>'}c.innerHTML=h}
 
-function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');if(b)b.classList.add('active');document.querySelectorAll('.bottom-nav-item').forEach(function(item){item.classList.remove('active');if(item.dataset&&item.dataset.tab===t)item.classList.add('active')});setTimeout(function(){renderAllCharts()},50)}
-function switchCompany(k){currentCompany=k;document.getElementById('companySelectorLabel').textContent=companies[k].name;renderAll();closeSearch()}
+function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');if(b)b.classList.add('active');document.querySelectorAll('.bottom-nav-item').forEach(function(item){item.classList.remove('active');if(item.dataset&&item.dataset.tab===t)item.classList.add('active')});window.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){renderAllCharts()},50)}
+function switchCompany(k){currentCompany=k;document.getElementById('companySelectorLabel').textContent=companies[k].name;renderAll();closeSearch();setTimeout(animateHeroScores,100)}
 
 function selectScenario(idx){activeScenario=idx;document.querySelectorAll('.scenario-card').forEach(function(c,i){c.classList.toggle('scenario-active',i===idx)});renderStressScenario();renderStressCharts()}
 
@@ -1555,6 +1614,9 @@ document.getElementById('stressWarnings').innerHTML=s.warnings.map(function(w){r
 
 function renderAll(){var c=companies[currentCompany];
 document.getElementById('heroLogo').textContent=c.short;document.getElementById('heroName').textContent=c.name;document.getElementById('heroMeta').innerHTML=c.sector+' &bull; '+c.location+' &bull; '+c.portfolio+' &bull; <strong>'+c.revenue+'</strong>';
+// Header accent bar based on score band
+var headerAccent=c.composite.total>=70?'var(--green)':c.composite.total>=50?'var(--orange)':'var(--red)';
+document.querySelector('.header').style.setProperty('--header-accent',headerAccent);
 // Hero composite score
 var comp=c.composite;
 function scoreCol(s){return s>=70?'var(--green)':s>=50?'var(--orange)':'var(--red)'}
@@ -1566,6 +1628,13 @@ document.getElementById('heroResScore').style.color=scoreCol(comp.resScore);
 document.getElementById('heroResScore').innerHTML='<span style="position:relative;z-index:1">'+comp.resScore+'</span>';
 document.getElementById('heroTotalScore').innerHTML='<span style="position:relative;z-index:1">'+comp.total+'</span>';
 document.getElementById('heroTotalBand').textContent=comp.band;
+// Score change indicator
+var sc=c.scoreChange;if(sc){var changeEl=document.getElementById('heroScoreChange');if(changeEl){changeEl.className='kpi-change '+(sc.direction==='up'?'up':'down');changeEl.textContent=(sc.direction==='up'?'\u25B2':'\u25BC')+' '+sc.label}}
+// Animate score rings
+document.getElementById('heroOpScore').style.setProperty('--ring-pct',comp.opScore+'%');
+document.getElementById('heroFinScore').style.setProperty('--ring-pct',comp.finScore+'%');
+document.getElementById('heroResScore').style.setProperty('--ring-pct',comp.resScore+'%');
+document.getElementById('heroTotalScore').style.setProperty('--ring-pct',comp.total+'%');
 ['1','2','3'].forEach(function(n){var s=c.contextSignals['headline'+n];document.getElementById('ctxSignal'+n+'Title').textContent=s.title;document.getElementById('ctxSignal'+n+'Detail').textContent=s.detail;document.getElementById('ctxIcon'+n).className='signal-icon '+s.iconClass;document.getElementById('ctxIcon'+n).textContent=s.icon});
 document.getElementById('overviewOppScore').textContent=c.arbOppScore;document.getElementById('overviewOppDesc').textContent=c.arbOpp1.desc.substring(0,120)+'...';document.getElementById('overviewOppWindow').textContent=c.arbOppWindow;
 renderPeerTable(c);document.getElementById('benchCompanyName').textContent=c.name;document.getElementById('benchBand').textContent=c.scoreBand;document.getElementById('benchBand').style.color=c.scoreBandColor;renderServiceBars(c);renderScorecard(c);
@@ -1595,6 +1664,11 @@ var resC=comp.resScore>=70?'var(--green)':comp.resScore>=50?'var(--orange)':'var
 document.getElementById('compOpScore').style.color=opC;
 document.getElementById('compFinScore').style.color=finC;
 document.getElementById('compResScore').style.color=resC;
+// Animate composite tab rings
+document.getElementById('compOpScore').style.setProperty('--ring-pct',comp.opScore+'%');
+document.getElementById('compFinScore').style.setProperty('--ring-pct',comp.finScore+'%');
+document.getElementById('compResScore').style.setProperty('--ring-pct',comp.resScore+'%');
+document.getElementById('compTotalScore').style.setProperty('--ring-pct',comp.total+'%');
 document.getElementById('compositeRadarSub').textContent=c.name+' vs sector average across all intelligence dimensions';
 // Update breakdowns
 var services=c.services;
@@ -1602,7 +1676,9 @@ document.getElementById('compOpBreakdown').innerHTML=services.map(function(s){va
 }
 
 function renderPeerTable(c){document.querySelector('#peerTable tbody').innerHTML=c.peers.map(function(p){return'<tr><td>'+p.name+'</td><td class="score-cell">'+p.score+'</td><td class="score-cell">'+p.website+'</td><td class="score-cell">'+p.social+'</td><td class="score-cell">'+p.media+'</td><td class="score-cell">'+p.employer+'</td><td class="score-cell">'+p.financial+'</td><td class="'+(p.trend==='up'?'trend-up':'trend-down')+'">'+(p.trend==='up'?'\u25B2 Up':'\u25BC Down')+'</td></tr>'}).join('')}
-function renderServiceBars(c){document.getElementById('serviceBars').innerHTML=c.services.map(function(s){return'<div class="service-bar"><div class="service-bar-header"><span class="service-name">'+s.name+'</span><span class="service-score" style="color:'+s.color+'">'+s.score+'</span></div><div class="bar-track"><div class="bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div><div class="bar-benchmark" style="left:'+s.benchmark+'%" title="Sector Avg: '+s.benchmark+'"></div></div></div>'}).join('')}
+function renderServiceBars(c){document.getElementById('serviceBars').innerHTML=c.services.map(function(s){return'<div class="service-bar"><div class="service-bar-header"><span class="service-name">'+s.name+'</span><span class="service-score" style="color:'+s.color+'">'+s.score+'</span></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:'+s.color+'" data-target="'+s.score+'"></div><div class="bar-benchmark" style="left:'+s.benchmark+'%" title="Sector Avg: '+s.benchmark+'"></div></div></div>'}).join('');
+// Animate bars from 0
+setTimeout(function(){document.querySelectorAll('#serviceBars .bar-fill').forEach(function(b){b.style.width=b.dataset.target+'%'})},50)}
 function renderScorecard(c){document.getElementById('scorecardGrid').innerHTML=c.services.map(function(s){var d=s.score-s.benchmark,dc=d>0?'var(--green)':d<0?'var(--red)':'var(--text-secondary)',ds=d>0?'+':'';return'<div class="scorecard-cell"><div class="sc-score" style="color:'+s.color+'">'+s.score+'</div><div class="sc-label">'+s.name+'</div><div style="font-size:10px;font-weight:600;color:'+dc+';margin-top:2px">'+ds+d+' vs avg</div><div class="sc-bar"><div class="sc-bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div></div></div>'}).join('')}
 function renderTimeline(c){document.getElementById('signalTimeline').innerHTML=c.timeline.map(function(t){return'<div class="timeline-item"><div class="timeline-dot" style="background:'+t.color+'"></div><div><div class="timeline-text">'+t.text+'</div><div class="timeline-date">'+t.date+'</div></div></div>'}).join('')}
 function renderSignalCards(c){function r(id,d){document.getElementById(id).innerHTML=d.map(function(x){return'<div class="overlay-row"><span class="overlay-label">'+x.label+'</span><span class="overlay-value" style="color:'+(x.trend==='positive'?'var(--green)':x.trend==='negative'?'var(--red)':'var(--text-primary)')+'">'+x.value+'</span></div>'}).join('')}r('talentSignals',c.talent);r('financialSignals',c.financial);r('marketContext',c.market)}
@@ -2102,7 +2178,14 @@ Object.keys(companies).forEach(function(k){var c=companies[k];if(!q||c.name.toLo
 var swfs=[{id:'pif',name:'PIF',m:'Saudi Arabia | $1.15T'},{id:'mubadala',name:'Mubadala',m:'UAE | $350B'},{id:'adq',name:'ADQ',m:'UAE | $157B'},{id:'qia',name:'QIA',m:'Qatar | $560B'}];
 html+='<div class="search-group-label">Sovereign Wealth Funds</div>';
 swfs.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="openEntitySheet(\'swf\',\''+s.id+'\')"><div class="sri-icon" style="background:var(--accent-light);color:var(--accent)">'+s.name.substring(0,3)+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">'+s.m+'</div></div></div>'}});
+// Quick navigation
+var sections=[{name:'Overview',tab:'overview',icon:'HUB'},{name:'Benchmarking',tab:'benchmarking',icon:'BM'},{name:'Signals',tab:'signals',icon:'SIG'},{name:'Arbitrage',tab:'arbitrage',icon:'ARB'},{name:'Macro Overlay',tab:'macropanel',icon:'MCR'},{name:'SWF Tracker',tab:'swftracker',icon:'SWF'},{name:'Sectoral',tab:'sectoral',icon:'SEC'},{name:'Stress Test',tab:'stress',icon:'STR'},{name:'Composite',tab:'composite',icon:'CMP'}];
+html+='<div class="search-group-label">Navigate</div>';
+sections.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="switchTab(\''+s.tab+'\',document.querySelector(\'.nav-tab\'));closeSearch()"><div class="sri-icon" style="background:var(--bg);color:var(--text-secondary);font-size:10px">'+s.icon+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">Tab</div></div></div>'}});
 results.innerHTML=html}
+
+// Scroll-to-top visibility
+window.addEventListener('scroll',function(){var btn=document.getElementById('scrollTopBtn');if(window.scrollY>400)btn.classList.add('visible');else btn.classList.remove('visible')},{passive:true});
 
 // Keyboard shortcut CMD+K
 document.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(document.getElementById('searchOverlay').classList.contains('open'))closeSearch();else openSearch()}if(e.key==='Escape'){closeSearch();closeBottomSheet()}});
@@ -2161,9 +2244,33 @@ function openMacroSheet(indicator) {
   if (x) openBottomSheet(x.t, x.s, '<div style="font-size:13px;color:var(--text-primary);line-height:1.6">' + x.c + '</div>');
 }
 
+// Count-up animation for score numbers
+function animateCount(el,target,duration){
+  duration=duration||800;
+  var start=0,startTime=null;
+  var inner=el.querySelector('span[style*="z-index"]');
+  function step(ts){
+    if(!startTime)startTime=ts;
+    var pct=Math.min((ts-startTime)/duration,1);
+    var val=Math.round(pct*target);
+    if(inner)inner.textContent=val;else el.textContent=val;
+    if(pct<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function animateHeroScores(){
+  var c=companies[currentCompany],comp=c.composite;
+  animateCount(document.getElementById('heroOpScore'),comp.opScore);
+  animateCount(document.getElementById('heroFinScore'),comp.finScore);
+  animateCount(document.getElementById('heroResScore'),comp.resScore);
+  animateCount(document.getElementById('heroTotalScore'),comp.total);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   renderAll();
   checkApi();
+  setTimeout(animateHeroScores,200);
 });
 </script>
 </body>
