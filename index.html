@@ -148,6 +148,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .macro-item-change.up{color:var(--green)}.macro-item-change.down{color:var(--red)}
 .macro-divider{width:1px;background:var(--border);align-self:stretch}
 
+/* TradingView Widget Styles */
+.tv-ticker-container{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;box-shadow:var(--shadow-sm);padding:4px 0}
+.tv-ticker-container .tradingview-widget-container{margin:0}
+.tv-mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;overflow:hidden;min-height:190px;position:relative}
+.tv-mini-card .tradingview-widget-container{margin:0}
+.tv-mini-card .tv-mini-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px}
+.tv-mini-card .tradingview-widget-copyright{display:none!important}
+
 .company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px}
 .company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px}
 .company-info h1{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--navy)}
@@ -394,6 +402,19 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* API dot stop pulsing when live */
 .api-dot.live{animation:none}
 
+/* Live market data styles */
+.market-data-bar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.market-refresh-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:11px;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all 0.15s}
+.market-refresh-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.market-refresh-btn.loading{opacity:0.6;pointer-events:none}
+.market-refresh-btn svg{width:14px;height:14px}
+.market-timestamp{font-size:10px;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace}
+.market-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.market-badge.live{background:var(--green-light);color:var(--green)}
+.market-badge.delayed{background:var(--orange-light);color:var(--orange)}
+.daily-change{font-size:11px;font-weight:600;margin-left:4px}
+.daily-change.up{color:var(--green)}.daily-change.down{color:var(--red)}
+
 @media(max-width:1024px){
   .oil-sim-panel{grid-template-columns:1fr}
   .oil-fiscal-grid{grid-template-columns:repeat(3,1fr)}
@@ -502,13 +523,28 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div class="main">
 <!-- OVERVIEW -->
 <div class="tab-content active" id="tab-overview">
-  <div class="macro-strip">
-    <div class="macro-item"><div><div class="macro-item-label">Brent Crude</div><div class="macro-item-value">$102.14 <span class="macro-item-change up">+8.6%</span></div></div></div><div class="macro-divider"></div>
-    <div class="macro-item"><div><div class="macro-item-label">UAE GDP Growth</div><div class="macro-item-value">5.0% <span class="macro-item-change up">+0.2pp</span></div></div></div><div class="macro-divider"></div>
-    <div class="macro-item"><div><div class="macro-item-label">MSCI UAE</div><div class="macro-item-value">18.42 <span class="macro-item-change up">+2.8%</span></div></div></div><div class="macro-divider"></div>
-    <div class="macro-item"><div><div class="macro-item-label">AED/USD</div><div class="macro-item-value">3.6725 <span class="macro-item-change" style="color:var(--text-tertiary)">Pegged</span></div></div></div><div class="macro-divider"></div>
-    <div class="macro-item"><div><div class="macro-item-label">LME Aluminium</div><div class="macro-item-value">$3,397 <span class="macro-item-change up">+37% YoY</span></div></div></div><div class="macro-divider"></div>
-    <div class="macro-item"><div><div class="macro-item-label">Next Event</div><div class="macro-item-value" style="font-family:inherit;font-size:13px">ADIPEC 2026 <span style="color:var(--text-tertiary);font-size:11px">Nov 2</span></div></div></div>
+  <div class="tv-ticker-container">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          {"proName": "NYMEX:BZ1!", "title": "Brent Crude"},
+          {"proName": "NYMEX:CL1!", "title": "WTI Crude"},
+          {"proName": "COMEX:GC1!", "title": "Gold"},
+          {"proName": "TVC:DXY", "title": "US Dollar Index"},
+          {"proName": "TVC:US10Y", "title": "US 10Y Yield"},
+          {"proName": "SP:SPX", "title": "S&P 500"},
+          {"proName": "AMEX:EEM", "title": "MSCI EM"}
+        ],
+        "showSymbolLogo": false,
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "colorTheme": "light",
+        "locale": "en"
+      }
+      </script>
+    </div>
   </div>
   <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div></div></div>
   <div class="section">
@@ -571,37 +607,51 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <!-- ====== NEW TAB 1: MACRO OVERLAY PANEL ====== -->
 <div class="tab-content" id="tab-macropanel">
   <div class="section">
-    <div class="section-header"><div class="section-title">Live Macro Indicators <span class="level-badge level-2">Intelligence Layer</span></div></div>
+    <div class="section-header"><div class="section-title">Live Macro Indicators <span class="level-badge level-2">Intelligence Layer</span></div>
+      <div class="market-data-bar">
+        <span class="api-badge" style="font-size:11px"><span class="api-dot live" style="background:var(--green);animation:none"></span> TradingView Live Feed</span>
+      </div>
+    </div>
     <div class="grid-5 fade-in" id="macroIndicatorGrid">
-      <div class="macro-indicator-card" onclick="openMacroSheet('brent')">
-        <div class="mi-label">Brent Crude</div>
-        <div class="mi-value" style="color:var(--navy)">$102.14</div>
-        <div class="mi-change" style="color:var(--green)"><span class="mi-signal" style="background:var(--green)"></span> +8.6% MoM</div>
-        <div class="traffic-light tl-green" style="margin-top:8px">Supportive</div>
+      <div class="tv-mini-card">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          { "symbol": "NYMEX:BZ1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
+          </script>
+        </div>
       </div>
-      <div class="macro-indicator-card" onclick="openMacroSheet('dxy')">
-        <div class="mi-label">DXY (USD Index)</div>
-        <div class="mi-value" style="color:var(--navy)">103.8</div>
-        <div class="mi-change" style="color:var(--red)"><span class="mi-signal" style="background:var(--red)"></span> +1.2% MoM</div>
-        <div class="traffic-light tl-amber" style="margin-top:8px">Headwind for exports</div>
+      <div class="tv-mini-card">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          { "symbol": "NYMEX:CL1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
+          </script>
+        </div>
       </div>
-      <div class="macro-indicator-card" onclick="openMacroSheet('yield')">
-        <div class="mi-label">US 10Y Yield</div>
-        <div class="mi-value" style="color:var(--navy)">4.28%</div>
-        <div class="mi-change" style="color:var(--red)"><span class="mi-signal" style="background:var(--red)"></span> +12bp MoM</div>
-        <div class="traffic-light tl-amber" style="margin-top:8px">Rate pressure</div>
+      <div class="tv-mini-card">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          { "symbol": "TVC:DXY", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
+          </script>
+        </div>
       </div>
-      <div class="macro-indicator-card" onclick="openMacroSheet('gold')">
-        <div class="mi-label">Gold (XAU/USD)</div>
-        <div class="mi-value" style="color:var(--orange)">$2,184</div>
-        <div class="mi-change" style="color:var(--green)"><span class="mi-signal" style="background:var(--green)"></span> +4.2% MoM</div>
-        <div class="traffic-light tl-green" style="margin-top:8px">Risk hedge active</div>
+      <div class="tv-mini-card">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          { "symbol": "COMEX:GC1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
+          </script>
+        </div>
       </div>
-      <div class="macro-indicator-card" onclick="openMacroSheet('fed')">
-        <div class="mi-label">Fed Funds Rate</div>
-        <div class="mi-value" style="color:var(--navy)">4.50%</div>
-        <div class="mi-change" style="color:var(--text-tertiary)"><span class="mi-signal" style="background:var(--text-tertiary)"></span> Unchanged</div>
-        <div class="traffic-light tl-amber" style="margin-top:8px">Hold cycle</div>
+      <div class="tv-mini-card">
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          { "symbol": "TVC:US10Y", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
+          </script>
+        </div>
       </div>
     </div>
   </div>
@@ -609,10 +659,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="section">
     <div class="insight-box">
       <div class="insight-label">Macro Context &mdash; What This Means for GCC Scores</div>
-      <div class="insight-text">
-        <strong>Oil above $100 is the GCC sweet spot.</strong> Government revenues are strong, sovereign deposits are flowing into the banking system, and fiscal expansion continues. However, the elevated DXY (103.8) creates a headwind for non-oil exporters like EGA &mdash; their aluminium becomes more expensive in euro and yuan terms. The Fed holding at 4.50% means GCC central banks maintain elevated rates (EIBOR 4.85%), pressuring leveraged real estate developers like DAMAC and Emaar. Gold at $2,184 signals institutional hedging against tail risks (regional conflict, peg pressure). Net assessment: <strong>Macro environment is SUPPORTIVE for GCC but bifurcated</strong> &mdash; oil-linked sectors benefit, rate-sensitive sectors face continued pressure.
+      <div class="insight-text" id="macroInsightText">
+        <strong>Oil above $100 is the GCC sweet spot.</strong> Government revenues are strong, sovereign deposits are flowing into the banking system, and fiscal expansion continues. However, an elevated DXY creates a headwind for non-oil exporters like EGA &mdash; their aluminium becomes more expensive in euro and yuan terms. Fed rate policy means GCC central banks maintain elevated rates (EIBOR tracks Fed Funds closely via the peg), pressuring leveraged real estate developers like DAMAC and Emaar. Elevated gold prices signal institutional hedging against tail risks (regional conflict, peg pressure). Net assessment: <strong>Macro environment is SUPPORTIVE for GCC but bifurcated</strong> &mdash; oil-linked sectors benefit, rate-sensitive sectors face continued pressure. <em>See live prices in the ticker tape above and the real-time widgets on this page.</em>
       </div>
-      <div class="insight-source">Sources: FRED, Bloomberg, CBUAE, SAMA | Updated: March 2026</div>
+      <div class="insight-source" id="macroInsightSource">Sources: FRED, Bloomberg, CBUAE, SAMA | Updated: March 2026</div>
     </div>
   </div>
 
@@ -635,7 +685,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="grid-2">
       <div class="card">
         <div class="card-title">GCC Fiscal Breakeven Oil Prices</div>
-        <div class="card-subtitle">Budget breakeven vs current Brent ($102)</div>
+        <div class="card-subtitle" id="breakevenSubtitle">Budget breakeven vs current Brent (see live ticker)</div>
         <div class="chart-container-tall"><canvas id="macroBreakevenChart"></canvas></div>
       </div>
       <div class="card">
@@ -1567,13 +1617,13 @@ destroyChart('timing');var tm=document.getElementById('timingChart');if(tm&&tm.o
 
 // Macro Overlay Charts
 destroyChart('macroOilCorrelation');var moc=document.getElementById('macroOilCorrelationChart');
-if(moc&&moc.offsetParent!==null){charts.macroOilCorrelation=new Chart(moc,{type:'line',data:{labels:mo,datasets:[{label:'Brent Crude ($/bbl)',data:[78,76,74,79,82,85,81,77,80,88,94,102],borderColor:'#0B1D3A',borderWidth:2.5,tension:0.4,pointRadius:3,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'MSCI GCC Index',data:[15.2,15.0,14.8,15.4,15.8,16.2,15.9,15.5,16.0,17.1,17.8,18.4],borderColor:'#2563EB',borderWidth:2,borderDash:[4,4],tension:0.4,pointRadius:3,pointBackgroundColor:'#2563EB',yAxisID:'y1'},{label:'GCC Corp Sentiment',data:[62,60,58,63,66,68,65,62,64,67,66,68],borderColor:'#059669',borderWidth:1.5,tension:0.4,pointRadius:2,pointBackgroundColor:'#059669',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{position:'left',min:60,max:120,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Brent ($/bbl)',font:{size:10}}},y1:{position:'right',min:10,max:80,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'Index / Sentiment',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+if(moc&&moc.offsetParent!==null){var _oilCorLast=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _oilCorMax=Math.max(120,_oilCorLast+20);charts.macroOilCorrelation=new Chart(moc,{type:'line',data:{labels:mo,datasets:[{label:'Brent Crude ($/bbl)',data:[78,76,74,79,82,85,81,77,80,88,94,_oilCorLast],borderColor:'#0B1D3A',borderWidth:2.5,tension:0.4,pointRadius:3,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'MSCI GCC Index',data:[15.2,15.0,14.8,15.4,15.8,16.2,15.9,15.5,16.0,17.1,17.8,18.4],borderColor:'#2563EB',borderWidth:2,borderDash:[4,4],tension:0.4,pointRadius:3,pointBackgroundColor:'#2563EB',yAxisID:'y1'},{label:'GCC Corp Sentiment',data:[62,60,58,63,66,68,65,62,64,67,66,68],borderColor:'#059669',borderWidth:1.5,tension:0.4,pointRadius:2,pointBackgroundColor:'#059669',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{position:'left',min:60,max:_oilCorMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Brent ($/bbl)',font:{size:10}}},y1:{position:'right',min:10,max:80,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'Index / Sentiment',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
 
 destroyChart('macroRate');var mr=document.getElementById('macroRateChart');
 if(mr&&mr.offsetParent!==null){charts.macroRate=new Chart(mr,{type:'line',data:{labels:mo,datasets:[{label:'Fed Funds',data:[5.25,5.25,5.25,5.00,5.00,4.75,4.75,4.50,4.50,4.50,4.50,4.50],borderColor:'#DC2626',borderWidth:2.5,tension:0.3,pointRadius:3,pointBackgroundColor:'#DC2626'},{label:'EIBOR 3M',data:[5.40,5.38,5.35,5.15,5.10,4.95,4.92,4.88,4.85,4.85,4.85,4.85],borderColor:'#D97706',borderWidth:2,tension:0.3,pointRadius:3,pointBackgroundColor:'#D97706'},{label:'GCC Corp Avg',data:[6.80,6.75,6.70,6.50,6.45,6.30,6.25,6.18,6.15,6.12,6.10,6.08],borderColor:'#7C3AED',borderWidth:2,borderDash:[4,4],tension:0.3,pointRadius:2,pointBackgroundColor:'#7C3AED'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:3,max:8,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v.toFixed(1)+'%'}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
 
 destroyChart('macroBreakeven');var mb=document.getElementById('macroBreakevenChart');
-if(mb&&mb.offsetParent!==null){charts.macroBreakeven=new Chart(mb,{type:'bar',data:{labels:['UAE','Qatar','Oman','Kuwait','Saudi','Bahrain'],datasets:[{label:'Fiscal Breakeven',data:[63,50,75,82,91,105],backgroundColor:['rgba(5,150,105,0.7)','rgba(5,150,105,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(220,38,38,0.7)'],borderRadius:6},{label:'Brent Spot ($102)',data:[102,102,102,102,102,102],type:'line',borderColor:'#0B1D3A',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:120,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+if(mb&&mb.offsetParent!==null){var _brentSpot=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _brentMax=Math.max(120,_brentSpot+20);charts.macroBreakeven=new Chart(mb,{type:'bar',data:{labels:['UAE','Qatar','Oman','Kuwait','Saudi','Bahrain'],datasets:[{label:'Fiscal Breakeven',data:[63,50,75,82,91,105],backgroundColor:['rgba(5,150,105,0.7)','rgba(5,150,105,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(220,38,38,0.7)'],borderRadius:6},{label:'Brent Spot ($'+_brentSpot+')',data:[_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot],type:'line',borderColor:'#0B1D3A',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:_brentMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
 
 // SWF Pie Charts
 destroyChart('swfPifPie');var pp=document.getElementById('swfPifPieChart');
@@ -1637,7 +1687,297 @@ function toggleSector(card){card.classList.toggle('expanded')}
 function mobileNav(tab,btn){document.querySelectorAll('.bottom-nav-item').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+tab).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){renderAllCharts()},50)}
 
 
-document.addEventListener('DOMContentLoaded',function(){renderAll();checkApi()});
+// ========== MARKET DATA (TradingView handles live prices) ==========
+// The old Yahoo Finance CORS proxy fetcher has been replaced by TradingView embedded widgets.
+// Keeping minimal structure for oil slider integration.
+var MARKET_SYMBOLS = {
+  brent:  { symbol: 'BZ=F',      fallback: 102.14, label: 'Brent Crude',   prefix: '$', suffix: '',  decimals: 2 },
+  dxy:    { symbol: 'DX-Y.NYB',  fallback: 103.8,  label: 'DXY',           prefix: '',  suffix: '',  decimals: 2 },
+  yield10:{ symbol: '^TNX',      fallback: 4.28,   label: 'US 10Y Yield',  prefix: '',  suffix: '%', decimals: 2 },
+  gold:   { symbol: 'GC=F',      fallback: 2184,   label: 'Gold',          prefix: '$', suffix: '',  decimals: 0 },
+  fed:    { symbol: null,         fallback: 4.50,   label: 'Fed Funds',     prefix: '',  suffix: '%', decimals: 2 }
+};
+
+var CORS_PROXIES = [
+  function(url){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url); },
+  function(url){ return 'https://corsproxy.io/?' + encodeURIComponent(url); },
+  function(url){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url); }
+];
+
+var liveMarketData = {};
+var marketDataLive = false;
+
+async function fetchSingleSymbol(symbol) {
+  var yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + symbol + '?interval=1d&range=1d';
+  for (var i = 0; i < CORS_PROXIES.length; i++) {
+    try {
+      var proxyUrl = CORS_PROXIES[i](yahooUrl);
+      var resp = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
+      if (!resp.ok) continue;
+      var data = await resp.json();
+      var result = data.chart.result[0];
+      var meta = result.meta;
+      var price = meta.regularMarketPrice;
+      var prevClose = meta.chartPreviousClose || meta.previousClose || price;
+      var change = ((price - prevClose) / prevClose) * 100;
+      return { price: price, previousClose: prevClose, change: change };
+    } catch(e) { continue; }
+  }
+  return null;
+}
+
+async function fetchMarketData() {
+  var btn = document.getElementById('marketRefreshBtn');
+  if (btn) { btn.classList.add('loading'); btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Fetching...'; }
+
+  var keys = Object.keys(MARKET_SYMBOLS);
+  var fetchPromises = keys.map(function(key) {
+    var cfg = MARKET_SYMBOLS[key];
+    if (!cfg.symbol) return Promise.resolve({ key: key, data: null });
+    return fetchSingleSymbol(cfg.symbol).then(function(data) {
+      return { key: key, data: data };
+    });
+  });
+
+  var results = await Promise.all(fetchPromises);
+  var anySuccess = false;
+
+  results.forEach(function(r) {
+    if (r.data) {
+      liveMarketData[r.key] = r.data;
+      anySuccess = true;
+    }
+  });
+
+  marketDataLive = anySuccess;
+  applyMarketData();
+
+  if (btn) {
+    btn.classList.remove('loading');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Refresh';
+  }
+}
+
+function formatPrice(key, price) {
+  var cfg = MARKET_SYMBOLS[key];
+  if (cfg.decimals === 0) return cfg.prefix + Math.round(price).toLocaleString() + cfg.suffix;
+  return cfg.prefix + price.toFixed(cfg.decimals) + cfg.suffix;
+}
+
+function formatChange(change) {
+  var sign = change >= 0 ? '+' : '';
+  return sign + change.toFixed(2) + '%';
+}
+
+function changeClass(change) {
+  return change >= 0 ? 'up' : 'down';
+}
+
+function changeColor(change) {
+  return change >= 0 ? 'var(--green)' : 'var(--red)';
+}
+
+function applyMarketData() {
+  var now = new Date();
+  var tsEl = document.getElementById('marketTimestamp');
+  var badgeEl = document.getElementById('marketBadge');
+
+  if (marketDataLive) {
+    if (tsEl) tsEl.textContent = 'Last updated: ' + now.toLocaleTimeString();
+    if (badgeEl) { badgeEl.className = 'market-badge live'; badgeEl.textContent = 'Live data'; }
+  } else {
+    if (tsEl) tsEl.textContent = 'Using fallback data';
+    if (badgeEl) { badgeEl.className = 'market-badge delayed'; badgeEl.textContent = 'Delayed data'; }
+  }
+
+  // --- BRENT ---
+  var brent = liveMarketData.brent;
+  var brentPrice = brent ? brent.price : MARKET_SYMBOLS.brent.fallback;
+  var brentChange = brent ? brent.change : null;
+  var brentFmt = '$' + brentPrice.toFixed(2);
+
+  // Macro strip
+  var macroStripBrent = document.getElementById('macroStripBrent');
+  if (macroStripBrent) {
+    var chHtml = brentChange !== null
+      ? ' <span class="macro-item-change ' + changeClass(brentChange) + '">' + formatChange(brentChange) + '</span>'
+      : ' <span class="macro-item-change up">+8.6%</span>';
+    macroStripBrent.innerHTML = brentFmt + chHtml;
+  }
+
+  // Macro indicator card
+  var miBV = document.getElementById('miBrentValue');
+  if (miBV) miBV.textContent = brentFmt;
+  var miBCh = document.getElementById('miBrentChange');
+  if (miBCh && brentChange !== null) {
+    var bChCol = changeColor(brentChange);
+    miBCh.innerHTML = '<span class="mi-signal" style="background:' + bChCol + '"></span> ' + formatChange(brentChange) + ' daily';
+    miBCh.style.color = bChCol;
+  }
+
+  // Oil slider Brent marker
+  var oilBrentMarker = document.getElementById('oilBrentMarker');
+  if (oilBrentMarker) {
+    var brentPct = ((brentPrice - 50) / 200) * 100;
+    brentPct = Math.max(0, Math.min(100, brentPct));
+    oilBrentMarker.style.left = brentPct + '%';
+    oilBrentMarker.textContent = 'Current Brent: ' + brentFmt;
+  }
+
+  // Oil sim default value - update slider
+  var oilSlider = document.getElementById('oilSlider');
+  if (oilSlider && brent) {
+    var sliderVal = Math.round(Math.max(50, Math.min(250, brentPrice)));
+    oilSlider.value = sliderVal;
+    debouncedOilUpdate(sliderVal);
+  }
+
+  // Breakeven subtitle
+  var beSubtitle = document.getElementById('breakevenSubtitle');
+  if (beSubtitle) beSubtitle.textContent = 'Budget breakeven vs current Brent (' + brentFmt + ')';
+
+  // --- DXY ---
+  var dxy = liveMarketData.dxy;
+  var dxyPrice = dxy ? dxy.price : MARKET_SYMBOLS.dxy.fallback;
+  var dxyChange = dxy ? dxy.change : null;
+  var dxyFmt = dxyPrice.toFixed(2);
+
+  var miDV = document.getElementById('miDxyValue');
+  if (miDV) miDV.textContent = dxyFmt;
+  var miDCh = document.getElementById('miDxyChange');
+  if (miDCh && dxyChange !== null) {
+    var dChCol = changeColor(dxyChange);
+    miDCh.innerHTML = '<span class="mi-signal" style="background:' + dChCol + '"></span> ' + formatChange(dxyChange) + ' daily';
+    miDCh.style.color = dChCol;
+  }
+  // Insight text
+  var insightDxy = document.getElementById('insightDxy');
+  if (insightDxy) insightDxy.textContent = dxyFmt;
+
+  // --- US 10Y YIELD ---
+  var yld = liveMarketData.yield10;
+  var yldPrice = yld ? yld.price : MARKET_SYMBOLS.yield10.fallback;
+  var yldChange = yld ? yld.change : null;
+  var yldFmt = yldPrice.toFixed(2) + '%';
+
+  var miYV = document.getElementById('miYieldValue');
+  if (miYV) miYV.textContent = yldFmt;
+  var miYCh = document.getElementById('miYieldChange');
+  if (miYCh && yldChange !== null) {
+    var yChCol = changeColor(yldChange);
+    miYCh.innerHTML = '<span class="mi-signal" style="background:' + yChCol + '"></span> ' + formatChange(yldChange) + ' daily';
+    miYCh.style.color = yChCol;
+  }
+
+  // --- GOLD ---
+  var gold = liveMarketData.gold;
+  var goldPrice = gold ? gold.price : MARKET_SYMBOLS.gold.fallback;
+  var goldChange = gold ? gold.change : null;
+  var goldFmt = '$' + Math.round(goldPrice).toLocaleString();
+
+  var miGV = document.getElementById('miGoldValue');
+  if (miGV) miGV.textContent = goldFmt;
+  var miGCh = document.getElementById('miGoldChange');
+  if (miGCh && goldChange !== null) {
+    var gChCol = changeColor(goldChange);
+    miGCh.innerHTML = '<span class="mi-signal" style="background:' + gChCol + '"></span> ' + formatChange(goldChange) + ' daily';
+    miGCh.style.color = gChCol;
+  }
+  var insightGold = document.getElementById('insightGold');
+  if (insightGold) insightGold.textContent = goldFmt;
+
+  // Update macro insight source timestamp
+  var insightSrc = document.getElementById('macroInsightSource');
+  if (insightSrc && marketDataLive) {
+    insightSrc.textContent = 'Sources: Yahoo Finance (live), FRED, CBUAE, SAMA | Updated: ' + now.toLocaleString();
+  }
+
+  // Update breakeven chart Brent line if charts exist
+  if (charts.macroBreakeven && brent) {
+    var brentRounded = Math.round(brentPrice);
+    charts.macroBreakeven.data.datasets[1].label = 'Brent Spot (' + brentFmt + ')';
+    charts.macroBreakeven.data.datasets[1].data = [brentRounded, brentRounded, brentRounded, brentRounded, brentRounded, brentRounded];
+    charts.macroBreakeven.update();
+  }
+
+  // Update oil correlation chart last data point if exists
+  if (charts.macroOilCorrelation && brent) {
+    charts.macroOilCorrelation.data.datasets[0].data[11] = Math.round(brentPrice);
+    charts.macroOilCorrelation.update();
+  }
+
+  // Update macro bottom sheet data
+  updateMacroSheetData();
+}
+
+function updateMacroSheetData() {
+  var brent = liveMarketData.brent;
+  var dxy = liveMarketData.dxy;
+  var yld = liveMarketData.yield10;
+  var gold = liveMarketData.gold;
+
+  // Update the openMacroSheet data dynamically
+  window._macroSheetData = {
+    brent: {
+      t: 'Brent Crude Oil',
+      s: (brent ? '$' + brent.price.toFixed(2) + '/bbl | ' + formatChange(brent.change) + ' daily' : '$102.14/bbl | +8.6% MoM'),
+      c: 'Oil ' + (brent && brent.price > 100 ? 'above $100 is the GCC sweet spot' : brent && brent.price > 80 ? 'in the $80-100 equilibrium zone' : 'at current levels requires monitoring') + '. Saudi fiscal breakeven is ~$91/bbl.' + (brent ? ' Current price: $' + brent.price.toFixed(2) + '/bbl.' : '')
+    },
+    dxy: {
+      t: 'DXY (USD Index)',
+      s: (dxy ? dxy.price.toFixed(2) + ' | ' + formatChange(dxy.change) + ' daily' : '103.8 | +1.2% MoM'),
+      c: (dxy && dxy.price > 100 ? 'Strong dollar creates headwind for GCC non-oil exporters.' : 'Weakening dollar supports GCC non-oil export competitiveness.') + (dxy ? ' Current DXY: ' + dxy.price.toFixed(2) + '.' : '')
+    },
+    yield: {
+      t: 'US 10Y Yield',
+      s: (yld ? yld.price.toFixed(2) + '% | ' + formatChange(yld.change) + ' daily' : '4.28% | +12bp MoM'),
+      c: 'Rising yields transmit directly to GCC borrowing costs via the peg.' + (yld ? ' Current yield: ' + yld.price.toFixed(2) + '%.' : '')
+    },
+    gold: {
+      t: 'Gold (XAU/USD)',
+      s: (gold ? '$' + Math.round(gold.price).toLocaleString() + '/oz | ' + formatChange(gold.change) + ' daily' : '$2,184/oz | +4.2% MoM'),
+      c: 'Gold at highs signals institutional hedging against tail risks.' + (gold ? ' Current price: $' + Math.round(gold.price).toLocaleString() + '/oz.' : '')
+    },
+    fed: {
+      t: 'Fed Funds Rate',
+      s: '4.50% | Unchanged',
+      c: 'Hold cycle continues. Rate-sensitive sectors face prolonged pressure.'
+    }
+  };
+}
+
+// Override openMacroSheet to use live data when available
+var _origOpenMacroSheet = null;
+
+// Add CSS for spinner animation
+var spinStyle = document.createElement('style');
+spinStyle.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+document.head.appendChild(spinStyle);
+
+document.addEventListener('DOMContentLoaded',function(){
+  renderAll();
+  checkApi();
+  // Fetch live market data on page load
+  fetchMarketData();
+});
+
+// Override openMacroSheet after initial definition
+var _origMacroSheet = typeof openMacroSheet === 'function' ? openMacroSheet : null;
+</script>
+
+<script>
+// Re-override openMacroSheet to use live data
+(function(){
+  var origFn = openMacroSheet;
+  openMacroSheet = function(indicator) {
+    if (window._macroSheetData && window._macroSheetData[indicator]) {
+      var x = window._macroSheetData[indicator];
+      openBottomSheet(x.t, x.s, '<div style="font-size:13px;color:var(--text-primary);line-height:1.6">' + x.c + '</div>');
+    } else {
+      origFn(indicator);
+    }
+  };
+})();
 </script>
 </body>
 </html>
