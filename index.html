@@ -966,7 +966,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
 
       <div class="oil-slider-container">
-        <div class="oil-slider-brent" id="oilBrentMarker" style="left:26%">Current Brent: $102</div>
+        <div class="oil-slider-brent" id="oilBrentMarker" style="left:26%">Scenario: $102 (see ticker for live)</div>
         <input type="range" class="oil-slider" id="oilSlider" min="50" max="250" value="102" step="1" oninput="debouncedOilUpdate(this.value)">
         <div class="oil-slider-labels">
           <div class="oil-slider-label">$50<br><span style="color:var(--red)">Crisis</span></div>
@@ -1672,9 +1672,9 @@ function openEntitySheet(type,id){
 if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | $930B AUM',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary).'},mubadala:{n:'Mubadala Investment Company',c:'UAE | $302B AUM',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target.'},adq:{n:'Abu Dhabi Developmental Holding',c:'UAE | $200B+ AUM',s:'Newest major GCC SWF. Terna Energy JV ($2.9B). LDC stake for food security. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | $510B AUM',s:'Diversified global investor. PSG, Harrods. Post-World Cup pivot toward tech and sustainability.'}};
 var s=d[id];if(s)openBottomSheet(s.n,s.c,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+s.s+'</div>')}}
 
-// Macro bottom sheet
+// Macro bottom sheet - first definition (overridden below with live-aware version)
 function openMacroSheet(indicator){
-var d={brent:{t:'Brent Crude Oil',s:'$102.14/bbl | +8.6% MoM',c:'Oil above $100 is the GCC sweet spot. Government revenues are running significant surpluses. Saudi fiscal breakeven is ~$91/bbl.'},dxy:{t:'DXY (USD Index)',s:'103.8 | +1.2% MoM',c:'Strong dollar creates headwind for GCC non-oil exporters.'},yield:{t:'US 10Y Yield',s:'4.28% | +12bp MoM',c:'Rising yields transmit directly to GCC borrowing costs via the peg.'},gold:{t:'Gold (XAU/USD)',s:'$2,184/oz | +4.2% MoM',c:'Gold at highs signals institutional hedging against tail risks.'},fed:{t:'Fed Funds Rate',s:'4.50% | Unchanged',c:'Hold cycle continues. Rate-sensitive sectors face prolonged pressure.'}};
+var d={brent:{t:'Brent Crude Oil',s:'Live via TradingView',c:'Brent crude is the primary GCC fiscal health indicator. Saudi breakeven is ~$91/bbl. See live widget for current price.'},dxy:{t:'DXY (USD Index)',s:'Live via TradingView',c:'Strong dollar creates headwind for GCC non-oil exporters. GCC pegs amplify USD movements.'},yield:{t:'US 10Y Yield',s:'Live via TradingView',c:'Rising yields transmit directly to GCC borrowing costs via the peg.'},gold:{t:'Gold (XAU/USD)',s:'Live via TradingView',c:'Elevated gold signals institutional hedging against tail risks.'},fed:{t:'Fed Funds Rate',s:'Live via TradingView',c:'Hold cycle continues. Rate-sensitive sectors face prolonged pressure.'}};
 var x=d[indicator];if(x)openBottomSheet(x.t,x.s,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+x.c+'</div>')}
 
 // Collapsible toggle
@@ -1698,286 +1698,29 @@ var MARKET_SYMBOLS = {
   fed:    { symbol: null,         fallback: 4.50,   label: 'Fed Funds',     prefix: '',  suffix: '%', decimals: 2 }
 };
 
-var CORS_PROXIES = [
-  function(url){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url); },
-  function(url){ return 'https://corsproxy.io/?' + encodeURIComponent(url); },
-  function(url){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url); }
-];
-
-var liveMarketData = {};
-var marketDataLive = false;
-
-async function fetchSingleSymbol(symbol) {
-  var yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + symbol + '?interval=1d&range=1d';
-  for (var i = 0; i < CORS_PROXIES.length; i++) {
-    try {
-      var proxyUrl = CORS_PROXIES[i](yahooUrl);
-      var resp = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
-      if (!resp.ok) continue;
-      var data = await resp.json();
-      var result = data.chart.result[0];
-      var meta = result.meta;
-      var price = meta.regularMarketPrice;
-      var prevClose = meta.chartPreviousClose || meta.previousClose || price;
-      var change = ((price - prevClose) / prevClose) * 100;
-      return { price: price, previousClose: prevClose, change: change };
-    } catch(e) { continue; }
-  }
-  return null;
+// TradingView widgets now handle all live price display.
+// fetchMarketData kept as no-op for backward compatibility.
+function fetchMarketData() {
+  console.log('Market data is provided by TradingView embedded widgets.');
 }
 
-async function fetchMarketData() {
-  var btn = document.getElementById('marketRefreshBtn');
-  if (btn) { btn.classList.add('loading'); btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Fetching...'; }
-
-  var keys = Object.keys(MARKET_SYMBOLS);
-  var fetchPromises = keys.map(function(key) {
-    var cfg = MARKET_SYMBOLS[key];
-    if (!cfg.symbol) return Promise.resolve({ key: key, data: null });
-    return fetchSingleSymbol(cfg.symbol).then(function(data) {
-      return { key: key, data: data };
-    });
-  });
-
-  var results = await Promise.all(fetchPromises);
-  var anySuccess = false;
-
-  results.forEach(function(r) {
-    if (r.data) {
-      liveMarketData[r.key] = r.data;
-      anySuccess = true;
-    }
-  });
-
-  marketDataLive = anySuccess;
-  applyMarketData();
-
-  if (btn) {
-    btn.classList.remove('loading');
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Refresh';
-  }
-}
-
-function formatPrice(key, price) {
-  var cfg = MARKET_SYMBOLS[key];
-  if (cfg.decimals === 0) return cfg.prefix + Math.round(price).toLocaleString() + cfg.suffix;
-  return cfg.prefix + price.toFixed(cfg.decimals) + cfg.suffix;
-}
-
-function formatChange(change) {
-  var sign = change >= 0 ? '+' : '';
-  return sign + change.toFixed(2) + '%';
-}
-
-function changeClass(change) {
-  return change >= 0 ? 'up' : 'down';
-}
-
-function changeColor(change) {
-  return change >= 0 ? 'var(--green)' : 'var(--red)';
-}
-
-function applyMarketData() {
-  var now = new Date();
-  var tsEl = document.getElementById('marketTimestamp');
-  var badgeEl = document.getElementById('marketBadge');
-
-  if (marketDataLive) {
-    if (tsEl) tsEl.textContent = 'Last updated: ' + now.toLocaleTimeString();
-    if (badgeEl) { badgeEl.className = 'market-badge live'; badgeEl.textContent = 'Live data'; }
-  } else {
-    if (tsEl) tsEl.textContent = 'Using fallback data';
-    if (badgeEl) { badgeEl.className = 'market-badge delayed'; badgeEl.textContent = 'Delayed data'; }
-  }
-
-  // --- BRENT ---
-  var brent = liveMarketData.brent;
-  var brentPrice = brent ? brent.price : MARKET_SYMBOLS.brent.fallback;
-  var brentChange = brent ? brent.change : null;
-  var brentFmt = '$' + brentPrice.toFixed(2);
-
-  // Macro strip
-  var macroStripBrent = document.getElementById('macroStripBrent');
-  if (macroStripBrent) {
-    var chHtml = brentChange !== null
-      ? ' <span class="macro-item-change ' + changeClass(brentChange) + '">' + formatChange(brentChange) + '</span>'
-      : ' <span class="macro-item-change up">+8.6%</span>';
-    macroStripBrent.innerHTML = brentFmt + chHtml;
-  }
-
-  // Macro indicator card
-  var miBV = document.getElementById('miBrentValue');
-  if (miBV) miBV.textContent = brentFmt;
-  var miBCh = document.getElementById('miBrentChange');
-  if (miBCh && brentChange !== null) {
-    var bChCol = changeColor(brentChange);
-    miBCh.innerHTML = '<span class="mi-signal" style="background:' + bChCol + '"></span> ' + formatChange(brentChange) + ' daily';
-    miBCh.style.color = bChCol;
-  }
-
-  // Oil slider Brent marker
-  var oilBrentMarker = document.getElementById('oilBrentMarker');
-  if (oilBrentMarker) {
-    var brentPct = ((brentPrice - 50) / 200) * 100;
-    brentPct = Math.max(0, Math.min(100, brentPct));
-    oilBrentMarker.style.left = brentPct + '%';
-    oilBrentMarker.textContent = 'Current Brent: ' + brentFmt;
-  }
-
-  // Oil sim default value - update slider
-  var oilSlider = document.getElementById('oilSlider');
-  if (oilSlider && brent) {
-    var sliderVal = Math.round(Math.max(50, Math.min(250, brentPrice)));
-    oilSlider.value = sliderVal;
-    debouncedOilUpdate(sliderVal);
-  }
-
-  // Breakeven subtitle
-  var beSubtitle = document.getElementById('breakevenSubtitle');
-  if (beSubtitle) beSubtitle.textContent = 'Budget breakeven vs current Brent (' + brentFmt + ')';
-
-  // --- DXY ---
-  var dxy = liveMarketData.dxy;
-  var dxyPrice = dxy ? dxy.price : MARKET_SYMBOLS.dxy.fallback;
-  var dxyChange = dxy ? dxy.change : null;
-  var dxyFmt = dxyPrice.toFixed(2);
-
-  var miDV = document.getElementById('miDxyValue');
-  if (miDV) miDV.textContent = dxyFmt;
-  var miDCh = document.getElementById('miDxyChange');
-  if (miDCh && dxyChange !== null) {
-    var dChCol = changeColor(dxyChange);
-    miDCh.innerHTML = '<span class="mi-signal" style="background:' + dChCol + '"></span> ' + formatChange(dxyChange) + ' daily';
-    miDCh.style.color = dChCol;
-  }
-  // Insight text
-  var insightDxy = document.getElementById('insightDxy');
-  if (insightDxy) insightDxy.textContent = dxyFmt;
-
-  // --- US 10Y YIELD ---
-  var yld = liveMarketData.yield10;
-  var yldPrice = yld ? yld.price : MARKET_SYMBOLS.yield10.fallback;
-  var yldChange = yld ? yld.change : null;
-  var yldFmt = yldPrice.toFixed(2) + '%';
-
-  var miYV = document.getElementById('miYieldValue');
-  if (miYV) miYV.textContent = yldFmt;
-  var miYCh = document.getElementById('miYieldChange');
-  if (miYCh && yldChange !== null) {
-    var yChCol = changeColor(yldChange);
-    miYCh.innerHTML = '<span class="mi-signal" style="background:' + yChCol + '"></span> ' + formatChange(yldChange) + ' daily';
-    miYCh.style.color = yChCol;
-  }
-
-  // --- GOLD ---
-  var gold = liveMarketData.gold;
-  var goldPrice = gold ? gold.price : MARKET_SYMBOLS.gold.fallback;
-  var goldChange = gold ? gold.change : null;
-  var goldFmt = '$' + Math.round(goldPrice).toLocaleString();
-
-  var miGV = document.getElementById('miGoldValue');
-  if (miGV) miGV.textContent = goldFmt;
-  var miGCh = document.getElementById('miGoldChange');
-  if (miGCh && goldChange !== null) {
-    var gChCol = changeColor(goldChange);
-    miGCh.innerHTML = '<span class="mi-signal" style="background:' + gChCol + '"></span> ' + formatChange(goldChange) + ' daily';
-    miGCh.style.color = gChCol;
-  }
-  var insightGold = document.getElementById('insightGold');
-  if (insightGold) insightGold.textContent = goldFmt;
-
-  // Update macro insight source timestamp
-  var insightSrc = document.getElementById('macroInsightSource');
-  if (insightSrc && marketDataLive) {
-    insightSrc.textContent = 'Sources: Yahoo Finance (live), FRED, CBUAE, SAMA | Updated: ' + now.toLocaleString();
-  }
-
-  // Update breakeven chart Brent line if charts exist
-  if (charts.macroBreakeven && brent) {
-    var brentRounded = Math.round(brentPrice);
-    charts.macroBreakeven.data.datasets[1].label = 'Brent Spot (' + brentFmt + ')';
-    charts.macroBreakeven.data.datasets[1].data = [brentRounded, brentRounded, brentRounded, brentRounded, brentRounded, brentRounded];
-    charts.macroBreakeven.update();
-  }
-
-  // Update oil correlation chart last data point if exists
-  if (charts.macroOilCorrelation && brent) {
-    charts.macroOilCorrelation.data.datasets[0].data[11] = Math.round(brentPrice);
-    charts.macroOilCorrelation.update();
-  }
-
-  // Update macro bottom sheet data
-  updateMacroSheetData();
-}
-
-function updateMacroSheetData() {
-  var brent = liveMarketData.brent;
-  var dxy = liveMarketData.dxy;
-  var yld = liveMarketData.yield10;
-  var gold = liveMarketData.gold;
-
-  // Update the openMacroSheet data dynamically
-  window._macroSheetData = {
-    brent: {
-      t: 'Brent Crude Oil',
-      s: (brent ? '$' + brent.price.toFixed(2) + '/bbl | ' + formatChange(brent.change) + ' daily' : '$102.14/bbl | +8.6% MoM'),
-      c: 'Oil ' + (brent && brent.price > 100 ? 'above $100 is the GCC sweet spot' : brent && brent.price > 80 ? 'in the $80-100 equilibrium zone' : 'at current levels requires monitoring') + '. Saudi fiscal breakeven is ~$91/bbl.' + (brent ? ' Current price: $' + brent.price.toFixed(2) + '/bbl.' : '')
-    },
-    dxy: {
-      t: 'DXY (USD Index)',
-      s: (dxy ? dxy.price.toFixed(2) + ' | ' + formatChange(dxy.change) + ' daily' : '103.8 | +1.2% MoM'),
-      c: (dxy && dxy.price > 100 ? 'Strong dollar creates headwind for GCC non-oil exporters.' : 'Weakening dollar supports GCC non-oil export competitiveness.') + (dxy ? ' Current DXY: ' + dxy.price.toFixed(2) + '.' : '')
-    },
-    yield: {
-      t: 'US 10Y Yield',
-      s: (yld ? yld.price.toFixed(2) + '% | ' + formatChange(yld.change) + ' daily' : '4.28% | +12bp MoM'),
-      c: 'Rising yields transmit directly to GCC borrowing costs via the peg.' + (yld ? ' Current yield: ' + yld.price.toFixed(2) + '%.' : '')
-    },
-    gold: {
-      t: 'Gold (XAU/USD)',
-      s: (gold ? '$' + Math.round(gold.price).toLocaleString() + '/oz | ' + formatChange(gold.change) + ' daily' : '$2,184/oz | +4.2% MoM'),
-      c: 'Gold at highs signals institutional hedging against tail risks.' + (gold ? ' Current price: $' + Math.round(gold.price).toLocaleString() + '/oz.' : '')
-    },
-    fed: {
-      t: 'Fed Funds Rate',
-      s: '4.50% | Unchanged',
-      c: 'Hold cycle continues. Rate-sensitive sectors face prolonged pressure.'
-    }
+// openMacroSheet - simplified, no longer references hardcoded prices
+function openMacroSheet(indicator) {
+  var d = {
+    brent: { t: 'Brent Crude Oil', s: 'Live via TradingView', c: 'Brent crude is the primary benchmark for GCC fiscal health. Oil above $100 is the GCC sweet spot. Saudi fiscal breakeven is ~$91/bbl. See the live chart widget above for current price and trend.' },
+    dxy: { t: 'DXY (USD Index)', s: 'Live via TradingView', c: 'The USD index directly impacts GCC competitiveness. A strong dollar creates headwind for non-oil exporters. GCC currencies are pegged to USD, so DXY movements affect trade balance dynamics.' },
+    yield: { t: 'US 10Y Yield', s: 'Live via TradingView', c: 'Rising yields transmit directly to GCC borrowing costs via the currency peg. EIBOR tracks the Fed closely. Rate-sensitive sectors (real estate, leveraged corporates) face pressure when yields rise.' },
+    gold: { t: 'Gold (XAU/USD)', s: 'Live via TradingView', c: 'Gold at elevated levels signals institutional hedging against tail risks including regional conflict, peg pressure, and geopolitical uncertainty. GCC central banks are net gold buyers.' },
+    fed: { t: 'Fed Funds Rate', s: 'Live via TradingView', c: 'The Fed Funds rate determines GCC monetary policy via the peg. Hold cycles maintain pressure on leveraged sectors. Rate cuts would release significant pent-up demand across GCC real estate and corporate lending.' }
   };
+  var x = d[indicator];
+  if (x) openBottomSheet(x.t, x.s, '<div style="font-size:13px;color:var(--text-primary);line-height:1.6">' + x.c + '</div>');
 }
 
-// Override openMacroSheet to use live data when available
-var _origOpenMacroSheet = null;
-
-// Add CSS for spinner animation
-var spinStyle = document.createElement('style');
-spinStyle.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
-document.head.appendChild(spinStyle);
-
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function() {
   renderAll();
   checkApi();
-  // Fetch live market data on page load
-  fetchMarketData();
 });
-
-// Override openMacroSheet after initial definition
-var _origMacroSheet = typeof openMacroSheet === 'function' ? openMacroSheet : null;
-</script>
-
-<script>
-// Re-override openMacroSheet to use live data
-(function(){
-  var origFn = openMacroSheet;
-  openMacroSheet = function(indicator) {
-    if (window._macroSheetData && window._macroSheetData[indicator]) {
-      var x = window._macroSheetData[indicator];
-      openBottomSheet(x.t, x.s, '<div style="font-size:13px;color:var(--text-primary);line-height:1.6">' + x.c + '</div>');
-    } else {
-      origFn(indicator);
-    }
-  };
-})();
 </script>
 </body>
 </html>
