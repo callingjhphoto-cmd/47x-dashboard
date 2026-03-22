@@ -23,8 +23,11 @@
   --shadow-md:0 4px 12px rgba(0,0,0,0.06);
   --shadow-lg:0 8px 24px rgba(0,0,0,0.08);
   --radius:16px;--radius-sm:10px;--radius-xs:6px;
+  --transition-fast:0.15s ease;
+  --transition-med:0.25s ease;
+  --transition-slow:0.35s cubic-bezier(0.4,0,0.2,1);
 }
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:'tnum' 1,'ss01' 1;font-variant-numeric:tabular-nums}
 ::selection{background:var(--accent);color:#fff}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -41,14 +44,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
 .nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
 .header-right{display:flex;align-items:center;gap:14px}
-.company-selector{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text-primary);background:var(--surface);cursor:pointer;min-width:200px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+
 .api-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
 .api-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
-.api-dot.live{background:var(--green)}.api-dot.offline{background:var(--red)}
+.api-dot.live{background:var(--green);animation:none}.api-dot.offline{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
 .main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
-.section{margin-bottom:32px}
+.section{margin-bottom:40px}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
 .level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
@@ -104,7 +107,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .signal-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
 .signal-detail{font-size:12px;color:var(--text-secondary);line-height:1.4}
 
-.arb-card{border-left:3px solid var(--green);padding:20px;background:linear-gradient(135deg,var(--green-light) 0%,var(--surface) 100%)}
+.arb-card{border-left:3px solid var(--green);padding:20px;background:var(--surface)}
 .arb-card .card-title{color:var(--green);display:flex;align-items:center;gap:8px}
 .arb-urgency{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
 .urgency-high{background:var(--red-light);color:var(--red)}.urgency-medium{background:var(--orange-light);color:var(--orange)}.urgency-low{background:var(--accent-light);color:var(--accent)}
@@ -112,10 +115,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .arb-metric:last-child{border-bottom:none}
 .arb-metric-label{color:var(--text-secondary)}.arb-metric-value{font-weight:600}
 
-.opp-score{display:flex;align-items:center;gap:20px;padding:24px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--radius);color:#fff;margin-bottom:16px}
-.opp-score-value{font-size:52px;font-weight:800;line-height:1;letter-spacing:-2px;background:linear-gradient(135deg,#34D399,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.opp-score-label{font-size:14px;font-weight:500;color:rgba(255,255,255,0.7)}
-.opp-score-detail{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
+.opp-score{display:flex;align-items:center;gap:20px;padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px}
+.opp-score-value{font-size:52px;font-weight:800;line-height:1;letter-spacing:-2px;color:var(--green)}
+.opp-score-label{font-size:14px;font-weight:600;color:var(--text-primary)}
+.opp-score-detail{font-size:12px;color:var(--text-secondary);margin-top:4px}
 
 .timeline-item{display:flex;gap:14px;padding:10px 0;position:relative}
 .timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;position:relative;z-index:1}
@@ -130,8 +133,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .action-text .impact{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;color:var(--green)}
 
 .comp-table{width:100%;border-collapse:collapse;font-size:13px}
-.comp-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
-.comp-table tbody td{padding:12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.comp-table thead th{text-align:left;padding:12px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.comp-table tbody td{padding:14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
 .comp-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
 .comp-table tbody tr:hover{background:var(--bg)}
 .comp-table .score-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
@@ -147,7 +150,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px}
 .company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px}
-.company-info h1{font-size:26px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--navy)}
+.company-info h1{font-size:32px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--navy)}
 .company-info .company-meta{font-size:13px;color:var(--text-secondary)}
 .company-info .company-meta strong{color:var(--text-primary)}
 
@@ -178,7 +181,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .pricing-features li{padding:6px 0;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
 .pricing-features li::before{content:'\2713';color:var(--green);font-weight:700;font-size:12px}
 
-.insight-box{background:linear-gradient(135deg,var(--accent-light),rgba(124,58,237,0.05));border:1px solid rgba(37,99,235,0.15);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+.insight-box{background:var(--accent-light);border:1px solid rgba(37,99,235,0.12);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
 .insight-box .insight-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px}
 .insight-box .insight-text{font-size:13px;color:var(--text-primary);line-height:1.5}
 .insight-box .insight-source{font-size:11px;color:var(--text-tertiary);margin-top:6px}
@@ -241,29 +244,29 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .dual-ring-item .dr-score{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;letter-spacing:-1px;margin:0 auto 8px;position:relative}
 .dual-ring-item .dr-score::before{content:'';position:absolute;inset:0;border-radius:50%;border:5px solid var(--border-light)}
 .dual-ring-item .dr-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
-.dr-plus{font-size:32px;font-weight:300;color:var(--border);align-self:center}
-.dr-equals{font-size:32px;font-weight:300;color:var(--border);align-self:center}
+.dr-plus{font-size:24px;font-weight:300;color:var(--border);align-self:center}
+.dr-equals{font-size:24px;font-weight:300;color:var(--border);align-self:center}
 
 .warning-matrix-cell{padding:8px 12px;font-size:11px;text-align:center;border-bottom:1px solid var(--border-light)}
 .warning-matrix-header{font-weight:700;text-transform:uppercase;letter-spacing:0.5px;font-size:10px;color:var(--text-tertiary);padding:10px 12px;border-bottom:2px solid var(--border)}
 
 /* Oil Price Scenario Simulator */
 .oil-sim{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
-.oil-sim::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#DC2626 0%,#DC2626 8%,#D97706 20%,#059669 35%,#059669 50%,#2563EB 55%,#D97706 65%,#DC2626 80%,#7C3AED 100%)}
+.oil-sim::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
 .oil-sim-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .oil-sim-title{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-0.5px}
 .oil-sim-price{font-size:48px;font-weight:800;letter-spacing:-2px;font-family:'JetBrains Mono',monospace;line-height:1;transition:color 0.3s}
 .oil-sim-price-label{font-size:12px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
 .oil-sim-band{font-size:16px;font-weight:700;padding:4px 16px;border-radius:100px;display:inline-block;margin-top:8px;transition:all 0.3s}
 
-.oil-slider-container{position:relative;padding:0 0 40px;margin:0 0 28px}
-.oil-slider{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:5px;outline:none;cursor:pointer;transition:background 0.3s;position:relative;z-index:2}
-.oil-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:var(--navy);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15);transition:transform 0.15s}
+.oil-slider-container{position:relative;padding:36px 0 40px;margin:0 0 28px}
+.oil-slider{-webkit-appearance:none;appearance:none;width:100%;height:14px;border-radius:5px;outline:none;cursor:pointer;transition:background 0.3s;position:relative;z-index:2}
+.oil-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:44px;height:44px;border-radius:50%;background:var(--navy);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15);transition:transform 0.15s}
 .oil-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
-.oil-slider::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--navy);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15)}
+.oil-slider::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:var(--navy);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15)}
 .oil-slider-labels{display:flex;justify-content:space-between;margin-top:8px;position:relative}
 .oil-slider-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-align:center}
-.oil-slider-brent{position:absolute;top:-52px;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;z-index:1}
+.oil-slider-brent{position:absolute;top:-8px;transform:translateX(-50%);pointer-events:none;transition:left 0.05s linear;background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;z-index:1}
 .oil-slider-brent::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid var(--navy)}
 
 .oil-sim-panel{display:grid;grid-template-columns:1fr 1fr;gap:20px;transition:opacity 0.2s}
@@ -300,6 +303,97 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .oil-nonlinear-chart{position:relative;height:200px;margin-top:12px}
 
+
+/* Bottom Sheet Infrastructure */
+.bottom-sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:199;opacity:0;pointer-events:none;transition:opacity 0.25s ease}
+.bottom-sheet-backdrop.open{opacity:1;pointer-events:auto}
+.bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-height:70vh;overflow-y:auto;z-index:200;box-shadow:0 -8px 32px rgba(0,0,0,0.12);padding:0 0 env(safe-area-inset-bottom)}
+.bottom-sheet.open{transform:translateY(0)}
+.bottom-sheet-handle{display:flex;justify-content:center;padding:12px 0 8px;cursor:grab}
+.bottom-sheet-handle::before{content:'';width:36px;height:4px;border-radius:2px;background:var(--border)}
+.bottom-sheet-content{padding:0 28px 28px;max-width:800px;margin:0 auto}
+.bottom-sheet-title{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.bottom-sheet-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
+
+/* Search Overlay (CMD+K) */
+.search-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:flex-start;justify-content:center;padding-top:min(20vh,160px);opacity:0;pointer-events:none;transition:opacity 0.25s ease}
+.search-overlay.open{opacity:1;pointer-events:auto}
+.search-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.search-modal{position:relative;width:min(580px,90vw);background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(0,0,0,0.05);overflow:hidden;transform:translateY(-12px) scale(0.97);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-height:60vh;display:flex;flex-direction:column}
+.search-overlay.open .search-modal{transform:translateY(0) scale(1)}
+.search-input-wrapper{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border-light);gap:12px}
+.search-input{flex:1;border:none;outline:none;font-size:16px;font-family:inherit;color:var(--text-primary);background:transparent}
+.search-input::placeholder{color:var(--text-tertiary)}
+.search-results{overflow-y:auto;padding:8px}
+.search-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);padding:8px 12px 4px}
+.search-result-item{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background 0.15s}
+.search-result-item:hover{background:var(--accent-light)}
+.search-result-item .sri-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.search-result-item .sri-name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.search-result-item .sri-meta{font-size:11px;color:var(--text-secondary)}
+
+/* Company selector button */
+.company-selector-btn{padding:8px 14px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text-primary);background:var(--surface);cursor:pointer;min-width:200px;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:all 0.15s}
+.company-selector-btn:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08)}
+.company-selector-btn .kbd{font-size:10px;color:var(--text-tertiary);background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border-light)}
+
+/* Entity linking */
+.entity-link{cursor:pointer;color:var(--accent);font-weight:600;transition:color 0.15s;border-bottom:1px dashed rgba(37,99,235,0.3)}
+.entity-link:hover{color:var(--accent-dark);border-bottom-color:var(--accent-dark)}
+
+/* Collapsible sections */
+.collapsible-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:12px 0;user-select:none}
+.collapsible-header .collapse-icon{font-size:18px;color:var(--text-tertiary);transition:transform 0.25s;font-weight:300}
+.collapsible-header.expanded .collapse-icon{transform:rotate(45deg)}
+.collapsible-content{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1)}
+.collapsible-content.expanded{max-height:2000px}
+
+/* Collapsible sector cards */
+.sector-fp-card{cursor:pointer;transition:all 0.25s}
+.sector-fp-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
+.sector-fp-card .sfp-toggle{font-size:18px;color:var(--text-tertiary);transition:transform 0.25s;font-weight:300}
+.sector-fp-card.expanded .sfp-toggle{transform:rotate(45deg)}
+.sector-fp-card .sfp-summary{display:flex;align-items:center;gap:8px;margin-top:8px}
+.sector-fp-card.expanded .sfp-summary{display:none}
+.sfp-detail{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1)}
+.sector-fp-card.expanded .sfp-detail{max-height:500px}
+.sector-fp-card.expanded .sfp-title{margin-bottom:12px}
+
+/* Scenario cards - hide description by default */
+.scenario-card .sc-desc{max-height:0;overflow:hidden;transition:max-height 0.35s;margin-top:0}
+.scenario-card.scenario-active .sc-desc{max-height:100px;margin-top:4px}
+
+/* Mobile bottom nav */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 env(safe-area-inset-bottom);justify-content:space-around;z-index:100}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;border-radius:8px;cursor:pointer;border:none;background:none;font-family:inherit;transition:all 0.15s;min-width:60px}
+.bottom-nav-item svg{width:22px;height:22px;color:var(--text-tertiary);transition:color 0.15s}
+.bottom-nav-item span{font-size:10px;font-weight:600;color:var(--text-tertiary);transition:color 0.15s}
+.bottom-nav-item.active svg{color:var(--accent)}
+.bottom-nav-item.active span{color:var(--accent)}
+
+/* Accessible traffic light symbols */
+.tl-symbol{font-weight:700;margin-right:2px}
+
+/* Hero grid for composite on overview */
+.grid-hero{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+
+/* Table scroll wrapper */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-scroll .comp-table{min-width:600px}
+
+/* Footer hover */
+.footer a:hover{color:var(--accent-dark)}
+
+/* Smooth card transitions */
+.card{transition:box-shadow 0.25s ease,transform 0.25s ease}
+.swf-card{cursor:pointer;transition:all 0.25s}
+.swf-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
+.macro-indicator-card{cursor:pointer;transition:all 0.25s}
+.macro-indicator-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
+
+/* API dot stop pulsing when live */
+.api-dot.live{animation:none}
+
 @media(max-width:1024px){
   .oil-sim-panel{grid-template-columns:1fr}
   .oil-fiscal-grid{grid-template-columns:repeat(3,1fr)}
@@ -314,7 +408,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 @media(max-width:1024px){
   .grid-4,.grid-5{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}
-  .grid-2-1{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}
+  .grid-2-1,.grid-hero{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}
   .header-inner{flex-wrap:wrap;height:auto;padding:12px 0;gap:8px}
   .nav-tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start}
   .main{padding:20px}
@@ -327,6 +421,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .macro-strip{flex-wrap:wrap;gap:12px}
   .opp-score{flex-direction:column;text-align:center}
   .dual-ring{flex-direction:column;gap:16px}
+  .nav-tabs{display:none}
+  .bottom-nav{display:flex}
+  .main{padding:16px 16px 100px}
+  .oil-sim-price{font-size:36px}
+  .grid-hero{grid-template-columns:1fr}
 }
 
 .fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
@@ -354,14 +453,51 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="nav-tab" onclick="switchTab('pricing',this)">Pricing</button>
   </div>
   <div class="header-right">
-    <select class="company-selector" id="companySelector" onchange="switchCompany(this.value)">
-      <option value="ega">Emirates Global Aluminium</option>
-      <option value="fab">First Abu Dhabi Bank</option>
-      <option value="aldar">Aldar Properties</option>
-    </select>
+    <button class="company-selector-btn" onclick="openSearch()" id="companySelectorBtn">
+      <span id="companySelectorLabel">Emirates Global Aluminium</span>
+      <span class="kbd">&#8984;K</span>
+    </button>
     <div class="api-badge"><div class="api-dot" id="apiDot"></div><span id="apiLabel">Connecting...</span></div>
   </div>
 </div></div>
+
+<!-- Search Overlay (CMD+K) -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-backdrop" onclick="closeSearch()"></div>
+  <div class="search-modal">
+    <div class="search-input-wrapper">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search companies, SWFs, sectors..." oninput="filterSearch(this.value)">
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- Bottom Sheet -->
+<div class="bottom-sheet-backdrop" id="bsBackdrop" onclick="closeBottomSheet()"></div>
+<div class="bottom-sheet" id="bottomSheet">
+  <div class="bottom-sheet-handle"></div>
+  <div class="bottom-sheet-content" id="bsContent"></div>
+</div>
+
+<!-- Mobile Bottom Nav -->
+<div class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-item active" onclick="mobileNav('overview',this)" data-tab="overview">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg><span>Hub</span>
+  </button>
+  <button class="bottom-nav-item" onclick="mobileNav('benchmarking',this)" data-tab="benchmarking">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><span>Company</span>
+  </button>
+  <button class="bottom-nav-item" onclick="mobileNav('macropanel',this)" data-tab="macropanel">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg><span>Macro</span>
+  </button>
+  <button class="bottom-nav-item" onclick="mobileNav('stress',this)" data-tab="stress">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg><span>Risk</span>
+  </button>
+  <button class="bottom-nav-item" onclick="openSearch()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span>
+  </button>
+</div>
 
 <div class="main">
 <!-- OVERVIEW -->
@@ -375,10 +511,33 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="macro-item"><div><div class="macro-item-label">Next Event</div><div class="macro-item-value" style="font-family:inherit;font-size:13px">ADIPEC 2026 <span style="color:var(--text-tertiary);font-size:11px">Nov 2</span></div></div></div>
   </div>
   <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div></div></div>
-  <div class="grid-3 section">
-    <div class="card fade-in" style="border-top:3px solid var(--accent)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-1">Level 1</span> Benchmarking</div><div class="kpi-card"><div class="score-ring score-average" id="overviewScore">58</div><div class="kpi-label">47X Composite Score</div><div class="kpi-change down" id="overviewScoreChange">-4 vs Q3</div></div><div style="font-size:13px;color:var(--text-secondary);text-align:center;margin-top:8px" id="overviewScoreSummary">Below sector average (71). Weak in social presence and employer brand.</div></div>
-    <div class="card fade-in" style="border-top:3px solid var(--purple)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-2">Level 2</span> Context</div><div style="padding:4px 0"><div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon1">&loz;</div><div class="signal-content"><div class="signal-title" id="ctxSignal1Title">Guinea Crisis Write-Down</div><div class="signal-detail" id="ctxSignal1Detail">$765M impairment driving negative sentiment shift</div></div></div><div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon2">&darr;</div><div class="signal-content"><div class="signal-title" id="ctxSignal2Title">Talent Leak Detected</div><div class="signal-detail" id="ctxSignal2Detail">14 senior engineers departed in 6 months</div></div></div><div class="signal-item" style="padding:8px 0"><div class="signal-icon warning" id="ctxIcon3">&sim;</div><div class="signal-content"><div class="signal-title" id="ctxSignal3Title">Sentiment Shift</div><div class="signal-detail" id="ctxSignal3Detail">News sentiment: +0.4 to -0.2 in 90 days</div></div></div></div></div>
-    <div class="card fade-in" style="border-top:3px solid var(--green)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-3">Level 3</span> Arbitrage</div><div class="opp-score" style="margin:0"><div><div class="opp-score-value" id="overviewOppScore">87</div><div class="opp-score-label">Opportunity Score</div></div><div><div class="opp-score-label" id="overviewOppDesc">Competitor talent acquisition window. EGA engineering team actively seeking exit.</div><div class="opp-score-detail" id="overviewOppWindow">Window closes: ~Sept 2026</div></div></div></div>
+  <div class="section">
+    <div class="grid-hero">
+      <div class="card fade-in" style="padding:28px">
+        <div class="section-title" style="margin-bottom:16px">47X Composite Intelligence Score</div>
+        <div class="dual-ring" style="padding:8px 0">
+          <div class="dual-ring-item"><div class="dr-score" id="heroOpScore" style="color:var(--orange)"><span style="position:relative;z-index:1">58</span></div><div class="dr-label">Operational</div></div>
+          <div class="dr-plus">+</div>
+          <div class="dual-ring-item"><div class="dr-score" id="heroFinScore" style="color:var(--red)"><span style="position:relative;z-index:1">42</span></div><div class="dr-label">Financial</div></div>
+          <div class="dr-plus">+</div>
+          <div class="dual-ring-item"><div class="dr-score" id="heroResScore" style="color:var(--red)"><span style="position:relative;z-index:1">35</span></div><div class="dr-label">Resilience</div></div>
+          <div class="dr-equals">=</div>
+          <div class="dual-ring-item"><div class="dr-score" id="heroTotalScore" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff"><span style="position:relative;z-index:1">45</span></div><div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite</div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="heroTotalBand">Below Average</div></div>
+        </div>
+      </div>
+      <div class="card fade-in" style="border-left:3px solid var(--accent)">
+        <div class="section-title" style="margin-bottom:12px"><span class="level-badge level-2">Level 2</span> Key Signals</div>
+        <div style="padding:4px 0">
+          <div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon1">&loz;</div><div class="signal-content"><div class="signal-title" id="ctxSignal1Title">Guinea Crisis Write-Down</div><div class="signal-detail" id="ctxSignal1Detail">$765M impairment driving negative sentiment shift</div></div></div>
+          <div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon2">&darr;</div><div class="signal-content"><div class="signal-title" id="ctxSignal2Title">Talent Leak Detected</div><div class="signal-detail" id="ctxSignal2Detail">14 senior engineers departed in 6 months</div></div></div>
+          <div class="signal-item" style="padding:8px 0"><div class="signal-icon warning" id="ctxIcon3">&sim;</div><div class="signal-content"><div class="signal-title" id="ctxSignal3Title">Sentiment Shift</div><div class="signal-detail" id="ctxSignal3Detail">News sentiment: +0.4 to -0.2 in 90 days</div></div></div>
+        </div>
+        <div style="margin-top:12px;padding:16px;background:var(--bg);border-radius:10px;display:flex;align-items:center;gap:14px">
+          <div style="font-size:36px;font-weight:800;color:var(--green);letter-spacing:-2px;font-family:'JetBrains Mono',monospace" id="overviewOppScore">87</div>
+          <div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">Opportunity Score</div><div style="font-size:11px;color:var(--text-secondary);line-height:1.3" id="overviewOppDesc">Active arbitrage window detected</div><div style="font-size:10px;color:var(--text-tertiary);margin-top:2px" id="overviewOppWindow">Window closes: ~Sept 2026</div></div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="section" id="liveApiSection" style="display:none"><div class="section-header"><div class="section-title">Live API Data <span class="level-badge level-1">Real-Time</span></div></div><div class="grid-4" id="liveApiCards"></div></div>
   <div class="section"><div class="section-header"><div class="section-title">Peer Comparison &mdash; Composite Scores</div></div><div class="card"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div>
@@ -414,31 +573,31 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="section">
     <div class="section-header"><div class="section-title">Live Macro Indicators <span class="level-badge level-2">Intelligence Layer</span></div></div>
     <div class="grid-5 fade-in" id="macroIndicatorGrid">
-      <div class="macro-indicator-card">
+      <div class="macro-indicator-card" onclick="openMacroSheet('brent')">
         <div class="mi-label">Brent Crude</div>
         <div class="mi-value" style="color:var(--navy)">$102.14</div>
         <div class="mi-change" style="color:var(--green)"><span class="mi-signal" style="background:var(--green)"></span> +8.6% MoM</div>
         <div class="traffic-light tl-green" style="margin-top:8px">Supportive</div>
       </div>
-      <div class="macro-indicator-card">
+      <div class="macro-indicator-card" onclick="openMacroSheet('dxy')">
         <div class="mi-label">DXY (USD Index)</div>
         <div class="mi-value" style="color:var(--navy)">103.8</div>
         <div class="mi-change" style="color:var(--red)"><span class="mi-signal" style="background:var(--red)"></span> +1.2% MoM</div>
         <div class="traffic-light tl-amber" style="margin-top:8px">Headwind for exports</div>
       </div>
-      <div class="macro-indicator-card">
+      <div class="macro-indicator-card" onclick="openMacroSheet('yield')">
         <div class="mi-label">US 10Y Yield</div>
         <div class="mi-value" style="color:var(--navy)">4.28%</div>
         <div class="mi-change" style="color:var(--red)"><span class="mi-signal" style="background:var(--red)"></span> +12bp MoM</div>
         <div class="traffic-light tl-amber" style="margin-top:8px">Rate pressure</div>
       </div>
-      <div class="macro-indicator-card">
+      <div class="macro-indicator-card" onclick="openMacroSheet('gold')">
         <div class="mi-label">Gold (XAU/USD)</div>
         <div class="mi-value" style="color:var(--orange)">$2,184</div>
         <div class="mi-change" style="color:var(--green)"><span class="mi-signal" style="background:var(--green)"></span> +4.2% MoM</div>
         <div class="traffic-light tl-green" style="margin-top:8px">Risk hedge active</div>
       </div>
-      <div class="macro-indicator-card">
+      <div class="macro-indicator-card" onclick="openMacroSheet('fed')">
         <div class="mi-label">Fed Funds Rate</div>
         <div class="mi-value" style="color:var(--navy)">4.50%</div>
         <div class="mi-change" style="color:var(--text-tertiary)"><span class="mi-signal" style="background:var(--text-tertiary)"></span> Unchanged</div>
@@ -501,7 +660,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="section">
     <div class="section-header"><div class="section-title">Sovereign Wealth Fund Flow Tracker <span class="level-badge level-3">Level 3</span></div></div>
     <div class="grid-4" id="swfCards">
-      <div class="swf-card fade-in">
+      <div class="swf-card fade-in" onclick="openEntitySheet('swf','pif')">
         <div class="swf-name">PIF</div>
         <div class="swf-country">Saudi Arabia</div>
         <div class="swf-aum">$930B</div>
@@ -512,7 +671,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="overlay-row"><span class="overlay-label">2026 Signal</span><span class="overlay-value" style="font-size:11px;color:var(--green)">Alat $100B+</span></div>
         </div>
       </div>
-      <div class="swf-card fade-in">
+      <div class="swf-card fade-in" onclick="openEntitySheet('swf','mubadala')">
         <div class="swf-name">Mubadala</div>
         <div class="swf-country">UAE (Abu Dhabi)</div>
         <div class="swf-aum">$302B</div>
@@ -523,7 +682,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="overlay-row"><span class="overlay-label">Key Asset</span><span class="overlay-value" style="font-size:11px;color:var(--accent)">GlobalFoundries</span></div>
         </div>
       </div>
-      <div class="swf-card fade-in">
+      <div class="swf-card fade-in" onclick="openEntitySheet('swf','adq')">
         <div class="swf-name">ADQ</div>
         <div class="swf-country">UAE (Abu Dhabi)</div>
         <div class="swf-aum">$200B+</div>
@@ -534,7 +693,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           <div class="overlay-row"><span class="overlay-label">2026 Signal</span><span class="overlay-value" style="font-size:11px;color:var(--green)">EU acquisitions</span></div>
         </div>
       </div>
-      <div class="swf-card fade-in">
+      <div class="swf-card fade-in" onclick="openEntitySheet('swf','qia')">
         <div class="swf-name">QIA</div>
         <div class="swf-country">Qatar</div>
         <div class="swf-aum">$510B</div>
@@ -758,7 +917,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
       <div class="oil-slider-container">
         <div class="oil-slider-brent" id="oilBrentMarker" style="left:26%">Current Brent: $102</div>
-        <input type="range" class="oil-slider" id="oilSlider" min="50" max="250" value="102" step="1" oninput="updateOilSim(this.value)">
+        <input type="range" class="oil-slider" id="oilSlider" min="50" max="250" value="102" step="1" oninput="debouncedOilUpdate(this.value)">
         <div class="oil-slider-labels">
           <div class="oil-slider-label">$50<br><span style="color:var(--red)">Crisis</span></div>
           <div class="oil-slider-label">$65<br><span style="color:var(--orange)">Stress</span></div>
@@ -1115,12 +1274,12 @@ sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','H
 
 var activeScenario=0;
 
-async function checkApi(){try{var r=await fetch(API_BASE+'/api/companies',{signal:AbortSignal.timeout(5000)});if(r.ok){var d=await r.json();document.getElementById('apiDot').className='api-dot live';document.getElementById('apiLabel').textContent='API Live';document.getElementById('apiLabel').style.color='var(--green)';if(d&&d.length>0)renderLiveApiCards(d)}else throw 0}catch(e){document.getElementById('apiDot').className='api-dot offline';document.getElementById('apiLabel').textContent='Demo Mode';document.getElementById('apiLabel').style.color='var(--text-tertiary)'}}
+async function checkApi(){try{var r=await fetch(API_BASE+'/api/companies',{signal:AbortSignal.timeout(5000)});if(r.ok){var d=await r.json();var dot=document.getElementById('apiDot');dot.className='api-dot live';document.getElementById('apiLabel').textContent='API Live';document.getElementById('apiLabel').style.color='var(--green)';if(d&&d.length>0)renderLiveApiCards(d)}else throw 0}catch(e){document.getElementById('apiDot').className='api-dot offline';document.getElementById('apiLabel').textContent='Demo Mode';document.getElementById('apiLabel').style.color='var(--text-tertiary)'}}
 
 async function renderLiveApiCards(list){var s=document.getElementById('liveApiSection'),c=document.getElementById('liveApiCards');s.style.display='block';var h='';for(var i=0;i<Math.min(list.length,4);i++){var co=list[i],sh='<span style="color:var(--text-tertiary)">No scores</span>';try{var r=await fetch(API_BASE+'/api/companies/'+co.slug+'/scores',{signal:AbortSignal.timeout(5000)});if(r.ok){var sc=await r.json();if(sc&&sc.composite!==undefined){var b=sc.composite>=90?'leading':sc.composite>=70?'strong':sc.composite>=50?'average':sc.composite>=30?'weak':'critical';var bc=b==='leading'?'var(--accent)':b==='strong'?'var(--green)':b==='average'?'var(--orange)':'var(--red)';sh='<div style="font-size:28px;font-weight:800;color:'+bc+';letter-spacing:-1px">'+Math.round(sc.composite)+'</div><div class="kpi-label">'+b.charAt(0).toUpperCase()+b.slice(1)+'</div>'}}}catch(e){}h+='<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+co.name+'</div>'+sh+'</div>'}c.innerHTML=h}
 
-function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');b.classList.add('active');setTimeout(function(){renderAllCharts()},50)}
-function switchCompany(k){currentCompany=k;renderAll()}
+function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');if(b)b.classList.add('active');document.querySelectorAll('.bottom-nav-item').forEach(function(item){item.classList.remove('active');if(item.dataset&&item.dataset.tab===t)item.classList.add('active')});setTimeout(function(){renderAllCharts()},50)}
+function switchCompany(k){currentCompany=k;document.getElementById('companySelectorLabel').textContent=companies[k].name;renderAll();closeSearch()}
 
 function selectScenario(idx){activeScenario=idx;document.querySelectorAll('.scenario-card').forEach(function(c,i){c.classList.toggle('scenario-active',i===idx)});renderStressScenario();renderStressCharts()}
 
@@ -1133,9 +1292,17 @@ document.getElementById('stressWarnings').innerHTML=s.warnings.map(function(w){r
 
 function renderAll(){var c=companies[currentCompany];
 document.getElementById('heroLogo').textContent=c.short;document.getElementById('heroName').textContent=c.name;document.getElementById('heroMeta').innerHTML=c.sector+' &bull; '+c.location+' &bull; '+c.portfolio+' &bull; <strong>'+c.revenue+'</strong>';
-var sr=document.getElementById('overviewScore');sr.textContent=c.score;sr.className='score-ring score-'+c.scoreBand.toLowerCase();
-var ce=document.getElementById('overviewScoreChange');ce.textContent=c.scoreChange.label;ce.className='kpi-change '+c.scoreChange.direction;
-document.getElementById('overviewScoreSummary').textContent=c.score<60?'Below sector average. Weak areas identified in social and employer brand.':c.score<75?'Above sector average. Strong digital presence with room for improvement.':'Leading position. Strong across most dimensions.';
+// Hero composite score
+var comp=c.composite;
+function scoreCol(s){return s>=70?'var(--green)':s>=50?'var(--orange)':'var(--red)'}
+document.getElementById('heroOpScore').style.color=scoreCol(comp.opScore);
+document.getElementById('heroOpScore').innerHTML='<span style="position:relative;z-index:1">'+comp.opScore+'</span>';
+document.getElementById('heroFinScore').style.color=scoreCol(comp.finScore);
+document.getElementById('heroFinScore').innerHTML='<span style="position:relative;z-index:1">'+comp.finScore+'</span>';
+document.getElementById('heroResScore').style.color=scoreCol(comp.resScore);
+document.getElementById('heroResScore').innerHTML='<span style="position:relative;z-index:1">'+comp.resScore+'</span>';
+document.getElementById('heroTotalScore').innerHTML='<span style="position:relative;z-index:1">'+comp.total+'</span>';
+document.getElementById('heroTotalBand').textContent=comp.band;
 ['1','2','3'].forEach(function(n){var s=c.contextSignals['headline'+n];document.getElementById('ctxSignal'+n+'Title').textContent=s.title;document.getElementById('ctxSignal'+n+'Detail').textContent=s.detail;document.getElementById('ctxIcon'+n).className='signal-icon '+s.iconClass;document.getElementById('ctxIcon'+n).textContent=s.icon});
 document.getElementById('overviewOppScore').textContent=c.arbOppScore;document.getElementById('overviewOppDesc').textContent=c.arbOpp1.desc.substring(0,120)+'...';document.getElementById('overviewOppWindow').textContent=c.arbOppWindow;
 renderPeerTable(c);document.getElementById('benchCompanyName').textContent=c.name;document.getElementById('benchBand').textContent=c.scoreBand;document.getElementById('benchBand').style.color=c.scoreBandColor;renderServiceBars(c);renderScorecard(c);
@@ -1144,7 +1311,7 @@ document.getElementById('arbOppScore').textContent=c.arbOppScore;document.getEle
 document.getElementById('arbOpp1Title').textContent=c.arbOpp1.title;document.getElementById('arbOpp1Urgency').textContent=c.arbOpp1.urgency;document.getElementById('arbOpp1Urgency').className='arb-urgency '+c.arbOpp1.urgencyClass;document.getElementById('arbOpp1Desc').textContent=c.arbOpp1.desc;
 document.getElementById('arbOpp2Title').textContent=c.arbOpp2.title;document.getElementById('arbOpp2Urgency').textContent=c.arbOpp2.urgency;document.getElementById('arbOpp2Urgency').className='arb-urgency '+c.arbOpp2.urgencyClass;document.getElementById('arbOpp2Desc').textContent=c.arbOpp2.desc;
 document.getElementById('arbActionSub').textContent='Sequenced actions to exploit the current '+c.short+' arbitrage window';document.getElementById('arbCorrSub').textContent='How '+c.short+"'s signals create opportunities";
-renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);renderEventCalendar();
+renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);
 // Composite tab
 renderCompositeTab(c);
 renderStressScenario();
@@ -1263,9 +1430,26 @@ function scoreColor(s){return s>=3?'#059669':s>=1?'#059669':s>=-1?'#D97706':s>=-
 function scoreBg(s){return s>=3?'rgba(5,150,105,0.12)':s>=1?'rgba(5,150,105,0.08)':s>=-1?'rgba(217,119,6,0.1)':s>=-3?'rgba(220,38,38,0.1)':'rgba(220,38,38,0.15)'}
 function fiscalColor(v){return v>=5?'#059669':v>=0?'#059669':v>=-5?'#D97706':'#DC2626'}
 
+// Debounce for oil slider
+var oilDebounceTimer=null;
+function debouncedOilUpdate(price){
+  var pct=((price-50)/200)*100;
+  var marker=document.getElementById('oilBrentMarker');
+  marker.style.left=pct+'%';
+  marker.textContent='Current: $'+price;
+  document.getElementById('oilSimPrice').textContent='$'+price;
+  if(oilDebounceTimer)clearTimeout(oilDebounceTimer);
+  oilDebounceTimer=setTimeout(function(){updateOilSim(price)},30);
+}
+
 function updateOilSim(price){
   price=parseInt(price);
   var band=interpolateOilBand(price);
+  // LOOP 1: Dynamic Brent marker tracking
+  var pct=((price-50)/200)*100;
+  var marker=document.getElementById('oilBrentMarker');
+  marker.style.left=pct+'%';
+  marker.textContent='Current: $'+price;
   // Price display
   document.getElementById('oilSimPrice').textContent='$'+price;
   document.getElementById('oilSimPrice').style.color=band.color;
@@ -1411,6 +1595,47 @@ if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'ba
 // Composite radar chart
 destroyChart('compositeRadar');var cr=document.getElementById('compositeRadarChart');
 if(cr&&cr.offsetParent!==null){var comp=c.composite;charts.compositeRadar=new Chart(cr,{type:'radar',data:{labels:['Website','Social','Media','Employer','Ads','Tech Stack','Brand','Reviews','Registry','Financial','Resilience'],datasets:[{label:c.short,data:[c.services[0].score,c.services[1].score,c.services[2].score,c.services[3].score,c.services[4].score,c.services[5].score,c.services[6].score,c.services[7].score,c.services[8].score,comp.finScore,comp.resScore],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3},{label:'Sector Average',data:[71,65,62,68,58,67,68,64,78,65,55],borderColor:'#9CA3AF',backgroundColor:'rgba(156,163,175,0.05)',borderWidth:1.5,borderDash:[4,4],pointBackgroundColor:'#9CA3AF',pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:20},pointLabels:{font:{size:10,family:"'Inter'"}},grid:{color:gC}}}}})}}
+
+
+// Search overlay
+function openSearch(){document.getElementById('searchOverlay').classList.add('open');document.getElementById('searchInput').value='';document.getElementById('searchInput').focus();renderSearchResults('')}
+function closeSearch(){document.getElementById('searchOverlay').classList.remove('open')}
+function filterSearch(q){renderSearchResults(q)}
+function renderSearchResults(query){
+var results=document.getElementById('searchResults');var q=query.toLowerCase();
+var html='<div class="search-group-label">Companies</div>';
+Object.keys(companies).forEach(function(k){var c=companies[k];if(!q||c.name.toLowerCase().includes(q)||c.short.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="switchCompany(\''+k+'\')"><div class="sri-icon" style="background:var(--navy);color:#fff">'+c.short+'</div><div><div class="sri-name">'+c.name+'</div><div class="sri-meta">'+c.sector+' | Score: '+c.score+'</div></div></div>'}});
+var swfs=[{id:'pif',name:'PIF',m:'Saudi Arabia | $930B'},{id:'mubadala',name:'Mubadala',m:'UAE | $302B'},{id:'adq',name:'ADQ',m:'UAE | $200B+'},{id:'qia',name:'QIA',m:'Qatar | $510B'}];
+html+='<div class="search-group-label">Sovereign Wealth Funds</div>';
+swfs.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="openEntitySheet(\'swf\',\''+s.id+'\')"><div class="sri-icon" style="background:var(--accent-light);color:var(--accent)">'+s.name.substring(0,3)+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">'+s.m+'</div></div></div>'}});
+results.innerHTML=html}
+
+// Keyboard shortcut CMD+K
+document.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(document.getElementById('searchOverlay').classList.contains('open'))closeSearch();else openSearch()}if(e.key==='Escape'){closeSearch();closeBottomSheet()}});
+
+// Bottom sheet
+function openBottomSheet(title,subtitle,contentHtml){document.getElementById('bsBackdrop').classList.add('open');document.getElementById('bottomSheet').classList.add('open');document.getElementById('bsContent').innerHTML='<div class="bottom-sheet-title">'+title+'</div><div class="bottom-sheet-subtitle">'+subtitle+'</div>'+contentHtml}
+function closeBottomSheet(){document.getElementById('bsBackdrop').classList.remove('open');document.getElementById('bottomSheet').classList.remove('open')}
+
+// Entity sheets
+function openEntitySheet(type,id){
+if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | $930B AUM',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary).'},mubadala:{n:'Mubadala Investment Company',c:'UAE | $302B AUM',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target.'},adq:{n:'Abu Dhabi Developmental Holding',c:'UAE | $200B+ AUM',s:'Newest major GCC SWF. Terna Energy JV ($2.9B). LDC stake for food security. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | $510B AUM',s:'Diversified global investor. PSG, Harrods. Post-World Cup pivot toward tech and sustainability.'}};
+var s=d[id];if(s)openBottomSheet(s.n,s.c,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+s.s+'</div>')}}
+
+// Macro bottom sheet
+function openMacroSheet(indicator){
+var d={brent:{t:'Brent Crude Oil',s:'$102.14/bbl | +8.6% MoM',c:'Oil above $100 is the GCC sweet spot. Government revenues are running significant surpluses. Saudi fiscal breakeven is ~$91/bbl.'},dxy:{t:'DXY (USD Index)',s:'103.8 | +1.2% MoM',c:'Strong dollar creates headwind for GCC non-oil exporters.'},yield:{t:'US 10Y Yield',s:'4.28% | +12bp MoM',c:'Rising yields transmit directly to GCC borrowing costs via the peg.'},gold:{t:'Gold (XAU/USD)',s:'$2,184/oz | +4.2% MoM',c:'Gold at highs signals institutional hedging against tail risks.'},fed:{t:'Fed Funds Rate',s:'4.50% | Unchanged',c:'Hold cycle continues. Rate-sensitive sectors face prolonged pressure.'}};
+var x=d[indicator];if(x)openBottomSheet(x.t,x.s,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+x.c+'</div>')}
+
+// Collapsible toggle
+function toggleCollapsible(header){var content=header.nextElementSibling;header.classList.toggle('expanded');content.classList.toggle('expanded');var icon=header.querySelector('.collapse-icon');if(header.classList.contains('expanded')){icon.style.transform='rotate(45deg)'}else{icon.style.transform='rotate(0deg)'}}
+
+// Sector card toggle
+function toggleSector(card){card.classList.toggle('expanded')}
+
+// Mobile nav
+function mobileNav(tab,btn){document.querySelectorAll('.bottom-nav-item').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+tab).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){renderAllCharts()},50)}
+
 
 document.addEventListener('DOMContentLoaded',function(){renderAll();checkApi()});
 </script>
