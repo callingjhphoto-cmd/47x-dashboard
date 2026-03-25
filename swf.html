@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>47X Intelligence Platform — SWF Tracker</title>
+<meta name="description" content="GCC Sovereign Wealth Fund Tracker — 50 funds, $5.4T+ in assets under management">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F5F7;--surface:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;
+  --navy:#0B1D3A;--navy-light:#1E3A5F;
+  --text-primary:#111827;--text-secondary:#6B7280;--text-tertiary:#9CA3AF;
+  --accent:#2563EB;--accent-light:#EFF6FF;--accent-dark:#1D4ED8;
+  --green:#059669;--green-light:#ECFDF5;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --orange:#D97706;--orange-light:#FFFBEB;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.08);
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+.header{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{width:36px;height:36px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:-0.5px}
+.logo-text{font-size:18px;font-weight:700;letter-spacing:-0.3px;color:var(--navy)}
+.logo-text span{color:var(--text-tertiary);font-weight:400;font-size:13px;margin-left:8px}
+.nav-tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px}
+.nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;white-space:nowrap;font-family:inherit;text-decoration:none}
+.nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
+.nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+
+.main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
+.section{margin-bottom:32px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
+.card:hover{box-shadow:var(--shadow-md)}
+
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+
+.kpi-card{text-align:center;padding:20px}
+.kpi-value{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+
+.chart-container{position:relative;height:260px;margin-top:12px}
+.chart-container-sm{position:relative;height:200px;margin-top:8px}
+.chart-container-tall{position:relative;height:320px;margin-top:12px}
+
+.level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.level-1{background:var(--accent-light);color:var(--accent)}
+.level-2{background:var(--purple-light);color:var(--purple)}
+.level-3{background:var(--green-light);color:var(--green)}
+
+.footer{max-width:1440px;margin:0 auto;padding:32px 40px;text-align:center;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:12px}
+.footer a{color:var(--accent);text-decoration:none}
+
+.fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
+@keyframes fadeIn{to{opacity:1}}
+.fade-in:nth-child(1){animation-delay:0s}.fade-in:nth-child(2){animation-delay:0.05s}.fade-in:nth-child(3){animation-delay:0.1s}
+.fade-in:nth-child(4){animation-delay:0.15s}.fade-in:nth-child(5){animation-delay:0.2s}.fade-in:nth-child(6){animation-delay:0.25s}
+
+/* SWF-specific styles */
+.swf-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--radius);padding:32px;color:#fff;margin-bottom:24px}
+.swf-hero h1{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.swf-hero p{font-size:14px;color:rgba(255,255,255,0.7)}
+.swf-hero-stats{display:flex;gap:40px;margin-top:20px}
+.swf-hero-stat-value{font-size:36px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#34D399,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.swf-hero-stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.5);margin-top:2px}
+
+.search-bar{display:flex;gap:12px;margin-bottom:20px;align-items:center}
+.search-input{flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:var(--surface);color:var(--text-primary);outline:none;transition:border-color 0.2s}
+.search-input:focus{border-color:var(--accent)}
+.filter-btn{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:inherit;background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.filter-btn:hover,.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tier-filters{display:flex;gap:6px;flex-wrap:wrap}
+
+.fund-table{width:100%;border-collapse:collapse;font-size:13px}
+.fund-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color 0.2s}
+.fund-table thead th:hover{color:var(--accent)}
+.fund-table thead th.sorted{color:var(--accent)}
+.fund-table thead th .sort-arrow{margin-left:4px;font-size:9px}
+.fund-table tbody tr{cursor:pointer;transition:background 0.15s}
+.fund-table tbody tr:hover{background:var(--accent-light)}
+.fund-table tbody tr.expanded{background:var(--accent-light);border-bottom:none}
+.fund-table tbody td{padding:12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.fund-table tbody td:first-child{font-weight:600;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;font-size:12px}
+.fund-table tbody td:nth-child(2){font-weight:600;color:var(--text-primary)}
+.fund-table .aum-cell{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--text-primary)}
+.fund-table .status-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px}
+.status-active{background:var(--green-light);color:var(--green)}
+.status-expanding{background:var(--accent-light);color:var(--accent)}
+.status-stealth{background:var(--orange-light);color:var(--orange)}
+.type-swf{background:var(--purple-light);color:var(--purple)}
+.type-pension{background:var(--accent-light);color:var(--accent)}
+.type-fo{background:var(--orange-light);color:var(--orange)}
+.type-vc{background:var(--green-light);color:var(--green)}
+.type-ihc{background:var(--red-light);color:var(--red)}
+.tier-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px}
+.tier-1{background:#0B1D3A;color:#fff}
+.tier-2{background:var(--accent);color:#fff}
+.tier-3{background:var(--purple);color:#fff}
+.tier-4{background:var(--orange);color:#fff}
+.tier-5{background:var(--text-tertiary);color:#fff}
+
+/* Fund Profile Panel */
+.fund-profile{display:none;background:var(--surface);border:1px solid var(--accent);border-radius:0 0 var(--radius) var(--radius);margin:-1px 0 8px;overflow:hidden;animation:slideDown 0.3s ease}
+.fund-profile.open{display:block}
+@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:2000px}}
+
+.profile-hero{display:flex;align-items:center;gap:20px;padding:24px 28px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);color:#fff}
+.profile-logo{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;letter-spacing:-0.5px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
+.profile-info h2{font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:2px}
+.profile-meta{font-size:13px;color:rgba(255,255,255,0.6)}
+.profile-meta strong{color:rgba(255,255,255,0.9)}
+.profile-stats{display:flex;gap:28px;margin-left:auto}
+.profile-stat{text-align:center}
+.profile-stat-value{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.profile-stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.5)}
+
+.profile-body{padding:24px 28px}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.profile-section{margin-bottom:20px}
+.profile-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-tertiary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.profile-section-title::before{content:'';display:block;width:3px;height:14px;border-radius:2px;background:var(--accent)}
+
+.mandate-text{font-size:13px;color:var(--text-secondary);line-height:1.6;padding:16px;background:var(--bg);border-radius:var(--radius-sm)}
+
+.investment-table{width:100%;border-collapse:collapse;font-size:12px}
+.investment-table th{text-align:left;padding:6px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);border-bottom:1px solid var(--border)}
+.investment-table td{padding:8px 10px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.investment-table td:first-child{font-weight:600;color:var(--text-primary)}
+.investment-table tr:hover{background:var(--bg)}
+
+.close-profile{position:absolute;top:16px;right:20px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.close-profile:hover{background:rgba(255,255,255,0.3)}
+
+.section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
+
+/* Macro overlay placeholder */
+.macro-placeholder{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;color:var(--text-tertiary)}
+.macro-placeholder h3{font-size:16px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
+.macro-placeholder p{font-size:13px;max-width:500px;margin:0 auto}
+
+@media(max-width:1024px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .header-inner{flex-wrap:wrap;height:auto;padding:12px 0;gap:8px}
+  .nav-tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start}
+  .main{padding:20px}
+  .profile-hero{flex-direction:column;text-align:center}
+  .profile-stats{margin-left:0}
+  .profile-grid{grid-template-columns:1fr}
+  .swf-hero-stats{flex-wrap:wrap;gap:20px}
+}
+@media(max-width:768px){
+  .header{padding:0 16px}.main{padding:16px}
+  .grid-4,.grid-3,.grid-2{grid-template-columns:1fr}
+  .fund-table{font-size:11px}
+  .fund-table thead th,.fund-table tbody td{padding:8px 6px}
+}
+</style>
+</head>
+<body>
+
+<div class="header"><div class="header-inner">
+  <a href="index.html" class="logo"><div class="logo-mark">47X</div><div class="logo-text">Intelligence Platform <span>by TrueGroup</span></div></a>
+  <div class="nav-tabs">
+    <button class="nav-tab" onclick="window.location.href='index.html'">Overview</button>
+    <button class="nav-tab active">SWF Tracker</button>
+  </div>
+</div></div>
+
+<div class="main">
+
+<!-- Hero Section -->
+<div class="swf-hero fade-in">
+  <h1>GCC Sovereign Wealth Fund Tracker</h1>
+  <p>Comprehensive intelligence across 50 GCC sovereign wealth funds, pension funds, family offices, and venture capital vehicles</p>
+  <div class="swf-hero-stats">
+    <div><div class="swf-hero-stat-value" id="totalAum">$5.42T</div><div class="swf-hero-stat-label">Total AUM Tracked</div></div>
+    <div><div class="swf-hero-stat-value">50</div><div class="swf-hero-stat-label">Funds Tracked</div></div>
+    <div><div class="swf-hero-stat-value">6</div><div class="swf-hero-stat-label">GCC Countries</div></div>
+    <div><div class="swf-hero-stat-value">5</div><div class="swf-hero-stat-label">Vehicle Types</div></div>
+  </div>
+</div>
+
+<!-- Aggregate KPI Cards -->
+<div class="grid-4 section fade-in">
+  <div class="card kpi-card">
+    <div class="kpi-value" style="color:var(--accent)">$1.15T</div>
+    <div class="kpi-label">Largest Fund (PIF)</div>
+  </div>
+  <div class="card kpi-card">
+    <div class="kpi-value" style="color:var(--green)">28</div>
+    <div class="kpi-label">Actively Expanding</div>
+  </div>
+  <div class="card kpi-card">
+    <div class="kpi-value" style="color:var(--purple)">$3.47T</div>
+    <div class="kpi-label">Top 5 Combined AUM</div>
+  </div>
+  <div class="card kpi-card">
+    <div class="kpi-value" style="color:var(--orange)">12</div>
+    <div class="kpi-label">Stealth / Emerging</div>
+  </div>
+</div>
+
+<!-- Aggregate Charts -->
+<div class="section-header"><div class="section-title"><span class="level-badge level-1">Aggregate</span> GCC Capital Landscape</div></div>
+<div class="grid-2 section fade-in">
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">AUM by Country</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Total sovereign and institutional capital by GCC nation</div>
+    <div class="chart-container-tall"><canvas id="countryPieChart"></canvas></div>
+  </div>
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Sector Allocation Across All Funds</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Weighted aggregate sector exposure</div>
+    <div class="chart-container-tall"><canvas id="sectorBarChart"></canvas></div>
+  </div>
+</div>
+<div class="grid-2 section fade-in">
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">AUM Distribution</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Fund size distribution across tiers</div>
+    <div class="chart-container-tall"><canvas id="aumHistogram"></canvas></div>
+  </div>
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Activity Heatmap</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Recent deployment activity intensity (last 12 months)</div>
+    <div class="chart-container-tall"><canvas id="activityChart"></canvas></div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- Fund Table -->
+<div class="section-header"><div class="section-title"><span class="level-badge level-2">Fund Directory</span> All 50 GCC Funds</div></div>
+
+<div class="search-bar">
+  <input type="text" class="search-input" id="fundSearch" placeholder="Search funds by name, country, or type..." oninput="filterFunds()">
+  <div class="tier-filters">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" data-filter="tier1" onclick="setFilter('tier1',this)">Tier 1</button>
+    <button class="filter-btn" data-filter="tier2" onclick="setFilter('tier2',this)">Tier 2</button>
+    <button class="filter-btn" data-filter="tier3" onclick="setFilter('tier3',this)">Tier 3</button>
+    <button class="filter-btn" data-filter="tier4" onclick="setFilter('tier4',this)">Tier 4</button>
+    <button class="filter-btn" data-filter="tier5" onclick="setFilter('tier5',this)">Tier 5</button>
+  </div>
+  <div class="tier-filters" style="margin-left:8px">
+    <button class="filter-btn" data-type="SWF" onclick="setTypeFilter('SWF',this)">SWF</button>
+    <button class="filter-btn" data-type="Pension" onclick="setTypeFilter('Pension',this)">Pension</button>
+    <button class="filter-btn" data-type="FO" onclick="setTypeFilter('Family Office',this)">Family Office</button>
+    <button class="filter-btn" data-type="VC" onclick="setTypeFilter('VC',this)">VC</button>
+    <button class="filter-btn" data-type="IHC" onclick="setTypeFilter('IHC',this)">IHC</button>
+  </div>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden">
+  <table class="fund-table" id="fundTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)" class="sorted">Rank <span class="sort-arrow">&#9660;</span></th>
+        <th onclick="sortTable(1)">Fund Name <span class="sort-arrow"></span></th>
+        <th onclick="sortTable(2)">Country <span class="sort-arrow"></span></th>
+        <th onclick="sortTable(3)">AUM ($B) <span class="sort-arrow"></span></th>
+        <th onclick="sortTable(4)">Type <span class="sort-arrow"></span></th>
+        <th onclick="sortTable(5)">Tier <span class="sort-arrow"></span></th>
+        <th onclick="sortTable(6)">Status <span class="sort-arrow"></span></th>
+      </tr>
+    </thead>
+    <tbody id="fundTableBody">
+    </tbody>
+  </table>
+</div>
+
+<!-- Fund Profile Panel (rendered dynamically) -->
+<div id="fundProfileContainer"></div>
+
+<div class="section-divider"></div>
+
+<!-- Macro Overlay Section -->
+<div class="section-header"><div class="section-title"><span class="level-badge level-3">Macro Overlay</span> Liquidity &amp; Capital Deployment</div></div>
+
+<div class="grid-2 section fade-in">
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Liquidity Cycle &amp; GCC Deployment</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">How GCC funds deploy within the global liquidity cycle</div>
+    <div class="macro-placeholder">
+      <h3>Michael Howell Liquidity Cycle Visualization</h3>
+      <p>Placeholder for CrossBorder Capital liquidity data overlay. Will map GCC fund deployment cadence against global liquidity peaks and troughs.</p>
+      <div style="margin-top:16px">
+        <div class="chart-container-tall"><canvas id="liquidityPlaceholder"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Oil Price vs Deployment Activity</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Correlation between Brent crude and GCC fund deal flow</div>
+    <div class="chart-container-tall"><canvas id="oilCorrelationChart"></canvas></div>
+  </div>
+</div>
+
+<div class="card section fade-in">
+  <div style="font-size:15px;font-weight:600;margin-bottom:4px">How GCC Funds Deploy Within the Global Liquidity Cycle</div>
+  <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">
+    <p style="margin-bottom:12px">GCC sovereign wealth funds operate on a distinct deployment cadence shaped by three key variables: <strong>oil revenue inflows</strong>, <strong>global liquidity conditions</strong>, and <strong>national strategic mandates</strong> (Vision 2030, Vision 2031, etc.).</p>
+    <p style="margin-bottom:12px">When Brent crude sustains above $80/bbl, Gulf states generate surplus fiscal revenue that feeds directly into SWF allocations. PIF, ADIA, and KIA historically accelerate deployment 6-9 months after sustained oil price increases. Conversely, during oil price contractions (e.g., 2020), deployment slows but does not stop &mdash; these funds pivot toward distressed asset acquisition and counter-cyclical plays.</p>
+    <p style="margin-bottom:12px">Michael Howell's Global Liquidity Index shows that GCC funds tend to deploy into risk assets (tech, real estate, infrastructure) during liquidity expansions, while rotating into fixed income and credit during contractions. This creates a predictable rhythm that informed investors can anticipate.</p>
+    <p>The current cycle (Q1 2026) shows <strong>liquidity expanding</strong>, oil at $102, and all major GCC funds in <strong>active deployment mode</strong>. PIF alone has committed $45B+ in 2025-2026 across NEOM, entertainment, and international portfolio positions.</p>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<div class="footer">47X Intelligence Platform &mdash; SWF Tracker Module &mdash; Data as of Q1 2026 &mdash; <a href="index.html">Back to Dashboard</a></div>
+
+<script>
+// ==========================================
+// FUND DATA — All 50 GCC Funds
+// ==========================================
+var funds = [
+  // TIER 1
+  {rank:1,name:'Public Investment Fund (PIF)',short:'PIF',country:'Saudi Arabia',aum:1150,type:'SWF',tier:1,status:'Expanding',founded:1971,
+    mandate:'Saudi Arabia\'s primary sovereign wealth fund and the financial engine of Vision 2030. Manages diversified global portfolio across technology, entertainment, sports, real estate, and infrastructure. Aims to grow AUM to $2T by 2030.',
+    sectors:{Technology:22,RealEstate:18,Infrastructure:15,Entertainment:12,Energy:10,Healthcare:8,Financial:8,Other:7},
+    investments:[{name:'Lucid Motors',sector:'Automotive/EV',value:'$3.4B',year:2018},{name:'NEOM',sector:'Megaproject',value:'$500B plan',year:2017},{name:'SoftBank Vision Fund',sector:'Technology',value:'$45B',year:2017},{name:'Newcastle United',sector:'Sports',value:'$415M',year:2021},{name:'Jeddah Tower',sector:'Real Estate',value:'$1.2B',year:2017},{name:'Electronic Arts',sector:'Gaming',value:'$1.1B',year:2022}],
+    geoFocus:{MiddleEast:35,NorthAmerica:25,Europe:18,Asia:15,Africa:7},
+    deals:[{q:'Q1 2026',count:12,value:8.2},{q:'Q4 2025',count:15,value:12.1},{q:'Q3 2025',count:10,value:6.8},{q:'Q2 2025',count:14,value:9.4},{q:'Q1 2025',count:11,value:7.5}]},
+
+  {rank:2,name:'Abu Dhabi Investment Authority (ADIA)',short:'ADIA',country:'UAE',aum:1050,type:'SWF',tier:1,status:'Active',founded:1976,
+    mandate:'One of the world\'s largest sovereign wealth funds, ADIA invests globally across all major asset classes on behalf of the Government of Abu Dhabi. Known for long-term, diversified approach with significant allocation to alternatives.',
+    sectors:{Equities:32,FixedIncome:15,RealEstate:12,PrivateEquity:12,Infrastructure:10,Alternatives:10,Cash:5,Other:4},
+    investments:[{name:'Gatwick Airport',sector:'Infrastructure',value:'Undisclosed',year:2018},{name:'Citi (2007 stake)',sector:'Financial',value:'$7.5B',year:2007},{name:'Brookfield Asset Mgmt',sector:'Alternatives',value:'$2B+',year:2020},{name:'Indian Infrastructure',sector:'Infrastructure',value:'$1.5B+',year:2021}],
+    geoFocus:{NorthAmerica:35,Europe:30,AsiaPacific:20,MiddleEast:10,Other:5},
+    deals:[{q:'Q1 2026',count:6,value:4.1},{q:'Q4 2025',count:8,value:5.2},{q:'Q3 2025',count:5,value:3.8},{q:'Q2 2025',count:7,value:4.5},{q:'Q1 2025',count:6,value:3.9}]},
+
+  {rank:3,name:'Kuwait Investment Authority (KIA)',short:'KIA',country:'Kuwait',aum:1020,type:'SWF',tier:1,status:'Active',founded:1953,
+    mandate:'The world\'s oldest sovereign wealth fund. Manages Kuwait\'s General Reserve Fund and Future Generations Fund. Conservative investment philosophy with global diversification mandate.',
+    sectors:{Equities:35,FixedIncome:20,RealEstate:12,PrivateEquity:10,Infrastructure:8,Alternatives:8,Cash:7},
+    investments:[{name:'Mercedes-Benz Group',sector:'Automotive',value:'6.8% stake',year:1974},{name:'BP',sector:'Energy',value:'Significant stake',year:1987},{name:'Various global equities',sector:'Diversified',value:'$200B+',year:'Ongoing'}],
+    geoFocus:{Europe:30,NorthAmerica:28,AsiaPacific:22,MiddleEast:12,Other:8},
+    deals:[{q:'Q1 2026',count:4,value:2.8},{q:'Q4 2025',count:5,value:3.1},{q:'Q3 2025',count:3,value:2.2},{q:'Q2 2025',count:4,value:2.6},{q:'Q1 2025',count:4,value:2.4}]},
+
+  {rank:4,name:'Qatar Investment Authority (QIA)',short:'QIA',country:'Qatar',aum:526,type:'SWF',tier:1,status:'Expanding',founded:2005,
+    mandate:'Qatar\'s sovereign wealth fund managing the state\'s surplus petroleum revenues. Active global investor with significant stakes in European banking, luxury brands, real estate, and technology.',
+    sectors:{FinancialServices:22,RealEstate:18,Technology:14,Luxury:12,Infrastructure:10,Energy:8,Healthcare:8,Sports:8},
+    investments:[{name:'Barclays',sector:'Financial',value:'Significant stake',year:2008},{name:'Volkswagen Group',sector:'Automotive',value:'17% stake',year:2009},{name:'Harrods',sector:'Retail/Luxury',value:'$2.2B',year:2010},{name:'The Shard',sector:'Real Estate',value:'95% stake',year:2013},{name:'Paris Saint-Germain',sector:'Sports',value:'$100M+',year:2011}],
+    geoFocus:{Europe:40,NorthAmerica:20,AsiaPacific:15,MiddleEast:15,Africa:10},
+    deals:[{q:'Q1 2026',count:8,value:5.5},{q:'Q4 2025',count:10,value:6.8},{q:'Q3 2025',count:7,value:4.2},{q:'Q2 2025',count:9,value:5.9},{q:'Q1 2025',count:8,value:5.1}]},
+
+  {rank:5,name:'Investment Corporation of Dubai (ICD)',short:'ICD',country:'UAE',aum:429,type:'SWF',tier:1,status:'Active',founded:2006,
+    mandate:'The principal investment arm of the Government of Dubai. Manages a diversified portfolio including Emirates airline, DEWA, Dubai Airports, and stakes in major global companies. Focuses on sustainable long-term returns.',
+    sectors:{Aviation:20,FinancialServices:18,RealEstate:15,Energy:12,Hospitality:10,Technology:10,Infrastructure:8,Other:7},
+    investments:[{name:'Emirates Group',sector:'Aviation',value:'100% ownership',year:2006},{name:'DEWA',sector:'Utilities',value:'Major stake',year:2006},{name:'Emirates NBD',sector:'Banking',value:'55.7% stake',year:2007},{name:'Dubai Airports',sector:'Infrastructure',value:'100%',year:2006}],
+    geoFocus:{MiddleEast:55,Europe:18,AsiaPacific:12,NorthAmerica:10,Africa:5},
+    deals:[{q:'Q1 2026',count:5,value:3.2},{q:'Q4 2025',count:6,value:3.8},{q:'Q3 2025',count:4,value:2.5},{q:'Q2 2025',count:5,value:3.0},{q:'Q1 2025',count:5,value:2.8}]},
+
+  {rank:6,name:'General Organization for Social Insurance (GOSI)',short:'GOSI',country:'Saudi Arabia',aum:374,type:'Pension',tier:1,status:'Active',founded:1969,
+    mandate:'Saudi Arabia\'s primary social insurance institution. Manages pension and retirement funds for private sector workers. Conservative investment approach with growing allocation to alternatives and international assets.',
+    sectors:{FixedIncome:30,Equities:25,RealEstate:15,PrivateEquity:10,Infrastructure:8,Cash:7,Other:5},
+    investments:[{name:'Saudi Tadawul equities',sector:'Diversified',value:'Large portfolio',year:'Ongoing'},{name:'Saudi real estate assets',sector:'Real Estate',value:'$20B+',year:'Ongoing'},{name:'International fixed income',sector:'Bonds',value:'$50B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:60,NorthAmerica:15,Europe:12,AsiaPacific:8,Other:5},
+    deals:[{q:'Q1 2026',count:3,value:1.8},{q:'Q4 2025',count:4,value:2.2},{q:'Q3 2025',count:2,value:1.5},{q:'Q2 2025',count:3,value:1.9},{q:'Q1 2025',count:3,value:1.7}]},
+
+  {rank:7,name:'Mubadala Investment Company',short:'Mubadala',country:'UAE',aum:330,type:'SWF',tier:1,status:'Expanding',founded:2002,
+    mandate:'Abu Dhabi\'s strategic investment arm. Operates across six continents with a mandate to generate sustainable financial returns. Key sectors include aerospace, ICT, semiconductors, metals & mining, and healthcare. Portfolio includes GlobalFoundries, Cleveland Clinic Abu Dhabi, and Cepsa.',
+    sectors:{Technology:22,Aerospace:14,Healthcare:12,Energy:12,FinancialServices:10,MetalsMining:10,RealEstate:8,LifeSciences:6,Other:6},
+    investments:[{name:'GlobalFoundries',sector:'Semiconductors',value:'$20B+ invested',year:2009},{name:'Cleveland Clinic Abu Dhabi',sector:'Healthcare',value:'$2B',year:2015},{name:'Cepsa',sector:'Energy',value:'Major stake',year:2011},{name:'Silver Lake Partners',sector:'PE/Tech',value:'$2B+',year:2020},{name:'G42',sector:'AI/Technology',value:'Significant stake',year:2023}],
+    geoFocus:{NorthAmerica:30,MiddleEast:25,Europe:20,AsiaPacific:18,Africa:7},
+    deals:[{q:'Q1 2026',count:9,value:6.1},{q:'Q4 2025',count:11,value:7.5},{q:'Q3 2025',count:8,value:5.2},{q:'Q2 2025',count:10,value:6.8},{q:'Q1 2025',count:9,value:5.9}]},
+
+  {rank:8,name:'Hassana Investment Company',short:'Hassana',country:'Saudi Arabia',aum:320,type:'Pension',tier:1,status:'Active',founded:2009,
+    mandate:'The investment arm of GOSI, managing Saudi Arabia\'s largest pension pool. Focus on long-term returns through diversified global portfolio spanning public equities, fixed income, real estate, and alternatives.',
+    sectors:{PublicEquities:30,FixedIncome:25,RealEstate:15,PrivateEquity:12,Alternatives:10,Cash:8},
+    investments:[{name:'Saudi Aramco IPO',sector:'Energy',value:'Anchor investor',year:2019},{name:'Global equity portfolio',sector:'Diversified',value:'$100B+',year:'Ongoing'},{name:'Saudi real estate',sector:'Real Estate',value:'$25B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:50,NorthAmerica:20,Europe:15,AsiaPacific:10,Other:5},
+    deals:[{q:'Q1 2026',count:4,value:2.5},{q:'Q4 2025',count:5,value:3.0},{q:'Q3 2025',count:3,value:2.1},{q:'Q2 2025',count:4,value:2.6},{q:'Q1 2025',count:4,value:2.3}]},
+
+  {rank:9,name:'Royal Group',short:'Royal',country:'UAE',aum:164,type:'Family Office',tier:1,status:'Active',founded:1997,
+    mandate:'Abu Dhabi-based conglomerate controlled by Sheikh Tahnoun bin Zayed. Diversified investments across technology, healthcare, construction, real estate, media, and financial services. Increasingly active in AI and cybersecurity.',
+    sectors:{Technology:20,Construction:18,Healthcare:14,RealEstate:14,FinancialServices:12,Media:8,FoodBeverage:8,Other:6},
+    investments:[{name:'G42',sector:'AI/Technology',value:'Major stake',year:2018},{name:'International Golden Group',sector:'Defence/Contracting',value:'Full ownership',year:2000},{name:'Multiply Group',sector:'Holding Company',value:'Listed entity',year:2021},{name:'PAX Global Technology',sector:'Technology',value:'Major stake',year:2019}],
+    geoFocus:{MiddleEast:60,AsiaPacific:15,Europe:12,NorthAmerica:8,Africa:5},
+    deals:[{q:'Q1 2026',count:5,value:2.8},{q:'Q4 2025',count:6,value:3.2},{q:'Q3 2025',count:4,value:2.1},{q:'Q2 2025',count:5,value:2.6},{q:'Q1 2025',count:5,value:2.4}]},
+
+  {rank:10,name:'ADQ',short:'ADQ',country:'UAE',aum:157,type:'SWF',tier:1,status:'Expanding',founded:2018,
+    mandate:'Abu Dhabi\'s newest sovereign wealth fund focused on transforming Abu Dhabi into a globally competitive economy. Manages a portfolio of major national enterprises including airports, utilities, food, and logistics. Aggressive acquisition strategy.',
+    sectors:{Utilities:18,FoodAgriculture:16,Logistics:14,Healthcare:12,RealEstate:10,Financial:10,Energy:10,Technology:10},
+    investments:[{name:'Abu Dhabi Airports',sector:'Infrastructure',value:'Full ownership',year:2020},{name:'TAQA',sector:'Utilities/Energy',value:'Major stake',year:2020},{name:'Louis Dreyfus Company',sector:'Agriculture',value:'45% stake',year:2021},{name:'Etihad Rail',sector:'Infrastructure',value:'Stake',year:2022}],
+    geoFocus:{MiddleEast:50,Africa:15,AsiaPacific:15,Europe:12,NorthAmerica:8},
+    deals:[{q:'Q1 2026',count:8,value:4.5},{q:'Q4 2025',count:10,value:5.8},{q:'Q3 2025',count:7,value:4.0},{q:'Q2 2025',count:9,value:5.1},{q:'Q1 2025',count:8,value:4.3}]},
+
+  // TIER 2
+  {rank:11,name:'Lunate',short:'Lunate',country:'UAE',aum:115,type:'IHC',tier:2,status:'Expanding',founded:2022,
+    mandate:'Abu Dhabi-based alternative asset management firm spun out of Mubadala. Manages private equity, credit, and infrastructure assets with a focus on value creation across global markets. Rapidly growing platform.',
+    sectors:{PrivateEquity:35,Credit:20,Infrastructure:18,Technology:12,RealEstate:10,Other:5},
+    investments:[{name:'Fortress Investment Group',sector:'Alt. Asset Mgmt',value:'$3.3B acquisition',year:2023},{name:'Various PE portfolio',sector:'Diversified',value:'$50B+',year:'Ongoing'}],
+    geoFocus:{NorthAmerica:35,Europe:25,MiddleEast:20,AsiaPacific:15,Other:5},
+    deals:[{q:'Q1 2026',count:6,value:3.2},{q:'Q4 2025',count:7,value:4.0},{q:'Q3 2025',count:5,value:2.8},{q:'Q2 2025',count:6,value:3.4},{q:'Q1 2025',count:5,value:2.9}]},
+
+  {rank:12,name:'SNB Capital',short:'SNBCap',country:'Saudi Arabia',aum:64,type:'IHC',tier:2,status:'Active',founded:2007,
+    mandate:'The investment banking and asset management arm of Saudi National Bank. Provides brokerage, asset management, and advisory services. Significant manager of Saudi equity and fixed income portfolios.',
+    sectors:{PublicEquities:35,FixedIncome:25,RealEstate:15,PrivateEquity:10,Alternatives:10,Cash:5},
+    investments:[{name:'Saudi Tadawul equities',sector:'Public Markets',value:'Large AUM',year:'Ongoing'},{name:'Saudi fixed income',sector:'Bonds',value:'$15B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:70,NorthAmerica:12,Europe:10,AsiaPacific:5,Other:3},
+    deals:[{q:'Q1 2026',count:3,value:1.2},{q:'Q4 2025',count:4,value:1.5},{q:'Q3 2025',count:2,value:0.9},{q:'Q2 2025',count:3,value:1.1},{q:'Q1 2025',count:3,value:1.0}]},
+
+  {rank:13,name:'Oman Investment Authority (OIA)',short:'OIA',country:'Oman',aum:53,type:'SWF',tier:2,status:'Active',founded:2020,
+    mandate:'Oman\'s unified sovereign wealth fund formed by merging the State General Reserve Fund and Oman Investment Fund. Focuses on economic diversification aligned with Oman Vision 2040. Invests in energy transition, logistics, tourism, and technology.',
+    sectors:{Energy:25,Logistics:15,Tourism:12,RealEstate:12,FinancialServices:10,Mining:10,Technology:8,Other:8},
+    investments:[{name:'OQ Energy',sector:'Energy',value:'Full ownership',year:2020},{name:'Omantel',sector:'Telecom',value:'Major stake',year:2020},{name:'Duqm Special Economic Zone',sector:'Infrastructure',value:'Strategic investment',year:2021}],
+    geoFocus:{MiddleEast:55,AsiaPacific:18,Europe:12,Africa:10,NorthAmerica:5},
+    deals:[{q:'Q1 2026',count:3,value:1.0},{q:'Q4 2025',count:4,value:1.3},{q:'Q3 2025',count:2,value:0.7},{q:'Q2 2025',count:3,value:0.9},{q:'Q1 2025',count:3,value:0.8}]},
+
+  {rank:14,name:'Investcorp',short:'Investcorp',country:'Bahrain',aum:53,type:'IHC',tier:2,status:'Active',founded:1982,
+    mandate:'Bahrain-headquartered global alternative investment firm. Manages investments across private equity, real estate, credit, and absolute return strategies. One of the oldest alternative investment firms in the MENA region.',
+    sectors:{PrivateEquity:30,RealEstate:25,Credit:20,AbsoluteReturn:15,Technology:10},
+    investments:[{name:'Tiffany & Co (historical)',sector:'Luxury',value:'$1.5B (exited)',year:1984},{name:'Gucci (historical)',sector:'Luxury',value:'$300M (exited)',year:1993},{name:'US real estate portfolio',sector:'Real Estate',value:'$5B+',year:'Ongoing'}],
+    geoFocus:{NorthAmerica:40,Europe:25,MiddleEast:20,AsiaPacific:10,Other:5},
+    deals:[{q:'Q1 2026',count:4,value:1.5},{q:'Q4 2025',count:5,value:1.8},{q:'Q3 2025',count:3,value:1.2},{q:'Q2 2025',count:4,value:1.4},{q:'Q1 2025',count:4,value:1.3}]},
+
+  {rank:15,name:'Dubai Holding',short:'DH',country:'UAE',aum:35,type:'IHC',tier:2,status:'Active',founded:2004,
+    mandate:'A diversified global investment holding company with operations and investments in hospitality, real estate, media, ICT, and design. Wholly owned by His Highness Sheikh Mohammed bin Rashid Al Maktoum.',
+    sectors:{RealEstate:30,Hospitality:20,Media:15,Technology:12,Financial:10,Design:8,Other:5},
+    investments:[{name:'Jumeirah Group',sector:'Hospitality',value:'Full ownership',year:2004},{name:'TECOM Group',sector:'Business Parks',value:'Major stake',year:2004},{name:'Dubai Properties',sector:'Real Estate',value:'Full ownership',year:2004}],
+    geoFocus:{MiddleEast:60,Europe:15,AsiaPacific:12,NorthAmerica:8,Africa:5},
+    deals:[{q:'Q1 2026',count:3,value:0.8},{q:'Q4 2025',count:4,value:1.2},{q:'Q3 2025',count:2,value:0.6},{q:'Q2 2025',count:3,value:0.9},{q:'Q1 2025',count:3,value:0.7}]},
+
+  {rank:16,name:'Al Rajhi Capital',short:'AlRajhi',country:'Saudi Arabia',aum:33,type:'IHC',tier:2,status:'Active',founded:2007,
+    mandate:'Investment banking and asset management subsidiary of Al Rajhi Bank. Provides Sharia-compliant investment solutions, brokerage, and asset management. Major player in Saudi capital markets.',
+    sectors:{PublicEquities:35,IslamicFinance:25,RealEstate:15,FixedIncome:12,Sukuk:8,Other:5},
+    investments:[{name:'Saudi equity funds',sector:'Public Markets',value:'$15B+ AUM',year:'Ongoing'},{name:'Sukuk portfolio',sector:'Islamic Finance',value:'$5B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:80,AsiaPacific:8,Europe:7,NorthAmerica:5},
+    deals:[{q:'Q1 2026',count:2,value:0.5},{q:'Q4 2025',count:3,value:0.7},{q:'Q3 2025',count:2,value:0.4},{q:'Q2 2025',count:2,value:0.5},{q:'Q1 2025',count:2,value:0.4}]},
+
+  {rank:17,name:'Jadwa Investment',short:'Jadwa',country:'Saudi Arabia',aum:30,type:'IHC',tier:2,status:'Active',founded:2006,
+    mandate:'Leading Saudi-based investment management and advisory firm. Offers public equity, private equity, real estate, and advisory services. Known for strong research capabilities and Sharia-compliant products.',
+    sectors:{PublicEquities:30,PrivateEquity:25,RealEstate:20,FixedIncome:15,Advisory:10},
+    investments:[{name:'Saudi Growth Fund',sector:'PE',value:'$2B+',year:2018},{name:'Real estate portfolio',sector:'Real Estate',value:'$3B+',year:'Ongoing'},{name:'Saudi public equity',sector:'Public Markets',value:'$10B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:75,NorthAmerica:10,Europe:8,AsiaPacific:7},
+    deals:[{q:'Q1 2026',count:3,value:0.8},{q:'Q4 2025',count:3,value:0.9},{q:'Q3 2025',count:2,value:0.6},{q:'Q2 2025',count:3,value:0.7},{q:'Q1 2025',count:2,value:0.6}]},
+
+  {rank:18,name:'GFH Financial Group',short:'GFH',country:'Bahrain',aum:22,type:'IHC',tier:2,status:'Active',founded:1999,
+    mandate:'Bahrain-based Islamic investment bank listed on multiple GCC stock exchanges. Focuses on private equity, commercial real estate, infrastructure, and financial services. Active in US and UK real estate markets.',
+    sectors:{RealEstate:35,FinancialServices:20,Infrastructure:15,PrivateEquity:15,Education:10,Other:5},
+    investments:[{name:'US real estate portfolio',sector:'Real Estate',value:'$2B+',year:'Ongoing'},{name:'UK logistics portfolio',sector:'Real Estate',value:'$500M+',year:2022},{name:'AMA University',sector:'Education',value:'Stake',year:2019}],
+    geoFocus:{MiddleEast:40,NorthAmerica:30,Europe:15,AsiaPacific:10,Other:5},
+    deals:[{q:'Q1 2026',count:3,value:0.6},{q:'Q4 2025',count:3,value:0.7},{q:'Q3 2025',count:2,value:0.4},{q:'Q2 2025',count:3,value:0.5},{q:'Q1 2025',count:2,value:0.4}]},
+
+  {rank:19,name:'NBK Wealth',short:'NBKW',country:'Kuwait',aum:22,type:'IHC',tier:2,status:'Active',founded:2016,
+    mandate:'Wealth management arm of National Bank of Kuwait. Provides private banking, asset management, and investment advisory services across GCC and international markets.',
+    sectors:{PublicEquities:30,FixedIncome:25,RealEstate:15,PrivateEquity:12,Alternatives:10,Cash:8},
+    investments:[{name:'Global diversified portfolio',sector:'Multi-asset',value:'$22B AUM',year:'Ongoing'},{name:'GCC equity funds',sector:'Public Markets',value:'$5B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:50,NorthAmerica:20,Europe:18,AsiaPacific:12},
+    deals:[{q:'Q1 2026',count:2,value:0.4},{q:'Q4 2025',count:3,value:0.5},{q:'Q3 2025',count:2,value:0.3},{q:'Q2 2025',count:2,value:0.4},{q:'Q1 2025',count:2,value:0.3}]},
+
+  {rank:20,name:'Abu Dhabi Capital Group',short:'ADCG',country:'UAE',aum:20,type:'Family Office',tier:2,status:'Active',founded:2003,
+    mandate:'Abu Dhabi-based investment company with diversified portfolio across real estate, hospitality, healthcare, and financial services. Focus on UAE and regional growth opportunities.',
+    sectors:{RealEstate:30,Hospitality:20,Healthcare:15,FinancialServices:15,Construction:10,Other:10},
+    investments:[{name:'UAE real estate portfolio',sector:'Real Estate',value:'$5B+',year:'Ongoing'},{name:'Healthcare ventures',sector:'Healthcare',value:'$1B+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:70,Europe:12,AsiaPacific:10,NorthAmerica:5,Other:3},
+    deals:[{q:'Q1 2026',count:2,value:0.3},{q:'Q4 2025',count:3,value:0.5},{q:'Q3 2025',count:2,value:0.3},{q:'Q2 2025',count:2,value:0.4},{q:'Q1 2025',count:2,value:0.3}]},
+
+  // TIER 3
+  {rank:21,name:'YBA Kanoo',short:'Kanoo',country:'Bahrain',aum:20,type:'Family Office',tier:3,status:'Active',founded:1890,
+    mandate:'One of the oldest and largest family-owned conglomerates in the Gulf. Diversified across shipping, logistics, industrial, travel, and joint ventures. Operations span 8 countries.',
+    sectors:{Logistics:25,Industrial:20,Travel:15,JointVentures:15,RealEstate:10,Automotive:10,Other:5},
+    investments:[{name:'Kanoo Shipping',sector:'Logistics',value:'Full ownership',year:1890},{name:'Various JVs with multinationals',sector:'Diversified',value:'Multiple',year:'Ongoing'}],
+    geoFocus:{MiddleEast:65,AsiaPacific:15,Europe:10,Africa:5,NorthAmerica:5},
+    deals:[{q:'Q1 2026',count:2,value:0.3},{q:'Q4 2025',count:2,value:0.3},{q:'Q3 2025',count:1,value:0.2},{q:'Q2 2025',count:2,value:0.3},{q:'Q1 2025',count:1,value:0.2}]},
+
+  {rank:22,name:'Mumtalakat Holding Company',short:'Mumtalakat',country:'Bahrain',aum:18,type:'SWF',tier:3,status:'Active',founded:2006,
+    mandate:'Bahrain\'s sovereign wealth fund established to manage the Kingdom\'s non-oil and gas assets. Portfolio includes stakes in major Bahraini companies including Gulf Air, Alba (aluminium), and McLaren Group.',
+    sectors:{Aviation:20,Aluminium:18,Automotive:15,RealEstate:12,Financial:10,Telecom:10,Tourism:8,Other:7},
+    investments:[{name:'Aluminium Bahrain (Alba)',sector:'Industrial',value:'69.4% stake',year:2006},{name:'Gulf Air',sector:'Aviation',value:'Full ownership',year:2006},{name:'McLaren Group',sector:'Automotive',value:'Exited 2024',year:2007},{name:'National Bank of Bahrain',sector:'Financial',value:'Major stake',year:2006}],
+    geoFocus:{MiddleEast:60,Europe:20,NorthAmerica:10,AsiaPacific:5,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.3},{q:'Q4 2025',count:3,value:0.4},{q:'Q3 2025',count:2,value:0.2},{q:'Q2 2025',count:2,value:0.3},{q:'Q1 2025',count:2,value:0.2}]},
+
+  {rank:23,name:'Al Qasimi Family Office',short:'AlQasimi',country:'UAE',aum:15,type:'Family Office',tier:3,status:'Stealth',founded:1972,
+    mandate:'Investment office of the ruling family of Sharjah. Diversified holdings across real estate, education, culture, and media. Known for conservative long-term investment approach.',
+    sectors:{RealEstate:30,Education:20,Culture:15,Media:12,Healthcare:10,Financial:8,Other:5},
+    investments:[{name:'Sharjah real estate',sector:'Real Estate',value:'$3B+',year:'Ongoing'},{name:'University of Sharjah',sector:'Education',value:'Endowment',year:1997}],
+    geoFocus:{MiddleEast:80,Europe:10,AsiaPacific:5,Other:5},
+    deals:[{q:'Q1 2026',count:1,value:0.1},{q:'Q4 2025',count:1,value:0.2},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:1,value:0.1},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:24,name:'Emirates Investment Authority (EIA)',short:'EIA',country:'UAE',aum:10,type:'SWF',tier:3,status:'Active',founded:2007,
+    mandate:'Federal sovereign wealth fund of the UAE managing federal government investments. Focuses on strategic investments that support UAE\'s economic diversification. Lower profile than emirate-level funds.',
+    sectors:{FinancialServices:25,Telecom:20,Industrial:15,Energy:12,RealEstate:10,Technology:10,Other:8},
+    investments:[{name:'Etisalat (e&)',sector:'Telecom',value:'60% stake (federal)',year:2007},{name:'Emirates Post',sector:'Logistics',value:'Federal asset',year:2007}],
+    geoFocus:{MiddleEast:70,AsiaPacific:12,Africa:8,Europe:5,NorthAmerica:5},
+    deals:[{q:'Q1 2026',count:1,value:0.2},{q:'Q4 2025',count:2,value:0.3},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:1,value:0.2},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:25,name:'Saudi Aramco Energy Ventures',short:'SAEV',country:'Saudi Arabia',aum:7,type:'VC',tier:3,status:'Expanding',founded:2012,
+    mandate:'The strategic venture capital arm of Saudi Aramco. Invests globally in start-ups and growth companies developing technologies relevant to energy, chemicals, water, and sustainability.',
+    sectors:{EnergyTech:30,Sustainability:20,Chemicals:15,DigitalTech:15,Water:10,Robotics:10},
+    investments:[{name:'Desktop Metal',sector:'3D Printing',value:'$65M+',year:2019},{name:'Solugen',sector:'Green Chemicals',value:'$50M',year:2021},{name:'Turntide Technologies',sector:'Electrification',value:'$35M',year:2021}],
+    geoFocus:{NorthAmerica:40,Europe:25,MiddleEast:20,AsiaPacific:15},
+    deals:[{q:'Q1 2026',count:4,value:0.3},{q:'Q4 2025',count:5,value:0.4},{q:'Q3 2025',count:3,value:0.2},{q:'Q2 2025',count:4,value:0.3},{q:'Q1 2025',count:3,value:0.2}]},
+
+  {rank:26,name:'Landmark Group',short:'Landmark',country:'UAE',aum:7,type:'Family Office',tier:3,status:'Active',founded:1973,
+    mandate:'Dubai-based retail and hospitality conglomerate. One of the largest retail chains in MENA, India, and Southeast Asia. Portfolio includes Centrepoint, Max, Splash, and Citymax Hotels.',
+    sectors:{Retail:40,Hospitality:20,FoodBeverage:15,RealEstate:10,ECommerce:10,Other:5},
+    investments:[{name:'Centrepoint',sector:'Retail',value:'Full ownership',year:1998},{name:'Max Fashion',sector:'Retail',value:'Full ownership',year:2004},{name:'Citymax Hotels',sector:'Hospitality',value:'Full ownership',year:2008}],
+    geoFocus:{MiddleEast:45,SouthAsia:30,SoutheastAsia:15,Africa:10},
+    deals:[{q:'Q1 2026',count:2,value:0.3},{q:'Q4 2025',count:3,value:0.4},{q:'Q3 2025',count:2,value:0.2},{q:'Q2 2025',count:2,value:0.3},{q:'Q1 2025',count:2,value:0.2}]},
+
+  {rank:27,name:'Future Fund Oman',short:'FFO',country:'Oman',aum:5.2,type:'SWF',tier:3,status:'Stealth',founded:2020,
+    mandate:'Oman\'s inter-generational fund designed to invest revenues from hydrocarbons for future generations. Part of Oman Vision 2040. Conservative investment approach with growing international allocation.',
+    sectors:{FixedIncome:30,Equities:25,RealEstate:15,Infrastructure:12,Alternatives:10,Cash:8},
+    investments:[{name:'Omani government bonds',sector:'Fixed Income',value:'Core holding',year:2020},{name:'International diversified',sector:'Multi-asset',value:'Growing',year:2021}],
+    geoFocus:{MiddleEast:50,Europe:18,AsiaPacific:15,NorthAmerica:12,Other:5},
+    deals:[{q:'Q1 2026',count:1,value:0.1},{q:'Q4 2025',count:1,value:0.1},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:1,value:0.1},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:28,name:'Waha Capital',short:'Waha',country:'UAE',aum:3.2,type:'IHC',tier:3,status:'Active',founded:1997,
+    mandate:'Abu Dhabi-listed investment company focused on private and public equity investments. Key holdings in healthcare, aerospace, and financial services.',
+    sectors:{Healthcare:25,Aerospace:20,FinancialServices:18,Technology:15,RealEstate:12,Other:10},
+    investments:[{name:'AerCap (partial stake)',sector:'Aerospace/Leasing',value:'Significant',year:2014},{name:'Channel VAS',sector:'Technology',value:'Stake',year:2016}],
+    geoFocus:{MiddleEast:45,Europe:25,NorthAmerica:15,AsiaPacific:10,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.2},{q:'Q4 2025',count:2,value:0.2},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:2,value:0.2},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:29,name:'Gulf Capital Investments',short:'GCInv',country:'UAE',aum:3.2,type:'IHC',tier:3,status:'Active',founded:2006,
+    mandate:'Abu Dhabi-based alternative asset management firm. Invests in private equity, credit, and real estate across MENA. Focus on mid-market opportunities in high-growth sectors.',
+    sectors:{PrivateEquity:35,Credit:25,RealEstate:20,Healthcare:10,Industrial:10},
+    investments:[{name:'Metito',sector:'Water/Infrastructure',value:'$200M+',year:2015},{name:'Gulf Marine Services',sector:'Energy Services',value:'Stake',year:2012}],
+    geoFocus:{MiddleEast:60,Europe:15,AsiaPacific:12,Africa:8,NorthAmerica:5},
+    deals:[{q:'Q1 2026',count:2,value:0.2},{q:'Q4 2025',count:2,value:0.3},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:2,value:0.2},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:30,name:'Wafra International Investment',short:'Wafra',country:'Kuwait',aum:3.2,type:'IHC',tier:3,status:'Active',founded:1998,
+    mandate:'Kuwait-based investment firm managing assets for PIFSS (Public Institution for Social Security). Focuses on real estate, private equity, and venture capital primarily in the United States.',
+    sectors:{RealEstate:35,PrivateEquity:25,VentureCapital:20,Credit:12,Other:8},
+    investments:[{name:'US real estate portfolio',sector:'Real Estate',value:'$1B+',year:'Ongoing'},{name:'VC investments (US tech)',sector:'Venture Capital',value:'$500M+',year:'Ongoing'}],
+    geoFocus:{NorthAmerica:60,Europe:15,MiddleEast:15,AsiaPacific:10},
+    deals:[{q:'Q1 2026',count:3,value:0.2},{q:'Q4 2025',count:3,value:0.3},{q:'Q3 2025',count:2,value:0.2},{q:'Q2 2025',count:3,value:0.2},{q:'Q1 2025',count:2,value:0.2}]},
+
+  // TIER 4
+  {rank:31,name:'Majid Al Futtaim',short:'MAF',country:'UAE',aum:3,type:'Family Office',tier:4,status:'Active',founded:1992,
+    mandate:'Dubai-based holding company operating across retail, leisure, entertainment, and real estate. Owner and operator of major malls (Mall of the Emirates), Carrefour franchise in MENA, and hospitality brands.',
+    sectors:{Retail:35,RealEstate:25,Entertainment:15,Hospitality:10,Financial:8,Other:7},
+    investments:[{name:'Mall of the Emirates',sector:'Real Estate/Retail',value:'Flagship',year:2005},{name:'Carrefour MENA',sector:'Retail',value:'Franchise',year:1995},{name:'VOX Cinemas',sector:'Entertainment',value:'Full ownership',year:2000}],
+    geoFocus:{MiddleEast:60,NorthAfrica:15,CentralAsia:10,AsiaPacific:10,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.3},{q:'Q4 2025',count:2,value:0.3},{q:'Q3 2025',count:1,value:0.2},{q:'Q2 2025',count:2,value:0.2},{q:'Q1 2025',count:1,value:0.2}]},
+
+  {rank:32,name:'Al Gurg Group',short:'AlGurg',country:'UAE',aum:2.5,type:'Family Office',tier:4,status:'Active',founded:1960,
+    mandate:'One of Dubai\'s most prominent family-owned conglomerates. Diversified portfolio spanning construction, retail, industrial, FMCG, and joint ventures with global brands including Siemens and Unilever.',
+    sectors:{Construction:25,Retail:20,Industrial:18,FMCG:15,RealEstate:12,JointVentures:10},
+    investments:[{name:'Siemens LLC (JV)',sector:'Industrial',value:'Joint Venture',year:1973},{name:'Unilever Gulf (JV)',sector:'FMCG',value:'Joint Venture',year:1985}],
+    geoFocus:{MiddleEast:80,AsiaPacific:10,Europe:5,Other:5},
+    deals:[{q:'Q1 2026',count:1,value:0.1},{q:'Q4 2025',count:2,value:0.2},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:1,value:0.1},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:33,name:'Gulf Capital',short:'GulfCap',country:'UAE',aum:2.4,type:'VC',tier:4,status:'Active',founded:2006,
+    mandate:'Abu Dhabi-based alternative asset management firm focused on private equity, private debt, and growth capital. Invests in MENA region mid-market companies with strong growth potential.',
+    sectors:{Healthcare:25,Technology:20,Industrial:15,FoodBev:15,Financial:12,Other:13},
+    investments:[{name:'Amlak Finance',sector:'Financial',value:'Stake',year:2013},{name:'Metito',sector:'Water/Infra',value:'Exited',year:2015},{name:'Gulf Marine Services',sector:'Energy Services',value:'Exited',year:2012}],
+    geoFocus:{MiddleEast:65,Europe:15,AsiaPacific:10,Africa:5,NorthAmerica:5},
+    deals:[{q:'Q1 2026',count:2,value:0.2},{q:'Q4 2025',count:3,value:0.3},{q:'Q3 2025',count:2,value:0.1},{q:'Q2 2025',count:2,value:0.2},{q:'Q1 2025',count:2,value:0.1}]},
+
+  {rank:34,name:'Saudi Venture Capital Company (SVC)',short:'SVC',country:'Saudi Arabia',aum:1.6,type:'VC',tier:4,status:'Expanding',founded:2018,
+    mandate:'Wholly owned by the Saudi government via SME Bank. Invests in VC/PE funds and directly into startups to catalyze Saudi Arabia\'s venture capital ecosystem. Fund-of-funds model with direct co-investment capability.',
+    sectors:{Technology:30,Fintech:20,ECommerce:15,Healthcare:12,Logistics:10,EdTech:8,Other:5},
+    investments:[{name:'Various VC fund commitments',sector:'VC Funds',value:'$1B+ committed',year:'Ongoing'},{name:'Direct co-investments',sector:'Startups',value:'$200M+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:70,NorthAmerica:12,Europe:10,AsiaPacific:8},
+    deals:[{q:'Q1 2026',count:5,value:0.2},{q:'Q4 2025',count:6,value:0.3},{q:'Q3 2025',count:4,value:0.2},{q:'Q2 2025',count:5,value:0.2},{q:'Q1 2025',count:4,value:0.2}]},
+
+  {rank:35,name:'STV',short:'STV',country:'Saudi Arabia',aum:1.4,type:'VC',tier:4,status:'Expanding',founded:2017,
+    mandate:'Saudi Arabia\'s largest VC firm focused on MENA technology startups. Invests from seed to growth stage. Portfolio includes major regional tech companies in fintech, e-commerce, and mobility.',
+    sectors:{Fintech:25,ECommerce:20,Mobility:15,FoodTech:12,HealthTech:10,PropTech:8,Other:10},
+    investments:[{name:'Stc Pay (now Urpay)',sector:'Fintech',value:'$200M+',year:2020},{name:'Unifonic',sector:'CPaaS',value:'$125M lead',year:2021},{name:'Trukker',sector:'Logistics',value:'$23M',year:2019}],
+    geoFocus:{MiddleEast:60,NorthAfrica:15,Turkey:10,SouthAsia:10,Other:5},
+    deals:[{q:'Q1 2026',count:4,value:0.15},{q:'Q4 2025',count:5,value:0.2},{q:'Q3 2025',count:3,value:0.12},{q:'Q2 2025',count:4,value:0.18},{q:'Q1 2025',count:3,value:0.14}]},
+
+  {rank:36,name:'Jada Fund of Funds (PIF)',short:'Jada',country:'Saudi Arabia',aum:1,type:'VC',tier:4,status:'Expanding',founded:2018,
+    mandate:'PIF subsidiary focused on developing Saudi Arabia\'s VC ecosystem through fund-of-funds strategy. Invests in local and international VC funds that deploy capital into Saudi startups.',
+    sectors:{Technology:30,Fintech:20,Healthcare:15,Logistics:12,Entertainment:10,Other:13},
+    investments:[{name:'Fund commitments to Saudi-focused VCs',sector:'VC Funds',value:'$1B committed',year:'Ongoing'}],
+    geoFocus:{MiddleEast:80,NorthAmerica:8,Europe:7,AsiaPacific:5},
+    deals:[{q:'Q1 2026',count:3,value:0.1},{q:'Q4 2025',count:4,value:0.15},{q:'Q3 2025',count:2,value:0.08},{q:'Q2 2025',count:3,value:0.12},{q:'Q1 2025',count:3,value:0.1}]},
+
+  {rank:37,name:'Riyad Capital',short:'RiyadCap',country:'Saudi Arabia',aum:1,type:'IHC',tier:4,status:'Active',founded:2007,
+    mandate:'Investment banking and asset management arm of Riyad Bank. Provides investment funds, portfolio management, brokerage, and advisory services in Saudi capital markets.',
+    sectors:{PublicEquities:35,FixedIncome:25,RealEstate:15,IslamicFinance:12,Cash:8,Other:5},
+    investments:[{name:'Saudi equity funds',sector:'Public Markets',value:'$500M+',year:'Ongoing'},{name:'Saudi sukuk',sector:'Islamic Finance',value:'$200M+',year:'Ongoing'}],
+    geoFocus:{MiddleEast:85,NorthAmerica:5,Europe:5,AsiaPacific:5},
+    deals:[{q:'Q1 2026',count:1,value:0.05},{q:'Q4 2025',count:2,value:0.08},{q:'Q3 2025',count:1,value:0.04},{q:'Q2 2025',count:1,value:0.05},{q:'Q1 2025',count:1,value:0.04}]},
+
+  {rank:38,name:'Sanabil Investments (PIF)',short:'Sanabil',country:'Saudi Arabia',aum:3,type:'VC',tier:4,status:'Expanding',founded:2009,
+    mandate:'PIF\'s early-stage and growth venture arm. Invests globally in technology, with $3B+ annual deployment budget. Portfolio includes Lucid, Waymo, and major Silicon Valley companies.',
+    sectors:{Technology:40,AI:15,Mobility:12,Fintech:10,HealthTech:8,SpaceTech:8,Other:7},
+    investments:[{name:'Lucid Motors (early)',sector:'EV/Automotive',value:'Early investor',year:2017},{name:'Waymo',sector:'Autonomous Driving',value:'Co-investor',year:2020},{name:'Various Silicon Valley',sector:'Deep Tech',value:'$2B+',year:'Ongoing'}],
+    geoFocus:{NorthAmerica:50,Europe:18,MiddleEast:15,AsiaPacific:12,Other:5},
+    deals:[{q:'Q1 2026',count:8,value:0.8},{q:'Q4 2025',count:10,value:1.0},{q:'Q3 2025',count:7,value:0.6},{q:'Q2 2025',count:9,value:0.9},{q:'Q1 2025',count:8,value:0.7}]},
+
+  {rank:39,name:'Middle East Venture Partners (MEVP)',short:'MEVP',country:'UAE',aum:0.3,type:'VC',tier:4,status:'Active',founded:2010,
+    mandate:'Beirut-founded, Dubai-based VC firm investing in early-stage technology companies across MENA. One of the most active early-stage investors in the region.',
+    sectors:{Fintech:25,ECommerce:20,SaaS:15,EdTech:12,HealthTech:10,DeepTech:8,Other:10},
+    investments:[{name:'Bayzat',sector:'InsurTech',value:'$5M',year:2017},{name:'Sarwa',sector:'Fintech',value:'$2M',year:2018},{name:'POSRocket',sector:'SaaS',value:'$3M',year:2019}],
+    geoFocus:{MiddleEast:60,NorthAfrica:20,Turkey:10,Other:10},
+    deals:[{q:'Q1 2026',count:3,value:0.03},{q:'Q4 2025',count:4,value:0.04},{q:'Q3 2025',count:2,value:0.02},{q:'Q2 2025',count:3,value:0.03},{q:'Q1 2025',count:3,value:0.02}]},
+
+  {rank:40,name:'TVM Capital Healthcare',short:'TVM',country:'UAE',aum:0.25,type:'VC',tier:4,status:'Active',founded:2007,
+    mandate:'Dubai-based healthcare-focused private equity firm. Invests in healthcare services, pharmaceutical, and medtech companies across MENA, Southeast Asia, and Sub-Saharan Africa.',
+    sectors:{HealthcareServices:35,Pharma:25,MedTech:20,Diagnostics:10,DigitalHealth:10},
+    investments:[{name:'Cambridge Medical & Rehab',sector:'Healthcare',value:'$100M+',year:2012},{name:'Bourn Hall International',sector:'Fertility',value:'$40M',year:2014}],
+    geoFocus:{MiddleEast:40,SoutheastAsia:25,Africa:20,Europe:10,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.03},{q:'Q4 2025',count:2,value:0.03},{q:'Q3 2025',count:1,value:0.02},{q:'Q2 2025',count:2,value:0.02},{q:'Q1 2025',count:1,value:0.02}]},
+
+  // TIER 5
+  {rank:41,name:'Shorooq Partners',short:'Shorooq',country:'UAE',aum:0.2,type:'VC',tier:5,status:'Expanding',founded:2016,
+    mandate:'Abu Dhabi-based VC firm focused on MENA fintech and enterprise SaaS. Active at pre-seed to Series A stage with strong founder community network.',
+    sectors:{Fintech:30,EnterpriseSaaS:25,PropTech:15,LogisticsTech:12,HealthTech:10,Other:8},
+    investments:[{name:'Tarabut Gateway',sector:'Open Banking',value:'$12M lead',year:2021},{name:'Rain',sector:'Crypto',value:'$6M',year:2019},{name:'Ziina',sector:'Fintech',value:'$2M',year:2021}],
+    geoFocus:{MiddleEast:70,NorthAfrica:12,SouthAsia:10,Other:8},
+    deals:[{q:'Q1 2026',count:3,value:0.02},{q:'Q4 2025',count:4,value:0.03},{q:'Q3 2025',count:2,value:0.01},{q:'Q2 2025',count:3,value:0.02},{q:'Q1 2025',count:3,value:0.02}]},
+
+  {rank:42,name:'Wamda Capital',short:'Wamda',country:'UAE',aum:0.186,type:'VC',tier:5,status:'Active',founded:2013,
+    mandate:'Dubai-based VC and growth equity firm investing in MENA technology companies. Managed by Wamda Group which also runs accelerator programs and startup media.',
+    sectors:{ECommerce:25,Fintech:20,Logistics:18,FoodTech:12,Mobility:12,Other:13},
+    investments:[{name:'Careem (early)',sector:'Mobility',value:'$1.5M seed',year:2013},{name:'Fetchr',sector:'Logistics',value:'$10M',year:2016},{name:'Locus Robotics',sector:'Robotics',value:'$5M',year:2018}],
+    geoFocus:{MiddleEast:65,NorthAfrica:15,Turkey:10,SouthAsia:5,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.015},{q:'Q4 2025',count:3,value:0.02},{q:'Q3 2025',count:2,value:0.01},{q:'Q2 2025',count:2,value:0.015},{q:'Q1 2025',count:2,value:0.01}]},
+
+  {rank:43,name:'NEOM Investment Fund',short:'NEOM',country:'Saudi Arabia',aum:null,type:'SWF',tier:5,status:'Expanding',founded:2017,
+    mandate:'Investment vehicle for the NEOM megaproject ($500B). Focuses on disruptive technologies, sustainable energy, advanced manufacturing, and future mobility solutions aligned with the city\'s ambitious vision.',
+    sectors:{SustainableEnergy:25,AdvancedManufacturing:20,Mobility:15,BioTech:12,DigitalTech:12,Tourism:8,Other:8},
+    investments:[{name:'NEOM megaproject',sector:'Infrastructure',value:'$500B master plan',year:2017},{name:'The Line',sector:'Urban Development',value:'$200B+',year:2022},{name:'Oxagon',sector:'Industrial',value:'Major investment',year:2021}],
+    geoFocus:{MiddleEast:60,NorthAmerica:15,Europe:12,AsiaPacific:8,Other:5},
+    deals:[{q:'Q1 2026',count:5,value:2.0},{q:'Q4 2025',count:6,value:2.5},{q:'Q3 2025',count:4,value:1.8},{q:'Q2 2025',count:5,value:2.2},{q:'Q1 2025',count:4,value:1.5}]},
+
+  {rank:44,name:'Abu Dhabi Developmental Holding (ADG)',short:'ADG',country:'UAE',aum:null,type:'SWF',tier:5,status:'Active',founded:2018,
+    mandate:'Abu Dhabi government holding company focused on developmental investments. Manages government stakes in companies that support Abu Dhabi\'s economic diversification agenda.',
+    sectors:{Industrial:25,Technology:20,Healthcare:15,Education:12,Tourism:10,Financial:10,Other:8},
+    investments:[{name:'Various Abu Dhabi entities',sector:'Diversified',value:'Government portfolio',year:2018}],
+    geoFocus:{MiddleEast:85,AsiaPacific:5,Europe:5,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.2},{q:'Q4 2025',count:2,value:0.3},{q:'Q3 2025',count:1,value:0.1},{q:'Q2 2025',count:2,value:0.2},{q:'Q1 2025',count:1,value:0.1}]},
+
+  {rank:45,name:'STC Ventures',short:'STCV',country:'Saudi Arabia',aum:null,type:'VC',tier:5,status:'Active',founded:2018,
+    mandate:'Corporate venture arm of Saudi Telecom Company (stc). Invests in technology companies aligned with stc\'s digital transformation strategy including cloud, cybersecurity, IoT, and AI.',
+    sectors:{Cloud:22,Cybersecurity:18,IoT:15,AI:15,Telecom:12,Fintech:10,Other:8},
+    investments:[{name:'Cisco ThousandEyes (co-invest)',sector:'Network Intelligence',value:'Co-investor',year:2020},{name:'Regional tech startups',sector:'Technology',value:'$100M+ deployed',year:'Ongoing'}],
+    geoFocus:{MiddleEast:55,NorthAmerica:20,Europe:12,AsiaPacific:8,Other:5},
+    deals:[{q:'Q1 2026',count:3,value:0.1},{q:'Q4 2025',count:4,value:0.12},{q:'Q3 2025',count:2,value:0.06},{q:'Q2 2025',count:3,value:0.08},{q:'Q1 2025',count:3,value:0.07}]},
+
+  {rank:46,name:'Taqnia (PIF)',short:'Taqnia',country:'Saudi Arabia',aum:null,type:'IHC',tier:5,status:'Stealth',founded:2011,
+    mandate:'PIF subsidiary focused on technology transfer and localization. Invests in advanced technology companies and forms joint ventures to bring cutting-edge technology to Saudi Arabia.',
+    sectors:{Defence:25,Aerospace:20,Technology:18,Telecom:12,AI:10,Cybersecurity:8,Other:7},
+    investments:[{name:'Saudi defence tech projects',sector:'Defence',value:'Government contracts',year:2011},{name:'Tech transfer JVs',sector:'Technology',value:'Multiple',year:'Ongoing'}],
+    geoFocus:{MiddleEast:70,NorthAmerica:12,Europe:10,AsiaPacific:8},
+    deals:[{q:'Q1 2026',count:1,value:0.05},{q:'Q4 2025',count:2,value:0.08},{q:'Q3 2025',count:1,value:0.04},{q:'Q2 2025',count:1,value:0.05},{q:'Q1 2025',count:1,value:0.04}]},
+
+  {rank:47,name:'Hub71',short:'Hub71',country:'UAE',aum:null,type:'VC',tier:5,status:'Expanding',founded:2019,
+    mandate:'Abu Dhabi\'s global tech ecosystem. Not a traditional fund but deploys capital through incentive programs, co-investments with Mubadala and ADQ, and startup support programs. 400+ startups in ecosystem.',
+    sectors:{Fintech:20,ClimateTech:18,HealthTech:15,Web3:12,AI:12,DeepTech:10,Other:13},
+    investments:[{name:'400+ ecosystem companies',sector:'Tech Startups',value:'Incentive capital',year:'Ongoing'},{name:'Co-investments with Mubadala/ADQ',sector:'Technology',value:'$500M+ deployed',year:'Ongoing'}],
+    geoFocus:{MiddleEast:50,NorthAmerica:20,Europe:15,AsiaPacific:10,Other:5},
+    deals:[{q:'Q1 2026',count:6,value:0.15},{q:'Q4 2025',count:8,value:0.2},{q:'Q3 2025',count:5,value:0.12},{q:'Q2 2025',count:6,value:0.15},{q:'Q1 2025',count:5,value:0.1}]},
+
+  {rank:48,name:'BECO Capital',short:'BECO',country:'UAE',aum:null,type:'VC',tier:5,status:'Active',founded:2012,
+    mandate:'Dubai-based VC firm focused on early-stage MENA startups. Known for backing category-defining companies. Exited Careem ($3.1B to Uber). Invests across seed to Series B.',
+    sectors:{Fintech:25,Logistics:20,ECommerce:15,PropTech:12,FoodTech:10,SaaS:10,Other:8},
+    investments:[{name:'Careem',sector:'Mobility',value:'Early investor (exited $3.1B)',year:2012},{name:'Kitopi',sector:'Cloud Kitchens',value:'Series A',year:2018},{name:'Swvl',sector:'Mobility',value:'Series A',year:2018}],
+    geoFocus:{MiddleEast:70,NorthAfrica:12,Turkey:8,SouthAsia:5,Other:5},
+    deals:[{q:'Q1 2026',count:2,value:0.02},{q:'Q4 2025',count:3,value:0.03},{q:'Q3 2025',count:2,value:0.02},{q:'Q2 2025',count:2,value:0.02},{q:'Q1 2025',count:2,value:0.02}]},
+
+  {rank:49,name:'Global Ventures',short:'GV',country:'UAE',aum:null,type:'VC',tier:5,status:'Expanding',founded:2018,
+    mandate:'Dubai-based VC firm investing in emerging market technology companies from pre-Series A to Series B. Focus on MENA, Africa, South Asia, and Southeast Asia.',
+    sectors:{Fintech:22,Logistics:18,HealthTech:15,ECommerce:14,EdTech:12,AgTech:10,Other:9},
+    investments:[{name:'Tabby',sector:'BNPL/Fintech',value:'Series A co-lead',year:2020},{name:'Bosta',sector:'Logistics',value:'$6.7M lead',year:2021},{name:'Breadfast',sector:'Instant Delivery',value:'$26M',year:2022}],
+    geoFocus:{MiddleEast:40,Africa:25,SouthAsia:15,SoutheastAsia:10,Other:10},
+    deals:[{q:'Q1 2026',count:3,value:0.03},{q:'Q4 2025',count:4,value:0.04},{q:'Q3 2025',count:2,value:0.02},{q:'Q2 2025',count:3,value:0.03},{q:'Q1 2025',count:3,value:0.02}]},
+
+  {rank:50,name:'Nuwa Capital',short:'Nuwa',country:'UAE',aum:null,type:'VC',tier:5,status:'Active',founded:2020,
+    mandate:'Dubai-based VC firm focused on pre-seed and seed stage investments across MENA. Founded by former Wamda and STV partners. Thesis-driven approach targeting underserved sectors.',
+    sectors:{Fintech:20,SaaS:18,HealthTech:15,ClimateTech:15,DeepTech:12,Web3:10,Other:10},
+    investments:[{name:'Baraka',sector:'Investing App',value:'$4M seed',year:2021},{name:'Eyewa',sector:'E-commerce/Eyewear',value:'$2M',year:2021}],
+    geoFocus:{MiddleEast:65,NorthAfrica:15,SouthAsia:10,Other:10},
+    deals:[{q:'Q1 2026',count:3,value:0.015},{q:'Q4 2025',count:3,value:0.02},{q:'Q3 2025',count:2,value:0.01},{q:'Q2 2025',count:3,value:0.015},{q:'Q1 2025',count:2,value:0.01}]}
+];
+
+// ==========================================
+// STATE
+// ==========================================
+var currentFilter = 'all';
+var currentTypeFilter = null;
+var currentSort = {col:0, asc:true};
+var expandedFund = null;
+var charts = {};
+
+// ==========================================
+// RENDER FUND TABLE
+// ==========================================
+function renderFundTable(){
+  var filtered = funds.filter(function(f){
+    if(currentFilter !== 'all' && 'tier'+f.tier !== currentFilter) return false;
+    if(currentTypeFilter && f.type !== currentTypeFilter) return false;
+    var q = document.getElementById('fundSearch').value.toLowerCase();
+    if(q && f.name.toLowerCase().indexOf(q)===-1 && f.country.toLowerCase().indexOf(q)===-1 && f.type.toLowerCase().indexOf(q)===-1) return false;
+    return true;
+  });
+
+  // Sort
+  filtered.sort(function(a,b){
+    var va,vb;
+    switch(currentSort.col){
+      case 0: va=a.rank; vb=b.rank; break;
+      case 1: va=a.name; vb=b.name; break;
+      case 2: va=a.country; vb=b.country; break;
+      case 3: va=(a.aum||0); vb=(b.aum||0); break;
+      case 4: va=a.type; vb=b.type; break;
+      case 5: va=a.tier; vb=b.tier; break;
+      case 6: va=a.status; vb=b.status; break;
+    }
+    if(typeof va==='string'){va=va.toLowerCase();vb=vb.toLowerCase()}
+    if(va<vb) return currentSort.asc?-1:1;
+    if(va>vb) return currentSort.asc?1:-1;
+    return 0;
+  });
+
+  var html='';
+  filtered.forEach(function(f){
+    var typeClass = f.type==='SWF'?'type-swf':f.type==='Pension'?'type-pension':f.type==='Family Office'?'type-fo':f.type==='VC'?'type-vc':'type-ihc';
+    var statusClass = f.status==='Active'?'status-active':f.status==='Expanding'?'status-expanding':'status-stealth';
+    var aumStr = f.aum ? (f.aum>=1000 ? '$'+((f.aum/1000).toFixed(2))+'T' : '$'+f.aum+'B') : 'Undisclosed';
+    var expanded = expandedFund===f.rank ? ' expanded' : '';
+
+    html += '<tr class="fund-row'+expanded+'" onclick="toggleFund('+f.rank+')" data-rank="'+f.rank+'">';
+    html += '<td>'+f.rank+'</td>';
+    html += '<td>'+f.name+'</td>';
+    html += '<td>'+f.country+'</td>';
+    html += '<td class="aum-cell">'+aumStr+'</td>';
+    html += '<td><span class="status-badge '+typeClass+'">'+f.type+'</span></td>';
+    html += '<td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td>';
+    html += '<td><span class="status-badge '+statusClass+'">'+f.status+'</span></td>';
+    html += '</tr>';
+
+    if(expandedFund===f.rank){
+      html += '<tr class="profile-row"><td colspan="7" style="padding:0;border:none">';
+      html += renderFundProfile(f);
+      html += '</td></tr>';
+    }
+  });
+  document.getElementById('fundTableBody').innerHTML = html;
+
+  // Re-render charts for expanded fund
+  if(expandedFund){
+    var f = funds.find(function(x){return x.rank===expandedFund});
+    if(f) renderFundCharts(f);
+  }
+}
+
+function renderFundProfile(f){
+  var aumStr = f.aum ? (f.aum>=1000 ? '$'+((f.aum/1000).toFixed(2))+'T' : '$'+f.aum+'B') : 'Undisclosed';
+  var sectorKeys = Object.keys(f.sectors);
+
+  var html = '<div class="fund-profile open" id="profile-'+f.rank+'">';
+
+  // Hero
+  html += '<div class="profile-hero" style="position:relative">';
+  html += '<div class="profile-logo">'+f.short+'</div>';
+  html += '<div class="profile-info"><h2>'+f.name+'</h2>';
+  html += '<div class="profile-meta">'+f.country+' &bull; Founded '+f.founded+' &bull; <strong>'+f.type+'</strong> &bull; Tier '+f.tier+'</div></div>';
+  html += '<div class="profile-stats">';
+  html += '<div class="profile-stat"><div class="profile-stat-value">'+aumStr+'</div><div class="profile-stat-label">AUM</div></div>';
+  html += '<div class="profile-stat"><div class="profile-stat-value">'+f.status+'</div><div class="profile-stat-label">Status</div></div>';
+  if(f.deals && f.deals.length>0){
+    var totalDeals = f.deals.reduce(function(s,d){return s+d.count},0);
+    html += '<div class="profile-stat"><div class="profile-stat-value">'+totalDeals+'</div><div class="profile-stat-label">Deals (5Q)</div></div>';
+  }
+  html += '</div>';
+  html += '<button class="close-profile" onclick="event.stopPropagation();toggleFund('+f.rank+')">&times;</button>';
+  html += '</div>';
+
+  // Body
+  html += '<div class="profile-body">';
+
+  // Mandate
+  html += '<div class="profile-section"><div class="profile-section-title">Mandate &amp; Strategy</div>';
+  html += '<div class="mandate-text">'+f.mandate+'</div></div>';
+
+  // Grid: Charts
+  html += '<div class="profile-grid">';
+
+  // Sector Allocation Chart
+  html += '<div class="profile-section"><div class="profile-section-title">Portfolio Allocation</div>';
+  html += '<div class="chart-container-sm"><canvas id="sectorChart-'+f.rank+'"></canvas></div></div>';
+
+  // Geographic Focus Chart
+  html += '<div class="profile-section"><div class="profile-section-title">Geographic Focus</div>';
+  html += '<div class="chart-container-sm"><canvas id="geoChart-'+f.rank+'"></canvas></div></div>';
+
+  html += '</div>'; // end profile-grid
+
+  // Grid: Tables
+  html += '<div class="profile-grid">';
+
+  // Key Investments Table
+  html += '<div class="profile-section"><div class="profile-section-title">Key Investments</div>';
+  html += '<table class="investment-table"><thead><tr><th>Investment</th><th>Sector</th><th>Value</th><th>Year</th></tr></thead><tbody>';
+  f.investments.forEach(function(inv){
+    html += '<tr><td>'+inv.name+'</td><td>'+inv.sector+'</td><td>'+inv.value+'</td><td>'+inv.year+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+
+  // Deployment Activity
+  if(f.deals && f.deals.length>0){
+    html += '<div class="profile-section"><div class="profile-section-title">Deployment Activity (Last 5 Quarters)</div>';
+    html += '<div class="chart-container-sm"><canvas id="dealsChart-'+f.rank+'"></canvas></div></div>';
+  }
+
+  html += '</div>'; // end profile-grid
+
+  html += '</div>'; // end profile-body
+  html += '</div>'; // end fund-profile
+  return html;
+}
+
+function renderFundCharts(f){
+  // Sector Allocation - Doughnut
+  var sectorKeys = Object.keys(f.sectors);
+  var sectorValues = sectorKeys.map(function(k){return f.sectors[k]});
+  var sectorColors = ['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+
+  destroyChart('sectorChart-'+f.rank);
+  var ctx1 = document.getElementById('sectorChart-'+f.rank);
+  if(ctx1){
+    charts['sectorChart-'+f.rank] = new Chart(ctx1,{type:'doughnut',data:{labels:sectorKeys.map(function(k){return k.replace(/([A-Z])/g,' $1').trim()}),datasets:[{data:sectorValues,backgroundColor:sectorColors.slice(0,sectorKeys.length),borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:6}}}}});
+  }
+
+  // Geographic Focus - Horizontal Bar
+  if(f.geoFocus){
+    var geoKeys = Object.keys(f.geoFocus);
+    var geoValues = geoKeys.map(function(k){return f.geoFocus[k]});
+    destroyChart('geoChart-'+f.rank);
+    var ctx2 = document.getElementById('geoChart-'+f.rank);
+    if(ctx2){
+      charts['geoChart-'+f.rank] = new Chart(ctx2,{type:'bar',data:{labels:geoKeys.map(function(k){return k.replace(/([A-Z])/g,' $1').trim()}),datasets:[{data:geoValues,backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{max:100,ticks:{callback:function(v){return v+'%'},font:{size:10}},grid:{color:'#F3F4F6'}},y:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{display:false}}}});
+    }
+  }
+
+  // Deals Timeline - Bar
+  if(f.deals && f.deals.length>0){
+    var dealLabels = f.deals.map(function(d){return d.q}).reverse();
+    var dealCounts = f.deals.map(function(d){return d.count}).reverse();
+    var dealValues = f.deals.map(function(d){return d.value}).reverse();
+
+    destroyChart('dealsChart-'+f.rank);
+    var ctx3 = document.getElementById('dealsChart-'+f.rank);
+    if(ctx3){
+      charts['dealsChart-'+f.rank] = new Chart(ctx3,{type:'bar',data:{labels:dealLabels,datasets:[{label:'Deal Count',data:dealCounts,backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4,yAxisID:'y'},{label:'Value ($B)',data:dealValues,type:'line',borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.1)',pointBackgroundColor:'#059669',pointRadius:4,tension:0.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',ticks:{font:{size:10},stepSize:1},grid:{color:'#F3F4F6'}},y1:{position:'right',ticks:{font:{size:10},callback:function(v){return '$'+v+'B'}},grid:{display:false}},x:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:12}}}}});
+    }
+  }
+}
+
+// ==========================================
+// TABLE INTERACTIONS
+// ==========================================
+function toggleFund(rank){
+  expandedFund = expandedFund===rank ? null : rank;
+  renderFundTable();
+}
+
+function sortTable(col){
+  if(currentSort.col===col){
+    currentSort.asc = !currentSort.asc;
+  } else {
+    currentSort.col = col;
+    currentSort.asc = true;
+  }
+  // Update sort arrows
+  document.querySelectorAll('.fund-table thead th').forEach(function(th,i){
+    th.classList.remove('sorted');
+    th.querySelector('.sort-arrow').textContent='';
+  });
+  var ths = document.querySelectorAll('.fund-table thead th');
+  ths[col].classList.add('sorted');
+  ths[col].querySelector('.sort-arrow').textContent = currentSort.asc ? '\u25B2' : '\u25BC';
+  renderFundTable();
+}
+
+function filterFunds(){renderFundTable()}
+
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.tier-filters:first-of-type .filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  renderFundTable();
+}
+
+function setTypeFilter(t,btn){
+  if(currentTypeFilter===t){
+    currentTypeFilter=null;
+    btn.classList.remove('active');
+  } else {
+    currentTypeFilter=t;
+    document.querySelectorAll('.tier-filters:last-of-type .filter-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+  }
+  renderFundTable();
+}
+
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k]}}
+
+// ==========================================
+// AGGREGATE CHARTS
+// ==========================================
+function renderAggregateCharts(){
+  // 1. AUM by Country - Pie
+  var countryAum = {};
+  funds.forEach(function(f){
+    if(f.aum){
+      if(!countryAum[f.country]) countryAum[f.country]=0;
+      countryAum[f.country]+=f.aum;
+    }
+  });
+  var cLabels = Object.keys(countryAum).sort(function(a,b){return countryAum[b]-countryAum[a]});
+  var cValues = cLabels.map(function(k){return countryAum[k]});
+  var cColors = ['#2563EB','#059669','#7C3AED','#D97706','#DC2626','#0891B2'];
+
+  new Chart(document.getElementById('countryPieChart'),{type:'doughnut',data:{labels:cLabels,datasets:[{data:cValues,backgroundColor:cColors,borderWidth:2,borderColor:'#FFFFFF',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'45%',plugins:{legend:{position:'right',labels:{font:{size:12,family:"'Inter'"},boxWidth:14,padding:12,generateLabels:function(chart){return chart.data.labels.map(function(l,i){var v=chart.data.datasets[0].data[i];var str=v>=1000?'$'+(v/1000).toFixed(2)+'T':'$'+v+'B';return{text:l+' ('+str+')',fillStyle:chart.data.datasets[0].backgroundColor[i],strokeStyle:'transparent',lineWidth:0,index:i}})}}},tooltip:{callbacks:{label:function(ctx){var v=ctx.parsed;return v>=1000?'$'+(v/1000).toFixed(2)+'T':'$'+v+'B'}}}}}});
+
+  // 2. Sector Allocation - Stacked Bar
+  var sectorTotals = {};
+  funds.forEach(function(f){
+    if(f.sectors && f.aum){
+      Object.keys(f.sectors).forEach(function(s){
+        var cleanS = s.replace(/([A-Z])/g,' $1').trim();
+        if(!sectorTotals[cleanS]) sectorTotals[cleanS]=0;
+        sectorTotals[cleanS] += f.sectors[s] * f.aum / 100;
+      });
+    }
+  });
+  var sLabels = Object.keys(sectorTotals).sort(function(a,b){return sectorTotals[b]-sectorTotals[a]}).slice(0,12);
+  var sValues = sLabels.map(function(k){return Math.round(sectorTotals[k])});
+  var sColors = ['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+
+  new Chart(document.getElementById('sectorBarChart'),{type:'bar',data:{labels:sLabels,datasets:[{data:sValues,backgroundColor:sColors,borderRadius:4,barThickness:20}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{ticks:{callback:function(v){return v>=1000?'$'+(v/1000).toFixed(1)+'T':'$'+v+'B'},font:{size:10}},grid:{color:'#F3F4F6'}},y:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var v=ctx.parsed.x;return v>=1000?'$'+(v/1000).toFixed(1)+'T':'$'+Math.round(v)+'B'}}}}}});
+
+  // 3. AUM Distribution Histogram
+  var tierLabels = ['Tier 1 ($100B+)','Tier 2 ($20-115B)','Tier 3 ($3-20B)','Tier 4 ($0.25-3B)','Tier 5 (Undisclosed/Early)'];
+  var tierCounts = [0,0,0,0,0];
+  var tierAum = [0,0,0,0,0];
+  funds.forEach(function(f){
+    tierCounts[f.tier-1]++;
+    if(f.aum) tierAum[f.tier-1]+=f.aum;
+  });
+
+  new Chart(document.getElementById('aumHistogram'),{type:'bar',data:{labels:tierLabels,datasets:[{label:'Number of Funds',data:tierCounts,backgroundColor:['#0B1D3A','#2563EB','#7C3AED','#D97706','#9CA3AF'],borderRadius:6,yAxisID:'y'},{label:'Combined AUM ($B)',data:tierAum,type:'line',borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.1)',pointBackgroundColor:'#059669',pointRadius:5,tension:0.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',ticks:{font:{size:10},stepSize:2},grid:{color:'#F3F4F6'}},y1:{position:'right',ticks:{font:{size:10},callback:function(v){return v>=1000?'$'+(v/1000).toFixed(1)+'T':'$'+v+'B'}},grid:{display:false}},x:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:12}}}}});
+
+  // 4. Activity Heatmap - top 15 most active funds
+  var activeFunds = funds.filter(function(f){return f.deals && f.deals.length>0}).map(function(f){
+    var totalDeals = f.deals.reduce(function(s,d){return s+d.count},0);
+    var totalValue = f.deals.reduce(function(s,d){return s+d.value},0);
+    return {name:f.short,deals:totalDeals,value:totalValue};
+  }).sort(function(a,b){return b.deals-a.deals}).slice(0,15);
+
+  new Chart(document.getElementById('activityChart'),{type:'bar',data:{labels:activeFunds.map(function(f){return f.name}),datasets:[{label:'Total Deals (5Q)',data:activeFunds.map(function(f){return f.deals}),backgroundColor:activeFunds.map(function(f){return f.deals>40?'#DC2626':f.deals>25?'#D97706':f.deals>15?'#2563EB':'#059669'}),borderRadius:4,barThickness:18}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{font:{size:10},stepSize:5},grid:{color:'#F3F4F6'}},x:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var f=activeFunds[ctx.dataIndex];return f.deals+' deals, $'+f.value.toFixed(1)+'B deployed'}}}}}});
+
+  // 5. Liquidity placeholder chart
+  var months=['Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
+  var liquidity=[68,70,72,71,73,75,78,80,82,84,86,88,90,91,93];
+  var deployment=[12,14,15,13,16,18,20,22,24,25,27,28,30,31,33];
+
+  new Chart(document.getElementById('liquidityPlaceholder'),{type:'line',data:{labels:months,datasets:[{label:'Global Liquidity Index',data:liquidity,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',fill:true,tension:0.4,pointRadius:3},{label:'GCC Deployment Index',data:deployment,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.1)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{font:{size:10}},grid:{color:'#F3F4F6'}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
+
+  // 6. Oil correlation chart
+  var oilPrice=[78,80,82,79,83,85,88,90,92,95,98,100,102,101,102];
+  var dealFlow=[15,18,20,16,22,25,28,30,32,35,38,40,42,43,45];
+
+  new Chart(document.getElementById('oilCorrelationChart'),{type:'line',data:{labels:months,datasets:[{label:'Brent Crude ($/bbl)',data:oilPrice,borderColor:'#D97706',backgroundColor:'rgba(217,119,6,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y'},{label:'GCC Deal Flow (deals/month)',data:dealFlow,borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',title:{display:true,text:'Oil Price ($)',font:{size:10}},ticks:{font:{size:10}},grid:{color:'#F3F4F6'}},y1:{position:'right',title:{display:true,text:'Deals/Month',font:{size:10}},ticks:{font:{size:10}},grid:{display:false}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
+}
+
+// ==========================================
+// INIT
+// ==========================================
+document.addEventListener('DOMContentLoaded', function(){
+  renderFundTable();
+  renderAggregateCharts();
+});
+</script>
+</body>
+</html>
