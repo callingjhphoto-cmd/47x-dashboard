@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>47X Intelligence Platform</title>
+<meta name="description" content="47X Performance Benchmark &amp; Arbitrage Intelligence — GCC company benchmarking across 9 dimensions">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F5F7;--surface:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;
+  --navy:#0B1D3A;--navy-light:#1E3A5F;
+  --text-primary:#111827;--text-secondary:#6B7280;--text-tertiary:#9CA3AF;
+  --accent:#2563EB;--accent-light:#EFF6FF;--accent-dark:#1D4ED8;
+  --green:#059669;--green-light:#ECFDF5;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --orange:#D97706;--orange-light:#FFFBEB;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.08);
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+.header{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:36px;height:36px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:-0.5px}
+.logo-text{font-size:18px;font-weight:700;letter-spacing:-0.3px;color:var(--navy)}
+.logo-text span{color:var(--text-tertiary);font-weight:400;font-size:13px;margin-left:8px}
+.nav-tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px}
+.nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;white-space:nowrap;font-family:inherit}
+.nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
+.nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+.header-right{display:flex;align-items:center;gap:14px}
+.company-selector{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text-primary);background:var(--surface);cursor:pointer;min-width:200px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.api-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.api-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
+.api-dot.live{background:var(--green)}.api-dot.offline{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
+.section{margin-bottom:32px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
+.level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.level-1{background:var(--accent-light);color:var(--accent)}.level-2{background:var(--purple-light);color:var(--purple)}.level-3{background:var(--green-light);color:var(--green)}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.card-subtitle{font-size:13px;color:var(--text-secondary);margin-bottom:16px}
+
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+
+.score-ring{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;margin:0 auto 10px;position:relative;letter-spacing:-1px}
+.score-ring::before{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid var(--border-light)}
+.score-critical{color:var(--red)}.score-critical::before{border-color:rgba(220,38,38,0.2)}
+.score-weak{color:var(--orange)}.score-weak::before{border-color:rgba(217,119,6,0.2)}
+.score-average{color:var(--orange)}.score-average::before{border-color:rgba(217,119,6,0.2)}
+.score-strong{color:var(--green)}.score-strong::before{border-color:rgba(5,150,105,0.2)}
+.score-leading{color:var(--accent)}.score-leading::before{border-color:rgba(37,99,235,0.2)}
+
+.kpi-card{text-align:center;padding:20px}
+.kpi-value{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+.kpi-change{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;margin-top:6px;padding:2px 10px;border-radius:100px}
+.kpi-change.up{background:var(--green-light);color:var(--green)}.kpi-change.down{background:var(--red-light);color:var(--red)}
+
+.service-bar{margin-bottom:12px}
+.service-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.service-name{font-size:13px;font-weight:500;color:var(--text-primary)}
+.service-score{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace}
+.bar-track{height:6px;background:var(--border-light);border-radius:100px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:100px;transition:width 1s ease}
+.bar-benchmark{position:absolute;top:-4px;width:2px;height:14px;background:var(--text-primary);border-radius:1px;opacity:0.2}
+
+.scorecard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.scorecard-cell{text-align:center;padding:12px 8px;border-radius:var(--radius-sm);background:var(--bg);transition:all 0.2s}
+.scorecard-cell:hover{background:var(--accent-light)}
+.scorecard-cell .sc-score{font-size:22px;font-weight:800;letter-spacing:-0.5px;font-family:'JetBrains Mono',monospace;line-height:1}
+.scorecard-cell .sc-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;color:var(--text-secondary);margin-top:4px;line-height:1.2}
+.scorecard-cell .sc-bar{height:3px;border-radius:2px;margin-top:6px;background:var(--border-light);overflow:hidden}
+.scorecard-cell .sc-bar-fill{height:100%;border-radius:2px;transition:width 0.8s ease}
+
+.signal-item{padding:12px 0;border-bottom:1px solid var(--border-light);display:flex;gap:12px;align-items:flex-start}
+.signal-item:last-child{border-bottom:none}
+.signal-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.signal-icon.negative{background:var(--red-light)}.signal-icon.positive{background:var(--green-light)}
+.signal-icon.neutral{background:var(--accent-light)}.signal-icon.warning{background:var(--orange-light)}
+.signal-content{flex:1}
+.signal-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.signal-detail{font-size:12px;color:var(--text-secondary);line-height:1.4}
+
+.arb-card{border-left:3px solid var(--green);padding:20px;background:linear-gradient(135deg,var(--green-light) 0%,var(--surface) 100%)}
+.arb-card .card-title{color:var(--green);display:flex;align-items:center;gap:8px}
+.arb-urgency{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.urgency-high{background:var(--red-light);color:var(--red)}.urgency-medium{background:var(--orange-light);color:var(--orange)}.urgency-low{background:var(--accent-light);color:var(--accent)}
+.arb-metric{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(5,150,105,0.08);font-size:13px}
+.arb-metric:last-child{border-bottom:none}
+.arb-metric-label{color:var(--text-secondary)}.arb-metric-value{font-weight:600}
+
+.opp-score{display:flex;align-items:center;gap:20px;padding:24px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--radius);color:#fff;margin-bottom:16px}
+.opp-score-value{font-size:52px;font-weight:800;line-height:1;letter-spacing:-2px;background:linear-gradient(135deg,#34D399,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.opp-score-label{font-size:14px;font-weight:500;color:rgba(255,255,255,0.7)}
+.opp-score-detail{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
+
+.timeline-item{display:flex;gap:14px;padding:10px 0;position:relative}
+.timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;position:relative;z-index:1}
+.timeline-item:not(:last-child) .timeline-dot::after{content:'';position:absolute;left:4px;top:10px;width:2px;height:calc(100% + 10px);background:var(--border-light)}
+.timeline-text{font-size:13px;color:var(--text-secondary)}.timeline-text strong{color:var(--text-primary);font-weight:600}
+.timeline-date{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+
+.action-step{display:flex;gap:14px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:8px;align-items:flex-start}
+.action-number{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.action-text{font-size:13px;color:var(--text-primary);line-height:1.5}
+.action-text strong{font-weight:600}
+.action-text .impact{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;color:var(--green)}
+
+.comp-table{width:100%;border-collapse:collapse;font-size:13px}
+.comp-table thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.comp-table tbody td{padding:12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.comp-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
+.comp-table tbody tr:hover{background:var(--bg)}
+.comp-table .score-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
+.comp-table .trend-up{color:var(--green)}.comp-table .trend-down{color:var(--red)}
+
+.macro-strip{display:flex;gap:20px;padding:12px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow-x:auto;box-shadow:var(--shadow-sm)}
+.macro-item{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.macro-item-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+.macro-item-value{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text-primary)}
+.macro-item-change{font-size:12px;font-weight:600}
+.macro-item-change.up{color:var(--green)}.macro-item-change.down{color:var(--red)}
+.macro-divider{width:1px;background:var(--border);align-self:stretch}
+
+.company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+.company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px}
+.company-info h1{font-size:26px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;color:var(--navy)}
+.company-info .company-meta{font-size:13px;color:var(--text-secondary)}
+.company-info .company-meta strong{color:var(--text-primary)}
+
+.chart-container{position:relative;height:260px;margin-top:12px}
+.chart-container-tall{position:relative;height:320px;margin-top:12px}
+
+.overlay-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:13px}
+.overlay-row:last-child{border-bottom:none}
+.overlay-label{color:var(--text-secondary)}.overlay-value{font-weight:600;font-family:'JetBrains Mono',monospace}
+
+.event-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);align-items:center}
+.event-item:last-child{border-bottom:none}
+.event-date-box{width:42px;height:42px;border-radius:8px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.event-date-month{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--red)}
+.event-date-day{font-size:15px;font-weight:700;line-height:1}
+.event-name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.event-location{font-size:11px;color:var(--text-secondary)}
+
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pricing-card{border-radius:var(--radius);padding:28px 24px;text-align:center;border:1px solid var(--border);background:var(--surface);position:relative;overflow:hidden}
+.pricing-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-lg)}
+.pricing-card.featured::before{content:'RECOMMENDED';position:absolute;top:0;left:0;right:0;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 0}
+.pricing-card.featured .pricing-header{margin-top:20px}
+.pricing-header h3{font-size:18px;font-weight:700;margin-bottom:4px}
+.pricing-header .price{font-size:36px;font-weight:800;letter-spacing:-1px;margin:12px 0 4px}
+.pricing-header .price span{font-size:14px;font-weight:400;color:var(--text-secondary)}
+.pricing-features{list-style:none;text-align:left;margin-top:16px}
+.pricing-features li{padding:6px 0;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
+.pricing-features li::before{content:'\2713';color:var(--green);font-weight:700;font-size:12px}
+
+.insight-box{background:linear-gradient(135deg,var(--accent-light),rgba(124,58,237,0.05));border:1px solid rgba(37,99,235,0.15);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+.insight-box .insight-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px}
+.insight-box .insight-text{font-size:13px;color:var(--text-primary);line-height:1.5}
+.insight-box .insight-source{font-size:11px;color:var(--text-tertiary);margin-top:6px}
+
+.tab-content{display:none}.tab-content.active{display:block}
+.section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
+
+/* NEW STYLES for Macro Overlay, SWF, Sectoral, Stress, Composite tabs */
+.macro-indicator-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;position:relative;overflow:hidden}
+.macro-indicator-card .mi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px}
+.macro-indicator-card .mi-value{font-size:28px;font-weight:800;letter-spacing:-1px;font-family:'JetBrains Mono',monospace;line-height:1.2}
+.macro-indicator-card .mi-change{font-size:12px;font-weight:600;margin-top:4px}
+.macro-indicator-card .mi-signal{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+
+.traffic-light{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:100px}
+.tl-green{background:var(--green-light);color:var(--green)}
+.tl-amber{background:var(--orange-light);color:var(--orange)}
+.tl-red{background:var(--red-light);color:var(--red)}
+
+.swf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative}
+.swf-card .swf-name{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.swf-card .swf-country{font-size:12px;color:var(--text-secondary);margin-bottom:12px}
+.swf-card .swf-aum{font-size:28px;font-weight:800;letter-spacing:-1px;font-family:'JetBrains Mono',monospace;color:var(--accent);margin-bottom:4px}
+.swf-card .swf-aum-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
+
+.conviction-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.conv-very-high{background:#059669;color:#fff}
+.conv-high{background:var(--green-light);color:var(--green)}
+.conv-medium-high{background:var(--accent-light);color:var(--accent)}
+.conv-medium{background:var(--orange-light);color:var(--orange)}
+.conv-low{background:var(--border-light);color:var(--text-secondary)}
+.conv-exit{background:var(--red-light);color:var(--red)}
+
+.sector-fp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.sector-fp-card .sfp-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sector-fp-card .sfp-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border-light);font-size:12px}
+.sector-fp-card .sfp-row:last-child{border-bottom:none}
+.sfp-ratio{font-weight:500;color:var(--text-primary)}.sfp-value{font-weight:600;font-family:'JetBrains Mono',monospace}
+.sfp-benchmark{font-size:10px;color:var(--text-tertiary)}
+
+.scenario-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;cursor:pointer;transition:all 0.3s}
+.scenario-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
+.scenario-card.scenario-active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,0.2),var(--shadow-md)}
+.scenario-card .sc-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.scenario-card .sc-prob{font-size:11px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px}
+.scenario-card .sc-desc{font-size:12px;color:var(--text-secondary);line-height:1.4}
+
+.gauge-container{position:relative;width:180px;height:100px;margin:0 auto}
+.gauge-value{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:36px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-1px}
+.gauge-label{text-align:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-top:8px}
+
+.cascade-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border-light);font-size:13px}
+.cascade-item:last-child{border-bottom:none}
+.cascade-arrow{color:var(--text-tertiary);font-weight:600;font-size:16px}
+.cascade-sector{font-weight:600;min-width:100px}
+.cascade-impact{flex:1;color:var(--text-secondary);font-size:12px}
+
+.dual-ring{display:flex;align-items:center;justify-content:center;gap:40px;padding:20px}
+.dual-ring-item{text-align:center}
+.dual-ring-item .dr-score{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;letter-spacing:-1px;margin:0 auto 8px;position:relative}
+.dual-ring-item .dr-score::before{content:'';position:absolute;inset:0;border-radius:50%;border:5px solid var(--border-light)}
+.dual-ring-item .dr-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
+.dr-plus{font-size:32px;font-weight:300;color:var(--border);align-self:center}
+.dr-equals{font-size:32px;font-weight:300;color:var(--border);align-self:center}
+
+.warning-matrix-cell{padding:8px 12px;font-size:11px;text-align:center;border-bottom:1px solid var(--border-light)}
+.warning-matrix-header{font-weight:700;text-transform:uppercase;letter-spacing:0.5px;font-size:10px;color:var(--text-tertiary);padding:10px 12px;border-bottom:2px solid var(--border)}
+
+/* Oil Price Scenario Simulator */
+.oil-sim{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
+.oil-sim::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#DC2626 0%,#DC2626 8%,#D97706 20%,#059669 35%,#059669 50%,#2563EB 55%,#D97706 65%,#DC2626 80%,#7C3AED 100%)}
+.oil-sim-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.oil-sim-title{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-0.5px}
+.oil-sim-price{font-size:48px;font-weight:800;letter-spacing:-2px;font-family:'JetBrains Mono',monospace;line-height:1;transition:color 0.3s}
+.oil-sim-price-label{font-size:12px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+.oil-sim-band{font-size:16px;font-weight:700;padding:4px 16px;border-radius:100px;display:inline-block;margin-top:8px;transition:all 0.3s}
+
+.oil-slider-container{position:relative;padding:0 0 40px;margin:0 0 28px}
+.oil-slider{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:5px;outline:none;cursor:pointer;transition:background 0.3s;position:relative;z-index:2}
+.oil-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:var(--navy);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15);transition:transform 0.15s}
+.oil-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.oil-slider::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--navy);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.2),0 0 0 4px rgba(11,29,58,0.15)}
+.oil-slider-labels{display:flex;justify-content:space-between;margin-top:8px;position:relative}
+.oil-slider-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-align:center}
+.oil-slider-brent{position:absolute;top:-52px;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;z-index:1}
+.oil-slider-brent::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid var(--navy)}
+
+.oil-sim-panel{display:grid;grid-template-columns:1fr 1fr;gap:20px;transition:opacity 0.2s}
+.oil-sim-description{grid-column:1/-1;background:var(--bg);border-radius:var(--radius-sm);padding:16px 20px;font-size:14px;color:var(--text-primary);line-height:1.6;border-left:4px solid var(--navy);transition:border-color 0.3s}
+
+.oil-fiscal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.oil-fiscal-card{background:var(--bg);border-radius:var(--radius-sm);padding:14px;text-align:center;transition:all 0.3s}
+.oil-fiscal-country{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:4px}
+.oil-fiscal-value{font-size:22px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-1px;transition:color 0.3s}
+.oil-fiscal-label{font-size:10px;color:var(--text-secondary);margin-top:2px}
+
+.oil-sector-heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.oil-sector-cell{text-align:center;padding:12px 4px;border-radius:var(--radius-xs);transition:all 0.3s}
+.oil-sector-name{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;color:var(--text-tertiary);margin-bottom:6px}
+.oil-sector-score{font-size:20px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-0.5px;transition:color 0.3s}
+.oil-sector-bar{height:4px;border-radius:2px;margin-top:6px;transition:all 0.3s}
+
+.oil-company-impacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.oil-company-card{background:var(--bg);border-radius:var(--radius-xs);padding:10px 12px;display:flex;align-items:center;gap:10px;transition:all 0.3s}
+.oil-company-name{font-size:12px;font-weight:600;color:var(--text-primary)}
+.oil-company-impact{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.oil-company-score{font-size:16px;font-weight:800;font-family:'JetBrains Mono',monospace;flex-shrink:0;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+
+.oil-swf-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);font-size:13px}
+.oil-swf-row:last-child{border-bottom:none}
+.oil-swf-name{font-weight:600;min-width:80px}
+.oil-swf-action{flex:1;color:var(--text-secondary);font-size:12px}
+.oil-swf-badge{padding:2px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap}
+
+.oil-demand-indicator{display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:var(--radius-sm)}
+.oil-demand-gauge{width:120px;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;flex-shrink:0}
+.oil-demand-fill{height:100%;border-radius:4px;transition:all 0.3s}
+.oil-demand-text{font-size:12px;color:var(--text-secondary);line-height:1.4}
+
+.oil-nonlinear-chart{position:relative;height:200px;margin-top:12px}
+
+@media(max-width:1024px){
+  .oil-sim-panel{grid-template-columns:1fr}
+  .oil-fiscal-grid{grid-template-columns:repeat(3,1fr)}
+  .oil-sector-heatmap{grid-template-columns:repeat(4,1fr)}
+  .oil-company-impacts{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .oil-fiscal-grid{grid-template-columns:repeat(2,1fr)}
+  .oil-sector-heatmap{grid-template-columns:repeat(3,1fr)}
+  .oil-company-impacts{grid-template-columns:1fr}
+}
+
+@media(max-width:1024px){
+  .grid-4,.grid-5{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-2-1{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}
+  .header-inner{flex-wrap:wrap;height:auto;padding:12px 0;gap:8px}
+  .nav-tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start}
+  .main{padding:20px}
+}
+@media(max-width:768px){
+  .header{padding:0 16px}.main{padding:16px}
+  .grid-4,.grid-3,.grid-2,.grid-5{grid-template-columns:1fr}
+  .company-hero{flex-direction:column;text-align:center;gap:12px}
+  .company-info h1{font-size:22px}
+  .macro-strip{flex-wrap:wrap;gap:12px}
+  .opp-score{flex-direction:column;text-align:center}
+  .dual-ring{flex-direction:column;gap:16px}
+}
+
+.fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
+@keyframes fadeIn{to{opacity:1}}
+.fade-in:nth-child(1){animation-delay:0s}.fade-in:nth-child(2){animation-delay:0.05s}.fade-in:nth-child(3){animation-delay:0.1s}
+.fade-in:nth-child(4){animation-delay:0.15s}.fade-in:nth-child(5){animation-delay:0.2s}.fade-in:nth-child(6){animation-delay:0.25s}
+
+.footer{max-width:1440px;margin:0 auto;padding:32px 40px;text-align:center;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:12px}
+.footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="header"><div class="header-inner">
+  <div class="logo"><div class="logo-mark">47X</div><div class="logo-text">Intelligence Platform <span>by TrueGroup</span></div></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
+    <button class="nav-tab" onclick="switchTab('benchmarking',this)">Benchmarking</button>
+    <button class="nav-tab" onclick="switchTab('signals',this)">Signals</button>
+    <button class="nav-tab" onclick="switchTab('arbitrage',this)">Arbitrage</button>
+    <button class="nav-tab" onclick="switchTab('macropanel',this)">Macro Overlay</button>
+    <button class="nav-tab" onclick="switchTab('swftracker',this)">SWF Tracker</button>
+    <button class="nav-tab" onclick="switchTab('sectoral',this)">Sectoral</button>
+    <button class="nav-tab" onclick="switchTab('stress',this)">Stress Test</button>
+    <button class="nav-tab" onclick="switchTab('composite',this)">Composite</button>
+    <button class="nav-tab" onclick="switchTab('pricing',this)">Pricing</button>
+  </div>
+  <div class="header-right">
+    <select class="company-selector" id="companySelector" onchange="switchCompany(this.value)">
+      <option value="ega">Emirates Global Aluminium</option>
+      <option value="fab">First Abu Dhabi Bank</option>
+      <option value="aldar">Aldar Properties</option>
+    </select>
+    <div class="api-badge"><div class="api-dot" id="apiDot"></div><span id="apiLabel">Connecting...</span></div>
+  </div>
+</div></div>
+
+<div class="main">
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="macro-strip">
+    <div class="macro-item"><div><div class="macro-item-label">Brent Crude</div><div class="macro-item-value">$102.14 <span class="macro-item-change up">+8.6%</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">UAE GDP Growth</div><div class="macro-item-value">5.0% <span class="macro-item-change up">+0.2pp</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">MSCI UAE</div><div class="macro-item-value">18.42 <span class="macro-item-change up">+2.8%</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">AED/USD</div><div class="macro-item-value">3.6725 <span class="macro-item-change" style="color:var(--text-tertiary)">Pegged</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">LME Aluminium</div><div class="macro-item-value">$3,397 <span class="macro-item-change up">+37% YoY</span></div></div></div><div class="macro-divider"></div>
+    <div class="macro-item"><div><div class="macro-item-label">Next Event</div><div class="macro-item-value" style="font-family:inherit;font-size:13px">ADIPEC 2026 <span style="color:var(--text-tertiary);font-size:11px">Nov 2</span></div></div></div>
+  </div>
+  <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div></div></div>
+  <div class="grid-3 section">
+    <div class="card fade-in" style="border-top:3px solid var(--accent)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-1">Level 1</span> Benchmarking</div><div class="kpi-card"><div class="score-ring score-average" id="overviewScore">58</div><div class="kpi-label">47X Composite Score</div><div class="kpi-change down" id="overviewScoreChange">-4 vs Q3</div></div><div style="font-size:13px;color:var(--text-secondary);text-align:center;margin-top:8px" id="overviewScoreSummary">Below sector average (71). Weak in social presence and employer brand.</div></div>
+    <div class="card fade-in" style="border-top:3px solid var(--purple)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-2">Level 2</span> Context</div><div style="padding:4px 0"><div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon1">&loz;</div><div class="signal-content"><div class="signal-title" id="ctxSignal1Title">Guinea Crisis Write-Down</div><div class="signal-detail" id="ctxSignal1Detail">$765M impairment driving negative sentiment shift</div></div></div><div class="signal-item" style="padding:8px 0"><div class="signal-icon negative" id="ctxIcon2">&darr;</div><div class="signal-content"><div class="signal-title" id="ctxSignal2Title">Talent Leak Detected</div><div class="signal-detail" id="ctxSignal2Detail">14 senior engineers departed in 6 months</div></div></div><div class="signal-item" style="padding:8px 0"><div class="signal-icon warning" id="ctxIcon3">&sim;</div><div class="signal-content"><div class="signal-title" id="ctxSignal3Title">Sentiment Shift</div><div class="signal-detail" id="ctxSignal3Detail">News sentiment: +0.4 to -0.2 in 90 days</div></div></div></div></div>
+    <div class="card fade-in" style="border-top:3px solid var(--green)"><div class="section-title" style="margin-bottom:16px"><span class="level-badge level-3">Level 3</span> Arbitrage</div><div class="opp-score" style="margin:0"><div><div class="opp-score-value" id="overviewOppScore">87</div><div class="opp-score-label">Opportunity Score</div></div><div><div class="opp-score-label" id="overviewOppDesc">Competitor talent acquisition window. EGA engineering team actively seeking exit.</div><div class="opp-score-detail" id="overviewOppWindow">Window closes: ~Sept 2026</div></div></div></div>
+  </div>
+  <div class="section" id="liveApiSection" style="display:none"><div class="section-header"><div class="section-title">Live API Data <span class="level-badge level-1">Real-Time</span></div></div><div class="grid-4" id="liveApiCards"></div></div>
+  <div class="section"><div class="section-header"><div class="section-title">Peer Comparison &mdash; Composite Scores</div></div><div class="card"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div>
+</div>
+
+<!-- BENCHMARKING -->
+<div class="tab-content" id="tab-benchmarking">
+  <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-1">Level 1</span> Service Score Breakdown</div></div>
+    <div class="grid-2-1"><div class="card"><div class="card-title" id="benchCompanyName">Emirates Global Aluminium</div><div class="card-subtitle">Score vs Sector Average (dashed line)</div><div id="serviceBars"></div></div>
+    <div><div class="card" style="margin-bottom:16px"><div class="card-title">9-Dimension Scorecard</div><div class="card-subtitle">Small multiples view &mdash; score vs benchmark</div><div class="scorecard-grid" id="scorecardGrid"></div></div><div class="card"><div class="card-title">Score Band</div><div style="text-align:center;padding:12px 0"><div class="kpi-value" id="benchBand" style="color:var(--orange)">Average</div><div class="kpi-label">50-69 points</div></div></div></div></div></div>
+  <div class="section"><div class="card"><div class="card-title">Score History &mdash; 12 Month Trend</div><div class="card-subtitle">Composite 47X score vs sector average</div><div class="chart-container-tall"><canvas id="historyChart"></canvas></div></div></div>
+</div>
+
+<!-- SIGNAL INTELLIGENCE -->
+<div class="tab-content" id="tab-signals">
+  <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-2">Level 2</span> Contextual Intelligence</div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Signal Timeline</div><div class="card-subtitle" id="ctxTimelineSub">Key events affecting EGA's score trajectory</div><div id="signalTimeline"></div></div><div class="card"><div class="card-title">News Sentiment Analysis</div><div class="card-subtitle">Rolling 30-day sentiment score (-1 to +1)</div><div class="chart-container-tall"><canvas id="sentimentChart"></canvas></div></div></div></div>
+  <div class="section"><div class="grid-3"><div class="card"><div class="card-title">Talent Signals</div><div class="card-subtitle">LinkedIn intelligence proxy</div><div id="talentSignals"></div></div><div class="card"><div class="card-title">Financial Proxies</div><div class="card-subtitle">Estimated from public signals</div><div id="financialSignals"></div></div><div class="card"><div class="card-title">Market Context</div><div class="card-subtitle">Sector and macro factors</div><div id="marketContext"></div></div></div></div>
+  <div class="section"><div class="card"><div class="card-title">Competitor Movement Tracker</div><div class="card-subtitle" id="ctxCompMoveSub">Score changes across EGA's competitive set in the last 90 days</div><div class="chart-container-tall"><canvas id="competitorMovementChart"></canvas></div></div></div>
+</div>
+
+<!-- ARBITRAGE -->
+<div class="tab-content" id="tab-arbitrage">
+  <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-3">Level 3</span> Arbitrage Opportunities</div></div>
+    <div class="opp-score"><div><div class="opp-score-value" id="arbOppScore">87</div></div><div><div class="opp-score-label" id="arbOppHeadline">Active Arbitrage Window Detected</div><div class="opp-score-detail" id="arbOppFormula">Urgency (9/10) x Impact (8/10) x Feasibility (7/10) = 87/100</div></div></div>
+    <div class="grid-2" style="margin-bottom:20px"><div class="card arb-card"><div class="card-title"><span id="arbOpp1Title">Talent Acquisition Window</span><span class="arb-urgency urgency-high" id="arbOpp1Urgency">High Urgency</span></div><div class="card-subtitle" id="arbOpp1Desc"></div><div id="arbOpp1Metrics"></div></div><div class="card arb-card"><div class="card-title"><span id="arbOpp2Title">Client Migration</span><span class="arb-urgency urgency-medium" id="arbOpp2Urgency">Medium Urgency</span></div><div class="card-subtitle" id="arbOpp2Desc"></div><div id="arbOpp2Metrics"></div></div></div>
+    <div class="card" style="margin-bottom:20px"><div class="card-title">Recommended Action Plan</div><div class="card-subtitle" id="arbActionSub">Sequenced actions to exploit the current arbitrage window</div><div id="actionPlan" style="margin-top:16px"></div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Timing Window Analysis</div><div class="card-subtitle">When to act and why</div><div class="chart-container-tall"><canvas id="timingChart"></canvas></div></div><div class="card"><div class="card-title">Cross-Signal Correlation</div><div class="card-subtitle" id="arbCorrSub">How EGA's weaknesses create opportunities</div><div id="correlationSignals"></div></div></div></div>
+</div>
+
+<!-- ====== NEW TAB 1: MACRO OVERLAY PANEL ====== -->
+<div class="tab-content" id="tab-macropanel">
+  <div class="section">
+    <div class="section-header"><div class="section-title">Live Macro Indicators <span class="level-badge level-2">Intelligence Layer</span></div></div>
+    <div class="grid-5 fade-in" id="macroIndicatorGrid">
+      <div class="macro-indicator-card">
+        <div class="mi-label">Brent Crude</div>
+        <div class="mi-value" style="color:var(--navy)">$102.14</div>
+        <div class="mi-change" style="color:var(--green)"><span class="mi-signal" style="background:var(--green)"></span> +8.6% MoM</div>
+        <div class="traffic-light tl-green" style="margin-top:8px">Supportive</div>
+      </div>
+      <div class="macro-indicator-card">
+        <div class="mi-label">DXY (USD Index)</div>
+        <div class="mi-value" style="color:var(--navy)">103.8</div>
+        <div class="mi-change" style="color:var(--red)"><span class="mi-signal" style="background:var(--red)"></span> +1.2% MoM</div>
+        <div class="traffic-light tl-amber" style="margin-top:8px">Headwind for exports</div>
+      </div>
+      <div class="macro-indicator-card">
+        <div class="mi-label">US 10Y Yield</div>
+        <div class="mi-value" style="color:var(--navy)">4.28%</div>
+        <div class="mi-change" style="color:var(--red)"><span class="mi-signal" style="background:var(--red)"></span> +12bp MoM</div>
+        <div class="traffic-light tl-amber" style="margin-top:8px">Rate pressure</div>
+      </div>
+      <div class="macro-indicator-card">
+        <div class="mi-label">Gold (XAU/USD)</div>
+        <div class="mi-value" style="color:var(--orange)">$2,184</div>
+        <div class="mi-change" style="color:var(--green)"><span class="mi-signal" style="background:var(--green)"></span> +4.2% MoM</div>
+        <div class="traffic-light tl-green" style="margin-top:8px">Risk hedge active</div>
+      </div>
+      <div class="macro-indicator-card">
+        <div class="mi-label">Fed Funds Rate</div>
+        <div class="mi-value" style="color:var(--navy)">4.50%</div>
+        <div class="mi-change" style="color:var(--text-tertiary)"><span class="mi-signal" style="background:var(--text-tertiary)"></span> Unchanged</div>
+        <div class="traffic-light tl-amber" style="margin-top:8px">Hold cycle</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="insight-box">
+      <div class="insight-label">Macro Context &mdash; What This Means for GCC Scores</div>
+      <div class="insight-text">
+        <strong>Oil above $100 is the GCC sweet spot.</strong> Government revenues are strong, sovereign deposits are flowing into the banking system, and fiscal expansion continues. However, the elevated DXY (103.8) creates a headwind for non-oil exporters like EGA &mdash; their aluminium becomes more expensive in euro and yuan terms. The Fed holding at 4.50% means GCC central banks maintain elevated rates (EIBOR 4.85%), pressuring leveraged real estate developers like DAMAC and Emaar. Gold at $2,184 signals institutional hedging against tail risks (regional conflict, peg pressure). Net assessment: <strong>Macro environment is SUPPORTIVE for GCC but bifurcated</strong> &mdash; oil-linked sectors benefit, rate-sensitive sectors face continued pressure.
+      </div>
+      <div class="insight-source">Sources: FRED, Bloomberg, CBUAE, SAMA | Updated: March 2026</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Oil Price vs GCC Market Performance</div>
+        <div class="card-subtitle">12-month correlation: Brent Crude vs MSCI GCC Index</div>
+        <div class="chart-container-tall"><canvas id="macroOilCorrelationChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Interest Rate Transmission</div>
+        <div class="card-subtitle">Fed Funds vs EIBOR vs GCC corporate borrowing cost</div>
+        <div class="chart-container-tall"><canvas id="macroRateChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">GCC Fiscal Breakeven Oil Prices</div>
+        <div class="card-subtitle">Budget breakeven vs current Brent ($102)</div>
+        <div class="chart-container-tall"><canvas id="macroBreakevenChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Macro Sensitivity by Sector</div>
+        <div class="card-subtitle">Oil beta coefficients (52-week rolling regression)</div>
+        <div style="margin-top:12px">
+          <div class="overlay-row"><span class="overlay-label">Energy (upstream)</span><span class="overlay-value" style="color:var(--green)">0.92 <span class="traffic-light tl-green" style="font-size:9px">Direct</span></span></div>
+          <div class="overlay-row"><span class="overlay-label">Real Estate</span><span class="overlay-value" style="color:var(--orange)">0.58 <span class="traffic-light tl-amber" style="font-size:9px">Lagged</span></span></div>
+          <div class="overlay-row"><span class="overlay-label">Banking</span><span class="overlay-value" style="color:var(--orange)">0.45 <span class="traffic-light tl-amber" style="font-size:9px">Via deposits</span></span></div>
+          <div class="overlay-row"><span class="overlay-label">Industrial</span><span class="overlay-value" style="color:var(--orange)">0.62 <span class="traffic-light tl-amber" style="font-size:9px">Mixed</span></span></div>
+          <div class="overlay-row"><span class="overlay-label">Telecom</span><span class="overlay-value" style="color:var(--text-primary)">0.18 <span class="traffic-light tl-green" style="font-size:9px">Resilient</span></span></div>
+          <div class="overlay-row"><span class="overlay-label">Healthcare</span><span class="overlay-value" style="color:var(--text-primary)">0.09 <span class="traffic-light tl-green" style="font-size:9px">Defensive</span></span></div>
+          <div class="overlay-row"><span class="overlay-label">Logistics</span><span class="overlay-value" style="color:var(--orange)">0.35 <span class="traffic-light tl-amber" style="font-size:9px">Trade-linked</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== NEW TAB 2: SWF TRACKER ====== -->
+<div class="tab-content" id="tab-swftracker">
+  <div class="section">
+    <div class="section-header"><div class="section-title">Sovereign Wealth Fund Flow Tracker <span class="level-badge level-3">Level 3</span></div></div>
+    <div class="grid-4" id="swfCards">
+      <div class="swf-card fade-in">
+        <div class="swf-name">PIF</div>
+        <div class="swf-country">Saudi Arabia</div>
+        <div class="swf-aum">$930B</div>
+        <div class="swf-aum-label">Assets Under Management</div>
+        <div style="margin-top:12px">
+          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Giga-projects, AI, EV</span></div>
+          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">3/10</span></div>
+          <div class="overlay-row"><span class="overlay-label">2026 Signal</span><span class="overlay-value" style="font-size:11px;color:var(--green)">Alat $100B+</span></div>
+        </div>
+      </div>
+      <div class="swf-card fade-in">
+        <div class="swf-name">Mubadala</div>
+        <div class="swf-country">UAE (Abu Dhabi)</div>
+        <div class="swf-aum">$302B</div>
+        <div class="swf-aum-label">Assets Under Management</div>
+        <div style="margin-top:12px">
+          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Tech, Semi, Health</span></div>
+          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">8/10</span></div>
+          <div class="overlay-row"><span class="overlay-label">Key Asset</span><span class="overlay-value" style="font-size:11px;color:var(--accent)">GlobalFoundries</span></div>
+        </div>
+      </div>
+      <div class="swf-card fade-in">
+        <div class="swf-name">ADQ</div>
+        <div class="swf-country">UAE (Abu Dhabi)</div>
+        <div class="swf-aum">$200B+</div>
+        <div class="swf-aum-label">Assets Under Management</div>
+        <div style="margin-top:12px">
+          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">Food, Pharma, Digital</span></div>
+          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">3/10</span></div>
+          <div class="overlay-row"><span class="overlay-label">2026 Signal</span><span class="overlay-value" style="font-size:11px;color:var(--green)">EU acquisitions</span></div>
+        </div>
+      </div>
+      <div class="swf-card fade-in">
+        <div class="swf-name">QIA</div>
+        <div class="swf-country">Qatar</div>
+        <div class="swf-aum">$510B</div>
+        <div class="swf-aum-label">Assets Under Management</div>
+        <div style="margin-top:12px">
+          <div class="overlay-row"><span class="overlay-label">Focus</span><span class="overlay-value" style="font-size:11px">RE, Luxury, Sports</span></div>
+          <div class="overlay-row"><span class="overlay-label">Transparency</span><span class="overlay-value" style="font-size:11px">4/10</span></div>
+          <div class="overlay-row"><span class="overlay-label">Key Asset</span><span class="overlay-value" style="font-size:11px;color:var(--purple)">PSG, Harrods</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Recent Allocation Shifts by Sector</div>
+        <div class="card-subtitle">Major moves detected (2025-2026)</div>
+        <table class="comp-table" style="margin-top:8px">
+          <thead><tr><th>Fund</th><th>Sector</th><th>Move</th><th>Signal</th><th>Conviction</th></tr></thead>
+          <tbody>
+            <tr><td>PIF</td><td>AI / Electronics</td><td style="color:var(--green);font-weight:600">+$100B (Alat)</td><td>New subsidiary</td><td><span class="conviction-badge conv-very-high">Very High</span></td></tr>
+            <tr><td>ADQ</td><td>European Energy</td><td style="color:var(--green);font-weight:600">+$2.9B (Terna)</td><td>JV announced</td><td><span class="conviction-badge conv-high">High</span></td></tr>
+            <tr><td>Mubadala</td><td>Clean Energy</td><td style="color:var(--green);font-weight:600">+Masdar 100GW</td><td>Expansion target</td><td><span class="conviction-badge conv-very-high">Very High</span></td></tr>
+            <tr><td>PIF</td><td>Giga-projects</td><td style="color:var(--orange);font-weight:600">Scaled back</td><td>NEOM phased</td><td><span class="conviction-badge conv-medium">Medium</span></td></tr>
+            <tr><td>QIA</td><td>Tech / AI</td><td style="color:var(--green);font-weight:600">Increasing</td><td>Multiple stakes</td><td><span class="conviction-badge conv-medium-high">Med-High</span></td></tr>
+            <tr><td>Mubadala</td><td>Healthcare</td><td style="color:var(--green);font-weight:600">Expanding</td><td>CC Abu Dhabi+</td><td><span class="conviction-badge conv-high">High</span></td></tr>
+            <tr><td>ADQ</td><td>Food Security</td><td style="color:var(--green);font-weight:600">Aggressive</td><td>LDC stake</td><td><span class="conviction-badge conv-high">High</span></td></tr>
+            <tr><td>PIF</td><td>Sports / Ent</td><td style="color:var(--text-tertiary);font-weight:600">Maintained</td><td>Newcastle, LIV</td><td><span class="conviction-badge conv-medium-high">Med-High</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Signal Conviction Ranking System</div>
+        <div class="card-subtitle">How to interpret SWF signals (6-tier framework)</div>
+        <div style="margin-top:8px">
+          <div class="signal-item"><div class="signal-icon" style="background:#059669;color:#fff;font-size:11px;font-weight:800">5</div><div class="signal-content"><div class="signal-title">New Subsidiary Created <span class="conviction-badge conv-very-high">Very High</span></div><div class="signal-detail">Multi-year commitment, dedicated capital + talent. Example: PIF creates Alat ($100B+ electronics)</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div><div class="signal-content"><div class="signal-title">JV with Global Partner <span class="conviction-badge conv-high">High</span></div><div class="signal-detail">Operational commitment beyond just capital. Example: ADQ + Terna Energy JV</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:800">3</div><div class="signal-content"><div class="signal-title">5%+ Listed Equity Stake <span class="conviction-badge conv-medium-high">Med-High</span></div><div class="signal-detail">Significant position, potential board seat. Track regulatory filings for follow-ons.</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--orange-light);color:var(--orange);font-size:11px;font-weight:800">2</div><div class="signal-content"><div class="signal-title">Bond with Sector Earmark <span class="conviction-badge conv-medium">Medium</span></div><div class="signal-detail">Capital raising signals deployment intent. Check proceeds allocation.</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--border-light);color:var(--text-secondary);font-size:11px;font-weight:800">1</div><div class="signal-content"><div class="signal-title">Public Statement <span class="conviction-badge conv-low">Low</span></div><div class="signal-detail">Aspiration vs. execution gap common. Track if capital follows rhetoric within 12-18 months.</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--red-light);color:var(--red);font-size:11px;font-weight:800">-1</div><div class="signal-content"><div class="signal-title">Position Exit / Subsidiary Dissolved <span class="conviction-badge conv-exit">Exit Signal</span></div><div class="signal-detail">Sector may be out of favor. Check if other SWFs are also pulling back. Fire-sale pricing possible.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">PIF Sector Allocation</div>
+        <div class="card-subtitle">Estimated portfolio distribution</div>
+        <div class="chart-container-tall"><canvas id="swfPifPieChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mubadala Sector Allocation</div>
+        <div class="card-subtitle">Based on annual report disclosures</div>
+        <div class="chart-container-tall"><canvas id="swfMubadalaPieChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== NEW TAB 3: SECTORAL FINGERPRINTS ====== -->
+<div class="tab-content" id="tab-sectoral">
+  <div class="section">
+    <div class="section-header"><div class="section-title">Sectoral Balance Sheet Fingerprints <span class="level-badge level-2">Intelligence Layer</span></div></div>
+    <div class="insight-box">
+      <div class="insight-label">The Premise</div>
+      <div class="insight-text">Every sector has a financial fingerprint. A P&amp;L shows demographics. A balance sheet shows strategy. The same revenue number means completely different things in banking vs real estate vs energy. These fingerprints define what to look for in each GCC sector &mdash; the ratios that tell the real story, the early warning signals that precede distress, and the benchmark ranges for healthy vs stressed.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-3" id="sectoralGrid">
+      <!-- Banking -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#127974;</span> Banking</div>
+        <div class="sfp-row"><span class="sfp-ratio">Net Interest Margin</span><span class="sfp-value" style="color:var(--green)">2.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Cost-to-Income</span><span class="sfp-value" style="color:var(--green)">28.5% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">NPL Ratio</span><span class="sfp-value" style="color:var(--green)">3.2% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Loan/Deposit Ratio</span><span class="sfp-value" style="color:var(--green)">88% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">CAR</span><span class="sfp-value" style="color:var(--green)">16.2% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">ROE</span><span class="sfp-value" style="color:var(--green)">15.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Govt Deposit Share</span><span class="sfp-value" style="color:var(--orange)">42% <span class="traffic-light tl-amber" style="font-size:9px">Watch</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: FAB | Healthy: 2.5-3.5% NIM, &lt;40% C/I, &lt;4% NPL</div>
+      </div>
+
+      <!-- Real Estate -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#127970;</span> Real Estate</div>
+        <div class="sfp-row"><span class="sfp-ratio">NAV Discount</span><span class="sfp-value" style="color:var(--green)">-8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Land Bank (yrs)</span><span class="sfp-value" style="color:var(--green)">5.2 <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Pre-Sales Ratio</span><span class="sfp-value" style="color:var(--green)">52% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Net Debt/Equity</span><span class="sfp-value" style="color:var(--green)">0.42x <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Revenue/Employee</span><span class="sfp-value" style="color:var(--green)">$2.7M <span class="traffic-light tl-green" style="font-size:9px">Strong</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Recurring Rev %</span><span class="sfp-value" style="color:var(--green)">38% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Occupancy Rate</span><span class="sfp-value" style="color:var(--green)">89% <span class="traffic-light tl-green" style="font-size:9px">Strong</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: Aldar | Healthy: 0-20% NAV disc, 3-7yr land, &gt;85% occ</div>
+      </div>
+
+      <!-- Energy -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#9981;</span> Energy</div>
+        <div class="sfp-row"><span class="sfp-ratio">Breakeven Oil</span><span class="sfp-value" style="color:var(--green)">$48/bbl <span class="traffic-light tl-green" style="font-size:9px">Low-cost</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Reserve Replacement</span><span class="sfp-value" style="color:var(--green)">112% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Lifting Cost</span><span class="sfp-value" style="color:var(--green)">$8.20/bbl <span class="traffic-light tl-green" style="font-size:9px">Low</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Capex/Revenue</span><span class="sfp-value" style="color:var(--green)">19% <span class="traffic-light tl-green" style="font-size:9px">Balanced</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Refining Margin</span><span class="sfp-value" style="color:var(--green)">$7.40/bbl <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">FCF Yield</span><span class="sfp-value" style="color:var(--green)">11.2% <span class="traffic-light tl-green" style="font-size:9px">Strong</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Net Debt/EBITDA</span><span class="sfp-value" style="color:var(--green)">0.8x <span class="traffic-light tl-green" style="font-size:9px">Low</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: ADNOC | Healthy: &lt;$50 breakeven, &gt;100% RRR, &lt;$12 lift</div>
+      </div>
+
+      <!-- Industrial -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#9874;</span> Industrial</div>
+        <div class="sfp-row"><span class="sfp-ratio">Capacity Utilisation</span><span class="sfp-value" style="color:var(--orange)">78% <span class="traffic-light tl-amber" style="font-size:9px">Watch</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Input Cost/Rev</span><span class="sfp-value" style="color:var(--orange)">58% <span class="traffic-light tl-amber" style="font-size:9px">Elevated</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Export Concentration</span><span class="sfp-value" style="color:var(--red)">Top 3: 54% <span class="traffic-light tl-red" style="font-size:9px">Risk</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Working Capital</span><span class="sfp-value" style="color:var(--orange)">105 days <span class="traffic-light tl-amber" style="font-size:9px">Slow</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Maint Capex/Rev</span><span class="sfp-value" style="color:var(--orange)">7.8% <span class="traffic-light tl-amber" style="font-size:9px">Rising</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">EBITDA Margin</span><span class="sfp-value" style="color:var(--orange)">18% <span class="traffic-light tl-amber" style="font-size:9px">Below avg</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Customer Conc.</span><span class="sfp-value" style="color:var(--green)">Top 5: 24% <span class="traffic-light tl-green" style="font-size:9px">Diverse</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: EGA | Healthy: &gt;85% util, &lt;55% input, 20-30% EBITDA</div>
+      </div>
+
+      <!-- Telecom -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#128225;</span> Telecom</div>
+        <div class="sfp-row"><span class="sfp-ratio">ARPU</span><span class="sfp-value" style="color:var(--green)">$38/mo <span class="traffic-light tl-green" style="font-size:9px">Premium</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Capex/Revenue</span><span class="sfp-value" style="color:var(--orange)">22% <span class="traffic-light tl-amber" style="font-size:9px">5G cycle</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">EBITDA Margin</span><span class="sfp-value" style="color:var(--green)">42% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Churn Rate</span><span class="sfp-value" style="color:var(--green)">1.2%/mo <span class="traffic-light tl-green" style="font-size:9px">Low</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Net Debt/EBITDA</span><span class="sfp-value" style="color:var(--green)">1.4x <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Digital Rev %</span><span class="sfp-value" style="color:var(--green)">16% <span class="traffic-light tl-green" style="font-size:9px">Growing</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: e&amp; | Healthy: $25-45 ARPU, 35-45% EBITDA, &lt;2.0x leverage</div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#127973;</span> Healthcare</div>
+        <div class="sfp-row"><span class="sfp-ratio">Revenue/Bed</span><span class="sfp-value" style="color:var(--green)">$480K <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Occupancy</span><span class="sfp-value" style="color:var(--green)">74% <span class="traffic-light tl-green" style="font-size:9px">Good</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Insured Payer Mix</span><span class="sfp-value" style="color:var(--green)">78% <span class="traffic-light tl-green" style="font-size:9px">Stable</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">AR Days</span><span class="sfp-value" style="color:var(--orange)">95 <span class="traffic-light tl-amber" style="font-size:9px">Slow govt</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Staff Cost/Rev</span><span class="sfp-value" style="color:var(--green)">48% <span class="traffic-light tl-green" style="font-size:9px">Normal</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">EBITDA Margin</span><span class="sfp-value" style="color:var(--green)">19% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: Mubadala Health | Healthy: $300-600K/bed, &gt;65% occ, 15-22% EBITDA</div>
+      </div>
+
+      <!-- Logistics -->
+      <div class="sector-fp-card fade-in">
+        <div class="sfp-title"><span style="font-size:18px">&#128674;</span> Logistics</div>
+        <div class="sfp-row"><span class="sfp-ratio">Throughput Growth</span><span class="sfp-value" style="color:var(--green)">+5.8% <span class="traffic-light tl-green" style="font-size:9px">Healthy</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Revenue/TEU</span><span class="sfp-value" style="color:var(--green)">$108 <span class="traffic-light tl-green" style="font-size:9px">Stable</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Concession Life</span><span class="sfp-value" style="color:var(--green)">22 yrs <span class="traffic-light tl-green" style="font-size:9px">Long</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">ROIC</span><span class="sfp-value" style="color:var(--green)">9.4% <span class="traffic-light tl-green" style="font-size:9px">&gt;WACC</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Net Debt/EBITDA</span><span class="sfp-value" style="color:var(--orange)">3.1x <span class="traffic-light tl-amber" style="font-size:9px">Sector norm</span></span></div>
+        <div class="sfp-row"><span class="sfp-ratio">Geo Diversification</span><span class="sfp-value" style="color:var(--green)">Top: 28% <span class="traffic-light tl-green" style="font-size:9px">Diverse</span></span></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)">Benchmark: DP World | Healthy: 3-8% growth, &gt;15yr concession, 8-12% ROIC</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-title">Cross-Sector Early Warning Matrix</div></div>
+    <div class="card">
+      <div class="card-subtitle">Macro shock transmission &mdash; how shocks cascade across sectors</div>
+      <table class="comp-table" style="margin-top:8px;font-size:11px">
+        <thead><tr><th>Warning Signal</th><th>Banking</th><th>Real Estate</th><th>Energy</th><th>Industrial</th><th>Telecom</th><th>Healthcare</th><th>Logistics</th></tr></thead>
+        <tbody>
+          <tr><td>Oil crash ($50/bbl)</td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-amber">Medium</span></td></tr>
+          <tr><td>Fed +200bp</td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-amber">Med-Hi</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Medium</span></td></tr>
+          <tr><td>China GDP &lt;3%</td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-red">High</span></td></tr>
+          <tr><td>Regional conflict</td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Med</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">High</span></td></tr>
+          <tr><td>Peg pressure</td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Med-Hi</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Medium</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <div class="card-title">Early Distress Sequence Alerts</div>
+      <div class="card-subtitle">Signals to monitor in order of appearance &mdash; each stage typically precedes the next by 1-2 quarters</div>
+      <div style="margin-top:12px">
+        <div class="cascade-item"><span class="cascade-sector" style="color:var(--green)">Stage 1</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">Working capital deterioration (DSO rising), auditor change, related-party increase</span><span class="traffic-light tl-green" style="margin-left:auto">Early</span></div>
+        <div class="cascade-item"><span class="cascade-sector" style="color:var(--orange)">Stage 2</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">NPL coverage declining, government deposits drop, capex cuts disguised as efficiency</span><span class="traffic-light tl-amber" style="margin-left:auto">Warning</span></div>
+        <div class="cascade-item"><span class="cascade-sector" style="color:var(--orange)">Stage 3</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">Management turnover (CFO departure strongest signal), debt covenant proximity</span><span class="traffic-light tl-amber" style="margin-left:auto">Serious</span></div>
+        <div class="cascade-item"><span class="cascade-sector" style="color:var(--red)">Stage 4</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">Dividend cut/suspension, provisions increase, M&amp;A rumours, rating downgrade</span><span class="traffic-light tl-red" style="margin-left:auto">Critical</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== NEW TAB 4: STRESS TESTING ====== -->
+<div class="tab-content" id="tab-stress">
+  <div class="section">
+    <div class="section-header"><div class="section-title">Interactive Stress Testing <span class="level-badge level-3">Level 3</span></div></div>
+    <div class="insight-box">
+      <div class="insight-label">Stress Testing Framework</div>
+      <div class="insight-text">The most valuable question for a portfolio manager isn't "how is this company performing?" &mdash; it's <strong>"what breaks this company?"</strong> The Oil Price Scenario Simulator below maps the NON-LINEAR relationship between Brent crude and GCC economic health. There is an optimal band ($78-100) &mdash; below it, fiscal crisis; above it, the system breaks from the demand side. Drag the slider to explore cascading impacts in real time.</div>
+    </div>
+  </div>
+
+  <!-- OIL PRICE SCENARIO SIMULATOR -->
+  <div class="section">
+    <div class="oil-sim">
+      <div class="oil-sim-header">
+        <div>
+          <div class="oil-sim-title">Oil Price Scenario Simulator</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Drag the slider to model cascading impacts across the GCC economy</div>
+        </div>
+        <div style="text-align:right">
+          <div class="oil-sim-price" id="oilSimPrice">$102</div>
+          <div class="oil-sim-price-label">per barrel (Brent)</div>
+          <div class="oil-sim-band" id="oilSimBand">GCC Sweet Spot</div>
+        </div>
+      </div>
+
+      <div class="oil-slider-container">
+        <div class="oil-slider-brent" id="oilBrentMarker" style="left:26%">Current Brent: $102</div>
+        <input type="range" class="oil-slider" id="oilSlider" min="50" max="250" value="102" step="1" oninput="updateOilSim(this.value)">
+        <div class="oil-slider-labels">
+          <div class="oil-slider-label">$50<br><span style="color:var(--red)">Crisis</span></div>
+          <div class="oil-slider-label">$65<br><span style="color:var(--orange)">Stress</span></div>
+          <div class="oil-slider-label">$85<br><span style="color:var(--green)">Equilibrium</span></div>
+          <div class="oil-slider-label">$100<br><span style="color:var(--green)">Sweet Spot</span></div>
+          <div class="oil-slider-label">$130<br><span style="color:var(--orange)">Tension</span></div>
+          <div class="oil-slider-label">$180<br><span style="color:var(--red)">Structural</span></div>
+          <div class="oil-slider-label">$250<br><span style="color:var(--purple)">Black Swan</span></div>
+        </div>
+      </div>
+
+      <div class="oil-sim-description" id="oilSimDesc">
+        Massive fiscal surpluses across the GCC. SWFs aggressively deploying capital internationally. Infrastructure megaprojects accelerating. Banks flush with government deposits, NIMs expanding. However, global demand destruction begins at this level &mdash; consumer spending impacted by -0.2 to -0.3%.
+      </div>
+
+      <div class="oil-sim-panel" style="margin-top:20px">
+        <div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px">Fiscal Impact by Country (Surplus/Deficit % of GDP)</div>
+          <div class="oil-fiscal-grid" id="oilFiscalGrid"></div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px">SWF Behaviour</div>
+          <div id="oilSwfPanel"></div>
+          <div style="margin-top:16px">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px">Global Demand Impact</div>
+            <div class="oil-demand-indicator" id="oilDemandIndicator"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px">Sector Impact Heatmap (Score: -5 Crisis to +5 Boom)</div>
+        <div class="oil-sector-heatmap" id="oilSectorHeatmap"></div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px">Key Company Exposure</div>
+        <div class="oil-company-impacts" id="oilCompanyImpacts"></div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:10px">GCC Welfare Curve &mdash; Non-Linear Relationship</div>
+        <div class="oil-nonlinear-chart"><canvas id="oilNonlinearChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXISTING 5 SCENARIO CARDS -->
+  <div class="section">
+    <div class="section-header"><div class="section-title">Macro Scenario Cards</div></div>
+    <div class="grid-5" id="scenarioGrid">
+      <div class="scenario-card scenario-active" onclick="selectScenario(0)">
+        <div class="sc-title" style="color:var(--red)">Oil Crash</div>
+        <div class="sc-prob">Probability: 15-25%</div>
+        <div class="sc-desc">Brent falls to $40-50/bbl. Government revenues collapse, deposits withdrawn, capex frozen.</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(1)">
+        <div class="sc-title" style="color:var(--orange)">Fed Tightening</div>
+        <div class="sc-prob">Probability: 10-15%</div>
+        <div class="sc-desc">+150-200bp from current. GCC central banks must follow. Borrowing costs spike.</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(2)">
+        <div class="sc-title" style="color:var(--purple)">China Collapse</div>
+        <div class="sc-prob">Probability: 20-30%</div>
+        <div class="sc-desc">GDP growth below 3%. Commodity demand falls, trade volumes drop, GCC exports decline.</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(3)">
+        <div class="sc-title" style="color:var(--navy)">Regional Conflict</div>
+        <div class="sc-prob">Probability: 10-20%</div>
+        <div class="sc-desc">Iran confrontation or Strait of Hormuz disruption. Oil spikes but capital flees.</div>
+      </div>
+      <div class="scenario-card" onclick="selectScenario(4)">
+        <div class="sc-title" style="color:var(--red)">Peg Pressure</div>
+        <div class="sc-prob">Probability: 5-10%</div>
+        <div class="sc-desc">Catastrophic tail risk. If peg breaks, all USD debt reprices. Banking crisis ensues.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" id="stressScenarioTitle">Oil Price Crash ($40-50/bbl Brent)</div>
+        <div class="card-subtitle" id="stressScenarioSub">Precedent: 2014-2016 ($115 to $28), 2020 COVID ($65 to $20)</div>
+        <div style="margin-top:12px">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px">Transmission Map</div>
+          <div id="stressTransmission"></div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px">Most Exposed Entities</div>
+          <div id="stressExposed"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Portfolio Resilience Score</div>
+        <div class="card-subtitle">Composite vulnerability across selected scenario</div>
+        <div style="margin-top:20px">
+          <canvas id="stressGaugeChart" height="180"></canvas>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px">Early Warning Signals</div>
+          <div id="stressWarnings"></div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px">Sector Impact</div>
+          <div class="chart-container"><canvas id="stressSectorImpactChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <div class="card-title">Company Macro Sensitivity Profiles</div>
+      <div class="card-subtitle">Vulnerability mapping across all 5 scenarios</div>
+      <table class="comp-table" style="margin-top:8px">
+        <thead><tr><th>Company</th><th>Oil</th><th>Rates</th><th>China</th><th>Conflict</th><th>Peg</th><th>Resilience</th><th>Primary Risk</th></tr></thead>
+        <tbody>
+          <tr><td>EGA</td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td style="font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">35</td><td style="font-size:11px">China + Oil</td></tr>
+          <tr><td>FAB</td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">Critical</span></td><td style="font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace">52</td><td style="font-size:11px">Govt deposits</td></tr>
+          <tr><td>Aldar</td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-red">Critical</span></td><td><span class="traffic-light tl-red">Critical</span></td><td style="font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace">41</td><td style="font-size:11px">Rate + Conflict</td></tr>
+          <tr><td>e&amp;</td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-amber">Moderate</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-amber">Med</span></td><td><span class="traffic-light tl-amber">Med-Hi</span></td><td style="font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace">72</td><td style="font-size:11px">Expat churn</td></tr>
+          <tr><td>ADNOC</td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-green">Low</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td><span class="traffic-light tl-amber">Mixed</span></td><td style="font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace">58</td><td style="font-size:11px">Oil + China</td></tr>
+          <tr><td>DP World</td><td><span class="traffic-light tl-amber">Medium</span></td><td><span class="traffic-light tl-amber">Moderate</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-red">High</span></td><td><span class="traffic-light tl-amber">Medium</span></td><td style="font-weight:800;color:var(--orange);font-family:'JetBrains Mono',monospace">48</td><td style="font-size:11px">China trade</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ====== NEW TAB 5: COMPOSITE SCORE ====== -->
+<div class="tab-content" id="tab-composite">
+  <div class="section">
+    <div class="section-header"><div class="section-title">47X Composite Intelligence Score <span class="level-badge level-3">Three-Score Framework</span></div></div>
+    <div class="insight-box">
+      <div class="insight-label">The Three-Score Framework</div>
+      <div class="insight-text">Patrick's 9-dimension scan measures the <strong>surface</strong> (operational health). The sectoral fingerprints read the <strong>balance sheet underneath</strong>. The stress test measures <strong>resilience</strong>. Three scores. Three views. One company. That's what no competitor does.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card" style="padding:32px" id="compositeHero">
+      <div style="text-align:center;margin-bottom:8px"><span style="font-size:14px;font-weight:700;color:var(--navy)" id="compositeCompanyName">Emirates Global Aluminium</span></div>
+      <div class="dual-ring">
+        <div class="dual-ring-item">
+          <div class="dr-score" style="color:var(--orange);border-color:rgba(217,119,6,0.2)" id="compOpScore"><span style="position:relative;z-index:1">58</span></div>
+          <div class="dr-label">Operational Score</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">Patrick's 9 Dimensions</div>
+        </div>
+        <div class="dr-plus">+</div>
+        <div class="dual-ring-item">
+          <div class="dr-score" style="color:var(--red);border-color:rgba(220,38,38,0.2)" id="compFinScore"><span style="position:relative;z-index:1">42</span></div>
+          <div class="dr-label">Financial Health</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">Balance Sheet Fingerprint</div>
+        </div>
+        <div class="dr-plus">+</div>
+        <div class="dual-ring-item">
+          <div class="dr-score" style="color:var(--red);border-color:rgba(220,38,38,0.2)" id="compResScore"><span style="position:relative;z-index:1">35</span></div>
+          <div class="dr-label">Macro Resilience</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">Stress Test Score</div>
+        </div>
+        <div class="dr-equals">=</div>
+        <div class="dual-ring-item">
+          <div class="dr-score" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff" id="compTotalScore"><span style="position:relative;z-index:1">45</span></div>
+          <div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="compTotalBand">Below Average</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent)">Operational Score Breakdown</div>
+        <div class="card-subtitle">Patrick's 9-dimension automated scoring</div>
+        <div id="compOpBreakdown">
+          <div class="overlay-row"><span class="overlay-label">Website Performance</span><span class="overlay-value" style="color:var(--accent)">72</span></div>
+          <div class="overlay-row"><span class="overlay-label">Social Media</span><span class="overlay-value" style="color:var(--red)">38</span></div>
+          <div class="overlay-row"><span class="overlay-label">Media Coverage</span><span class="overlay-value" style="color:var(--accent)">68</span></div>
+          <div class="overlay-row"><span class="overlay-label">Employer Brand</span><span class="overlay-value" style="color:var(--red)">42</span></div>
+          <div class="overlay-row"><span class="overlay-label">Google Ads</span><span class="overlay-value" style="color:var(--orange)">55</span></div>
+          <div class="overlay-row"><span class="overlay-label">Tech Stack</span><span class="overlay-value" style="color:var(--orange)">61</span></div>
+          <div class="overlay-row"><span class="overlay-label">Brand Audit</span><span class="overlay-value" style="color:var(--orange)">65</span></div>
+          <div class="overlay-row"><span class="overlay-label">Reviews &amp; Maps</span><span class="overlay-value" style="color:var(--green)">71</span></div>
+          <div class="overlay-row"><span class="overlay-label">Registration</span><span class="overlay-value" style="color:var(--green)">82</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--purple)">Financial Health Breakdown</div>
+        <div class="card-subtitle">Balance sheet proxy signals (10 signals)</div>
+        <div id="compFinBreakdown">
+          <div class="overlay-row"><span class="overlay-label">Revenue trajectory</span><span class="overlay-value" style="color:var(--green)">+14%</span></div>
+          <div class="overlay-row"><span class="overlay-label">Profitability</span><span class="overlay-value" style="color:var(--red)">6.6% margin</span></div>
+          <div class="overlay-row"><span class="overlay-label">Write-down impact</span><span class="overlay-value" style="color:var(--red)">-$765M</span></div>
+          <div class="overlay-row"><span class="overlay-label">Input cost pressure</span><span class="overlay-value" style="color:var(--orange)">58% of rev</span></div>
+          <div class="overlay-row"><span class="overlay-label">Capacity utilisation</span><span class="overlay-value" style="color:var(--orange)">78%</span></div>
+          <div class="overlay-row"><span class="overlay-label">Working capital</span><span class="overlay-value" style="color:var(--orange)">105 days</span></div>
+          <div class="overlay-row"><span class="overlay-label">Talent retention</span><span class="overlay-value" style="color:var(--red)">3.2 Glassdoor</span></div>
+          <div class="overlay-row"><span class="overlay-label">Hiring signal</span><span class="overlay-value" style="color:var(--red)">Net negative</span></div>
+          <div class="overlay-row"><span class="overlay-label">Proxy confidence</span><span class="overlay-value">91% (EGA)</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--green)">Macro Resilience Breakdown</div>
+        <div class="card-subtitle">Sensitivity across 5 stress scenarios</div>
+        <div id="compResBreakdown">
+          <div class="overlay-row"><span class="overlay-label">Oil sensitivity</span><span class="overlay-value" style="color:var(--red)">Critical</span></div>
+          <div class="overlay-row"><span class="overlay-label">Rate sensitivity</span><span class="overlay-value" style="color:var(--orange)">Medium</span></div>
+          <div class="overlay-row"><span class="overlay-label">China sensitivity</span><span class="overlay-value" style="color:var(--red)">Critical</span></div>
+          <div class="overlay-row"><span class="overlay-label">Conflict sensitivity</span><span class="overlay-value" style="color:var(--red)">High</span></div>
+          <div class="overlay-row"><span class="overlay-label">Peg sensitivity</span><span class="overlay-value" style="color:var(--orange)">Medium</span></div>
+          <div class="overlay-row"><span class="overlay-label">Primary risk</span><span class="overlay-value">China + Oil</span></div>
+          <div class="overlay-row"><span class="overlay-label">Monitor freq</span><span class="overlay-value" style="color:var(--red)">Weekly</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <div class="card-title">Composite Score Comparison &mdash; Portfolio View</div>
+      <div class="card-subtitle">All three scores side by side across tracked companies</div>
+      <div class="chart-container-tall"><canvas id="compositeComparisonChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <div class="card-title">Score Radar &mdash; Multi-Dimensional Profile</div>
+      <div class="card-subtitle" id="compositeRadarSub">Current company vs sector average across all intelligence dimensions</div>
+      <div class="chart-container-tall"><canvas id="compositeRadarChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- MACRO OVERLAY (original, kept as hidden fallback) -->
+<div class="tab-content" id="tab-macro" style="display:none"></div>
+
+<!-- PLATFORM & PRICING -->
+<div class="tab-content" id="tab-pricing">
+  <div class="section"><div class="section-header"><div class="section-title">Platform Architecture &amp; Pricing</div></div>
+    <div class="insight-box"><div class="insight-label">Sovereign Cloud Deployment</div><div class="insight-text">The 47X Intelligence Platform is designed for <strong>sovereign cloud deployment</strong>, ensuring all data processing occurs within jurisdiction-compliant infrastructure. For GCC clients, data residency in UAE or Saudi datacentres. For EU clients, GDPR-compliant hosting with no cross-border data transfer. The platform operates as <strong>Infrastructure-as-a-Service (IaaS)</strong>, not SaaS &mdash; clients own their data, models, and outputs entirely.</div></div>
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="card fade-in" style="border-top:3px solid var(--accent)"><div class="section-title" style="margin-bottom:12px"><span class="level-badge level-1">Level 1</span></div><h3 style="font-size:18px;font-weight:700;margin-bottom:6px">Benchmarking</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px">9-dimension scoring across website, social, media, employer brand, advertising, tech stack, brand, reviews, and corporate registration. Composite score with sector percentile ranking.</p><div style="font-size:12px;color:var(--text-tertiary)"><strong style="color:var(--text-primary)">181</strong> data points per company<br><strong style="color:var(--text-primary)">9</strong> automated services<br><strong style="color:var(--text-primary)">Real-time</strong> collection &amp; scoring</div></div>
+      <div class="card fade-in" style="border-top:3px solid var(--purple)"><div class="section-title" style="margin-bottom:12px"><span class="level-badge level-2">Level 2</span></div><h3 style="font-size:18px;font-weight:700;margin-bottom:6px">Signal Intelligence</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px">Contextual layer adding talent signals, financial proxies, news sentiment, and competitor movement tracking. Transforms static scores into dynamic intelligence with temporal awareness.</p><div style="font-size:12px;color:var(--text-tertiary)"><strong style="color:var(--text-primary)">5</strong> signal categories<br><strong style="color:var(--text-primary)">12-month</strong> sentiment tracking<br><strong style="color:var(--text-primary)">Cross-signal</strong> correlation</div></div>
+      <div class="card fade-in" style="border-top:3px solid var(--green)"><div class="section-title" style="margin-bottom:12px"><span class="level-badge level-3">Level 3</span></div><h3 style="font-size:18px;font-weight:700;margin-bottom:6px">Arbitrage Intelligence</h3><p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px">Actionable opportunity identification with urgency scoring, timing windows, and sequenced action plans. Turns intelligence into competitive advantage with specific, measurable recommendations.</p><div style="font-size:12px;color:var(--text-tertiary)"><strong style="color:var(--text-primary)">Opportunity</strong> scoring (U x I x F)<br><strong style="color:var(--text-primary)">Timing</strong> window analysis<br><strong style="color:var(--text-primary)">Action</strong> plans with ROI</div></div>
+    </div>
+    <div class="section-header"><div class="section-title">3-Tier IaaS Pricing Model</div></div>
+    <div class="pricing-grid">
+      <div class="pricing-card"><div class="pricing-header"><h3>Base Platform</h3><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">Level 1 Benchmarking</div><div class="price">$2,500<span>/mo</span></div></div><ul class="pricing-features"><li>Up to 50 company profiles</li><li>9-dimension automated scoring</li><li>181 data points per company</li><li>Quarterly refresh cycle</li><li>Sector benchmark comparison</li><li>PDF export &amp; API access</li><li>Sovereign cloud hosting</li></ul></div>
+      <div class="pricing-card featured"><div class="pricing-header"><h3>Intelligence Suite</h3><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">Levels 1 + 2 + 3</div><div class="price">$7,500<span>/mo</span></div><div style="font-size:12px;color:var(--accent)">+ $0.50 per query</div></div><ul class="pricing-features"><li>Unlimited company profiles</li><li>All Level 1 features</li><li>Signal intelligence layer</li><li>Arbitrage opportunity scoring</li><li>Action plan generation</li><li>Weekly refresh cycle</li><li>Dedicated analyst support</li><li>Custom sector models</li></ul></div>
+      <div class="pricing-card"><div class="pricing-header"><h3>Outcome Partnership</h3><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px">Full Platform + Upside</div><div class="price">Custom</div><div style="font-size:12px;color:var(--green)">Base + outcome-linked upside</div></div><ul class="pricing-features"><li>Everything in Intelligence Suite</li><li>Real-time continuous monitoring</li><li>Bespoke financial proxy models</li><li>Board-ready reporting</li><li>Embedded analyst team</li><li>Outcome-linked fee structure</li><li>White-label deployment option</li><li>EU AI Act compliance package</li></ul></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="insight-box"><div class="insight-label">Case Study: GCC-EU Bridge</div><div class="insight-text">ADQ's joint venture with Terna Energy for <strong>&euro;2.7B in Greek energy infrastructure</strong> exemplifies the GCC-EU investment bridge. The 47X platform uniquely serves this corridor: (1) outside-in benchmarking of target companies, (2) EU AI Act compliance documentation, (3) sovereign cloud deployment in both jurisdictions. <strong>PIF tracks 60% local procurement</strong> through its Alat subsidiary &mdash; a Localization Score dimension is being developed for the 47X framework.</div><div class="insight-source">Sources: Reuters, PIF Annual Report 2025, ADQ public filings</div></div>
+  </div>
+</div>
+</div>
+
+<div class="footer">47X Intelligence Platform &copy; 2026 &mdash; Built by <a href="https://truegroup.agency" target="_blank">TrueGroup</a> &bull; API: <a href="https://47x-audit-platform.truegroup.workers.dev/" target="_blank">Live Endpoint</a> &bull; Sovereign Cloud Ready</div>
+
+<script>
+var API_BASE='https://47x-audit-platform.truegroup.workers.dev';
+var companies={
+ega:{name:'Emirates Global Aluminium',short:'EGA',sector:'Industrial / Aluminium',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$8.7B Revenue',score:58,scoreBand:'Average',scoreBandColor:'#D97706',scoreChange:{value:-4,label:'-4 vs Q3',direction:'down'},
+services:[{name:'Website Performance',score:72,benchmark:71,color:'#2563EB'},{name:'Social Media',score:38,benchmark:65,color:'#DC2626'},{name:'Media Coverage',score:68,benchmark:62,color:'#2563EB'},{name:'Employer Brand',score:42,benchmark:70,color:'#DC2626'},{name:'Google Ads',score:55,benchmark:58,color:'#D97706'},{name:'Tech Stack',score:61,benchmark:67,color:'#D97706'},{name:'Brand Audit',score:65,benchmark:68,color:'#D97706'},{name:'Reviews & Maps',score:71,benchmark:64,color:'#059669'},{name:'Registration',score:82,benchmark:78,color:'#059669'}],
+history:[64,63,62,60,61,59,58,57,58,56,57,58],sectorAvg:[71,71,72,71,70,71,71,72,72,71,71,71],
+contextSignals:{headline1:{title:'Guinea Crisis Write-Down',detail:'$765M impairment driving negative sentiment shift',iconClass:'negative',icon:'\u26A0'},headline2:{title:'Talent Leak Detected',detail:'14 senior engineers departed in 6 months',iconClass:'negative',icon:'\u2193'},headline3:{title:'Sentiment Shift',detail:'News sentiment: +0.4 to -0.2 in 90 days',iconClass:'warning',icon:'\u223C'}},
+timeline:[{date:'Mar 2026',text:'<strong>Glassdoor drops to 3.2</strong> from 3.8 \u2014 correlates with Guinea write-down',color:'#DC2626'},{date:'Feb 2026',text:'<strong>14 senior engineers</strong> update LinkedIn to "open to work"',color:'#DC2626'},{date:'Jan 2026',text:'<strong>$765M write-down</strong> announced on Guinea assets',color:'#DC2626'},{date:'Dec 2025',text:'<strong>Ad spend paused</strong> \u2014 Google Ads activity dropped to zero',color:'#D97706'},{date:'Nov 2025',text:'<strong>Guinea political instability</strong> escalates \u2014 supply chain risk flagged',color:'#D97706'},{date:'Sep 2025',text:'<strong>Record H1 sales</strong> reported but profit margins compress 12%',color:'#059669'}],
+sentiment:[0.4,0.35,0.3,0.2,0.1,-0.05,-0.1,-0.15,-0.2,-0.18,-0.2,-0.15],
+talent:[{label:'Engineers departed (6mo)',value:'14',trend:'negative'},{label:'Open roles posted',value:'8',trend:'neutral'},{label:'"Open to work" signals',value:'23',trend:'negative'},{label:'Avg tenure (departures)',value:'6.2 yrs',trend:'negative'},{label:'Glassdoor rating',value:'3.2 / 5.0',trend:'negative'},{label:'CEO approval',value:'58%',trend:'negative'}],
+financial:[{label:'Revenue (est.)',value:'$8.7B',trend:'positive'},{label:'Revenue growth',value:'+14%',trend:'positive'},{label:'Profit margin (est.)',value:'6.6%',trend:'negative'},{label:'Write-down impact',value:'-$765M',trend:'negative'},{label:'Employee count',value:'~7,200',trend:'neutral'},{label:'Revenue per employee',value:'$1.21M',trend:'positive'}],
+market:[{label:'LME Aluminium price',value:'$3,397/t',trend:'positive'},{label:'Aluminium demand growth',value:'+3.1%',trend:'positive'},{label:'Guinea bauxite share',value:'28% global',trend:'negative'},{label:'UAE industrial policy',value:'Expansionary',trend:'positive'},{label:'Competitor capacity adds',value:'+2.4Mt',trend:'negative'},{label:'Energy cost trend (UAE)',value:'Stable',trend:'neutral'}],
+competitorMovement:{labels:['EGA','Alba (Bahrain)',"Ma'aden (Saudi)",'Hindalco','Rusal'],current:[58,72,68,64,51],previous:[64,69,65,62,55]},
+peers:[{name:'Emirates Global Aluminium',score:58,website:72,social:38,media:68,employer:42,financial:62,trend:'down'},{name:'Alba (Bahrain)',score:72,website:78,social:65,media:71,employer:74,financial:68,trend:'up'},{name:"Ma'aden (Saudi)",score:68,website:70,social:62,media:65,employer:68,financial:72,trend:'up'}],
+arbOppScore:87,arbOppHeadline:'Active Arbitrage Window Detected',arbOppFormula:'Urgency (9/10) \u00d7 Impact (8/10) \u00d7 Feasibility (7/10) \u2192 Weighted: 87/100',arbOppWindow:'Window closes: ~Sept 2026',
+arbOpp1:{title:'Talent Acquisition Window',urgency:'High Urgency',urgencyClass:'urgency-high',desc:"EGA's engineering talent is actively updating LinkedIn profiles and accepting recruiter calls. Guinea crisis and write-down have shaken confidence.",metrics:[{label:'Available engineers (senior)',value:'14+'},{label:'Avg years experience',value:'6.2'},{label:'Typical salary band',value:'$120-180K'},{label:'Estimated hire cost',value:'60% of market rate'},{label:'Window duration',value:'3-6 months'}]},
+arbOpp2:{title:'Client Migration Opportunity',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:"EGA's supply chain uncertainty from Guinea operations is making downstream clients nervous. Position as a stable alternative supplier.",metrics:[{label:'At-risk client contracts',value:'~$420M'},{label:'Client switching cost',value:'Low-Medium'},{label:'Lead time to supply',value:'8-12 weeks'},{label:'Price premium opportunity',value:'+4-6%'},{label:'Win probability',value:'35-50%'}]},
+actionPlan:[{text:'<strong>Week 1-2: Map the talent.</strong> Identify the 14+ senior engineers who have signalled availability. Cross-reference with LinkedIn skills. Prioritise smelting process engineers and automation specialists.',impact:'Impact: Acquire 5+ years of institutional knowledge per hire'},{text:"<strong>Week 2-4: Approach EGA's top 3 nervous clients.</strong> Automotive OEMs and construction material suppliers dependent on Guinea-sourced aluminium. Lead with supply stability messaging.",impact:'Impact: $50-150M incremental contract value'},{text:"<strong>Week 3-6: Increase digital visibility.</strong> EGA has paused Google Ads. Their branded search terms are now available at 40% lower CPC. Run targeted campaigns in UAE and Saudi.",impact:'Impact: 3x impression share in category at reduced cost'},{text:'<strong>Month 2-3: Position PR narrative.</strong> Publish thought leadership on supply chain resilience. Reference Guinea situation without naming EGA.',impact:'Impact: Brand perception lift of 15-20 points'},{text:'<strong>Month 3-6: Monitor EGA stabilisation.</strong> Set automated alerts for: new CEO appointment, Guinea resolution, Glassdoor recovery above 3.5, resumed ad spend.',impact:'Impact: Know precisely when to shift from offence to defence'}],
+correlations:[{from:'Guinea Write-Down ($765M)',to:'Glassdoor drops to 3.2',label:'Employees lose confidence in leadership',color:'#DC2626'},{from:'Glassdoor drops to 3.2',to:'14 engineers signal "open to work"',label:'Talent retention failure',color:'#DC2626'},{from:'Talent departures',to:'Innovation pipeline slows',label:'R&D output drops ~30% (patent proxy)',color:'#D97706'},{from:'Guinea supply uncertainty',to:'Client contracts at risk',label:'Downstream buyers seek alternatives',color:'#D97706'},{from:'Google Ads paused',to:'Branded search available',label:'Competitor CPC drops 40%',color:'#059669'},{from:'Negative news sentiment',to:'Investor caution',label:'Stock/valuation pressure',color:'#DC2626'}],
+timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[40,55,72,87,90,85,70,50,30],risk:[20,25,30,35,40,50,60,70,80]},
+composite:{opScore:58,finScore:42,resScore:35,total:45,band:'Below Average'}},
+
+fab:{name:'First Abu Dhabi Bank',short:'FAB',sector:'Financial Services / Banking',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$10.0B Revenue',score:78,scoreBand:'Strong',scoreBandColor:'#059669',scoreChange:{value:3,label:'+3 vs Q3',direction:'up'},
+services:[{name:'Website Performance',score:85,benchmark:76,color:'#059669'},{name:'Social Media',score:82,benchmark:70,color:'#059669'},{name:'Media Coverage',score:88,benchmark:72,color:'#059669'},{name:'Employer Brand',score:71,benchmark:68,color:'#059669'},{name:'Google Ads',score:78,benchmark:65,color:'#059669'},{name:'Tech Stack',score:74,benchmark:70,color:'#059669'},{name:'Brand Audit',score:80,benchmark:72,color:'#059669'},{name:'Reviews & Maps',score:65,benchmark:68,color:'#D97706'},{name:'Registration',score:90,benchmark:82,color:'#059669'}],
+history:[72,73,74,74,75,76,76,77,77,78,78,78],sectorAvg:[68,68,69,69,70,70,70,70,71,71,71,71],
+contextSignals:{headline1:{title:'Digital Banking Push',detail:'Launched new mobile platform, user growth +45% QoQ',iconClass:'positive',icon:'\u2191'},headline2:{title:'ESG Leadership',detail:'First GCC bank to issue green bond \u2014 $600M raised',iconClass:'positive',icon:'\u2713'},headline3:{title:'Hiring Acceleration',detail:'120+ tech roles posted in last 60 days',iconClass:'positive',icon:'\u2197'}},
+timeline:[{date:'Mar 2026',text:'<strong>120+ tech roles</strong> posted \u2014 largest hiring wave in 2 years',color:'#059669'},{date:'Feb 2026',text:'<strong>$600M green bond</strong> issued \u2014 first in GCC banking',color:'#059669'},{date:'Jan 2026',text:'<strong>Mobile app relaunch</strong> drives 45% user growth',color:'#059669'},{date:'Dec 2025',text:'<strong>Q4 earnings beat</strong> consensus by 8%',color:'#059669'},{date:'Nov 2025',text:'<strong>New CTO hired</strong> from Standard Chartered',color:'#059669'},{date:'Oct 2025',text:'<strong>Branch footprint reduced</strong> 12% \u2014 digital-first strategy',color:'#D97706'}],
+sentiment:[0.3,0.32,0.35,0.38,0.4,0.42,0.45,0.5,0.52,0.55,0.58,0.6],
+talent:[{label:'New hires (6mo)',value:'340+',trend:'positive'},{label:'Open roles posted',value:'120',trend:'positive'},{label:'Tech team growth',value:'+22%',trend:'positive'},{label:'Avg tenure (current)',value:'4.8 yrs',trend:'neutral'},{label:'Glassdoor rating',value:'3.9 / 5.0',trend:'positive'},{label:'CEO approval',value:'78%',trend:'positive'}],
+financial:[{label:'Revenue (est.)',value:'$10.0B',trend:'positive'},{label:'Revenue growth',value:'+16%',trend:'positive'},{label:'Net interest margin',value:'2.8%',trend:'positive'},{label:'Cost-to-income ratio',value:'28.5%',trend:'positive'},{label:'Employee count',value:'~6,900',trend:'positive'},{label:'Digital adoption rate',value:'72%',trend:'positive'}],
+market:[{label:'UAE banking sector growth',value:'+8.2%',trend:'positive'},{label:'Digital banking penetration',value:'64%',trend:'positive'},{label:'CBUAE base rate',value:'3.65%',trend:'neutral'},{label:'Regulatory environment',value:'Supportive',trend:'positive'},{label:'Fintech competition',value:'Moderate',trend:'neutral'},{label:'Vision 2031 alignment',value:'Strong',trend:'positive'}],
+competitorMovement:{labels:['FAB','ENBD','ADCB','Mashreq','DIB'],current:[78,74,65,61,58],previous:[75,72,66,63,56]},
+peers:[{name:'First Abu Dhabi Bank',score:78,website:85,social:82,media:88,employer:71,financial:82,trend:'up'},{name:'Emirates NBD',score:74,website:80,social:78,media:75,employer:68,financial:78,trend:'up'},{name:'ADCB',score:65,website:68,social:58,media:62,employer:64,financial:72,trend:'down'}],
+arbOppScore:62,arbOppHeadline:'Moderate Arbitrage Opportunities Detected',arbOppFormula:'Urgency (6/10) \u00d7 Impact (7/10) \u00d7 Feasibility (8/10) \u2192 Weighted: 62/100',arbOppWindow:'Ongoing opportunity window',
+arbOpp1:{title:'ADCB Digital Gap',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:'ADCB is lagging in digital transformation. Their mobile app has a 2.8-star rating. FAB can poach their digitally-savvy customers.',metrics:[{label:'ADCB digital adoption',value:'41%'},{label:'Customer churn signal',value:'Rising'},{label:'App store rating',value:'2.8 / 5.0'},{label:'Switchable deposit base',value:'~$4.2B'},{label:'Marketing gap',value:'No active campaigns'}]},
+arbOpp2:{title:'Fintech Partnership Window',urgency:'Low Urgency',urgencyClass:'urgency-low',desc:'Three UAE-based fintech startups are seeking banking partners for embedded finance. Early mover advantage available.',metrics:[{label:'Fintech targets',value:'3 identified'},{label:'Combined users',value:'~280K'},{label:'Partnership cost',value:'$2-5M'},{label:'Revenue potential',value:'$15-30M/yr'},{label:'ENBD timeline',value:'~4 months out'}]},
+actionPlan:[{text:'<strong>Week 1-2: Launch targeted switch campaign.</strong> Identify ADCB customers through social listening and offer frictionless account migration with sign-up bonuses.',impact:'Impact: Capture 5-8% of ADCB digital-ready customer base'},{text:'<strong>Week 2-4: Engage the 3 fintech targets.</strong> Offer sandbox API access and co-development funding. Move before ENBD closes exclusives.',impact:'Impact: Lock in 280K+ users into FAB ecosystem'},{text:'<strong>Month 1-2: Amplify ESG positioning.</strong> Green bond success gives credibility. Run thought leadership targeting ESG-mandate institutional clients.',impact:'Impact: Attract $1-2B in ESG-linked deposits'},{text:'<strong>Month 2-4: Build digital moat.</strong> Accelerate AI-powered advisory features. ADCB is 18+ months behind.',impact:'Impact: Sustainable competitive advantage in digital banking'}],
+correlations:[{from:'ADCB digital lag',to:'Customer dissatisfaction rising',label:'2.8 app rating, social complaints +60%',color:'#059669'},{from:'Customer dissatisfaction',to:'Switch propensity increasing',label:'~$4.2B in mobile deposits',color:'#059669'},{from:'FAB mobile relaunch',to:'Brand perception lift',label:'+45% user growth validates platform',color:'#059669'},{from:'Green bond success',to:'ESG leadership position',label:'Institutional mandate alignment',color:'#2563EB'},{from:'CTO hire from StanChart',to:'Tech talent magnet effect',label:'Senior hires attract more senior hires',color:'#059669'}],
+timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[50,55,60,62,60,55,50,45,40],risk:[15,18,20,25,30,35,40,45,50]},
+composite:{opScore:78,finScore:72,resScore:52,total:67,band:'Strong'}},
+
+aldar:{name:'Aldar Properties',short:'ALD',sector:'Real Estate / Development',location:'Abu Dhabi, UAE',portfolio:'Mubadala Portfolio',revenue:'$9.2B Revenue',score:71,scoreBand:'Strong',scoreBandColor:'#059669',scoreChange:{value:6,label:'+6 vs Q3',direction:'up'},
+services:[{name:'Website Performance',score:80,benchmark:72,color:'#059669'},{name:'Social Media',score:78,benchmark:68,color:'#059669'},{name:'Media Coverage',score:85,benchmark:70,color:'#059669'},{name:'Employer Brand',score:62,benchmark:65,color:'#D97706'},{name:'Google Ads',score:72,benchmark:60,color:'#059669'},{name:'Tech Stack',score:58,benchmark:68,color:'#DC2626'},{name:'Brand Audit',score:75,benchmark:70,color:'#059669'},{name:'Reviews & Maps',score:68,benchmark:62,color:'#059669'},{name:'Registration',score:88,benchmark:80,color:'#059669'}],
+history:[62,63,64,65,66,67,68,68,69,70,70,71],sectorAvg:[65,65,66,66,66,67,67,67,68,68,68,68],
+contextSignals:{headline1:{title:'Yas Island Expansion',detail:'$2.8B masterplan announced, sales pipeline +35%',iconClass:'positive',icon:'\u2191'},headline2:{title:'Tech Stack Lag',detail:'Legacy CRM and website tech 3+ years behind competitors',iconClass:'warning',icon:'\u26A0'},headline3:{title:'Talent Gap in PropTech',detail:'Struggling to hire data/AI roles, 45-day avg time-to-fill',iconClass:'warning',icon:'\u2026'}},
+timeline:[{date:'Mar 2026',text:'<strong>Sales pipeline +35%</strong> \u2014 strongest Q1 in company history',color:'#059669'},{date:'Feb 2026',text:'<strong>Yas Island Phase 3</strong> masterplan launched ($2.8B)',color:'#059669'},{date:'Jan 2026',text:'<strong>PropTech roles unfilled</strong> \u2014 8 data science positions open 45+ days',color:'#D97706'},{date:'Dec 2025',text:'<strong>Q4 sales record</strong> driven by international buyer demand',color:'#059669'},{date:'Nov 2025',text:'<strong>Website refresh delayed</strong> \u2014 legacy tech stack causing bottlenecks',color:'#DC2626'},{date:'Oct 2025',text:'<strong>Strategic land acquisitions</strong> in Saadiyat and Reem Islands',color:'#059669'}],
+sentiment:[0.3,0.35,0.38,0.4,0.42,0.45,0.48,0.5,0.52,0.54,0.56,0.58],
+talent:[{label:'Open roles',value:'42',trend:'neutral'},{label:'PropTech roles unfilled',value:'8',trend:'negative'},{label:'Avg time-to-fill (tech)',value:'45 days',trend:'negative'},{label:'Sales team growth',value:'+18%',trend:'positive'},{label:'Glassdoor rating',value:'3.6 / 5.0',trend:'neutral'},{label:'CEO approval',value:'72%',trend:'positive'}],
+financial:[{label:'Revenue (est.)',value:'$9.2B',trend:'positive'},{label:'Revenue growth',value:'+47%',trend:'positive'},{label:'Net margin',value:'26.0%',trend:'positive'},{label:'Landbank value',value:'$12.4B',trend:'positive'},{label:'Employee count',value:'~3,400',trend:'positive'},{label:'Revenue per employee',value:'$2.71M',trend:'positive'}],
+market:[{label:'Abu Dhabi property prices',value:'+14% YoY',trend:'positive'},{label:'Transaction volumes',value:'+28%',trend:'positive'},{label:'International buyer share',value:'38%',trend:'positive'},{label:'Mortgage rates (avg)',value:'4.2%',trend:'neutral'},{label:'New supply (units)',value:'12,400',trend:'neutral'},{label:'Golden Visa impact',value:'Strong',trend:'positive'}],
+competitorMovement:{labels:['Aldar','Emaar','DAMAC','Nakheel','Bloom'],current:[71,82,68,55,48],previous:[65,80,70,56,45]},
+peers:[{name:'Aldar Properties',score:71,website:80,social:78,media:85,employer:62,financial:78,trend:'up'},{name:'Emaar Properties',score:82,website:88,social:85,media:82,employer:75,financial:80,trend:'up'},{name:'DAMAC Properties',score:68,website:72,social:74,media:65,employer:55,financial:70,trend:'down'}],
+arbOppScore:74,arbOppHeadline:'Strong Arbitrage Opportunities Detected',arbOppFormula:'Urgency (7/10) \u00d7 Impact (8/10) \u00d7 Feasibility (8/10) \u2192 Weighted: 74/100',arbOppWindow:'Window: 6-12 months (DAMAC weakening)',
+arbOpp1:{title:'DAMAC Client Capture',urgency:'High Urgency',urgencyClass:'urgency-high',desc:"DAMAC's employer brand is declining (Glassdoor 2.9) and delivery delays are eroding buyer confidence. International buyers actively seeking alternatives.",metrics:[{label:'DAMAC Glassdoor',value:'2.9 / 5.0'},{label:'Delivery delays reported',value:'6-12 months'},{label:'Buyer confidence index',value:'Falling'},{label:'Switchable pipeline',value:'~$600M'},{label:'International buyer interest',value:'High'}]},
+arbOpp2:{title:'PropTech First-Mover',urgency:'Medium Urgency',urgencyClass:'urgency-medium',desc:'No major UAE developer has deployed AI-powered property matching or virtual staging at scale. First-mover advantage in PropTech.',metrics:[{label:'Tech-savvy buyer segment',value:'~35%'},{label:'Conversion lift potential',value:'+25-40%'},{label:'Investment required',value:'$3-5M'},{label:'Competitor readiness',value:'18+ months behind'},{label:'ROI timeline',value:'6-9 months'}]},
+actionPlan:[{text:"<strong>Week 1-2: Mine DAMAC's dissatisfied buyers.</strong> Social listening for complaints. Offer Aldar's track record of on-time delivery as the key differentiator.",impact:'Impact: Capture $100-200M from DAMAC pipeline'},{text:'<strong>Week 2-4: Fast-track PropTech build.</strong> Hire 3-4 senior engineers from EGA (cross-arbitrage play) to build AI property matching.',impact:'Impact: Category-defining PropTech capability'},{text:'<strong>Month 1-2: Fix the tech stack.</strong> Legacy CRM scoring 58 on tech stack \u2014 below sector avg. Migrate to modern stack.',impact:'Impact: +10-15 point score improvement on tech dimension'},{text:'<strong>Month 2-4: International buyer push.</strong> Leverage Yas Island Phase 3 launch with targeted digital campaigns in India, UK, and China.',impact:'Impact: Increase international buyer share from 38% to 45%+'}],
+correlations:[{from:'DAMAC delivery delays',to:'Buyer confidence eroding',label:'Social complaints up 60%',color:'#059669'},{from:'Buyer confidence drop',to:'Active buyer migration',label:'Search for "DAMAC alternative" +120%',color:'#059669'},{from:'Aldar Yas Island launch',to:'Pipeline +35%',label:'Perfectly timed to capture migrating buyers',color:'#059669'},{from:'Tech stack lag (score: 58)',to:'PropTech opportunity',label:'Weakness is also the biggest opportunity',color:'#D97706'},{from:'EGA talent availability',to:'Cross-sector hire opportunity',label:'Senior engineers available at 60% cost',color:'#2563EB'}],
+timingData:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],opportunity:[45,50,60,74,78,75,68,60,50],risk:[10,12,15,20,25,30,35,40,50]},
+composite:{opScore:71,finScore:68,resScore:41,total:60,band:'Average'}}
+};
+
+var currentCompany='ega',charts={};
+
+// Stress testing scenario data
+var scenarios=[
+{title:'Oil Price Crash ($40-50/bbl Brent)',sub:'Precedent: 2014-2016 ($115 to $28), 2020 COVID ($65 to $20)',resilience:35,transmission:[
+{sector:'Oil crash',impact:'Government revenues collapse'},{sector:'Fiscal stress',impact:'Government deposits withdrawn from banks'},{sector:'Liquidity',impact:'Credit tightening, loan defaults begin'},{sector:'Capex freeze',impact:'Construction stops, real estate demand drops'},{sector:'Confidence',impact:'Consumer spending contracts across economy'}],
+exposed:[{rank:1,name:'EGA',detail:'Already stressed. Aluminium correlates with global growth which correlates with oil. Double exposure.'},{rank:2,name:'Aldar Properties',detail:'Discretionary real estate purchases freeze first. Off-plan cancellations spike.'},{rank:3,name:'ADNOC subsidiaries',detail:'Direct revenue hit, but low-cost producer survives. Dividend reduction more likely than distress.'}],
+warnings:[{label:'Saudi fiscal breakeven vs spot',value:'$91 vs $102',color:'var(--orange)'},{label:'SAMA foreign reserves trend',value:'Stable',color:'var(--green)'},{label:'UAE budget revision',value:'None',color:'var(--green)'},{label:'GCC PMI',value:'55.0 (>50)',color:'var(--green)'},{label:'RE transaction volumes',value:'+28% YoY',color:'var(--green)'}],
+sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','Healthcare','Logistics'],data:[95,80,85,80,45,25,55]}},
+{title:'Fed Rapid Tightening (+150-200bp)',sub:'Precedent: 2022-2023 (+525bp in 16 months)',resilience:48,transmission:[
+{sector:'Fed hikes',impact:'GCC central banks MUST follow (peg defence)'},{sector:'Borrowing',impact:'Corporate borrowing costs spike across sectors'},{sector:'Real estate',impact:'Mortgage costs rise, property demand collapses'},{sector:'Banks',impact:'NIM expands first, then NPLs rise 2-4Q later'},{sector:'Refinancing',impact:'Leveraged companies face refinancing stress'}],
+exposed:[{rank:1,name:'DAMAC',detail:'Historically high leverage + luxury real estate = maximum sensitivity.'},{rank:2,name:'Emaar',detail:'Massive ongoing developments, significant debt burden.'},{rank:3,name:'Floating-rate borrowers',detail:'Any company with floating-rate debt maturing in 12 months.'}],
+warnings:[{label:'Fed dot plot',value:'Hawkish shift',color:'var(--red)'},{label:'2Y vs 10Y UST',value:'-42bp inverted',color:'var(--red)'},{label:'EIBOR 3M',value:'4.85%',color:'var(--orange)'},{label:'GCC corp bond spreads',value:'Widening',color:'var(--orange)'},{label:'Mortgage applications',value:'-12% MoM',color:'var(--red)'}],
+sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','Healthcare','Logistics'],data:[15,65,95,70,50,45,40]}},
+{title:'China Demand Collapse (GDP <3%)',sub:'Precedent: 2015 China slowdown, 2022 zero-COVID',resilience:42,transmission:[
+{sector:'China slows',impact:'Commodity demand falls (oil, aluminium, petrochemicals)'},{sector:'Exports',impact:'GCC export revenues decline across industrial sectors'},{sector:'Trade',impact:'Container throughput through GCC ports drops sharply'},{sector:'Investment',impact:'Chinese real estate investment in GCC stalls'},{sector:'Sentiment',impact:'Contagion: global risk-off hits emerging/frontier markets'}],
+exposed:[{rank:1,name:'EGA',detail:'China is largest aluminium consumer. Chinese overcapacity + demand drop = global price crash.'},{rank:2,name:'SABIC',detail:'Petrochemical demand heavily China-driven. Faces competition from Chinese domestic production.'},{rank:3,name:'DP World',detail:'China-origin containers are significant throughput. Structural decline, not cyclical.'}],
+warnings:[{label:'Caixin Mfg PMI',value:'49.2 (<50)',color:'var(--red)'},{label:'Iron ore price',value:'Declining',color:'var(--orange)'},{label:'Baltic Dry Index',value:'-18% MoM',color:'var(--red)'},{label:'China crude imports',value:'Flat YoY',color:'var(--orange)'},{label:'Property dev defaults',value:'Rising',color:'var(--red)'}],
+sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','Healthcare','Logistics'],data:[75,45,50,95,15,10,80]}},
+{title:'Regional Conflict Escalation',sub:'Precedent: 2019 Aramco drone attack, 2024 Red Sea crisis',resilience:55,transmission:[
+{sector:'Conflict',impact:'Oil price spikes short-term (supply disruption premium)'},{sector:'Insurance',impact:'Shipping/port insurance costs spike, logistics disrupted'},{sector:'Capital',impact:'Foreign investment freezes, portfolio outflows from GCC'},{sector:'Talent',impact:'Expatriate outflows, labour market disruption'},{sector:'Tourism',impact:'Travel avoidance, event cancellations, tourism collapse'}],
+exposed:[{rank:1,name:'Aldar / Emaar',detail:'Foreign buyer confidence collapses overnight. 2019 drone attack caused visible Dubai RE pause.'},{rank:2,name:'DP World / AD Ports',detail:'Physical asset risk + shipping disruption + insurance cost spike.'},{rank:3,name:'e& / STC',detail:'Subscriber base contraction from expat departure (UAE is 88% expat).'}],
+warnings:[{label:'Brent-WTI spread',value:'$4.20 (normal)',color:'var(--green)'},{label:'GCC CDS spreads',value:'Stable',color:'var(--green)'},{label:'Flight bookings to GCC',value:'+8%',color:'var(--green)'},{label:'War risk insurance',value:'Low',color:'var(--green)'},{label:'Expat remittance flows',value:'Stable',color:'var(--green)'}],
+sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','Healthcare','Logistics'],data:[30,75,90,70,40,35,80]}},
+{title:'USD Peg Pressure (Tail Risk)',sub:'No GCC country has broken the peg, but pressure tested in 2008 and 2016',resilience:28,transmission:[
+{sector:'Oil crash',impact:'Reserves depleted defending the currency peg'},{sector:'Speculation',impact:'Forward markets price in devaluation, capital flight builds'},{sector:'If peg breaks',impact:'All USD-denominated debt becomes more expensive in local currency'},{sector:'Banking',impact:'Currency mismatch on balance sheets creates systemic crisis'},{sector:'Real estate',impact:'Asset revaluation, foreign buyer exodus, confidence collapse'}],
+exposed:[{rank:1,name:'All GCC Banks',detail:'Currency mismatch on balance sheets. CATASTROPHIC impact if peg breaks.'},{rank:2,name:'All Real Estate',detail:'Asset revaluation, foreign buyer exodus. Every property is priced assuming peg holds.'},{rank:3,name:'Leveraged corporates',detail:'Any company with USD debt sees costs spike overnight in local currency terms.'}],
+warnings:[{label:'SAR 12M NDF',value:'3.7510 (stable)',color:'var(--green)'},{label:'SAMA reserves trend',value:'$420B stable',color:'var(--green)'},{label:'CBUAE repo rate',value:'Normal',color:'var(--green)'},{label:'Gold imports to GCC',value:'Normal',color:'var(--green)'},{label:'Saudi CDS spread',value:'52bp (low)',color:'var(--green)'}],
+sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','Healthcare','Logistics'],data:[35,98,95,75,65,50,55]}}
+];
+
+var activeScenario=0;
+
+async function checkApi(){try{var r=await fetch(API_BASE+'/api/companies',{signal:AbortSignal.timeout(5000)});if(r.ok){var d=await r.json();document.getElementById('apiDot').className='api-dot live';document.getElementById('apiLabel').textContent='API Live';document.getElementById('apiLabel').style.color='var(--green)';if(d&&d.length>0)renderLiveApiCards(d)}else throw 0}catch(e){document.getElementById('apiDot').className='api-dot offline';document.getElementById('apiLabel').textContent='Demo Mode';document.getElementById('apiLabel').style.color='var(--text-tertiary)'}}
+
+async function renderLiveApiCards(list){var s=document.getElementById('liveApiSection'),c=document.getElementById('liveApiCards');s.style.display='block';var h='';for(var i=0;i<Math.min(list.length,4);i++){var co=list[i],sh='<span style="color:var(--text-tertiary)">No scores</span>';try{var r=await fetch(API_BASE+'/api/companies/'+co.slug+'/scores',{signal:AbortSignal.timeout(5000)});if(r.ok){var sc=await r.json();if(sc&&sc.composite!==undefined){var b=sc.composite>=90?'leading':sc.composite>=70?'strong':sc.composite>=50?'average':sc.composite>=30?'weak':'critical';var bc=b==='leading'?'var(--accent)':b==='strong'?'var(--green)':b==='average'?'var(--orange)':'var(--red)';sh='<div style="font-size:28px;font-weight:800;color:'+bc+';letter-spacing:-1px">'+Math.round(sc.composite)+'</div><div class="kpi-label">'+b.charAt(0).toUpperCase()+b.slice(1)+'</div>'}}}catch(e){}h+='<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+co.name+'</div>'+sh+'</div>'}c.innerHTML=h}
+
+function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');b.classList.add('active');setTimeout(function(){renderAllCharts()},50)}
+function switchCompany(k){currentCompany=k;renderAll()}
+
+function selectScenario(idx){activeScenario=idx;document.querySelectorAll('.scenario-card').forEach(function(c,i){c.classList.toggle('scenario-active',i===idx)});renderStressScenario();renderStressCharts()}
+
+function renderStressScenario(){var s=scenarios[activeScenario];
+document.getElementById('stressScenarioTitle').textContent=s.title;
+document.getElementById('stressScenarioSub').textContent=s.sub;
+document.getElementById('stressTransmission').innerHTML=s.transmission.map(function(t){var c=t.sector.includes('crash')||t.sector.includes('Conflict')||t.sector.includes('breaks')?'var(--red)':t.sector.includes('stress')||t.sector.includes('Borrowing')||t.sector.includes('Speculation')?'var(--red)':t.sector.includes('Liquidity')||t.sector.includes('Capex')||t.sector.includes('Insurance')||t.sector.includes('Capital')||t.sector.includes('estate')||t.sector.includes('Exports')||t.sector.includes('Trade')?'var(--orange)':'var(--text-secondary)';return'<div class="cascade-item"><span class="cascade-sector" style="color:'+c+'">'+t.sector+'</span><span class="cascade-arrow">&rarr;</span><span class="cascade-impact">'+t.impact+'</span></div>'}).join('');
+document.getElementById('stressExposed').innerHTML=s.exposed.map(function(e){var bg=e.rank===1?'var(--red-light)':e.rank===2?'var(--red-light)':'var(--orange-light)';var col=e.rank<=2?'var(--red)':'var(--orange)';return'<div class="signal-item"><div class="signal-icon" style="background:'+bg+';color:'+col+';font-size:12px;font-weight:800">'+e.rank+'</div><div class="signal-content"><div class="signal-title">'+e.name+'</div><div class="signal-detail">'+e.detail+'</div></div></div>'}).join('');
+document.getElementById('stressWarnings').innerHTML=s.warnings.map(function(w){return'<div class="overlay-row"><span class="overlay-label">'+w.label+'</span><span class="overlay-value" style="color:'+w.color+'">'+w.value+'</span></div>'}).join('')}
+
+function renderAll(){var c=companies[currentCompany];
+document.getElementById('heroLogo').textContent=c.short;document.getElementById('heroName').textContent=c.name;document.getElementById('heroMeta').innerHTML=c.sector+' &bull; '+c.location+' &bull; '+c.portfolio+' &bull; <strong>'+c.revenue+'</strong>';
+var sr=document.getElementById('overviewScore');sr.textContent=c.score;sr.className='score-ring score-'+c.scoreBand.toLowerCase();
+var ce=document.getElementById('overviewScoreChange');ce.textContent=c.scoreChange.label;ce.className='kpi-change '+c.scoreChange.direction;
+document.getElementById('overviewScoreSummary').textContent=c.score<60?'Below sector average. Weak areas identified in social and employer brand.':c.score<75?'Above sector average. Strong digital presence with room for improvement.':'Leading position. Strong across most dimensions.';
+['1','2','3'].forEach(function(n){var s=c.contextSignals['headline'+n];document.getElementById('ctxSignal'+n+'Title').textContent=s.title;document.getElementById('ctxSignal'+n+'Detail').textContent=s.detail;document.getElementById('ctxIcon'+n).className='signal-icon '+s.iconClass;document.getElementById('ctxIcon'+n).textContent=s.icon});
+document.getElementById('overviewOppScore').textContent=c.arbOppScore;document.getElementById('overviewOppDesc').textContent=c.arbOpp1.desc.substring(0,120)+'...';document.getElementById('overviewOppWindow').textContent=c.arbOppWindow;
+renderPeerTable(c);document.getElementById('benchCompanyName').textContent=c.name;document.getElementById('benchBand').textContent=c.scoreBand;document.getElementById('benchBand').style.color=c.scoreBandColor;renderServiceBars(c);renderScorecard(c);
+document.getElementById('ctxTimelineSub').textContent='Key events affecting '+c.short+"'s score trajectory";renderTimeline(c);renderSignalCards(c);document.getElementById('ctxCompMoveSub').textContent='Score changes across '+c.short+"'s competitive set in the last 90 days";
+document.getElementById('arbOppScore').textContent=c.arbOppScore;document.getElementById('arbOppHeadline').textContent=c.arbOppHeadline;document.getElementById('arbOppFormula').textContent=c.arbOppFormula;
+document.getElementById('arbOpp1Title').textContent=c.arbOpp1.title;document.getElementById('arbOpp1Urgency').textContent=c.arbOpp1.urgency;document.getElementById('arbOpp1Urgency').className='arb-urgency '+c.arbOpp1.urgencyClass;document.getElementById('arbOpp1Desc').textContent=c.arbOpp1.desc;
+document.getElementById('arbOpp2Title').textContent=c.arbOpp2.title;document.getElementById('arbOpp2Urgency').textContent=c.arbOpp2.urgency;document.getElementById('arbOpp2Urgency').className='arb-urgency '+c.arbOpp2.urgencyClass;document.getElementById('arbOpp2Desc').textContent=c.arbOpp2.desc;
+document.getElementById('arbActionSub').textContent='Sequenced actions to exploit the current '+c.short+' arbitrage window';document.getElementById('arbCorrSub').textContent='How '+c.short+"'s signals create opportunities";
+renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);renderEventCalendar();
+// Composite tab
+renderCompositeTab(c);
+renderStressScenario();
+updateOilSim(document.getElementById('oilSlider')?document.getElementById('oilSlider').value:102);
+renderAllCharts()}
+
+function renderCompositeTab(c){
+var comp=c.composite;
+document.getElementById('compositeCompanyName').textContent=c.name;
+document.getElementById('compOpScore').innerHTML='<span style="position:relative;z-index:1">'+comp.opScore+'</span>';
+document.getElementById('compFinScore').innerHTML='<span style="position:relative;z-index:1">'+comp.finScore+'</span>';
+document.getElementById('compResScore').innerHTML='<span style="position:relative;z-index:1">'+comp.resScore+'</span>';
+document.getElementById('compTotalScore').innerHTML='<span style="position:relative;z-index:1">'+comp.total+'</span>';
+document.getElementById('compTotalBand').textContent=comp.band;
+var opC=comp.opScore>=70?'var(--green)':comp.opScore>=50?'var(--orange)':'var(--red)';
+var finC=comp.finScore>=70?'var(--green)':comp.finScore>=50?'var(--orange)':'var(--red)';
+var resC=comp.resScore>=70?'var(--green)':comp.resScore>=50?'var(--orange)':'var(--red)';
+document.getElementById('compOpScore').style.color=opC;
+document.getElementById('compFinScore').style.color=finC;
+document.getElementById('compResScore').style.color=resC;
+document.getElementById('compositeRadarSub').textContent=c.name+' vs sector average across all intelligence dimensions';
+// Update breakdowns
+var services=c.services;
+document.getElementById('compOpBreakdown').innerHTML=services.map(function(s){var col=s.score>=70?'var(--green)':s.score>=50?'var(--orange)':'var(--red)';return'<div class="overlay-row"><span class="overlay-label">'+s.name+'</span><span class="overlay-value" style="color:'+col+'">'+s.score+'</span></div>'}).join('');
+}
+
+function renderPeerTable(c){document.querySelector('#peerTable tbody').innerHTML=c.peers.map(function(p){return'<tr><td>'+p.name+'</td><td class="score-cell">'+p.score+'</td><td class="score-cell">'+p.website+'</td><td class="score-cell">'+p.social+'</td><td class="score-cell">'+p.media+'</td><td class="score-cell">'+p.employer+'</td><td class="score-cell">'+p.financial+'</td><td class="'+(p.trend==='up'?'trend-up':'trend-down')+'">'+(p.trend==='up'?'\u25B2 Up':'\u25BC Down')+'</td></tr>'}).join('')}
+function renderServiceBars(c){document.getElementById('serviceBars').innerHTML=c.services.map(function(s){return'<div class="service-bar"><div class="service-bar-header"><span class="service-name">'+s.name+'</span><span class="service-score" style="color:'+s.color+'">'+s.score+'</span></div><div class="bar-track"><div class="bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div><div class="bar-benchmark" style="left:'+s.benchmark+'%" title="Sector Avg: '+s.benchmark+'"></div></div></div>'}).join('')}
+function renderScorecard(c){document.getElementById('scorecardGrid').innerHTML=c.services.map(function(s){var d=s.score-s.benchmark,dc=d>0?'var(--green)':d<0?'var(--red)':'var(--text-secondary)',ds=d>0?'+':'';return'<div class="scorecard-cell"><div class="sc-score" style="color:'+s.color+'">'+s.score+'</div><div class="sc-label">'+s.name+'</div><div style="font-size:10px;font-weight:600;color:'+dc+';margin-top:2px">'+ds+d+' vs avg</div><div class="sc-bar"><div class="sc-bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div></div></div>'}).join('')}
+function renderTimeline(c){document.getElementById('signalTimeline').innerHTML=c.timeline.map(function(t){return'<div class="timeline-item"><div class="timeline-dot" style="background:'+t.color+'"></div><div><div class="timeline-text">'+t.text+'</div><div class="timeline-date">'+t.date+'</div></div></div>'}).join('')}
+function renderSignalCards(c){function r(id,d){document.getElementById(id).innerHTML=d.map(function(x){return'<div class="overlay-row"><span class="overlay-label">'+x.label+'</span><span class="overlay-value" style="color:'+(x.trend==='positive'?'var(--green)':x.trend==='negative'?'var(--red)':'var(--text-primary)')+'">'+x.value+'</span></div>'}).join('')}r('talentSignals',c.talent);r('financialSignals',c.financial);r('marketContext',c.market)}
+function renderArbMetrics(c){['arbOpp1Metrics','arbOpp2Metrics'].forEach(function(id,i){var o=i===0?c.arbOpp1:c.arbOpp2;document.getElementById(id).innerHTML=o.metrics.map(function(m){return'<div class="arb-metric"><span class="arb-metric-label">'+m.label+'</span><span class="arb-metric-value">'+m.value+'</span></div>'}).join('')})}
+function renderActionPlan(c){document.getElementById('actionPlan').innerHTML=c.actionPlan.map(function(a,i){return'<div class="action-step"><div class="action-number">'+(i+1)+'</div><div class="action-text">'+a.text+'<br><span class="impact">'+a.impact+'</span></div></div>'}).join('')}
+function renderCorrelations(c){document.getElementById('correlationSignals').innerHTML=c.correlations.map(function(r){return'<div class="signal-item"><div class="signal-icon" style="background:'+r.color+'12;color:'+r.color+';font-size:14px">\u2192</div><div class="signal-content"><div class="signal-title" style="font-size:12px">'+r.from+' \u2192 '+r.to+'</div><div class="signal-detail">'+r.label+'</div></div></div>'}).join('')}
+function renderEventCalendar(){var ev=[{month:'MAR',day:'23',name:'Brussels TrueGroup Event',location:'Brussels, Belgium'},{month:'APR',day:'28',name:'STEP Conference',location:'Dubai Internet City'},{month:'MAY',day:'12',name:'Future Investment Initiative',location:'Riyadh, Saudi Arabia'},{month:'JUN',day:'02',name:'Cityscape Abu Dhabi',location:'Abu Dhabi (ADNEC)'},{month:'AUG',day:'01',name:'EU AI Act High-Risk Deadline',location:'European Union'},{month:'SEP',day:'08',name:'Saudi Vision 2030 Summit',location:'Riyadh, Saudi Arabia'},{month:'OCT',day:'14',name:'GITEX Global 2026',location:'Dubai World Trade Centre'},{month:'NOV',day:'02',name:'ADIPEC 2026',location:'Abu Dhabi (ADNEC)'}];document.getElementById('eventCalendar').innerHTML=ev.map(function(e){return'<div class="event-item"><div class="event-date-box"><div class="event-date-month">'+e.month+'</div><div class="event-date-day">'+e.day+'</div></div><div><div class="event-name">'+e.name+'</div><div class="event-location">'+e.location+'</div></div></div>'}).join('')}
+
+var gC='#F3F4F6',lO={position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}};
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k]}}
+
+// ========== OIL PRICE SCENARIO SIMULATOR ==========
+var oilBands=[
+  {price:50,name:'Fiscal Crisis',color:'#DC2626',bandBg:'#FEF2F2',bandText:'#DC2626',
+    desc:'Saudi runs ~15% GDP deficit, mega-projects freeze. Government deposits withdrawn from banks, interbank rates spike. Construction/contracting NPLs surge. PIF forced to liquidate international holdings. All sectors in severe stress.',
+    fiscal:{saudi:-15,uae:-4,qatar:-2,bahrain:-18,oman:-20,kuwait:-8},
+    sectors:{banking:-5,realEstate:-5,energy:-4,industrial:-5,telecom:-2,healthcare:-1,logistics:-3},
+    companies:{ega:{score:-5,note:'Aluminium demand collapses with global growth'},fab:{score:-4,note:'Govt deposits withdrawn, NPLs surge'},aldar:{score:-5,note:'All construction freezes, off-plan cancellations'},aramco:{score:-4,note:'Below breakeven, dividend cuts'},sabic:{score:-5,note:'Petrochemical margins negative'},dpworld:{score:-3,note:'Trade volumes decline sharply'}},
+    swf:{pif:'Liquidating international holdings to cover fiscal gaps',mubadala:'Defensive mode, selective divestments',adq:'Freezing new investments',qia:'Shifting to capital preservation'},
+    swfAction:'liquidating',demand:{level:75,text:'Global demand strong but GCC unable to benefit. Fiscal crisis dominates.'}},
+  {price:65,name:'Stress Zone',color:'#D97706',bandBg:'#FFFBEB',bandText:'#D97706',
+    desc:'UAE comfortable, Saudi uncomfortable, Bahrain and Oman in crisis. Selective project deferrals in Saudi. Petrochemical margins thin but survivable. Real estate softens as confidence dips. Banks begin tightening lending standards.',
+    fiscal:{saudi:-8,uae:1,qatar:3,bahrain:-12,oman:-14,kuwait:-2},
+    sectors:{banking:-2,realEstate:-3,energy:-1,industrial:-3,telecom:0,healthcare:0,logistics:-1},
+    companies:{ega:{score:-3,note:'Margins compressed, capex deferred'},fab:{score:-1,note:'UAE banks resilient, Saudi exposure concerning'},aldar:{score:-3,note:'Sales slow, project deferrals likely'},aramco:{score:-2,note:'Below Saudi breakeven but profitable'},sabic:{score:-3,note:'Margins thin, restructuring likely'},dpworld:{score:-1,note:'Modest trade volume softening'}},
+    swf:{pif:'Slowing deployment, prioritising domestic commitments',mubadala:'Selective, maintaining core positions',adq:'Cautious, pausing new ventures',qia:'Maintaining positions, no new major deployments'},
+    swfAction:'maintaining',demand:{level:80,text:'Global demand healthy. GCC supply-side stress but world economy functioning normally.'}},
+  {price:82,name:'Equilibrium',color:'#059669',bandBg:'#ECFDF5',bandText:'#059669',
+    desc:'Saudi balanced budget, UAE running surpluses. All diversification projects proceed as planned. SWFs deploying internationally with confidence. Corporate credit conditions healthy across the region. Real estate fundamentals positive with sustainable growth.',
+    fiscal:{saudi:0,uae:6,qatar:8,bahrain:-3,oman:-2,kuwait:5},
+    sectors:{banking:3,realEstate:3,energy:3,industrial:2,telecom:1,healthcare:1,logistics:2},
+    companies:{ega:{score:1,note:'Steady demand, margins stable'},fab:{score:3,note:'Credit growth healthy, deposits stable'},aldar:{score:3,note:'Strong sales pipeline, projects on track'},aramco:{score:3,note:'Comfortable above breakeven'},sabic:{score:2,note:'Petrochemical margins healthy'},dpworld:{score:2,note:'Trade volumes growing steadily'}},
+    swf:{pif:'Deploying per Vision 2030 timeline',mubadala:'Active international deployment',adq:'Expanding EU/food security acquisitions',qia:'Active portfolio management, selective new positions'},
+    swfAction:'deploying',demand:{level:70,text:'Global demand healthy. Balanced equilibrium between producer revenue and consumer affordability.'}},
+  {price:100,name:'GCC Sweet Spot',color:'#059669',bandBg:'#ECFDF5',bandText:'#059669',
+    desc:'Massive fiscal surpluses across the GCC. SWFs aggressively deploying capital internationally. Infrastructure megaprojects accelerating. Banks flush with government deposits, NIMs expanding. However, global demand destruction begins at this level \u2014 consumer spending impacted by -0.2 to -0.3%.',
+    fiscal:{saudi:5,uae:12,qatar:15,bahrain:1,oman:2,kuwait:12},
+    sectors:{banking:5,realEstate:4,energy:5,industrial:3,telecom:2,healthcare:2,logistics:3},
+    companies:{ega:{score:3,note:'Strong demand, margins expanding'},fab:{score:5,note:'Flush with deposits, NIMs peak'},aldar:{score:4,note:'Mega-projects accelerating, sales booming'},aramco:{score:5,note:'Record surpluses, dividend increases'},sabic:{score:3,note:'Good margins, global demand beginning to soften'},dpworld:{score:3,note:'Strong throughput, capacity expanding'}},
+    swf:{pif:'Aggressively deploying $40B+ annually',mubadala:'Peak deployment across tech, energy transition',adq:'Accelerating EU acquisitions and food security',qia:'Expanding into new geographies and asset classes'},
+    swfAction:'deploying',demand:{level:55,text:'Demand destruction beginning. Consumer spending globally down -0.2 to -0.3%. Energy transition investment accelerating.'}},
+  {price:130,name:'Global Tension',color:'#D97706',bandBg:'#FFFBEB',bandText:'#D97706',
+    desc:'GCC swimming in cash but customers are hurting. European recession likely. Fed forced to tighten \u2192 GCC must follow (peg) \u2192 rate hikes during boom = bubble risk. Real estate overheating with speculative frenzy. Petrochemical end-product demand falling as consumers cut discretionary spending.',
+    fiscal:{saudi:12,uae:18,qatar:22,bahrain:5,oman:8,kuwait:18},
+    sectors:{banking:2,realEstate:1,energy:4,industrial:-1,telecom:1,healthcare:1,logistics:-1},
+    companies:{ega:{score:0,note:'High revenue but end-demand weakening globally'},fab:{score:2,note:'Deposits strong but bubble risk from rate hikes during boom'},aldar:{score:1,note:'Overheating risk, speculative buying'},aramco:{score:4,note:'Massive surplus but demand destruction accelerating'},sabic:{score:-2,note:'End-product demand falling globally'},dpworld:{score:-1,note:'Trade volumes declining, de-globalisation pressure'}},
+    swf:{pif:'Deploying aggressively but international targets becoming expensive',mubadala:'Cautious on valuation, selective deployment',adq:'Sitting on cash, waiting for correction opportunities',qia:'Reducing risk exposure, rotating to defensive assets'},
+    swfAction:'deploying',demand:{level:35,text:'Significant demand destruction. European recession, Asian slowdown. Energy transition becoming urgent policy priority globally.'}},
+  {price:180,name:'Structural Break',color:'#DC2626',bandBg:'#FEF2F2',bandText:'#DC2626',
+    desc:'Global recession guaranteed. Energy transition accelerates as governments fast-track alternatives. Industrial demand collapses worldwide. GCC has cash but nobody is buying their non-oil exports. Stranded asset risk emerges for the first time in GCC planning horizons.',
+    fiscal:{saudi:25,uae:28,qatar:30,bahrain:12,oman:15,kuwait:25},
+    sectors:{banking:0,realEstate:-2,energy:3,industrial:-4,telecom:-1,healthcare:0,logistics:-4},
+    companies:{ega:{score:-4,note:'Global industrial collapse, aluminium demand crashes'},fab:{score:0,note:'Flush with deposits but no profitable lending opportunities'},aldar:{score:-2,note:'Expat exodus risk, oversupply from over-building'},aramco:{score:3,note:'Revenue high but stranded asset discount emerging'},sabic:{score:-4,note:'Industrial demand collapse, plant shutdowns'},dpworld:{score:-4,note:'Global trade in freefall'}},
+    swf:{pif:'Massive capital but valuations distorted, investment case weakened',mubadala:'Shifting to energy transition and defensive plays',adq:'Acquiring distressed assets at deep discounts',qia:'Defensive rotation, capital preservation priority'},
+    swfAction:'maintaining',demand:{level:15,text:'Global recession. Permanent demand destruction likely. Post-crisis world will consume less oil.'}},
+  {price:250,name:'Wartime / Black Swan',color:'#7C3AED',bandBg:'#F5F3FF',bandText:'#7C3AED',
+    desc:'Strait of Hormuz closure scenario. Physical delivery of oil from the Gulf becomes impossible. Global economy in freefall. Post-crisis will trigger permanent demand destruction as every nation fast-tracks energy independence. GCC faces existential long-term threat despite short-term cash abundance.',
+    fiscal:{saudi:40,uae:35,qatar:40,bahrain:20,oman:22,kuwait:35},
+    sectors:{banking:-3,realEstate:-5,energy:2,industrial:-5,telecom:-3,healthcare:-2,logistics:-5},
+    companies:{ega:{score:-5,note:'Operations may halt, shipping impossible'},fab:{score:-3,note:'Capital flight, expat exodus, system stress'},aldar:{score:-5,note:'Complete market freeze, foreign buyers flee'},aramco:{score:1,note:'Price high but cannot deliver physical crude'},sabic:{score:-5,note:'Shipping impossible, plants idled'},dpworld:{score:-5,note:'Ports non-functional, Hormuz blocked'}},
+    swf:{pif:'Emergency fiscal role, propping up domestic economy',mubadala:'International holdings become lifeline as domestic stalls',adq:'Emergency food security deployment',qia:'LNG revenues may partially offset (piped to Asia)'},
+    swfAction:'liquidating',demand:{level:5,text:'Global economic freefall. Permanent paradigm shift away from hydrocarbon dependency. Post-crisis demand never recovers to pre-crisis levels.'}}
+];
+
+function interpolateOilBand(price){
+  if(price<=oilBands[0].price) return oilBands[0];
+  if(price>=oilBands[oilBands.length-1].price) return oilBands[oilBands.length-1];
+  var lower=oilBands[0],upper=oilBands[1];
+  for(var i=0;i<oilBands.length-1;i++){
+    if(price>=oilBands[i].price&&price<=oilBands[i+1].price){lower=oilBands[i];upper=oilBands[i+1];break}}
+  var t=(price-lower.price)/(upper.price-lower.price);
+  var result=JSON.parse(JSON.stringify(t<0.5?lower:upper));
+  // Interpolate numeric values
+  var countries=['saudi','uae','qatar','bahrain','oman','kuwait'];
+  countries.forEach(function(c){result.fiscal[c]=Math.round(lower.fiscal[c]+(upper.fiscal[c]-lower.fiscal[c])*t)});
+  var sects=['banking','realEstate','energy','industrial','telecom','healthcare','logistics'];
+  sects.forEach(function(s){result.sectors[s]=+(lower.sectors[s]+(upper.sectors[s]-lower.sectors[s])*t).toFixed(1)});
+  var comps=['ega','fab','aldar','aramco','sabic','dpworld'];
+  comps.forEach(function(c){result.companies[c].score=+(lower.companies[c].score+(upper.companies[c].score-lower.companies[c].score)*t).toFixed(1)});
+  result.demand.level=Math.round(lower.demand.level+(upper.demand.level-lower.demand.level)*t);
+  // Interpolate color
+  if(t<0.5){result.color=lower.color;result.bandBg=lower.bandBg;result.bandText=lower.bandText;result.name=lower.name}
+  else{result.color=upper.color;result.bandBg=upper.bandBg;result.bandText=upper.bandText;result.name=upper.name}
+  return result;
+}
+
+function scoreColor(s){return s>=3?'#059669':s>=1?'#059669':s>=-1?'#D97706':s>=-3?'#DC2626':'#DC2626'}
+function scoreBg(s){return s>=3?'rgba(5,150,105,0.12)':s>=1?'rgba(5,150,105,0.08)':s>=-1?'rgba(217,119,6,0.1)':s>=-3?'rgba(220,38,38,0.1)':'rgba(220,38,38,0.15)'}
+function fiscalColor(v){return v>=5?'#059669':v>=0?'#059669':v>=-5?'#D97706':'#DC2626'}
+
+function updateOilSim(price){
+  price=parseInt(price);
+  var band=interpolateOilBand(price);
+  // Price display
+  document.getElementById('oilSimPrice').textContent='$'+price;
+  document.getElementById('oilSimPrice').style.color=band.color;
+  var bandEl=document.getElementById('oilSimBand');
+  bandEl.textContent=band.name;
+  bandEl.style.background=band.bandBg;
+  bandEl.style.color=band.bandText;
+  // Description
+  var descEl=document.getElementById('oilSimDesc');
+  descEl.textContent=band.desc;
+  descEl.style.borderLeftColor=band.color;
+  // Slider gradient
+  var slider=document.getElementById('oilSlider');
+  var pct=((price-50)/200)*100;
+  slider.style.background='linear-gradient(to right, #DC2626 0%, #DC2626 8%, #D97706 15%, #059669 16%, #059669 25%, #059669 30%, #D97706 40%, #DC2626 65%, #7C3AED 100%)';
+  // Fiscal grid
+  var countries=[
+    {key:'saudi',name:'Saudi Arabia'},{key:'uae',name:'UAE'},{key:'qatar',name:'Qatar'},
+    {key:'bahrain',name:'Bahrain'},{key:'oman',name:'Oman'},{key:'kuwait',name:'Kuwait'}];
+  document.getElementById('oilFiscalGrid').innerHTML=countries.map(function(c){
+    var v=band.fiscal[c.key];var sign=v>=0?'+':'';var col=fiscalColor(v);
+    return'<div class="oil-fiscal-card" style="border-left:3px solid '+col+'"><div class="oil-fiscal-country">'+c.name+'</div><div class="oil-fiscal-value" style="color:'+col+'">'+sign+v+'%</div><div class="oil-fiscal-label">of GDP</div></div>'}).join('');
+  // Sector heatmap
+  var sectorNames={banking:'Banking',realEstate:'Real Estate',energy:'Energy',industrial:'Industrial',telecom:'Telecom',healthcare:'Healthcare',logistics:'Logistics'};
+  var sectorKeys=['banking','realEstate','energy','industrial','telecom','healthcare','logistics'];
+  document.getElementById('oilSectorHeatmap').innerHTML=sectorKeys.map(function(k){
+    var s=band.sectors[k];var col=scoreColor(s);var bg=scoreBg(s);
+    var sign=s>=0?'+':'';var barW=Math.abs(s)/5*100;
+    return'<div class="oil-sector-cell" style="background:'+bg+'"><div class="oil-sector-name">'+sectorNames[k]+'</div><div class="oil-sector-score" style="color:'+col+'">'+sign+s.toFixed(1)+'</div><div class="oil-sector-bar" style="background:'+col+';width:'+barW+'%;margin:6px auto 0"></div></div>'}).join('');
+  // Company impacts
+  var companyNames={ega:'EGA',fab:'FAB',aldar:'Aldar',aramco:'Saudi Aramco',sabic:'SABIC',dpworld:'DP World'};
+  var companyKeys=['ega','fab','aldar','aramco','sabic','dpworld'];
+  document.getElementById('oilCompanyImpacts').innerHTML=companyKeys.map(function(k){
+    var c=band.companies[k];var col=scoreColor(c.score);var bg=scoreBg(c.score);
+    var sign=c.score>=0?'+':'';
+    return'<div class="oil-company-card"><div class="oil-company-score" style="background:'+bg+';color:'+col+'">'+sign+c.score.toFixed(0)+'</div><div><div class="oil-company-name">'+companyNames[k]+'</div><div class="oil-company-impact">'+c.note+'</div></div></div>'}).join('');
+  // SWF panel
+  var swfNames=['PIF','Mubadala','ADQ','QIA'];
+  var swfKeys=['pif','mubadala','adq','qia'];
+  var actionColors={deploying:'var(--green-light)',maintaining:'var(--orange-light)',liquidating:'var(--red-light)'};
+  var actionTextColors={deploying:'var(--green)',maintaining:'var(--orange)',liquidating:'var(--red)'};
+  document.getElementById('oilSwfPanel').innerHTML=swfKeys.map(function(k,i){
+    return'<div class="oil-swf-row"><span class="oil-swf-name">'+swfNames[i]+'</span><span class="oil-swf-action">'+band.swf[k]+'</span><span class="oil-swf-badge" style="background:'+actionColors[band.swfAction]+';color:'+actionTextColors[band.swfAction]+'">'+band.swfAction+'</span></div>'}).join('');
+  // Demand indicator
+  var demandCol=band.demand.level>=60?'#059669':band.demand.level>=30?'#D97706':'#DC2626';
+  document.getElementById('oilDemandIndicator').innerHTML='<div class="oil-demand-gauge"><div class="oil-demand-fill" style="width:'+band.demand.level+'%;background:'+demandCol+'"></div></div><div class="oil-demand-text"><strong style="color:'+demandCol+'">Global Demand: '+band.demand.level+'%</strong><br>'+band.demand.text+'</div>';
+  // Update nonlinear chart
+  renderOilNonlinearChart(price);
+}
+
+function renderOilNonlinearChart(currentPrice){
+  destroyChart('oilNonlinear');
+  var canvas=document.getElementById('oilNonlinearChart');
+  if(!canvas||canvas.offsetParent===null) return;
+  var prices=[50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,140,150,160,170,180,200,220,250];
+  var welfare=[-40,-30,-18,-8,5,18,32,45,52,55,55,52,46,38,28,18,8,-8,-20,-30,-38,-45,-55,-62,-70];
+  var colors=prices.map(function(p){
+    if(p<=57) return'rgba(220,38,38,0.8)';if(p<=72) return'rgba(217,119,6,0.8)';
+    if(p<=105) return'rgba(5,150,105,0.8)';if(p<=135) return'rgba(217,119,6,0.8)';
+    if(p<=185) return'rgba(220,38,38,0.8)';return'rgba(124,58,237,0.8)'});
+  charts.oilNonlinear=new Chart(canvas,{type:'line',data:{labels:prices.map(function(p){return'$'+p}),datasets:[
+    {label:'GCC Welfare Index',data:welfare,borderColor:'#0B1D3A',backgroundColor:function(ctx){
+      var chart=ctx.chart,area=chart.chartArea;if(!area)return'rgba(37,99,235,0.05)';
+      var gradient=chart.ctx.createLinearGradient(area.left,0,area.right,0);
+      gradient.addColorStop(0,'rgba(220,38,38,0.15)');gradient.addColorStop(0.15,'rgba(217,119,6,0.1)');
+      gradient.addColorStop(0.25,'rgba(5,150,105,0.15)');gradient.addColorStop(0.4,'rgba(5,150,105,0.15)');
+      gradient.addColorStop(0.55,'rgba(217,119,6,0.1)');gradient.addColorStop(0.75,'rgba(220,38,38,0.15)');
+      gradient.addColorStop(1,'rgba(124,58,237,0.15)');return gradient},
+      fill:true,tension:0.4,borderWidth:2.5,pointRadius:prices.map(function(p){return Math.abs(p-currentPrice)<8?6:2}),
+      pointBackgroundColor:prices.map(function(p){return Math.abs(p-currentPrice)<8?'#0B1D3A':'#9CA3AF'}),
+      pointBorderColor:prices.map(function(p){return Math.abs(p-currentPrice)<8?'#fff':'transparent'}),
+      pointBorderWidth:prices.map(function(p){return Math.abs(p-currentPrice)<8?2:0})},
+    {label:'Optimal Zone',data:prices.map(function(p){return(p>=78&&p<=105)?55:null}),borderColor:'rgba(5,150,105,0.3)',borderWidth:8,pointRadius:0,fill:false,spanGaps:false}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:function(ctx){return'Welfare: '+ctx.parsed.y+' | Price: '+prices[ctx.dataIndex]+'/bbl'}}}},
+    scales:{y:{grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v>0?'+'+v:v}},title:{display:true,text:'GCC Net Welfare Index',font:{size:10}}},
+    x:{grid:{display:false},ticks:{font:{size:9},maxTicksLimit:12}}}}})}
+
+
+function renderStressCharts(){
+var s=scenarios[activeScenario];
+// Gauge chart
+destroyChart('stressGauge');
+var gc=document.getElementById('stressGaugeChart');
+if(gc&&gc.offsetParent!==null){
+var res=s.resilience;
+var gaugeCol=res>=70?'#059669':res>=50?'#D97706':res>=30?'#DC2626':'#DC2626';
+charts.stressGauge=new Chart(gc,{type:'doughnut',data:{datasets:[{data:[res,100-res],backgroundColor:[gaugeCol,'#F3F4F6'],borderWidth:0,circumference:180,rotation:270}]},options:{responsive:true,maintainAspectRatio:false,cutout:'75%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+// Overlay text
+var parent=gc.parentElement;
+var existing=parent.querySelector('.gauge-overlay');
+if(existing)existing.remove();
+var overlay=document.createElement('div');
+overlay.className='gauge-overlay';
+overlay.style.cssText='position:absolute;bottom:20px;left:50%;transform:translateX(-50%);text-align:center';
+overlay.innerHTML='<div style="font-size:42px;font-weight:800;color:'+gaugeCol+';font-family:JetBrains Mono,monospace;letter-spacing:-2px">'+res+'</div><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)">Resilience Score</div>';
+parent.style.position='relative';
+parent.appendChild(overlay);
+}
+// Sector impact bar chart
+destroyChart('stressSectorImpact');
+var si=document.getElementById('stressSectorImpactChart');
+if(si&&si.offsetParent!==null){
+charts.stressSectorImpact=new Chart(si,{type:'bar',data:{labels:s.sectorImpact.labels,datasets:[{label:'Impact Severity',data:s.sectorImpact.data,backgroundColor:s.sectorImpact.data.map(function(v){return v>=80?'rgba(220,38,38,0.7)':v>=50?'rgba(217,119,6,0.7)':'rgba(5,150,105,0.7)'}),borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v+'%'}}},y:{grid:{display:false},ticks:{font:{size:10}}}}}})}}
+
+function renderAllCharts(){var c=companies[currentCompany],mo=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+
+destroyChart('history');var h=document.getElementById('historyChart');if(h&&h.offsetParent!==null){charts.history=new Chart(h,{type:'line',data:{labels:mo,datasets:[{label:c.short+' Score',data:c.history,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2563EB'},{label:'Sector Average',data:c.sectorAvg,borderColor:'#9CA3AF',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:40,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+
+destroyChart('sentiment');var s=document.getElementById('sentimentChart');if(s&&s.offsetParent!==null){var ls=c.sentiment[c.sentiment.length-1];charts.sentiment=new Chart(s,{type:'line',data:{labels:mo,datasets:[{label:'News Sentiment',data:c.sentiment,borderColor:ls>=0?'#059669':'#DC2626',backgroundColor:ls>=0?'rgba(5,150,105,0.06)':'rgba(220,38,38,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:c.sentiment.map(function(v){return v>=0?'#059669':'#DC2626'})}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:-0.5,max:0.8,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v.toFixed(1)}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+
+destroyChart('competitorMovement');var cm=document.getElementById('competitorMovementChart');if(cm&&cm.offsetParent!==null){var cd=c.competitorMovement;charts.competitorMovement=new Chart(cm,{type:'bar',data:{labels:cd.labels,datasets:[{label:'90 Days Ago',data:cd.previous,backgroundColor:'rgba(156,163,175,0.25)',borderRadius:6},{label:'Current',data:cd.current,backgroundColor:cd.current.map(function(v,i){return v>cd.previous[i]?'rgba(5,150,105,0.65)':'rgba(220,38,38,0.65)'}),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+
+destroyChart('timing');var tm=document.getElementById('timingChart');if(tm&&tm.offsetParent!==null){charts.timing=new Chart(tm,{type:'line',data:{labels:c.timingData.labels,datasets:[{label:'Opportunity Window',data:c.timingData.opportunity,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#059669'},{label:'Risk of Closure',data:c.timingData.risk,borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,0.04)',fill:true,tension:0.4,borderWidth:2,borderDash:[4,4],pointRadius:3,pointBackgroundColor:'#DC2626'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v+'%'}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+
+// Macro Overlay Charts
+destroyChart('macroOilCorrelation');var moc=document.getElementById('macroOilCorrelationChart');
+if(moc&&moc.offsetParent!==null){charts.macroOilCorrelation=new Chart(moc,{type:'line',data:{labels:mo,datasets:[{label:'Brent Crude ($/bbl)',data:[78,76,74,79,82,85,81,77,80,88,94,102],borderColor:'#0B1D3A',borderWidth:2.5,tension:0.4,pointRadius:3,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'MSCI GCC Index',data:[15.2,15.0,14.8,15.4,15.8,16.2,15.9,15.5,16.0,17.1,17.8,18.4],borderColor:'#2563EB',borderWidth:2,borderDash:[4,4],tension:0.4,pointRadius:3,pointBackgroundColor:'#2563EB',yAxisID:'y1'},{label:'GCC Corp Sentiment',data:[62,60,58,63,66,68,65,62,64,67,66,68],borderColor:'#059669',borderWidth:1.5,tension:0.4,pointRadius:2,pointBackgroundColor:'#059669',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{position:'left',min:60,max:120,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Brent ($/bbl)',font:{size:10}}},y1:{position:'right',min:10,max:80,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'Index / Sentiment',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+
+destroyChart('macroRate');var mr=document.getElementById('macroRateChart');
+if(mr&&mr.offsetParent!==null){charts.macroRate=new Chart(mr,{type:'line',data:{labels:mo,datasets:[{label:'Fed Funds',data:[5.25,5.25,5.25,5.00,5.00,4.75,4.75,4.50,4.50,4.50,4.50,4.50],borderColor:'#DC2626',borderWidth:2.5,tension:0.3,pointRadius:3,pointBackgroundColor:'#DC2626'},{label:'EIBOR 3M',data:[5.40,5.38,5.35,5.15,5.10,4.95,4.92,4.88,4.85,4.85,4.85,4.85],borderColor:'#D97706',borderWidth:2,tension:0.3,pointRadius:3,pointBackgroundColor:'#D97706'},{label:'GCC Corp Avg',data:[6.80,6.75,6.70,6.50,6.45,6.30,6.25,6.18,6.15,6.12,6.10,6.08],borderColor:'#7C3AED',borderWidth:2,borderDash:[4,4],tension:0.3,pointRadius:2,pointBackgroundColor:'#7C3AED'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:3,max:8,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v.toFixed(1)+'%'}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+
+destroyChart('macroBreakeven');var mb=document.getElementById('macroBreakevenChart');
+if(mb&&mb.offsetParent!==null){charts.macroBreakeven=new Chart(mb,{type:'bar',data:{labels:['UAE','Qatar','Oman','Kuwait','Saudi','Bahrain'],datasets:[{label:'Fiscal Breakeven',data:[63,50,75,82,91,105],backgroundColor:['rgba(5,150,105,0.7)','rgba(5,150,105,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(220,38,38,0.7)'],borderRadius:6},{label:'Brent Spot ($102)',data:[102,102,102,102,102,102],type:'line',borderColor:'#0B1D3A',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:120,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+
+// SWF Pie Charts
+destroyChart('swfPifPie');var pp=document.getElementById('swfPifPieChart');
+if(pp&&pp.offsetParent!==null){charts.swfPifPie=new Chart(pp,{type:'doughnut',data:{labels:['Giga-projects','Technology & AI','Entertainment & Sports','Energy & Mining','Automotive & EV','Financial Services','Real Estate','Other'],datasets:[{data:[25,18,12,14,8,10,8,5],backgroundColor:['#0B1D3A','#2563EB','#7C3AED','#059669','#D97706','#DC2626','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}
+
+destroyChart('swfMubadalaPie');var mp=document.getElementById('swfMubadalaPieChart');
+if(mp&&mp.offsetParent!==null){charts.swfMubadalaPie=new Chart(mp,{type:'doughnut',data:{labels:['Technology & Semis','Energy Transition','Healthcare','Aerospace & Defence','Financial Services','Real Assets','Metals & Mining','Other'],datasets:[{data:[28,20,14,10,12,8,4,4],backgroundColor:['#2563EB','#059669','#DC2626','#0B1D3A','#D97706','#7C3AED','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}
+
+// Stress charts
+renderStressCharts();
+// Oil simulator chart
+var oilSliderEl=document.getElementById('oilSlider');
+if(oilSliderEl) renderOilNonlinearChart(parseInt(oilSliderEl.value));
+
+// Composite comparison chart
+destroyChart('compositeComparison');var cc=document.getElementById('compositeComparisonChart');
+if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'bar',data:{labels:['EGA','FAB','Aldar','e&','ADNOC','DP World'],datasets:[{label:'Operational (L1)',data:[58,78,71,82,74,69],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4},{label:'Financial (L2)',data:[42,72,68,65,78,62],backgroundColor:'rgba(124,58,237,0.7)',borderRadius:4},{label:'Resilience (L3)',data:[35,52,41,72,58,48],backgroundColor:'rgba(5,150,105,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+
+// Composite radar chart
+destroyChart('compositeRadar');var cr=document.getElementById('compositeRadarChart');
+if(cr&&cr.offsetParent!==null){var comp=c.composite;charts.compositeRadar=new Chart(cr,{type:'radar',data:{labels:['Website','Social','Media','Employer','Ads','Tech Stack','Brand','Reviews','Registry','Financial','Resilience'],datasets:[{label:c.short,data:[c.services[0].score,c.services[1].score,c.services[2].score,c.services[3].score,c.services[4].score,c.services[5].score,c.services[6].score,c.services[7].score,c.services[8].score,comp.finScore,comp.resScore],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3},{label:'Sector Average',data:[71,65,62,68,58,67,68,64,78,65,55],borderColor:'#9CA3AF',backgroundColor:'rgba(156,163,175,0.05)',borderWidth:1.5,borderDash:[4,4],pointBackgroundColor:'#9CA3AF',pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:20},pointLabels:{font:{size:10,family:"'Inter'"}},grid:{color:gC}}}}})}}
+
+document.addEventListener('DOMContentLoaded',function(){renderAll();checkApi()});
+</script>
+</body>
+</html>

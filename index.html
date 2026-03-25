@@ -33,6 +33,31 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+[hidden]{display:none!important}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+.page-loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(245,245,247,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:400;transition:opacity 0.25s ease,visibility 0.25s ease}
+.page-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow-lg)}
+.loader-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.loader-copy{font-size:13px;color:var(--text-secondary);margin-bottom:18px}
+.loader-progress{height:8px;border-radius:999px;background:var(--border-light);overflow:hidden}
+.loader-progress span{display:block;width:38%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--navy),var(--accent));animation:loaderSweep 1.2s ease-in-out infinite}
+@keyframes loaderSweep{0%{transform:translateX(-110%)}100%{transform:translateX(290%)}}
+.loader-meta{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.6px}
+
+.dashboard-message{position:sticky;top:72px;z-index:95;max-width:1440px;margin:0 auto;padding:12px 40px 0}
+.dashboard-message-banner{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:14px 16px;border-radius:14px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow-sm)}
+.dashboard-message.is-error .dashboard-message-banner{border-color:rgba(220,38,38,0.25);background:var(--red-light)}
+.dashboard-message.is-warning .dashboard-message-banner{border-color:rgba(217,119,6,0.2);background:var(--orange-light)}
+.dashboard-message-text{font-size:13px;color:var(--text-primary)}
+.dashboard-message-close{border:none;background:none;color:var(--text-secondary);font:inherit;font-size:18px;line-height:1;cursor:pointer}
+
+.chart-summary{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 2px}
+.chart-summary-item{min-width:110px;padding:10px 12px;border:1px solid var(--border-light);border-radius:12px;background:var(--bg)}
+.chart-summary-label{display:block;font-size:10px;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px}
+.chart-summary-value{display:block;font-size:18px;font-weight:800;letter-spacing:-0.5px;color:var(--text-primary)}
+.chart-summary-meta{display:block;font-size:11px;color:var(--text-secondary);margin-top:2px}
 
 .header{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100}
 .header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--header-accent,var(--navy));transition:background 0.4s ease}
@@ -45,7 +70,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease;border:none;background:none;white-space:nowrap;font-family:inherit;position:relative}
 .nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
 .nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm);font-weight:600}
-.header-right{display:flex;align-items:center;gap:14px}
+.header-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
 
 .api-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
 .api-dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
@@ -158,12 +183,29 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .macro-divider{width:1px;background:var(--border);align-self:stretch}
 
 /* TradingView Widget Styles */
-.tv-ticker-container{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;box-shadow:var(--shadow-sm);padding:4px 0}
+.tv-ticker-container{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;box-shadow:var(--shadow-sm);padding:10px 12px}
 .tv-ticker-container .tradingview-widget-container{margin:0}
-.tv-mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;overflow:hidden;min-height:190px;position:relative}
+.tv-mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;overflow:hidden;min-height:204px;position:relative}
 .tv-mini-card .tradingview-widget-container{margin:0}
 .tv-mini-card .tv-mini-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px}
 .tv-mini-card .tradingview-widget-copyright{display:none!important}
+.tv-widget-shell{position:relative;min-height:160px;border-radius:12px;background:linear-gradient(180deg,rgba(245,245,247,0.9),rgba(255,255,255,0.98));border:1px dashed rgba(156,163,175,0.35);overflow:hidden}
+.tv-widget-shell .tradingview-widget-container__widget{min-height:inherit}
+.tv-widget-shell[data-tv-state='loading'] .tradingview-widget-container__widget{opacity:0.18}
+.tv-widget-shell[data-tv-state='ready']{background:transparent;border-color:transparent}
+.tv-widget-shell[data-tv-state='ready'] .tv-widget-status{display:none}
+.tv-widget-shell[data-tv-state='ready'] .tradingview-widget-container__widget{opacity:1}
+.tv-widget-status{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;font-size:12px;color:var(--text-secondary)}
+.tv-widget-status::before{content:'';display:block;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent-light),rgba(37,99,235,0.16));box-shadow:inset 0 0 0 1px rgba(37,99,235,0.12)}
+.tv-widget-status strong{font-size:13px;color:var(--text-primary)}
+.tv-widget-shell[data-tv-state='loading'] .tv-widget-status::before{animation:widgetPulse 1.2s ease-in-out infinite}
+@keyframes widgetPulse{0%,100%{transform:scale(0.94);opacity:0.65}50%{transform:scale(1);opacity:1}}
+.tv-widget-actions{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px}
+.tv-widget-btn,.tv-widget-link{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:999px;border:1px solid var(--border);font:inherit;font-size:11px;font-weight:600;background:var(--surface);color:var(--text-primary);cursor:pointer;text-decoration:none;transition:all 0.15s}
+.tv-widget-btn:hover,.tv-widget-link:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.tv-widget-shell[data-tv-state='error']{border-color:rgba(220,38,38,0.18);background:linear-gradient(180deg,#fff,#fef2f2)}
+.tv-widget-shell[data-tv-state='error'] .tradingview-widget-container__widget{display:none}
+.tv-widget-shell[data-tv-state='error'] .tv-widget-status{position:relative;min-height:160px}
 
 .company-hero{display:flex;align-items:center;gap:20px;margin-bottom:20px;padding:24px 28px;background:linear-gradient(135deg,rgba(11,29,58,0.02),rgba(37,99,235,0.03));border-radius:var(--radius);border:1px solid var(--border-light)}
 .company-logo-circle{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;letter-spacing:-1px;box-shadow:0 4px 12px rgba(11,29,58,0.2);transition:background 0.3s ease}
@@ -206,6 +248,60 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .tab-content{display:none;opacity:0}.tab-content.active{display:block;animation:tabFadeIn 0.35s ease forwards}
 @keyframes tabFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Page Premise Cards */
+.page-premise{background:linear-gradient(135deg,rgba(11,29,58,0.03),rgba(37,99,235,0.04));border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px}
+.page-premise .premise-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.page-premise .premise-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--navy)}
+.page-premise .premise-text{font-size:13px;color:var(--text-primary);line-height:1.65;letter-spacing:-0.01em}
+
+/* Macro Weather Badge (header) */
+.macro-weather-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 8px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;cursor:default;transition:all 0.2s;white-space:nowrap}
+.macro-weather-badge .mw-icon{font-size:14px;line-height:1}
+.macro-weather-badge .mw-label{font-size:10px;font-weight:600;color:var(--text-tertiary);margin-right:2px}
+.macro-weather-badge.regime-goldilocks{background:#ECFDF5;color:#059669;border:1px solid rgba(5,150,105,0.2)}
+.macro-weather-badge.regime-reflation{background:#FFFBEB;color:#D97706;border:1px solid rgba(217,119,6,0.2)}
+.macro-weather-badge.regime-inflation{background:#FEF2F2;color:#DC2626;border:1px solid rgba(220,38,38,0.2)}
+.macro-weather-badge.regime-deflation{background:#EFF6FF;color:#2563EB;border:1px solid rgba(37,99,235,0.2)}
+
+/* Macro Weather Panel (Sectoral page) */
+.macro-weather-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-md);position:relative;overflow:hidden;margin-bottom:24px}
+.macro-weather-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.macro-weather-panel.regime-deflation::before{background:linear-gradient(90deg,#2563EB,#60A5FA)}
+.macro-weather-panel.regime-goldilocks::before{background:linear-gradient(90deg,#059669,#34D399)}
+.macro-weather-panel.regime-reflation::before{background:linear-gradient(90deg,#D97706,#FBBF24)}
+.macro-weather-panel.regime-inflation::before{background:linear-gradient(90deg,#DC2626,#F87171)}
+.mw-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.mw-regime-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.mw-regime-icon.regime-deflation{background:var(--accent-light)}
+.mw-regime-icon.regime-goldilocks{background:var(--green-light)}
+.mw-regime-icon.regime-reflation{background:var(--orange-light)}
+.mw-regime-icon.regime-inflation{background:var(--red-light)}
+.mw-regime-title{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+.mw-regime-tagline{font-size:13px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
+.mw-sectors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.mw-sector-pill{padding:10px 14px;border-radius:var(--radius-sm);text-align:center;font-size:12px;font-weight:600}
+.mw-sector-pill.outperform{background:var(--green-light);color:var(--green)}
+.mw-sector-pill.neutral{background:var(--bg);color:var(--text-secondary)}
+.mw-sector-pill.underperform{background:var(--red-light);color:var(--red)}
+.mw-swf-signal{margin-top:20px;padding:16px 20px;border-radius:var(--radius-sm);border-left:4px solid var(--accent);background:var(--accent-light)}
+.mw-swf-signal .mws-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
+.mw-swf-signal .mws-text{font-size:13px;color:var(--text-primary);line-height:1.5}
+
+/* Sector Regime Table */
+.regime-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+.regime-table thead th{text-align:center;padding:10px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.regime-table thead th:first-child{text-align:left}
+.regime-table tbody td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--border-light);font-weight:500}
+.regime-table tbody td:first-child{text-align:left;font-weight:600;color:var(--text-primary)}
+.regime-table .rt-out{color:var(--green);font-weight:700}.regime-table .rt-neut{color:var(--text-tertiary)}.regime-table .rt-under{color:var(--red);font-weight:600}
+.regime-table .rt-active{background:var(--accent-light)}
+
+/* Regime Timeline */
+.regime-timeline{display:flex;align-items:stretch;gap:0;margin-top:16px;border-radius:var(--radius-sm);overflow:hidden;height:48px}
+.regime-timeline .rt-block{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;font-size:10px;font-weight:700;letter-spacing:0.3px;color:#fff;padding:4px 8px;white-space:nowrap}
+.regime-timeline .rt-block .rt-period{font-size:9px;font-weight:500;opacity:0.85}
+.rt-block.rt-goldilocks{background:#059669}.rt-block.rt-reflation{background:#D97706}.rt-block.rt-inflation{background:#DC2626}.rt-block.rt-deflation{background:#2563EB}
 .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
 
 /* NEW STYLES for Macro Overlay, SWF, Sectoral, Stress, Composite tabs */
@@ -448,8 +544,20 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .grid-hero{display:grid;grid-template-columns:2fr 1fr;gap:16px}
 
 /* Table scroll wrapper */
-.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.table-scroll::after{content:'';position:absolute;top:0;right:0;width:32px;height:100%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(245,245,247,0.96));opacity:0;pointer-events:none;transition:opacity 0.2s ease}
+.table-scroll.is-overflowing::after{opacity:1}
 .table-scroll .comp-table{min-width:600px}
+.table-scroll-hint{display:none;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-tertiary);margin-top:8px}
+.table-scroll.is-overflowing+.table-scroll-hint{display:block}
+
+.print-summary{display:none;border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:18px 20px;margin-bottom:20px}
+.print-summary h2{font-size:18px;color:var(--navy);margin-bottom:8px}
+.print-summary p{font-size:12px;color:var(--text-secondary)}
+.print-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.print-summary-card{padding:10px 12px;border-radius:12px;background:var(--bg)}
+.print-summary-card strong{display:block;font-size:18px;letter-spacing:-0.4px;color:var(--text-primary)}
+.print-summary-card span{display:block;font-size:10px;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:var(--text-tertiary);margin-top:3px}
 
 /* Footer hover */
 .footer a:hover{color:var(--accent-dark)}
@@ -496,6 +604,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .grid-2-1,.grid-hero{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}
   .header-inner{flex-wrap:wrap;height:auto;padding:12px 0;gap:8px}
   .nav-tabs{order:3;width:100%;overflow-x:auto;justify-content:flex-start}
+  .header-right{width:100%;justify-content:space-between}
+  .dashboard-message{padding:12px 20px 0}
   .main{padding:20px}
 }
 @media(max-width:768px){
@@ -510,6 +620,20 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .dual-ring{flex-direction:column;gap:16px}
   .nav-tabs{display:none}
   .bottom-nav{display:flex}
+  .macro-weather-badge{display:none}
+  .header-right{flex-direction:column;align-items:stretch}
+  .mw-sectors-grid{grid-template-columns:repeat(2,1fr)}
+  .regime-timeline{flex-wrap:wrap;height:auto}
+  .regime-timeline .rt-block{min-height:40px;flex-basis:calc(50% - 0px)!important;flex-grow:0!important}
+  .company-selector-btn{width:100%;min-width:0}
+  .freshness-badge,.api-badge{justify-content:center}
+  .dashboard-message{top:64px;padding:10px 16px 0}
+  .dashboard-message-banner{align-items:center}
+  #macroIndicatorGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tv-mini-card{min-height:186px}
+  .tv-widget-shell{min-height:146px}
+  .chart-summary{gap:8px}
+  .chart-summary-item{flex:1 1 calc(50% - 8px);min-width:0}
   .main{padding:16px 16px 100px}
   .oil-sim-price{font-size:36px}
   .grid-hero{grid-template-columns:1fr}
@@ -518,6 +642,11 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .swf-filter-bar{gap:6px}
   .swf-filter-group{flex-wrap:wrap}
   .swf-search-input{width:100%}
+}
+@media(max-width:520px){
+  #macroIndicatorGrid{grid-template-columns:1fr}
+  .dashboard-message-banner{flex-direction:column;align-items:flex-start}
+  .print-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
 .fade-in{animation:fadeIn 0.5s ease forwards;opacity:0}
@@ -531,6 +660,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .card{transition:none}
   .collapsible-content{transition:none}
   .oil-slider::-webkit-slider-thumb{transition:none}
+  .loader-progress span,.tv-widget-shell[data-tv-state='loading'] .tv-widget-status::before{animation:none}
 }
 
 /* Scroll to top button */
@@ -546,33 +676,53 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .footer{max-width:1440px;margin:0 auto;padding:32px 40px;text-align:center;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:12px}
 .footer a{color:var(--accent);text-decoration:none}
 
+@page{margin:12mm}
 @media print{
   .header,.bottom-nav,.scroll-top,.search-overlay,.bottom-sheet-backdrop,.bottom-sheet{display:none!important}
   .tab-content{display:block!important;opacity:1!important;page-break-inside:avoid}
   .main{padding:0;max-width:none}
+  .dashboard-message,.tv-ticker-container,.tv-mini-card,.market-data-bar,.page-loader{display:none!important}
+  .print-summary{display:block}
+  .grid-4,.grid-3,.grid-2,.grid-2-1,.grid-5,.grid-hero,.pricing-grid,.oil-sim-panel,.oil-fiscal-grid,.oil-company-impacts,.print-summary-grid{display:block}
+  .grid-4>*,.grid-3>*,.grid-2>*,.grid-2-1>*,.grid-5>*,.grid-hero>*,.pricing-grid>*,.oil-sim-panel>*,.oil-fiscal-grid>*,.oil-company-impacts>*,.print-summary-grid>*{margin-bottom:12px}
+  .table-scroll{overflow:visible}
+  .table-scroll::after,.table-scroll-hint{display:none!important}
+  .table-scroll .comp-table{min-width:0}
+  .chart-container,.chart-container-tall,.oil-nonlinear-chart{height:220px}
   .card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}
+  a[href]::after{content:" (" attr(href) ")";font-size:10px;color:#666}
   body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
-<body>
+<body class="is-loading">
+<div class="page-loader" id="pageLoader" role="status" aria-live="polite" aria-label="Loading dashboard">
+  <div class="loader-card">
+    <div class="loader-title">Preparing 47X dashboard</div>
+    <div class="loader-copy">Loading charts, company context, and live market widgets.</div>
+    <div class="loader-progress" aria-hidden="true"><span></span></div>
+    <div class="loader-meta"><span>Charts</span><span>Macro Feed</span><span>Benchmarks</span></div>
+  </div>
+</div>
+<div class="sr-only" id="dashboardStatus" aria-live="polite" aria-atomic="true"></div>
 <div class="header"><div class="header-inner">
   <div class="logo"><div class="logo-mark">47X</div><div class="logo-text">Intelligence Platform <span>by TrueGroup</span></div></div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
-    <button class="nav-tab" onclick="switchTab('benchmarking',this)">Benchmarking</button>
-    <button class="nav-tab" onclick="switchTab('signals',this)">Signals</button>
-    <button class="nav-tab" onclick="switchTab('arbitrage',this)">Arbitrage</button>
-    <button class="nav-tab" onclick="switchTab('macropanel',this)">Macro Overlay</button>
-    <button class="nav-tab" onclick="switchTab('swftracker',this)">SWF Tracker</button>
-    <button class="nav-tab" onclick="switchTab('sectoral',this)">Sectoral</button>
-    <button class="nav-tab" onclick="switchTab('stress',this)">Stress Test</button>
-    <button class="nav-tab" onclick="switchTab('composite',this)">Composite</button>
+  <div class="macro-weather-badge regime-deflation" id="headerMacroBadge" title="Macro Regime: Deflation (Howell Framework Q1 2026)"><span class="mw-icon">&#10052;</span><span class="mw-label">Regime</span> DEFLATION</div>
+  <div class="nav-tabs" role="tablist" aria-label="Dashboard sections">
+    <button class="nav-tab active" data-tab="overview" onclick="switchTab('overview',this)">Overview</button>
+    <button class="nav-tab" data-tab="benchmarking" onclick="switchTab('benchmarking',this)">Benchmarking</button>
+    <button class="nav-tab" data-tab="signals" onclick="switchTab('signals',this)">Signals</button>
+    <button class="nav-tab" data-tab="arbitrage" onclick="switchTab('arbitrage',this)">Arbitrage</button>
+    <button class="nav-tab" data-tab="macropanel" onclick="switchTab('macropanel',this)">Macro Overlay</button>
+    <button class="nav-tab" data-tab="swftracker" onclick="switchTab('swftracker',this)">SWF Tracker</button>
+    <button class="nav-tab" data-tab="sectoral" onclick="switchTab('sectoral',this)">Sectoral</button>
+    <button class="nav-tab" data-tab="stress" onclick="switchTab('stress',this)">Stress Test</button>
+    <button class="nav-tab" data-tab="composite" onclick="switchTab('composite',this)">Composite</button>
     <!-- Pricing tab hidden for SWF demo — content preserved in tab-pricing div -->
     <!-- <button class="nav-tab" onclick="switchTab('pricing',this)">Pricing</button> -->
   </div>
   <div class="header-right">
-    <button class="company-selector-btn" onclick="openSearch()" id="companySelectorBtn">
+    <button class="company-selector-btn" onclick="openSearch()" id="companySelectorBtn" aria-haspopup="dialog" aria-controls="searchOverlay">
       <span id="companySelectorLabel">Emirates Global Aluminium</span>
       <span class="kbd">&#8984;K</span>
     </button>
@@ -580,14 +730,16 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="api-badge"><div class="api-dot" id="apiDot"></div><span id="apiLabel">Connecting...</span></div>
   </div>
 </div></div>
+<div class="dashboard-message" id="dashboardMessage" hidden></div>
 
 <!-- Search Overlay (CMD+K) -->
-<div class="search-overlay" id="searchOverlay">
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-labelledby="searchDialogTitle" aria-hidden="true">
   <div class="search-backdrop" onclick="closeSearch()"></div>
   <div class="search-modal">
+    <div class="sr-only" id="searchDialogTitle">Search dashboard entities and sections</div>
     <div class="search-input-wrapper">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" id="searchInput" type="text" placeholder="Search companies, SWFs, sectors..." oninput="filterSearch(this.value)">
+      <input class="search-input" id="searchInput" type="text" placeholder="Search companies, SWFs, sectors..." oninput="filterSearch(this.value)" aria-label="Search companies, sovereign wealth funds, and sections">
     </div>
     <div class="search-results" id="searchResults"></div>
   </div>
@@ -595,8 +747,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <!-- Bottom Sheet -->
 <div class="bottom-sheet-backdrop" id="bsBackdrop" onclick="closeBottomSheet()"></div>
-<div class="bottom-sheet" id="bottomSheet">
-  <div class="bottom-sheet-handle"></div>
+<div class="bottom-sheet" id="bottomSheet" role="dialog" aria-modal="true" aria-labelledby="bsTitle" aria-describedby="bsSubtitle" aria-hidden="true">
+  <div class="bottom-sheet-handle" aria-hidden="true"></div>
   <div class="bottom-sheet-content" id="bsContent"></div>
 </div>
 
@@ -619,15 +771,21 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   </button>
 </div>
 
-<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&uarr;</button>
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll back to top">&uarr;</button>
 <div class="main">
+<div class="print-summary" id="printSummary" aria-hidden="true"></div>
 <!-- OVERVIEW -->
 <div class="tab-content active" id="tab-overview">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">47X provides real-time operational intelligence on GCC companies. This overview surfaces the key performance indicators, composite scores, and arbitrage signals across your tracked portfolio &mdash; giving sovereign decision-makers a single pane of glass.</div></div>
   <div class="tv-ticker-container">
-    <div class="tradingview-widget-container">
+    <div class="tv-widget-shell tradingview-widget-container" data-tv-widget data-tv-widget-id="ticker-tape" data-tv-tab="overview" data-tv-script="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" data-tv-title="Macro market tape" data-tv-symbol="MARKETS">
+      <div class="tv-widget-status"><strong>Loading live macro tape</strong><span>Brent, DXY, rates, gold, and risk assets.</span></div>
       <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {
+      <div class="tv-widget-actions" hidden>
+        <button class="tv-widget-btn" type="button" onclick="retryTradingViewWidget('ticker-tape')">Retry</button>
+        <a class="tv-widget-link" href="https://www.tradingview.com/markets/" target="_blank" rel="noopener noreferrer">Open TradingView</a>
+      </div>
+      <script type="application/json" class="tv-widget-config">{
         "symbols": [
           {"proName": "NYMEX:BZ1!", "title": "Brent Crude"},
           {"proName": "NYMEX:CL1!", "title": "WTI Crude"},
@@ -642,8 +800,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         "displayMode": "adaptive",
         "colorTheme": "light",
         "locale": "en"
-      }
-      </script>
+      }</script>
     </div>
   </div>
   <div class="company-hero"><div class="company-logo-circle" id="heroLogo">EGA</div><div class="company-info"><h1 id="heroName">Emirates Global Aluminium</h1><div class="company-meta"><span id="heroMeta">Industrial / Aluminium &bull; Abu Dhabi, UAE &bull; Mubadala Portfolio &bull; <strong>$8.7B Revenue</strong></span></div><div style="margin-top:6px;font-size:11px;color:var(--text-tertiary);letter-spacing:0.3px">Intelligence coverage: 50+ GCC entities scanned &bull; 3 deep-dive profiles loaded &bull; 7 sectors &bull; 4 SWFs tracked</div></div></div>
@@ -676,27 +833,30 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </div>
   <div class="section" id="liveApiSection" style="display:none"><div class="section-header"><div class="section-title">Live API Data <span class="level-badge level-1">Real-Time</span></div></div><div class="grid-4" id="liveApiCards"></div></div>
-  <div class="section"><div class="card"><div class="section-title" style="margin-bottom:14px">Peer Comparison &mdash; Composite Scores</div><div class="table-scroll"><table class="comp-table" id="peerTable"><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div></div></div>
+  <div class="section"><div class="card"><div class="section-title" style="margin-bottom:14px">Peer Comparison &mdash; Composite Scores</div><div class="table-scroll"><table class="comp-table" id="peerTable"><caption class="sr-only">Peer comparison table for composite 47X scores</caption><thead><tr><th>Company</th><th>47X Score</th><th>Website</th><th>Social</th><th>Media</th><th>Employer</th><th>Financial</th><th>Trend</th></tr></thead><tbody></tbody></table></div><div class="table-scroll-hint" aria-hidden="true">Swipe to view all columns</div></div></div>
 </div>
 
 <!-- BENCHMARKING -->
 <div class="tab-content" id="tab-benchmarking">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Benchmark any GCC company against 187 data points across 9 operational dimensions. Compare digital maturity, talent sentiment, operational footprint, and market positioning to identify where companies over- or under-index relative to peers.</div></div>
   <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-1">Level 1</span> Service Score Breakdown</div></div>
     <div class="grid-2-1"><div class="card"><div class="card-title" id="benchCompanyName">Emirates Global Aluminium</div><div class="card-subtitle">Score vs Sector Average (dashed line)</div><div id="serviceBars"></div></div>
     <div><div class="card" style="margin-bottom:16px"><div class="card-title">9-Dimension Scorecard</div><div class="card-subtitle">Small multiples view &mdash; score vs benchmark</div><div class="scorecard-grid" id="scorecardGrid"></div></div><div class="card"><div class="card-title">Score Band</div><div style="text-align:center;padding:12px 0"><div class="kpi-value" id="benchBand" style="color:var(--orange)">Average</div><div class="kpi-label">50-69 points</div></div></div></div></div></div>
-  <div class="section"><div class="card"><div class="card-title">Score History &mdash; 12 Month Trend</div><div class="card-subtitle">Composite 47X score vs sector average</div><div class="chart-container-tall"><canvas id="historyChart"></canvas></div></div></div>
+  <div class="section"><div class="card"><div class="card-title">Score History &mdash; 12 Month Trend</div><div class="card-subtitle">Composite 47X score vs sector average</div><div class="chart-summary" id="historySummary"></div><div class="chart-container-tall"><canvas id="historyChart"></canvas></div></div></div>
 </div>
 
 <!-- SIGNAL INTELLIGENCE -->
 <div class="tab-content" id="tab-signals">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Early warning signals extracted from real-time data collection. Lighthouse audits, social sentiment shifts, hiring patterns, and PR momentum are cross-referenced to surface operational opportunities and risks before they hit the P&amp;L.</div></div>
   <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-2">Level 2</span> Contextual Intelligence</div></div>
-    <div class="grid-2"><div class="card"><div class="card-title">Signal Timeline</div><div class="card-subtitle" id="ctxTimelineSub">Key events affecting EGA's score trajectory</div><div id="signalTimeline"></div></div><div class="card"><div class="card-title">News Sentiment Analysis</div><div class="card-subtitle">Rolling 30-day sentiment score (-1 to +1)</div><div class="chart-container-tall"><canvas id="sentimentChart"></canvas></div></div></div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Signal Timeline</div><div class="card-subtitle" id="ctxTimelineSub">Key events affecting EGA's score trajectory</div><div id="signalTimeline"></div></div><div class="card"><div class="card-title">News Sentiment Analysis</div><div class="card-subtitle">Rolling 30-day sentiment score (-1 to +1)</div><div class="chart-summary" id="sentimentSummary"></div><div class="chart-container-tall"><canvas id="sentimentChart"></canvas></div></div></div></div>
   <div class="section"><div class="grid-3"><div class="card"><div class="card-title">Talent Signals</div><div class="card-subtitle">LinkedIn intelligence proxy</div><div id="talentSignals"></div></div><div class="card"><div class="card-title">Financial Proxies</div><div class="card-subtitle">Estimated from public signals</div><div id="financialSignals"></div></div><div class="card"><div class="card-title">Market Context</div><div class="card-subtitle">Sector and macro factors</div><div id="marketContext"></div></div></div></div>
-  <div class="section"><div class="card"><div class="card-title">Competitor Movement Tracker</div><div class="card-subtitle" id="ctxCompMoveSub">Score changes across EGA's competitive set in the last 90 days</div><div class="chart-container-tall"><canvas id="competitorMovementChart"></canvas></div></div></div>
+  <div class="section"><div class="card"><div class="card-title">Competitor Movement Tracker</div><div class="card-subtitle" id="ctxCompMoveSub">Score changes across EGA's competitive set in the last 90 days</div><div class="chart-summary" id="competitorMovementSummary"></div><div class="chart-container-tall"><canvas id="competitorMovementChart"></canvas></div></div></div>
 </div>
 
 <!-- ARBITRAGE -->
 <div class="tab-content" id="tab-arbitrage">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Arbitrage intelligence identifies the gap between a company's operational reality and its market perception. When the data says one thing and the market says another, that's where sovereign capital can deploy with conviction.</div></div>
   <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-3">Level 3</span> Arbitrage Opportunities</div></div>
     <div class="opp-score"><div><div class="opp-score-value" id="arbOppScore">87</div></div><div><div class="opp-score-label" id="arbOppHeadline">Active Arbitrage Window Detected</div><div class="opp-score-detail" id="arbOppFormula">Urgency (9/10) x Impact (8/10) x Feasibility (7/10) = 87/100</div></div></div>
     <div class="grid-2" style="margin-bottom:20px"><div class="card arb-card"><div class="card-title"><span id="arbOpp1Title">Talent Acquisition Window</span><span class="arb-urgency urgency-high" id="arbOpp1Urgency">High Urgency</span></div><div class="card-subtitle" id="arbOpp1Desc"></div><div id="arbOpp1Metrics"></div></div><div class="card arb-card"><div class="card-title"><span id="arbOpp2Title">Client Migration</span><span class="arb-urgency urgency-medium" id="arbOpp2Urgency">Medium Urgency</span></div><div class="card-subtitle" id="arbOpp2Desc"></div><div id="arbOpp2Metrics"></div></div></div>
@@ -706,6 +866,23 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <!-- ====== NEW TAB 1: MACRO OVERLAY PANEL ====== -->
 <div class="tab-content" id="tab-macropanel">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">The macro environment determines the weather in which all investments must operate. Oil prices, global liquidity cycles (per Michael Howell's CrossBorder Capital framework), and geopolitical risk shape when and how GCC sovereign funds deploy capital.</div></div>
+  <!-- Macro Weather on Macro Overlay page -->
+  <div class="macro-weather-panel regime-deflation" style="margin-bottom:24px">
+    <div class="mw-header">
+      <div class="mw-regime-icon regime-deflation">&#10052;</div>
+      <div>
+        <div class="mw-regime-title" style="color:var(--accent)">DEFLATION &mdash; Current Macro Regime</div>
+        <div class="mw-regime-tagline">Growth falling, inflation falling. Risk-off environment. Global liquidity contracting per Howell's CrossBorder Capital framework. GCC fiscal surpluses narrowing as oil demand softens.</div>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:16px">
+      <div style="text-align:center;padding:14px;background:var(--accent-light);border-radius:var(--radius-sm)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:4px">Regime</div><div style="font-size:20px;font-weight:800;color:var(--accent)">&#10052; Deflation</div></div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border-radius:var(--radius-sm)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:4px">Favoured Sectors</div><div style="font-size:13px;font-weight:600;color:var(--text-primary)">Healthcare, Utilities, Treasuries</div></div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border-radius:var(--radius-sm)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:4px">Avoid</div><div style="font-size:13px;font-weight:600;color:var(--red)">Tech, Discretionary, Industrials</div></div>
+      <div style="text-align:center;padding:14px;background:var(--bg);border-radius:var(--radius-sm)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:4px">SWF Signal</div><div style="font-size:13px;font-weight:600;color:var(--accent)">Preserve + Accumulate</div></div>
+    </div>
+  </div>
   <div class="section">
     <div class="section-header"><div class="section-title">Live Macro Indicators <span class="level-badge level-2">Intelligence Layer</span></div>
       <div class="market-data-bar">
@@ -714,43 +891,63 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </div>
     <div class="grid-5 fade-in" id="macroIndicatorGrid">
       <div class="tv-mini-card">
-        <div class="tradingview-widget-container">
+        <div class="tv-mini-label">Brent Crude</div>
+        <div class="tv-widget-shell tradingview-widget-container" data-tv-widget data-tv-widget-id="macro-brent" data-tv-tab="macropanel" data-tv-script="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" data-tv-title="Brent Crude" data-tv-symbol="NYMEX:BZ1!">
+          <div class="tv-widget-status"><strong>Loading Brent</strong><span>1-month live overview.</span></div>
           <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          { "symbol": "NYMEX:BZ1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
-          </script>
+          <div class="tv-widget-actions" hidden>
+            <button class="tv-widget-btn" type="button" onclick="retryTradingViewWidget('macro-brent')">Retry</button>
+            <a class="tv-widget-link" href="https://www.tradingview.com/symbols/NYMEX-BZ1!/" target="_blank" rel="noopener noreferrer">Open chart</a>
+          </div>
+          <script type="application/json" class="tv-widget-config">{ "symbol": "NYMEX:BZ1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }</script>
         </div>
       </div>
       <div class="tv-mini-card">
-        <div class="tradingview-widget-container">
+        <div class="tv-mini-label">WTI Crude</div>
+        <div class="tv-widget-shell tradingview-widget-container" data-tv-widget data-tv-widget-id="macro-wti" data-tv-tab="macropanel" data-tv-script="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" data-tv-title="WTI Crude" data-tv-symbol="NYMEX:CL1!">
+          <div class="tv-widget-status"><strong>Loading WTI</strong><span>Live price context for energy spreads.</span></div>
           <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          { "symbol": "NYMEX:CL1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
-          </script>
+          <div class="tv-widget-actions" hidden>
+            <button class="tv-widget-btn" type="button" onclick="retryTradingViewWidget('macro-wti')">Retry</button>
+            <a class="tv-widget-link" href="https://www.tradingview.com/symbols/NYMEX-CL1!/" target="_blank" rel="noopener noreferrer">Open chart</a>
+          </div>
+          <script type="application/json" class="tv-widget-config">{ "symbol": "NYMEX:CL1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }</script>
         </div>
       </div>
       <div class="tv-mini-card">
-        <div class="tradingview-widget-container">
+        <div class="tv-mini-label">US Dollar Index</div>
+        <div class="tv-widget-shell tradingview-widget-container" data-tv-widget data-tv-widget-id="macro-dxy" data-tv-tab="macropanel" data-tv-script="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" data-tv-title="US Dollar Index" data-tv-symbol="TVC:DXY">
+          <div class="tv-widget-status"><strong>Loading DXY</strong><span>USD strength against major currencies.</span></div>
           <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          { "symbol": "TVC:DXY", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
-          </script>
+          <div class="tv-widget-actions" hidden>
+            <button class="tv-widget-btn" type="button" onclick="retryTradingViewWidget('macro-dxy')">Retry</button>
+            <a class="tv-widget-link" href="https://www.tradingview.com/symbols/TVC-DXY/" target="_blank" rel="noopener noreferrer">Open chart</a>
+          </div>
+          <script type="application/json" class="tv-widget-config">{ "symbol": "TVC:DXY", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }</script>
         </div>
       </div>
       <div class="tv-mini-card">
-        <div class="tradingview-widget-container">
+        <div class="tv-mini-label">Gold</div>
+        <div class="tv-widget-shell tradingview-widget-container" data-tv-widget data-tv-widget-id="macro-gold" data-tv-tab="macropanel" data-tv-script="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" data-tv-title="Gold" data-tv-symbol="COMEX:GC1!">
+          <div class="tv-widget-status"><strong>Loading Gold</strong><span>Tail-risk and hedging signal.</span></div>
           <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          { "symbol": "COMEX:GC1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
-          </script>
+          <div class="tv-widget-actions" hidden>
+            <button class="tv-widget-btn" type="button" onclick="retryTradingViewWidget('macro-gold')">Retry</button>
+            <a class="tv-widget-link" href="https://www.tradingview.com/symbols/COMEX-GC1!/" target="_blank" rel="noopener noreferrer">Open chart</a>
+          </div>
+          <script type="application/json" class="tv-widget-config">{ "symbol": "COMEX:GC1!", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }</script>
         </div>
       </div>
       <div class="tv-mini-card">
-        <div class="tradingview-widget-container">
+        <div class="tv-mini-label">US 10Y Yield</div>
+        <div class="tv-widget-shell tradingview-widget-container" data-tv-widget data-tv-widget-id="macro-ust10" data-tv-tab="macropanel" data-tv-script="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" data-tv-title="US 10Y Yield" data-tv-symbol="TVC:US10Y">
+          <div class="tv-widget-status"><strong>Loading 10Y Yield</strong><span>Rate transmission into GCC credit.</span></div>
           <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          { "symbol": "TVC:US10Y", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }
-          </script>
+          <div class="tv-widget-actions" hidden>
+            <button class="tv-widget-btn" type="button" onclick="retryTradingViewWidget('macro-ust10')">Retry</button>
+            <a class="tv-widget-link" href="https://www.tradingview.com/symbols/TVC-US10Y/" target="_blank" rel="noopener noreferrer">Open chart</a>
+          </div>
+          <script type="application/json" class="tv-widget-config">{ "symbol": "TVC:US10Y", "width": "100%", "height": "170", "locale": "en", "dateRange": "1M", "colorTheme": "light", "isTransparent": true, "autosize": false, "largeChartUrl": "" }</script>
         </div>
       </div>
     </div>
@@ -786,6 +983,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <div class="card">
         <div class="card-title">GCC Fiscal Breakeven Oil Prices</div>
         <div class="card-subtitle" id="breakevenSubtitle">Budget breakeven vs current Brent (see live ticker)</div>
+        <div class="chart-summary" id="macroBreakevenSummary"></div>
         <div class="chart-container-tall"><canvas id="macroBreakevenChart"></canvas></div>
       </div>
       <div class="card">
@@ -807,6 +1005,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <!-- ====== NEW TAB 2: SWF TRACKER ====== -->
 <div class="tab-content" id="tab-swftracker">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Track 50 GCC sovereign wealth funds, pension funds, and family offices representing over $5.5 trillion in assets. Drill into individual fund profiles to understand portfolio allocation, sector focus, mandate alignment, and deployment patterns.</div></div>
   <!-- KPI Summary Row -->
   <div class="section">
     <div class="section-header"><div class="section-title">GCC Investment Fund Tracker <span class="level-badge level-3">50 Funds</span></div></div>
@@ -901,6 +1100,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       </div>
       <div class="table-scroll">
         <table class="swf-fund-table" id="swfFundTable">
+          <caption class="sr-only">Searchable and sortable table of GCC investment funds</caption>
           <thead><tr>
             <th onclick="sortFundTable('rank')">#</th>
             <th onclick="sortFundTable('name')">Fund Name</th>
@@ -912,6 +1112,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <tbody id="swfFundTableBody"></tbody>
         </table>
       </div>
+      <div class="table-scroll-hint" aria-hidden="true">Swipe to view all columns</div>
       <button class="swf-expand-btn" id="swfExpandBtn" onclick="toggleFundTableExpand()">
         <span id="swfExpandLabel">View all 50 funds</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1050,6 +1251,104 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <!-- ====== NEW TAB 3: SECTORAL FINGERPRINTS ====== -->
 <div class="tab-content" id="tab-sectoral">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Sector performance rotates with the macro cycle. During risk-on regimes (Goldilocks/Reflation), growth sectors and commodities outperform. During risk-off (Deflation/De-risking), defensive sectors and treasuries lead. Understanding this rotation is critical for timing sovereign capital deployment.</div></div>
+
+  <!-- MACRO WEATHER INDICATOR -->
+  <div class="macro-weather-panel regime-deflation" id="sectoralMacroWeather">
+    <div class="mw-header">
+      <div class="mw-regime-icon regime-deflation">&#10052;</div>
+      <div>
+        <div class="mw-regime-title" style="color:var(--accent)">DEFLATION</div>
+        <div class="mw-regime-tagline">Growth falling, inflation falling. Risk-off. Rotate into defensives, treasuries, and cash. Based on Michael Howell's CrossBorder Capital global liquidity framework &mdash; early contraction phase as of Q1 2026.</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-tertiary);margin-bottom:8px">Sectors Favoured in This Regime</div>
+    <div class="mw-sectors-grid">
+      <div class="mw-sector-pill outperform">&#9679; Healthcare</div>
+      <div class="mw-sector-pill outperform">&#9679; Utilities</div>
+      <div class="mw-sector-pill outperform">&#9679; Treasuries</div>
+      <div class="mw-sector-pill outperform">&#9679; Cash / Defensive</div>
+      <div class="mw-sector-pill underperform">&#9675; Technology</div>
+      <div class="mw-sector-pill underperform">&#9675; Consumer Disc.</div>
+      <div class="mw-sector-pill underperform">&#9675; Industrials</div>
+      <div class="mw-sector-pill neutral">&#8722; Energy</div>
+    </div>
+    <div class="mw-swf-signal">
+      <div class="mws-label">GCC SWF Deployment Signal</div>
+      <div class="mws-text">Deflation &rarr; <strong>Preserve capital, accumulate defensive positions, build dry powder.</strong> Sovereign funds should reduce exposure to cyclical growth and increase allocation to infrastructure, healthcare, and fixed income. This is the accumulation phase &mdash; identify distressed quality assets for deployment when the cycle turns to Goldilocks.</div>
+    </div>
+  </div>
+
+  <!-- SECTOR PERFORMANCE BY REGIME TABLE -->
+  <div class="section">
+    <div class="card">
+      <div class="card-title">Sector Performance by Regime</div>
+      <div class="card-subtitle">How each major sector performs across the four macro regimes. The DEFLATION column is highlighted as the current regime.</div>
+      <div class="table-scroll">
+      <table class="regime-table">
+        <thead>
+          <tr>
+            <th>Sector</th>
+            <th>&#9728; Goldilocks</th>
+            <th>&#9925; Reflation</th>
+            <th>&#9888; Inflation</th>
+            <th class="rt-active">&#10052; Deflation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Technology</td><td class="rt-out">Outperform</td><td class="rt-neut">Neutral</td><td class="rt-under">Underperform</td><td class="rt-under rt-active">Underperform</td></tr>
+          <tr><td>Consumer Discretionary</td><td class="rt-out">Outperform</td><td class="rt-neut">Neutral</td><td class="rt-under">Underperform</td><td class="rt-under rt-active">Underperform</td></tr>
+          <tr><td>Financials</td><td class="rt-out">Outperform</td><td class="rt-out">Outperform</td><td class="rt-neut">Neutral</td><td class="rt-under rt-active">Underperform</td></tr>
+          <tr><td>Real Estate</td><td class="rt-out">Outperform</td><td class="rt-neut">Neutral</td><td class="rt-under">Underperform</td><td class="rt-under rt-active">Underperform</td></tr>
+          <tr><td>Energy</td><td class="rt-neut">Neutral</td><td class="rt-out">Outperform</td><td class="rt-out">Outperform</td><td class="rt-neut rt-active">Neutral</td></tr>
+          <tr><td>Materials / Industrials</td><td class="rt-neut">Neutral</td><td class="rt-out">Outperform</td><td class="rt-neut">Neutral</td><td class="rt-under rt-active">Underperform</td></tr>
+          <tr><td>Healthcare</td><td class="rt-neut">Neutral</td><td class="rt-neut">Neutral</td><td class="rt-neut">Neutral</td><td class="rt-out rt-active">Outperform</td></tr>
+          <tr><td>Utilities</td><td class="rt-under">Underperform</td><td class="rt-neut">Neutral</td><td class="rt-out">Outperform</td><td class="rt-out rt-active">Outperform</td></tr>
+          <tr><td>Gold / Real Assets</td><td class="rt-under">Underperform</td><td class="rt-neut">Neutral</td><td class="rt-out">Outperform</td><td class="rt-out rt-active">Outperform</td></tr>
+          <tr><td>Treasuries / Fixed Income</td><td class="rt-under">Underperform</td><td class="rt-under">Underperform</td><td class="rt-under">Underperform</td><td class="rt-out rt-active">Outperform</td></tr>
+          <tr><td>Commodities (ex-Gold)</td><td class="rt-neut">Neutral</td><td class="rt-out">Outperform</td><td class="rt-out">Outperform</td><td class="rt-under rt-active">Underperform</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CURRENT REGIME IMPLICATIONS -->
+  <div class="section">
+    <div class="card" style="border-left:4px solid var(--accent)">
+      <div class="card-title" style="color:var(--accent)">Current Regime Implications &mdash; Deflation (Q1 2026)</div>
+      <div class="card-subtitle">What the current deflationary regime means for GCC sovereign fund sector allocation</div>
+      <div style="margin-top:12px;font-size:13px;color:var(--text-primary);line-height:1.7">
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border-light)"><span style="color:var(--accent);font-weight:800;font-size:16px;flex-shrink:0">1.</span><span><strong>Reduce cyclical exposure.</strong> GCC industrial names (EGA, Ma'aden, SABIC) face demand compression as global growth decelerates. Aluminium and petrochemical volumes are particularly sensitive to Chinese manufacturing PMIs, which are trending below 50. Sovereign funds should trim positions or hedge with commodity puts.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border-light)"><span style="color:var(--accent);font-weight:800;font-size:16px;flex-shrink:0">2.</span><span><strong>Accumulate defensive healthcare and infrastructure.</strong> GCC healthcare operators (NMC successors, Aster DM, Saudi German) are counter-cyclical with government-backed demand floors. Infrastructure names tied to Vision 2030 / Expo legacy have sovereign payment guarantees that de-risk cash flows during downturns.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border-light)"><span style="color:var(--accent);font-weight:800;font-size:16px;flex-shrink:0">3.</span><span><strong>Build fixed-income duration.</strong> With Howell's global liquidity index contracting, GCC central banks will eventually cut rates once the Fed pivots. Locking in current yields on GCC sovereign sukuks (5-6% range) provides both income and capital appreciation when the cycle turns. ADIA and QIA have historically front-run this trade.</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0"><span style="color:var(--accent);font-weight:800;font-size:16px;flex-shrink:0">4.</span><span><strong>Build dry powder for the Goldilocks phase.</strong> The deflation regime typically lasts 4-8 quarters before transitioning to Goldilocks (per Howell's historical data). Funds that accumulated capital during 2008-09 and 2020 deflation phases generated the strongest vintage returns. Current positioning should prioritise liquidity for future deployment.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORICAL REGIME TRANSITIONS -->
+  <div class="section">
+    <div class="card">
+      <div class="card-title">Historical Regime Transitions &mdash; Last 5 Years</div>
+      <div class="card-subtitle">Based on Howell's CrossBorder Capital global liquidity cycle framework. Each phase typically lasts 4-8 quarters.</div>
+      <div class="regime-timeline">
+        <div class="rt-block rt-goldilocks" style="flex:3"><span>Goldilocks</span><span class="rt-period">Q1-Q3 2021</span></div>
+        <div class="rt-block rt-reflation" style="flex:4"><span>Reflation</span><span class="rt-period">Q4 2021-Q3 2022</span></div>
+        <div class="rt-block rt-inflation" style="flex:4"><span>Inflation</span><span class="rt-period">Q4 2022-Q3 2023</span></div>
+        <div class="rt-block rt-goldilocks" style="flex:4"><span>Goldilocks</span><span class="rt-period">Q4 2023-Q3 2024</span></div>
+        <div class="rt-block rt-reflation" style="flex:2"><span>Reflation</span><span class="rt-period">Q4 2024-Q1 2025</span></div>
+        <div class="rt-block rt-deflation" style="flex:4"><span>&#10052; Deflation</span><span class="rt-period">Q2 2025-Now</span></div>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:14px;font-size:11px;color:var(--text-secondary);flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#059669;display:inline-block"></span> Goldilocks &mdash; Growth &uarr;, Inflation &darr;</div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#D97706;display:inline-block"></span> Reflation &mdash; Growth &uarr;, Inflation &uarr;</div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#DC2626;display:inline-block"></span> Inflation &mdash; Growth &darr;, Inflation &uarr;</div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2563EB;display:inline-block"></span> Deflation &mdash; Growth &darr;, Inflation &darr;</div>
+      </div>
+    </div>
+  </div>
+
   <div class="section">
     <div class="section-header"><div class="section-title">Sectoral Balance Sheet Fingerprints <span class="level-badge level-2">Intelligence Layer</span></div></div>
     <div class="insight-box">
@@ -1208,6 +1507,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <!-- ====== NEW TAB 4: STRESS TESTING ====== -->
 <div class="tab-content" id="tab-stress">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Stress testing models how portfolio companies perform under adverse scenarios &mdash; oil price shocks, currency moves, geopolitical escalation, and liquidity contractions. Identify fragile positions before they break.</div></div>
   <div class="section">
     <div class="section-header"><div class="section-title">Interactive Stress Testing <span class="level-badge level-3">Level 3</span></div></div>
     <div class="insight-box">
@@ -1369,6 +1669,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <!-- ====== NEW TAB 5: COMPOSITE SCORE ====== -->
 <div class="tab-content" id="tab-composite">
+  <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">The 47X Composite Score synthesises all 9 operational dimensions into a single 0-100 rating. It's the GCC equivalent of a credit score for operational quality &mdash; designed for sovereign fund portfolio committees.</div></div>
   <div class="section">
     <div class="section-header"><div class="section-title">47X Composite Intelligence Score <span class="level-badge level-3">Three-Score Framework</span></div></div>
     <div class="insight-box">
@@ -1595,15 +1896,262 @@ sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','H
 ];
 
 var activeScenario=0;
+var chartRenderFrame=null;
+var resizeDebounceTimer=null;
+var lastFocusedElement=null;
+var TAB_ORDER=['overview','benchmarking','signals','arbitrage','macropanel','swftracker','sectoral','stress','composite'];
+var CHART_MONTHS=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
 
-async function checkApi(){try{var r=await fetch(API_BASE+'/api/companies',{signal:AbortSignal.timeout(5000)});if(r.ok){var d=await r.json();var dot=document.getElementById('apiDot');dot.className='api-dot live';document.getElementById('apiLabel').textContent='API Live';document.getElementById('apiLabel').style.color='var(--green)';if(d&&d.length>0)renderLiveApiCards(d)}else throw 0}catch(e){document.getElementById('apiDot').className='api-dot offline';document.getElementById('apiLabel').textContent='Demo Mode';document.getElementById('apiLabel').style.color='var(--text-tertiary)'}}
+function createTimeoutSignal(timeout){
+  if(window.AbortSignal&&typeof window.AbortSignal.timeout==='function')return window.AbortSignal.timeout(timeout);
+  var controller=new AbortController();
+  window.setTimeout(function(){controller.abort(new Error('timeout'))},timeout);
+  return controller.signal;
+}
 
-async function renderLiveApiCards(list){var s=document.getElementById('liveApiSection'),c=document.getElementById('liveApiCards');s.style.display='block';var h='';for(var i=0;i<Math.min(list.length,4);i++){var co=list[i],sh='<span style="color:var(--text-tertiary)">No scores</span>';try{var r=await fetch(API_BASE+'/api/companies/'+co.slug+'/scores',{signal:AbortSignal.timeout(5000)});if(r.ok){var sc=await r.json();if(sc&&sc.composite!==undefined){var b=sc.composite>=90?'leading':sc.composite>=70?'strong':sc.composite>=50?'average':sc.composite>=30?'weak':'critical';var bc=b==='leading'?'var(--accent)':b==='strong'?'var(--green)':b==='average'?'var(--orange)':'var(--red)';sh='<div style="font-size:28px;font-weight:800;color:'+bc+';letter-spacing:-1px">'+Math.round(sc.composite)+'</div><div class="kpi-label">'+b.charAt(0).toUpperCase()+b.slice(1)+'</div>'}}}catch(e){}h+='<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+co.name+'</div>'+sh+'</div>'}c.innerHTML=h}
+async function safeFetchJson(url,timeout){
+  var response=await fetch(url,{signal:createTimeoutSignal(timeout||5000)});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  return response.json();
+}
 
-function switchTab(t,b){document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('.nav-tab').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+t).classList.add('active');if(b)b.classList.add('active');document.querySelectorAll('.bottom-nav-item').forEach(function(item){item.classList.remove('active');if(item.dataset&&item.dataset.tab===t)item.classList.add('active')});window.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){renderAllCharts()},50)}
-function switchCompany(k){currentCompany=k;document.getElementById('companySelectorLabel').textContent=companies[k].name;renderAll();closeSearch();setTimeout(animateHeroScores,100)}
+function debounce(fn,wait){
+  return function(){
+    var args=arguments;
+    var ctx=this;
+    clearTimeout(resizeDebounceTimer);
+    resizeDebounceTimer=setTimeout(function(){fn.apply(ctx,args)},wait);
+  };
+}
 
-function selectScenario(idx){activeScenario=idx;document.querySelectorAll('.scenario-card').forEach(function(c,i){c.classList.toggle('scenario-active',i===idx)});renderStressScenario();renderStressCharts()}
+function setStatusMessage(message){
+  var el=document.getElementById('dashboardStatus');
+  if(el)el.textContent=message;
+}
+
+function showDashboardMessage(message,tone,persist){
+  var host=document.getElementById('dashboardMessage');
+  if(!host)return;
+  host.hidden=false;
+  host.className='dashboard-message is-'+(tone||'warning');
+  host.innerHTML='<div class="dashboard-message-banner"><div class="dashboard-message-text">'+message+'</div><button class="dashboard-message-close" type="button" aria-label="Dismiss message" onclick="clearDashboardMessage()">&times;</button></div>';
+  if(!persist){
+    window.clearTimeout(host._hideTimer);
+    host._hideTimer=window.setTimeout(clearDashboardMessage,6000);
+  }
+}
+
+function clearDashboardMessage(){
+  var host=document.getElementById('dashboardMessage');
+  if(!host)return;
+  host.hidden=true;
+  host.className='dashboard-message';
+  window.clearTimeout(host._hideTimer);
+}
+
+function hidePageLoader(){
+  document.body.classList.remove('is-loading');
+  var loader=document.getElementById('pageLoader');
+  if(loader)loader.classList.add('hidden');
+}
+
+function getActiveTab(){
+  var active=document.querySelector('.tab-content.active');
+  return active?active.id.replace('tab-',''):'overview';
+}
+
+function syncTabAccessibility(activeTab){
+  document.querySelectorAll('.nav-tab').forEach(function(btn){
+    var tab=btn.dataset.tab;
+    var selected=tab===activeTab;
+    btn.setAttribute('role','tab');
+    btn.setAttribute('id','tab-btn-'+tab);
+    btn.setAttribute('aria-controls','tab-'+tab);
+    btn.setAttribute('aria-selected',selected?'true':'false');
+    btn.setAttribute('tabindex',selected?'0':'-1');
+  });
+  document.querySelectorAll('.tab-content').forEach(function(panel){
+    var id=panel.id.replace('tab-','');
+    var active=id===activeTab;
+    panel.setAttribute('role','tabpanel');
+    panel.setAttribute('aria-labelledby','tab-btn-'+id);
+    panel.setAttribute('tabindex','0');
+    panel.hidden=!active;
+  });
+}
+
+function updateTableOverflowIndicators(){
+  document.querySelectorAll('.table-scroll').forEach(function(el){
+    var overflowing=el.scrollWidth>el.clientWidth+4;
+    el.classList.toggle('is-overflowing',overflowing);
+  });
+}
+
+function annotateCanvases(){
+  document.querySelectorAll('canvas').forEach(function(canvas){
+    var card=canvas.closest('.card');
+    if(!card)return;
+    var title=card.querySelector('.card-title');
+    var subtitle=card.querySelector('.card-subtitle');
+    var label=(title?title.textContent.trim():'Chart')+(subtitle?' - '+subtitle.textContent.trim():'');
+    canvas.setAttribute('role','img');
+    canvas.setAttribute('aria-label',label);
+  });
+}
+
+function enhanceAccessibility(){
+  syncTabAccessibility(getActiveTab());
+  annotateCanvases();
+  document.querySelectorAll('.collapsible-header').forEach(function(header,idx){
+    var content=header.nextElementSibling;
+    if(!content)return;
+    if(!content.id)content.id='collapsible-panel-'+idx;
+    header.setAttribute('role','button');
+    header.setAttribute('tabindex','0');
+    header.setAttribute('aria-controls',content.id);
+    header.setAttribute('aria-expanded',header.classList.contains('expanded')?'true':'false');
+    content.hidden=!content.classList.contains('expanded');
+  });
+  document.querySelectorAll('.swf-card,.scenario-card,.sector-fp-card').forEach(function(card){
+    card.setAttribute('role','button');
+    card.setAttribute('tabindex','0');
+    if(card.classList.contains('scenario-card'))card.setAttribute('aria-pressed',card.classList.contains('scenario-active')?'true':'false');
+    if(card.classList.contains('sector-fp-card'))card.setAttribute('aria-expanded',card.classList.contains('expanded')?'true':'false');
+  });
+}
+
+function updatePrintSummary(c){
+  var comp=c.composite;
+  var latestSentiment=c.sentiment[c.sentiment.length-1];
+  var sentimentLabel=(latestSentiment>=0?'+':'')+latestSentiment.toFixed(2);
+  var html='<h2>'+c.name+'</h2><p>'+c.sector+' | '+c.location+' | '+c.portfolio+'</p>';
+  html+='<div class="print-summary-grid">';
+  html+='<div class="print-summary-card"><strong>'+comp.total+'</strong><span>Composite Score</span></div>';
+  html+='<div class="print-summary-card"><strong>'+comp.opScore+' / '+comp.finScore+' / '+comp.resScore+'</strong><span>Op / Fin / Res</span></div>';
+  html+='<div class="print-summary-card"><strong>'+c.scoreChange.label+'</strong><span>Latest Change</span></div>';
+  html+='<div class="print-summary-card"><strong>'+sentimentLabel+'</strong><span>30-Day Sentiment</span></div>';
+  html+='</div>';
+  document.getElementById('printSummary').innerHTML=html;
+}
+
+function updateChartSummaries(c){
+  var historyDelta=c.history[c.history.length-1]-c.history[0];
+  var latestScore=c.history[c.history.length-1];
+  var sectorGap=latestScore-c.sectorAvg[c.sectorAvg.length-1];
+  document.getElementById('historySummary').innerHTML=
+    '<div class="chart-summary-item"><span class="chart-summary-label">Current</span><span class="chart-summary-value">'+latestScore+'</span><span class="chart-summary-meta">'+c.composite.band+'</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">Vs Sector</span><span class="chart-summary-value">'+(sectorGap>0?'+':'')+sectorGap+'</span><span class="chart-summary-meta">Gap to benchmark</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">12M Move</span><span class="chart-summary-value">'+(historyDelta>0?'+':'')+historyDelta+'</span><span class="chart-summary-meta">Since last April</span></div>';
+  var latestSentiment=c.sentiment[c.sentiment.length-1];
+  var sentimentTrend=latestSentiment-c.sentiment[0];
+  document.getElementById('sentimentSummary').innerHTML=
+    '<div class="chart-summary-item"><span class="chart-summary-label">Latest</span><span class="chart-summary-value">'+latestSentiment.toFixed(2)+'</span><span class="chart-summary-meta">30-day rolling</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">Trend</span><span class="chart-summary-value">'+(sentimentTrend>0?'+':'')+sentimentTrend.toFixed(2)+'</span><span class="chart-summary-meta">Since last April</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">Signal</span><span class="chart-summary-value">'+(latestSentiment>=0?'Positive':'Negative')+'</span><span class="chart-summary-meta">Current direction</span></div>';
+  var peerMoves=c.competitorMovement.current.map(function(value,idx){return value-c.competitorMovement.previous[idx]});
+  var maxMoveIndex=0;
+  for(var i=1;i<peerMoves.length;i++){if(Math.abs(peerMoves[i])>Math.abs(peerMoves[maxMoveIndex]))maxMoveIndex=i}
+  document.getElementById('competitorMovementSummary').innerHTML=
+    '<div class="chart-summary-item"><span class="chart-summary-label">Largest Move</span><span class="chart-summary-value">'+c.competitorMovement.labels[maxMoveIndex]+'</span><span class="chart-summary-meta">'+(peerMoves[maxMoveIndex]>0?'+':'')+peerMoves[maxMoveIndex]+' points</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">'+c.short+' Delta</span><span class="chart-summary-value">'+(peerMoves[0]>0?'+':'')+peerMoves[0]+'</span><span class="chart-summary-meta">Over 90 days</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">Peer Median</span><span class="chart-summary-value">'+Math.round(c.competitorMovement.current.slice().sort(function(a,b){return a-b})[Math.floor(c.competitorMovement.current.length/2)])+'</span><span class="chart-summary-meta">Current score</span></div>';
+  var brentSpot=Math.round(liveMarketData.brent?liveMarketData.brent.price:102);
+  document.getElementById('macroBreakevenSummary').innerHTML=
+    '<div class="chart-summary-item"><span class="chart-summary-label">Brent Spot</span><span class="chart-summary-value">$'+brentSpot+'</span><span class="chart-summary-meta">TradingView-linked fallback</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">Saudi Buffer</span><span class="chart-summary-value">'+(brentSpot-91>=0?'+':'')+'$'+(brentSpot-91)+'</span><span class="chart-summary-meta">Vs fiscal breakeven</span></div>'+
+    '<div class="chart-summary-item"><span class="chart-summary-label">Highest Stress</span><span class="chart-summary-value">Bahrain</span><span class="chart-summary-meta">$105 breakeven</span></div>';
+}
+
+function runRenderTask(label,fn){
+  try{fn()}
+  catch(error){
+    console.error(label,error);
+    showDashboardMessage(label+' could not be rendered. Displaying the rest of the dashboard.', 'warning');
+    setStatusMessage(label+' failed to render');
+  }
+}
+
+function scheduleRenderAllCharts(){
+  if(chartRenderFrame)cancelAnimationFrame(chartRenderFrame);
+  chartRenderFrame=requestAnimationFrame(function(){
+    chartRenderFrame=null;
+    renderAllCharts();
+    updateTableOverflowIndicators();
+  });
+}
+
+function activateTab(tab,button){
+  document.querySelectorAll('.tab-content').forEach(function(panel){
+    panel.classList.toggle('active',panel.id==='tab-'+tab);
+  });
+  document.querySelectorAll('.nav-tab').forEach(function(btn){
+    btn.classList.toggle('active',btn.dataset.tab===tab);
+  });
+  document.querySelectorAll('.bottom-nav-item').forEach(function(item){
+    item.classList.toggle('active',item.dataset&&item.dataset.tab===tab);
+  });
+  if(button&&button.classList.contains('nav-tab'))button.focus();
+  syncTabAccessibility(tab);
+  ensureWidgetsForTab(tab);
+  scheduleRenderAllCharts();
+  window.scrollTo({top:0,behavior:'smooth'});
+  setStatusMessage('Showing '+tab.replace(/([a-z])([A-Z])/g,'$1 $2')+' tab');
+}
+
+async function checkApi(){
+  setStatusMessage('Checking live API status');
+  try{
+    var companiesList=await safeFetchJson(API_BASE+'/api/companies',5000);
+    document.getElementById('apiDot').className='api-dot live';
+    document.getElementById('apiLabel').textContent='API Live';
+    document.getElementById('apiLabel').style.color='var(--green)';
+    clearDashboardMessage();
+    if(companiesList&&companiesList.length>0)renderLiveApiCards(companiesList);
+  }catch(error){
+    document.getElementById('apiDot').className='api-dot offline';
+    document.getElementById('apiLabel').textContent='Demo Mode';
+    document.getElementById('apiLabel').style.color='var(--text-tertiary)';
+    showDashboardMessage('Live API checks timed out. The dashboard is running in cached demo mode.', 'warning');
+    setStatusMessage('Live API unavailable, demo mode active');
+  }
+}
+
+async function renderLiveApiCards(list){
+  var section=document.getElementById('liveApiSection');
+  var container=document.getElementById('liveApiCards');
+  if(!section||!container)return;
+  section.style.display='block';
+  var items=list.slice(0,4);
+  container.innerHTML=items.map(function(item){
+    return '<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+item.name+'</div><div class="kpi-label">Loading score...</div></div>';
+  }).join('');
+  var results=await Promise.all(items.map(async function(item){
+    try{return{company:item,score:await safeFetchJson(API_BASE+'/api/companies/'+item.slug+'/scores',5000)}}
+    catch(error){return{company:item,score:null}}
+  }));
+  container.innerHTML=results.map(function(result){
+    var scoreHtml='<span style="color:var(--text-tertiary)">No scores</span>';
+    if(result.score&&result.score.composite!==undefined){
+      var composite=Math.round(result.score.composite);
+      var band=composite>=90?'Leading':composite>=70?'Strong':composite>=50?'Average':composite>=30?'Weak':'Critical';
+      var color=composite>=90?'var(--accent)':composite>=70?'var(--green)':composite>=50?'var(--orange)':'var(--red)';
+      scoreHtml='<div style="font-size:28px;font-weight:800;color:'+color+';letter-spacing:-1px">'+composite+'</div><div class="kpi-label">'+band+'</div>';
+    }
+    return '<div class="card kpi-card fade-in"><div style="font-size:13px;font-weight:600;margin-bottom:8px">'+result.company.name+'</div>'+scoreHtml+'</div>';
+  }).join('');
+}
+
+function switchTab(t,b){activateTab(t,b||document.querySelector('.nav-tab[data-tab="'+t+'"]'))}
+function switchCompany(k){
+  currentCompany=k;
+  document.getElementById('companySelectorLabel').textContent=companies[k].name;
+  renderAll();
+  closeSearch();
+  window.setTimeout(animateHeroScores,100);
+  setStatusMessage('Loaded '+companies[k].name);
+}
+
+function selectScenario(idx){activeScenario=idx;document.querySelectorAll('.scenario-card').forEach(function(c,i){var active=i===idx;c.classList.toggle('scenario-active',active);c.setAttribute('aria-pressed',active?'true':'false')});renderStressScenario();renderStressCharts();setStatusMessage('Selected stress scenario '+(idx+1))}
 
 function renderStressScenario(){var s=scenarios[activeScenario];
 document.getElementById('stressScenarioTitle').textContent=s.title;
@@ -1648,7 +2196,11 @@ renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);
 renderCompositeTab(c);
 renderStressScenario();
 updateOilSim(document.getElementById('oilSlider')?document.getElementById('oilSlider').value:102);
-renderAllCharts()}
+updateChartSummaries(c);
+updatePrintSummary(c);
+annotateCanvases();
+ensureWidgetsForTab(getActiveTab());
+scheduleRenderAllCharts()}
 
 function renderCompositeTab(c){
 var comp=c.composite;
@@ -1677,8 +2229,7 @@ document.getElementById('compOpBreakdown').innerHTML=services.map(function(s){va
 
 function renderPeerTable(c){document.querySelector('#peerTable tbody').innerHTML=c.peers.map(function(p){return'<tr><td>'+p.name+'</td><td class="score-cell">'+p.score+'</td><td class="score-cell">'+p.website+'</td><td class="score-cell">'+p.social+'</td><td class="score-cell">'+p.media+'</td><td class="score-cell">'+p.employer+'</td><td class="score-cell">'+p.financial+'</td><td class="'+(p.trend==='up'?'trend-up':'trend-down')+'">'+(p.trend==='up'?'\u25B2 Up':'\u25BC Down')+'</td></tr>'}).join('')}
 function renderServiceBars(c){document.getElementById('serviceBars').innerHTML=c.services.map(function(s){return'<div class="service-bar"><div class="service-bar-header"><span class="service-name">'+s.name+'</span><span class="service-score" style="color:'+s.color+'">'+s.score+'</span></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:'+s.color+'" data-target="'+s.score+'"></div><div class="bar-benchmark" style="left:'+s.benchmark+'%" title="Sector Avg: '+s.benchmark+'"></div></div></div>'}).join('');
-// Animate bars from 0
-setTimeout(function(){document.querySelectorAll('#serviceBars .bar-fill').forEach(function(b){b.style.width=b.dataset.target+'%'})},50)}
+requestAnimationFrame(function(){document.querySelectorAll('#serviceBars .bar-fill').forEach(function(b){b.style.width=b.dataset.target+'%'})})}
 function renderScorecard(c){document.getElementById('scorecardGrid').innerHTML=c.services.map(function(s){var d=s.score-s.benchmark,dc=d>0?'var(--green)':d<0?'var(--red)':'var(--text-secondary)',ds=d>0?'+':'';return'<div class="scorecard-cell"><div class="sc-score" style="color:'+s.color+'">'+s.score+'</div><div class="sc-label">'+s.name+'</div><div style="font-size:10px;font-weight:600;color:'+dc+';margin-top:2px">'+ds+d+' vs avg</div><div class="sc-bar"><div class="sc-bar-fill" style="width:'+s.score+'%;background:'+s.color+'"></div></div></div>'}).join('')}
 function renderTimeline(c){document.getElementById('signalTimeline').innerHTML=c.timeline.map(function(t){return'<div class="timeline-item"><div class="timeline-dot" style="background:'+t.color+'"></div><div><div class="timeline-text">'+t.text+'</div><div class="timeline-date">'+t.date+'</div></div></div>'}).join('')}
 function renderSignalCards(c){function r(id,d){document.getElementById(id).innerHTML=d.map(function(x){return'<div class="overlay-row"><span class="overlay-label">'+x.label+'</span><span class="overlay-value" style="color:'+(x.trend==='positive'?'var(--green)':x.trend==='negative'?'var(--red)':'var(--text-primary)')+'">'+x.value+'</span></div>'}).join('')}r('talentSignals',c.talent);r('financialSignals',c.financial);r('marketContext',c.market)}
@@ -1894,52 +2445,64 @@ var si=document.getElementById('stressSectorImpactChart');
 if(si&&si.offsetParent!==null){
 charts.stressSectorImpact=new Chart(si,{type:'bar',data:{labels:s.sectorImpact.labels,datasets:[{label:'Impact Severity',data:s.sectorImpact.data,backgroundColor:s.sectorImpact.data.map(function(v){return v>=80?'rgba(220,38,38,0.7)':v>=50?'rgba(217,119,6,0.7)':'rgba(5,150,105,0.7)'}),borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v+'%'}}},y:{grid:{display:false},ticks:{font:{size:10}}}}}})}}
 
-function renderAllCharts(){var c=companies[currentCompany],mo=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+function renderBenchmarkCharts(c){
+destroyChart('history');var h=document.getElementById('historyChart');if(h&&h.offsetParent!==null){charts.history=new Chart(h,{type:'line',data:{labels:CHART_MONTHS,datasets:[{label:c.short+' Score',data:c.history,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2563EB'},{label:'Sector Average',data:c.sectorAvg,borderColor:'#9CA3AF',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:40,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}}
 
-destroyChart('history');var h=document.getElementById('historyChart');if(h&&h.offsetParent!==null){charts.history=new Chart(h,{type:'line',data:{labels:mo,datasets:[{label:c.short+' Score',data:c.history,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2563EB'},{label:'Sector Average',data:c.sectorAvg,borderColor:'#9CA3AF',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:40,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+function renderSignalCharts(c){
+destroyChart('sentiment');var s=document.getElementById('sentimentChart');if(s&&s.offsetParent!==null){var ls=c.sentiment[c.sentiment.length-1];charts.sentiment=new Chart(s,{type:'line',data:{labels:CHART_MONTHS,datasets:[{label:'News Sentiment',data:c.sentiment,borderColor:ls>=0?'#059669':'#DC2626',backgroundColor:ls>=0?'rgba(5,150,105,0.06)':'rgba(220,38,38,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:c.sentiment.map(function(v){return v>=0?'#059669':'#DC2626'})}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:-0.5,max:0.8,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v.toFixed(1)}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+destroyChart('competitorMovement');var cm=document.getElementById('competitorMovementChart');if(cm&&cm.offsetParent!==null){var cd=c.competitorMovement;charts.competitorMovement=new Chart(cm,{type:'bar',data:{labels:cd.labels,datasets:[{label:'90 Days Ago',data:cd.previous,backgroundColor:'rgba(156,163,175,0.25)',borderRadius:6},{label:'Current',data:cd.current,backgroundColor:cd.current.map(function(v,i){return v>cd.previous[i]?'rgba(5,150,105,0.65)':'rgba(220,38,38,0.65)'}),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}}
 
-destroyChart('sentiment');var s=document.getElementById('sentimentChart');if(s&&s.offsetParent!==null){var ls=c.sentiment[c.sentiment.length-1];charts.sentiment=new Chart(s,{type:'line',data:{labels:mo,datasets:[{label:'News Sentiment',data:c.sentiment,borderColor:ls>=0?'#059669':'#DC2626',backgroundColor:ls>=0?'rgba(5,150,105,0.06)':'rgba(220,38,38,0.06)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:c.sentiment.map(function(v){return v>=0?'#059669':'#DC2626'})}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:-0.5,max:0.8,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v.toFixed(1)}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
+function renderArbitrageCharts(c){
+destroyChart('timing');var tm=document.getElementById('timingChart');if(tm&&tm.offsetParent!==null){charts.timing=new Chart(tm,{type:'line',data:{labels:c.timingData.labels,datasets:[{label:'Opportunity Window',data:c.timingData.opportunity,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#059669'},{label:'Risk of Closure',data:c.timingData.risk,borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,0.04)',fill:true,tension:0.4,borderWidth:2,borderDash:[4,4],pointRadius:3,pointBackgroundColor:'#DC2626'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v+'%'}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}}
 
-destroyChart('competitorMovement');var cm=document.getElementById('competitorMovementChart');if(cm&&cm.offsetParent!==null){var cd=c.competitorMovement;charts.competitorMovement=new Chart(cm,{type:'bar',data:{labels:cd.labels,datasets:[{label:'90 Days Ago',data:cd.previous,backgroundColor:'rgba(156,163,175,0.25)',borderRadius:6},{label:'Current',data:cd.current,backgroundColor:cd.current.map(function(v,i){return v>cd.previous[i]?'rgba(5,150,105,0.65)':'rgba(220,38,38,0.65)'}),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
-
-destroyChart('timing');var tm=document.getElementById('timingChart');if(tm&&tm.offsetParent!==null){charts.timing=new Chart(tm,{type:'line',data:{labels:c.timingData.labels,datasets:[{label:'Opportunity Window',data:c.timingData.opportunity,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#059669'},{label:'Risk of Closure',data:c.timingData.risk,borderColor:'#DC2626',backgroundColor:'rgba(220,38,38,0.04)',fill:true,tension:0.4,borderWidth:2,borderDash:[4,4],pointRadius:3,pointBackgroundColor:'#DC2626'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11},callback:function(v){return v+'%'}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
-
-// Macro Overlay Charts
+function renderMacroCharts(){
 destroyChart('macroOilCorrelation');var moc=document.getElementById('macroOilCorrelationChart');
-if(moc&&moc.offsetParent!==null){var _oilCorLast=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _oilCorMax=Math.max(120,_oilCorLast+20);charts.macroOilCorrelation=new Chart(moc,{type:'line',data:{labels:mo,datasets:[{label:'Brent Crude ($/bbl)',data:[78,76,74,79,82,85,81,77,80,88,94,_oilCorLast],borderColor:'#0B1D3A',borderWidth:2.5,tension:0.4,pointRadius:3,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'MSCI GCC Index',data:[15.2,15.0,14.8,15.4,15.8,16.2,15.9,15.5,16.0,17.1,17.8,18.4],borderColor:'#2563EB',borderWidth:2,borderDash:[4,4],tension:0.4,pointRadius:3,pointBackgroundColor:'#2563EB',yAxisID:'y1'},{label:'GCC Corp Sentiment',data:[62,60,58,63,66,68,65,62,64,67,66,68],borderColor:'#059669',borderWidth:1.5,tension:0.4,pointRadius:2,pointBackgroundColor:'#059669',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{position:'left',min:60,max:_oilCorMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Brent ($/bbl)',font:{size:10}}},y1:{position:'right',min:10,max:80,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'Index / Sentiment',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
-
+if(moc&&moc.offsetParent!==null){var _oilCorLast=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _oilCorMax=Math.max(120,_oilCorLast+20);charts.macroOilCorrelation=new Chart(moc,{type:'line',data:{labels:CHART_MONTHS,datasets:[{label:'Brent Crude ($/bbl)',data:[78,76,74,79,82,85,81,77,80,88,94,_oilCorLast],borderColor:'#0B1D3A',borderWidth:2.5,tension:0.4,pointRadius:3,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'MSCI GCC Index',data:[15.2,15.0,14.8,15.4,15.8,16.2,15.9,15.5,16.0,17.1,17.8,18.4],borderColor:'#2563EB',borderWidth:2,borderDash:[4,4],tension:0.4,pointRadius:3,pointBackgroundColor:'#2563EB',yAxisID:'y1'},{label:'GCC Corp Sentiment',data:[62,60,58,63,66,68,65,62,64,67,66,68],borderColor:'#059669',borderWidth:1.5,tension:0.4,pointRadius:2,pointBackgroundColor:'#059669',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{position:'left',min:60,max:_oilCorMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Brent ($/bbl)',font:{size:10}}},y1:{position:'right',min:10,max:80,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'Index / Sentiment',font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
 destroyChart('macroRate');var mr=document.getElementById('macroRateChart');
-if(mr&&mr.offsetParent!==null){charts.macroRate=new Chart(mr,{type:'line',data:{labels:mo,datasets:[{label:'Fed Funds',data:[5.25,5.25,5.25,5.00,5.00,4.75,4.75,4.50,4.50,4.50,4.50,4.50],borderColor:'#DC2626',borderWidth:2.5,tension:0.3,pointRadius:3,pointBackgroundColor:'#DC2626'},{label:'EIBOR 3M',data:[5.40,5.38,5.35,5.15,5.10,4.95,4.92,4.88,4.85,4.85,4.85,4.85],borderColor:'#D97706',borderWidth:2,tension:0.3,pointRadius:3,pointBackgroundColor:'#D97706'},{label:'GCC Corp Avg',data:[6.80,6.75,6.70,6.50,6.45,6.30,6.25,6.18,6.15,6.12,6.10,6.08],borderColor:'#7C3AED',borderWidth:2,borderDash:[4,4],tension:0.3,pointRadius:2,pointBackgroundColor:'#7C3AED'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:3,max:8,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v.toFixed(1)+'%'}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
-
+if(mr&&mr.offsetParent!==null){charts.macroRate=new Chart(mr,{type:'line',data:{labels:CHART_MONTHS,datasets:[{label:'Fed Funds',data:[5.25,5.25,5.25,5.00,5.00,4.75,4.75,4.50,4.50,4.50,4.50,4.50],borderColor:'#DC2626',borderWidth:2.5,tension:0.3,pointRadius:3,pointBackgroundColor:'#DC2626'},{label:'EIBOR 3M',data:[5.40,5.38,5.35,5.15,5.10,4.95,4.92,4.88,4.85,4.85,4.85,4.85],borderColor:'#D97706',borderWidth:2,tension:0.3,pointRadius:3,pointBackgroundColor:'#D97706'},{label:'GCC Corp Avg',data:[6.80,6.75,6.70,6.50,6.45,6.30,6.25,6.18,6.15,6.12,6.10,6.08],borderColor:'#7C3AED',borderWidth:2,borderDash:[4,4],tension:0.3,pointRadius:2,pointBackgroundColor:'#7C3AED'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:3,max:8,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return v.toFixed(1)+'%'}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
 destroyChart('macroBreakeven');var mb=document.getElementById('macroBreakevenChart');
-if(mb&&mb.offsetParent!==null){var _brentSpot=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _brentMax=Math.max(120,_brentSpot+20);charts.macroBreakeven=new Chart(mb,{type:'bar',data:{labels:['UAE','Qatar','Oman','Kuwait','Saudi','Bahrain'],datasets:[{label:'Fiscal Breakeven',data:[63,50,75,82,91,105],backgroundColor:['rgba(5,150,105,0.7)','rgba(5,150,105,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(220,38,38,0.7)'],borderRadius:6},{label:'Brent Spot ($'+_brentSpot+')',data:[_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot],type:'line',borderColor:'#0B1D3A',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:_brentMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+if(mb&&mb.offsetParent!==null){var _brentSpot=liveMarketData.brent?Math.round(liveMarketData.brent.price):102;var _brentMax=Math.max(120,_brentSpot+20);charts.macroBreakeven=new Chart(mb,{type:'bar',data:{labels:['UAE','Qatar','Oman','Kuwait','Saudi','Bahrain'],datasets:[{label:'Fiscal Breakeven',data:[63,50,75,82,91,105],backgroundColor:['rgba(5,150,105,0.7)','rgba(5,150,105,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(217,119,6,0.7)','rgba(220,38,38,0.7)'],borderRadius:6},{label:'Brent Spot ($'+_brentSpot+')',data:[_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot,_brentSpot],type:'line',borderColor:'#0B1D3A',borderWidth:2,borderDash:[6,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:_brentMax,grid:{color:gC},ticks:{font:{size:10},callback:function(v){return'$'+v}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}})}}
 
-// SWF Fund Table + Charts
+function renderSwfCharts(){
 renderSwfFundTable();
 renderSwfAumChart();
 renderSwfHeatmap();
 renderSwfCountryPie();
-
-// SWF Pie Charts
 destroyChart('swfPifPie');var pp=document.getElementById('swfPifPieChart');
 if(pp&&pp.offsetParent!==null){charts.swfPifPie=new Chart(pp,{type:'doughnut',data:{labels:['Giga-projects','Technology & AI','Entertainment & Sports','Energy & Mining','Automotive & EV','Financial Services','Real Estate','Other'],datasets:[{data:[25,18,12,14,8,10,8,5],backgroundColor:['#0B1D3A','#2563EB','#7C3AED','#059669','#D97706','#DC2626','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}
-
 destroyChart('swfMubadalaPie');var mp=document.getElementById('swfMubadalaPieChart');
-if(mp&&mp.offsetParent!==null){charts.swfMubadalaPie=new Chart(mp,{type:'doughnut',data:{labels:['Technology & Semis','Energy Transition','Healthcare','Aerospace & Defence','Financial Services','Real Assets','Metals & Mining','Other'],datasets:[{data:[28,20,14,10,12,8,4,4],backgroundColor:['#2563EB','#059669','#DC2626','#0B1D3A','#D97706','#7C3AED','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}
+if(mp&&mp.offsetParent!==null){charts.swfMubadalaPie=new Chart(mp,{type:'doughnut',data:{labels:['Technology & Semis','Energy Transition','Healthcare','Aerospace & Defence','Financial Services','Real Assets','Metals & Mining','Other'],datasets:[{data:[28,20,14,10,12,8,4,4],backgroundColor:['#2563EB','#059669','#DC2626','#0B1D3A','#D97706','#7C3AED','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}}
 
-// Stress charts
+function renderStressTabCharts(){
 renderStressCharts();
-// Oil simulator chart
 var oilSliderEl=document.getElementById('oilSlider');
-if(oilSliderEl) renderOilNonlinearChart(parseInt(oilSliderEl.value));
+if(oilSliderEl)renderOilNonlinearChart(parseInt(oilSliderEl.value,10));
+}
 
-// Composite comparison chart
+function renderCompositeCharts(c){
 destroyChart('compositeComparison');var cc=document.getElementById('compositeComparisonChart');
 if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'bar',data:{labels:['EGA','FAB','Aldar','e&','ADNOC','DP World'],datasets:[{label:'Operational (L1)',data:[58,78,65,82,74,69],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4},{label:'Financial (L2)',data:[42,72,62,65,78,62],backgroundColor:'rgba(124,58,237,0.7)',borderRadius:4},{label:'Resilience (L3)',data:[35,52,41,72,58,48],backgroundColor:'rgba(5,150,105,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
-
-// Composite radar chart
 destroyChart('compositeRadar');var cr=document.getElementById('compositeRadarChart');
 if(cr&&cr.offsetParent!==null){var comp=c.composite;charts.compositeRadar=new Chart(cr,{type:'radar',data:{labels:['Website','Social','Media','Employer','Ads','Tech Stack','Brand','Reviews','Registry','Financial','Resilience'],datasets:[{label:c.short,data:[c.services[0].score,c.services[1].score,c.services[2].score,c.services[3].score,c.services[4].score,c.services[5].score,c.services[6].score,c.services[7].score,c.services[8].score,comp.finScore,comp.resScore],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3},{label:'Sector Average',data:[71,65,62,68,58,67,68,64,78,65,55],borderColor:'#9CA3AF',backgroundColor:'rgba(156,163,175,0.05)',borderWidth:1.5,borderDash:[4,4],pointBackgroundColor:'#9CA3AF',pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:20},pointLabels:{font:{size:10,family:"'Inter'"}},grid:{color:gC}}}}})}}
+
+function renderAllCharts(){
+var c=companies[currentCompany];
+var activeTab=getActiveTab();
+if(activeTab==='swftracker')renderSwfFundTable();
+if(typeof Chart==='undefined'){
+  showDashboardMessage('Chart.js failed to load. Narrative sections and tables remain available.', 'error', true);
+  setStatusMessage('Chart library unavailable');
+  return;
+}
+if(activeTab==='benchmarking')runRenderTask('Benchmark charts',function(){renderBenchmarkCharts(c)});
+if(activeTab==='signals')runRenderTask('Signal charts',function(){renderSignalCharts(c)});
+if(activeTab==='arbitrage')runRenderTask('Arbitrage charts',function(){renderArbitrageCharts(c)});
+if(activeTab==='macropanel')runRenderTask('Macro charts',function(){renderMacroCharts()});
+if(activeTab==='swftracker')runRenderTask('SWF charts',function(){renderSwfCharts()});
+if(activeTab==='stress')runRenderTask('Stress charts',function(){renderStressTabCharts()});
+if(activeTab==='composite')runRenderTask('Composite charts',function(){renderCompositeCharts(c)});
+setStatusMessage('Updated '+activeTab+' visuals');
+}
 
 
 // ====== SWF FUND TRACKER DATA + FUNCTIONS ======
@@ -2064,6 +2627,7 @@ function renderSwfFundTable(){
     if(f.length<=10){btn.style.display='none'}
     else{btn.style.display='flex';lbl.textContent=swfTableExpanded?'Show top 10':'View all '+f.length+' funds'}
   }
+  updateTableOverflowIndicators();
 }
 
 function filterFundType(t,btn){
@@ -2168,50 +2732,166 @@ function renderSwfCountryPie(){
 }
 
 // Search overlay
-function openSearch(){document.getElementById('searchOverlay').classList.add('open');document.getElementById('searchInput').value='';document.getElementById('searchInput').focus();renderSearchResults('')}
-function closeSearch(){document.getElementById('searchOverlay').classList.remove('open')}
+function openSearch(){
+  lastFocusedElement=document.activeElement;
+  var overlay=document.getElementById('searchOverlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  document.getElementById('searchInput').value='';
+  renderSearchResults('');
+  document.getElementById('searchInput').focus();
+}
+
+function closeSearch(){
+  var overlay=document.getElementById('searchOverlay');
+  if(!overlay.classList.contains('open'))return;
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden','true');
+  if(lastFocusedElement&&typeof lastFocusedElement.focus==='function')lastFocusedElement.focus();
+}
+
 function filterSearch(q){renderSearchResults(q)}
+
 function renderSearchResults(query){
 var results=document.getElementById('searchResults');var q=query.toLowerCase();
 var html='<div class="search-group-label">Companies</div>';
-Object.keys(companies).forEach(function(k){var c=companies[k];if(!q||c.name.toLowerCase().includes(q)||c.short.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="switchCompany(\''+k+'\')"><div class="sri-icon" style="background:var(--navy);color:#fff">'+c.short+'</div><div><div class="sri-name">'+c.name+'</div><div class="sri-meta">'+c.sector+' | Score: '+c.score+'</div></div></div>'}});
+Object.keys(companies).forEach(function(k){var c=companies[k];if(!q||c.name.toLowerCase().includes(q)||c.short.toLowerCase().includes(q)){html+='<div class="search-result-item" role="button" tabindex="0" onclick="switchCompany(\''+k+'\')"><div class="sri-icon" style="background:var(--navy);color:#fff">'+c.short+'</div><div><div class="sri-name">'+c.name+'</div><div class="sri-meta">'+c.sector+' | Score: '+c.score+'</div></div></div>'}});
 var swfs=[{id:'pif',name:'PIF',m:'Saudi Arabia | $1.15T'},{id:'mubadala',name:'Mubadala',m:'UAE | $350B'},{id:'adq',name:'ADQ',m:'UAE | $157B'},{id:'qia',name:'QIA',m:'Qatar | $560B'}];
 html+='<div class="search-group-label">Sovereign Wealth Funds</div>';
-swfs.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="openEntitySheet(\'swf\',\''+s.id+'\')"><div class="sri-icon" style="background:var(--accent-light);color:var(--accent)">'+s.name.substring(0,3)+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">'+s.m+'</div></div></div>'}});
-// Quick navigation
+swfs.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" role="button" tabindex="0" onclick="closeSearch();openEntitySheet(\'swf\',\''+s.id+'\')"><div class="sri-icon" style="background:var(--accent-light);color:var(--accent)">'+s.name.substring(0,3)+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">'+s.m+'</div></div></div>'}});
 var sections=[{name:'Overview',tab:'overview',icon:'HUB'},{name:'Benchmarking',tab:'benchmarking',icon:'BM'},{name:'Signals',tab:'signals',icon:'SIG'},{name:'Arbitrage',tab:'arbitrage',icon:'ARB'},{name:'Macro Overlay',tab:'macropanel',icon:'MCR'},{name:'SWF Tracker',tab:'swftracker',icon:'SWF'},{name:'Sectoral',tab:'sectoral',icon:'SEC'},{name:'Stress Test',tab:'stress',icon:'STR'},{name:'Composite',tab:'composite',icon:'CMP'}];
 html+='<div class="search-group-label">Navigate</div>';
-sections.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" onclick="switchTab(\''+s.tab+'\',document.querySelector(\'.nav-tab\'));closeSearch()"><div class="sri-icon" style="background:var(--bg);color:var(--text-secondary);font-size:10px">'+s.icon+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">Tab</div></div></div>'}});
+sections.forEach(function(s){if(!q||s.name.toLowerCase().includes(q)){html+='<div class="search-result-item" role="button" tabindex="0" onclick="switchTab(\''+s.tab+'\',document.querySelector(\'.nav-tab[data-tab=&quot;'+s.tab+'&quot;]\'));closeSearch()"><div class="sri-icon" style="background:var(--bg);color:var(--text-secondary);font-size:10px">'+s.icon+'</div><div><div class="sri-name">'+s.name+'</div><div class="sri-meta">Tab</div></div></div>'}});
 results.innerHTML=html}
 
 // Scroll-to-top visibility
 window.addEventListener('scroll',function(){var btn=document.getElementById('scrollTopBtn');if(window.scrollY>400)btn.classList.add('visible');else btn.classList.remove('visible')},{passive:true});
 
-// Keyboard shortcut CMD+K
-document.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(document.getElementById('searchOverlay').classList.contains('open'))closeSearch();else openSearch()}if(e.key==='Escape'){closeSearch();closeBottomSheet()}});
-
 // Bottom sheet
-function openBottomSheet(title,subtitle,contentHtml){document.getElementById('bsBackdrop').classList.add('open');document.getElementById('bottomSheet').classList.add('open');document.getElementById('bsContent').innerHTML='<div class="bottom-sheet-title">'+title+'</div><div class="bottom-sheet-subtitle">'+subtitle+'</div>'+contentHtml}
-function closeBottomSheet(){document.getElementById('bsBackdrop').classList.remove('open');document.getElementById('bottomSheet').classList.remove('open')}
+function openBottomSheet(title,subtitle,contentHtml){
+  lastFocusedElement=document.activeElement;
+  document.getElementById('bsBackdrop').classList.add('open');
+  var sheet=document.getElementById('bottomSheet');
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden','false');
+  document.getElementById('bsContent').innerHTML='<div class="bottom-sheet-title" id="bsTitle">'+title+'</div><div class="bottom-sheet-subtitle" id="bsSubtitle">'+subtitle+'</div>'+contentHtml;
+}
+
+function closeBottomSheet(){
+  var sheet=document.getElementById('bottomSheet');
+  if(!sheet.classList.contains('open'))return;
+  document.getElementById('bsBackdrop').classList.remove('open');
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden','true');
+  if(lastFocusedElement&&typeof lastFocusedElement.focus==='function')lastFocusedElement.focus();
+}
 
 // Entity sheets
 function openEntitySheet(type,id){
 if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | AUM: $1.15T+',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary). EA take-private with Silver Lake ($55B).'},adia:{n:'Abu Dhabi Investment Authority (ADIA)',c:'Abu Dhabi | AUM: $1.1T+',s:'World\'s second-largest SWF. Long-term, diversified global portfolio spanning equities, fixed income, real estate, infrastructure and alternatives. Known for patience and discretion.'},kia:{n:'Kuwait Investment Authority (KIA)',c:'Kuwait | AUM: $1.02T',s:'World\'s oldest SWF (est. 1953). Manages the Future Generations Fund and General Reserve Fund. Major stakes in Mercedes-Benz (~7%), BP. Key investor in Aligned Data Centers ($40B deal with Mubadala/BlackRock).'},mubadala:{n:'Mubadala Investment Company',c:'Abu Dhabi | AUM: $350B+',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target. Key partner in $40B Aligned Data Centers deal.'},adq:{n:'Abu Dhabi Developmental Holding',c:'Abu Dhabi | AUM: $157B',s:'Fast-growing Abu Dhabi state holder. Ras El Hekma $35B Egypt mega-project. Terna Energy JV ($2.9B). $7B global bond. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | AUM: $560B+',s:'Diversified global investor. PSG, Harrods, The Shard. $500B US tech pledge over 10 years. Post-World Cup pivot toward tech and sustainability.'}};
 var s=d[id];if(s)openBottomSheet(s.n,s.c,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+s.s+'</div>')}}
 
-// Macro bottom sheet - first definition (overridden below with live-aware version)
-function openMacroSheet(indicator){
-var d={brent:{t:'Brent Crude Oil',s:'Live via TradingView',c:'Brent crude is the primary GCC fiscal health indicator. Saudi breakeven is ~$91/bbl. See live widget for current price.'},dxy:{t:'DXY (USD Index)',s:'Live via TradingView',c:'Strong dollar creates headwind for GCC non-oil exporters. GCC pegs amplify USD movements.'},yield:{t:'US 10Y Yield',s:'Live via TradingView',c:'Rising yields transmit directly to GCC borrowing costs via the peg.'},gold:{t:'Gold (XAU/USD)',s:'Live via TradingView',c:'Elevated gold signals institutional hedging against tail risks.'},fed:{t:'Fed Funds Rate',s:'Live via TradingView',c:'Hold cycle continues. Rate-sensitive sectors face prolonged pressure.'}};
-var x=d[indicator];if(x)openBottomSheet(x.t,x.s,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+x.c+'</div>')}
-
 // Collapsible toggle
-function toggleCollapsible(header){var content=header.nextElementSibling;header.classList.toggle('expanded');content.classList.toggle('expanded');var icon=header.querySelector('.collapse-icon');if(header.classList.contains('expanded')){icon.style.transform='rotate(45deg)'}else{icon.style.transform='rotate(0deg)'}}
+function toggleCollapsible(header){
+  var content=header.nextElementSibling;
+  if(!content)return;
+  header.classList.toggle('expanded');
+  content.classList.toggle('expanded');
+  var expanded=header.classList.contains('expanded');
+  header.setAttribute('aria-expanded',expanded?'true':'false');
+  content.hidden=!expanded;
+  var icon=header.querySelector('.collapse-icon');
+  if(icon)icon.style.transform=expanded?'rotate(45deg)':'rotate(0deg)';
+}
 
 // Sector card toggle
-function toggleSector(card){card.classList.toggle('expanded')}
+function toggleSector(card){card.classList.toggle('expanded');card.setAttribute('aria-expanded',card.classList.contains('expanded')?'true':'false')}
 
 // Mobile nav
-function mobileNav(tab,btn){document.querySelectorAll('.bottom-nav-item').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});document.getElementById('tab-'+tab).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){renderAllCharts()},50)}
+function mobileNav(tab,btn){activateTab(tab,btn)}
+
+function setTradingViewWidgetState(shell,state,message){
+  shell.dataset.tvState=state;
+  var status=shell.querySelector('.tv-widget-status');
+  var actions=shell.querySelector('.tv-widget-actions');
+  var title=shell.dataset.tvTitle||'Live widget';
+  var copy=message||(state==='loading'?'Loading live widget.':'Live widget unavailable right now.');
+  if(status)status.innerHTML='<strong>'+title+'</strong><span>'+copy+'</span>';
+  if(actions)actions.hidden=state!=='error';
+}
+
+function loadTradingViewWidget(shell){
+  if(!shell||shell.dataset.tvState==='ready'||shell.dataset.tvState==='loading')return;
+  var host=shell.querySelector('.tradingview-widget-container__widget');
+  var config=shell.querySelector('.tv-widget-config');
+  if(!host||!config)return;
+  var injected=shell.querySelector('script[data-tv-injected="true"]');
+  if(injected)injected.remove();
+  host.innerHTML='';
+  setTradingViewWidgetState(shell,'loading','Connecting to TradingView...');
+  var resolved=false;
+  var observer=new MutationObserver(function(){
+    if(host.childNodes.length>0||host.querySelector('iframe'))finalize('ready','Live widget ready');
+  });
+  observer.observe(host,{childList:true,subtree:true});
+  var timeoutId=window.setTimeout(function(){finalize('error','TradingView did not respond in time.')},9000);
+  function finalize(state,message){
+    if(resolved)return;
+    resolved=true;
+    observer.disconnect();
+    window.clearTimeout(timeoutId);
+    setTradingViewWidgetState(shell,state,message);
+    if(state==='error'){
+      showDashboardMessage('A live market widget did not load. Retry is available and TradingView links remain accessible.', 'warning');
+      setStatusMessage('Live widget load failed');
+    }
+  }
+  var script=document.createElement('script');
+  script.type='text/javascript';
+  script.src=shell.dataset.tvScript;
+  script.async=true;
+  script.dataset.tvInjected='true';
+  script.text=config.textContent.trim();
+  script.onerror=function(){finalize('error','Could not reach TradingView.')};
+  shell.appendChild(script);
+}
+
+function ensureWidgetsForTab(tab){
+  document.querySelectorAll('[data-tv-widget]').forEach(function(shell){
+    if(shell.dataset.tvTab===tab)loadTradingViewWidget(shell);
+  });
+}
+
+function retryTradingViewWidget(id){
+  var shell=document.querySelector('[data-tv-widget-id="'+id+'"]');
+  if(!shell)return;
+  shell.dataset.tvState='idle';
+  loadTradingViewWidget(shell);
+}
+
+window.addEventListener('resize',debounce(function(){
+  updateTableOverflowIndicators();
+  scheduleRenderAllCharts();
+},180),{passive:true});
+
+window.addEventListener('error',function(){showDashboardMessage('A dashboard component failed unexpectedly. The rest of the page remains available.', 'warning')});
+window.addEventListener('unhandledrejection',function(){showDashboardMessage('A background request failed. Data may be partially stale.', 'warning')});
+
+document.addEventListener('keydown',function(e){
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(document.getElementById('searchOverlay').classList.contains('open'))closeSearch();else openSearch();return}
+  if(e.key==='Escape'){closeSearch();closeBottomSheet();return}
+  if(e.target.classList.contains('collapsible-header')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();toggleCollapsible(e.target);return}
+  if((e.target.classList.contains('swf-card')||e.target.classList.contains('scenario-card')||e.target.classList.contains('sector-fp-card'))&&(e.key==='Enter'||e.key===' ')){e.preventDefault();e.target.click();return}
+  if(e.target.classList.contains('search-result-item')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();e.target.click();return}
+  if(e.target.classList.contains('nav-tab')&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){
+    e.preventDefault();
+    var currentIndex=TAB_ORDER.indexOf(e.target.dataset.tab);
+    var delta=e.key==='ArrowRight'?1:-1;
+    var nextIndex=(currentIndex+delta+TAB_ORDER.length)%TAB_ORDER.length;
+    var nextTab=document.querySelector('.nav-tab[data-tab="'+TAB_ORDER[nextIndex]+'"]');
+    if(nextTab)activateTab(nextTab.dataset.tab,nextTab);
+  }
+});
 
 
 // ========== MARKET DATA (TradingView handles live prices) ==========
@@ -2246,6 +2926,11 @@ function openMacroSheet(indicator) {
 
 // Count-up animation for score numbers
 function animateCount(el,target,duration){
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var reducedInner=el.querySelector('span[style*="z-index"]');
+    if(reducedInner)reducedInner.textContent=target;else el.textContent=target;
+    return;
+  }
   duration=duration||800;
   var start=0,startTime=null;
   var inner=el.querySelector('span[style*="z-index"]');
@@ -2268,9 +2953,15 @@ function animateHeroScores(){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  enhanceAccessibility();
+  updateTableOverflowIndicators();
   renderAll();
   checkApi();
-  setTimeout(animateHeroScores,200);
+  ensureWidgetsForTab(getActiveTab());
+  requestAnimationFrame(function(){
+    animateHeroScores();
+    window.setTimeout(hidePageLoader,180);
+  });
 });
 </script>
 </body>
