@@ -896,6 +896,116 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <!-- SIGNAL INTELLIGENCE -->
 <div class="tab-content" id="tab-signals">
   <div class="page-premise"><div class="premise-label">Page Premise</div><div class="premise-text">Early warning signals extracted from real-time data collection. Lighthouse audits, social sentiment shifts, hiring patterns, and PR momentum are cross-referenced to surface operational opportunities and risks before they hit the P&amp;L.</div></div>
+
+  <!-- Hero Summary: Active Signals -->
+  <div class="section">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <div class="section-title" style="margin:0">Latest Signal Activity</div>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:100px;background:var(--accent);color:#fff;font-size:12px;font-weight:700;letter-spacing:0.3px"><span style="width:8px;height:8px;border-radius:50%;background:#34d399;display:inline-block;animation:pulse 2s infinite"></span>7 Active Signals</span>
+    </div>
+    <div class="grid-4">
+      <div class="card" style="border-left:3px solid #059669">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px">PIF</span><span class="conviction-badge conv-very-high">Very High</span></div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">New Subsidiary (Alat Electronics)</div>
+        <div style="font-size:11px;color:var(--text-secondary)">$100B+ dedicated electronics entity created</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Conviction 5</span><span style="font-size:10px;color:var(--text-tertiary)">&middot;</span><span style="font-size:10px;color:var(--text-tertiary)">Jan 2026</span></div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--green)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px">ADQ</span><span class="conviction-badge conv-high">High</span></div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">ADQ + Terna Energy JV</div>
+        <div style="font-size:11px;color:var(--text-secondary)">$2.9B joint venture in European renewables</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Conviction 4</span><span style="font-size:10px;color:var(--text-tertiary)">&middot;</span><span style="font-size:10px;color:var(--text-tertiary)">Feb 2026</span></div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--accent)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px">QIA</span><span class="conviction-badge conv-medium-high">Med-High</span></div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">QIA increases VW stake to 17%</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Expanded equity position signals board influence</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Conviction 3</span><span style="font-size:10px;color:var(--text-tertiary)">&middot;</span><span style="font-size:10px;color:var(--text-tertiary)">Mar 2026</span></div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--red)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px">Mubadala</span><span class="conviction-badge conv-exit">Exit Signal</span></div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Mubadala sells Cepsa stake</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Divesting downstream oil &mdash; sector rotation signal</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Conviction -1</span><span style="font-size:10px;color:var(--text-tertiary)">&middot;</span><span style="font-size:10px;color:var(--text-tertiary)">Dec 2025</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signal Conviction Ranking System (expanded by default) -->
+  <div class="section">
+    <div class="card">
+      <div class="collapsible-header expanded" onclick="toggleCollapsible(this)" aria-expanded="true"><div class="card-title" style="margin:0">Signal Conviction Ranking System</div><span class="collapse-icon" style="transform:rotate(45deg)">+</span></div>
+      <div class="collapsible-content expanded">
+        <div class="card-subtitle" style="margin-top:12px">How to interpret sovereign fund signals (6-tier framework)</div>
+        <div style="margin-top:8px">
+          <div class="signal-item"><div class="signal-icon" style="background:#059669;color:#fff;font-size:11px;font-weight:800">5</div><div class="signal-content"><div class="signal-title">New Subsidiary Created <span class="conviction-badge conv-very-high">Very High</span></div><div class="signal-detail">Multi-year commitment, dedicated capital + talent. Example: PIF creates Alat ($100B+ electronics)</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div><div class="signal-content"><div class="signal-title">JV with Global Partner <span class="conviction-badge conv-high">High</span></div><div class="signal-detail">Operational commitment beyond just capital. Example: ADQ + Terna Energy JV</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:800">3</div><div class="signal-content"><div class="signal-title">5%+ Listed Equity Stake <span class="conviction-badge conv-medium-high">Med-High</span></div><div class="signal-detail">Significant position, potential board seat. Track regulatory filings for follow-ons.</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--orange-light);color:var(--orange);font-size:11px;font-weight:800">2</div><div class="signal-content"><div class="signal-title">Bond with Sector Earmark <span class="conviction-badge conv-medium">Medium</span></div><div class="signal-detail">Capital raising signals deployment intent. Check proceeds allocation.</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--border-light);color:var(--text-secondary);font-size:11px;font-weight:800">1</div><div class="signal-content"><div class="signal-title">Public Statement <span class="conviction-badge conv-low">Low</span></div><div class="signal-detail">Aspiration vs. execution gap common. Track if capital follows rhetoric within 12-18 months.</div></div></div>
+          <div class="signal-item"><div class="signal-icon" style="background:var(--red-light);color:var(--red);font-size:11px;font-weight:800">-1</div><div class="signal-content"><div class="signal-title">Position Exit / Subsidiary Dissolved <span class="conviction-badge conv-exit">Exit Signal</span></div><div class="signal-detail">Sector may be out of favor. Check if other SWFs are also pulling back. Fire-sale pricing possible.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signal Feed: Chronological -->
+  <div class="section">
+    <div class="section-header"><div class="section-title">Signal Feed <span class="level-badge level-2">Live</span></div></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:#059669;color:#fff;font-size:11px;font-weight:800">5</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">PIF creates Alat Electronics subsidiary</span><span class="conviction-badge conv-very-high">Very High</span></div><div style="font-size:11px;color:var(--text-secondary)">$100B+ multi-year commitment to electronics manufacturing. Signals structural sector entry, not a portfolio bet.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Jan 2026</div><div style="font-size:10px;color:var(--text-tertiary)">PIF</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">ADQ + Terna Energy form renewable JV</span><span class="conviction-badge conv-high">High</span></div><div style="font-size:11px;color:var(--text-secondary)">$2.9B joint venture targeting European clean energy assets. Operational commitment, not passive capital.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Feb 2026</div><div style="font-size:10px;color:var(--text-tertiary)">ADQ</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:800">3</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">QIA increases Volkswagen stake to 17%</span><span class="conviction-badge conv-medium-high">Med-High</span></div><div style="font-size:11px;color:var(--text-secondary)">Significant equity expansion signals potential board seat push. Monitor for follow-on regulatory filings.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Mar 2026</div><div style="font-size:10px;color:var(--text-tertiary)">QIA</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">Mubadala expands Masdar to 100GW target</span><span class="conviction-badge conv-high">High</span></div><div style="font-size:11px;color:var(--text-secondary)">Aggressive clean energy expansion. Masdar now one of the largest renewable platforms globally.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Jan 2026</div><div style="font-size:10px;color:var(--text-tertiary)">Mubadala</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--orange-light);color:var(--orange);font-size:11px;font-weight:800">2</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">PIF scales back NEOM giga-projects</span><span class="conviction-badge conv-medium">Medium</span></div><div style="font-size:11px;color:var(--text-secondary)">Phased approach signals capital discipline. Watch for reallocation to higher-conviction verticals.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Nov 2025</div><div style="font-size:10px;color:var(--text-tertiary)">PIF</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:800">3</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">QIA takes multiple AI/tech equity positions</span><span class="conviction-badge conv-medium-high">Med-High</span></div><div style="font-size:11px;color:var(--text-secondary)">Cross-portfolio AI thesis emerging. Multiple 5%+ stakes across semiconductor and cloud infra.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Feb 2026</div><div style="font-size:10px;color:var(--text-tertiary)">QIA</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">ADQ acquires LDC food security stake</span><span class="conviction-badge conv-high">High</span></div><div style="font-size:11px;color:var(--text-secondary)">Aggressive food security play. Strategic acquisition aligning with GCC food import dependency thesis.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Dec 2025</div><div style="font-size:10px;color:var(--text-tertiary)">ADQ</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--red-light);color:var(--red);font-size:11px;font-weight:800">-1</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">Mubadala sells Cepsa stake</span><span class="conviction-badge conv-exit">Exit Signal</span></div><div style="font-size:11px;color:var(--text-secondary)">Divesting downstream oil exposure. Sector rotation away from fossil fuels. Fire-sale pricing for contrarians.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Dec 2025</div><div style="font-size:10px;color:var(--text-tertiary)">Mubadala</div></div>
+      </div>
+      <div style="border-bottom:1px solid var(--border-light);padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800">4</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">Mubadala expands Cleveland Clinic Abu Dhabi</span><span class="conviction-badge conv-high">High</span></div><div style="font-size:11px;color:var(--text-secondary)">Healthcare infrastructure buildout continuing. Long-term mandate alignment with Vision 2030 social objectives.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Oct 2025</div><div style="font-size:10px;color:var(--text-tertiary)">Mubadala</div></div>
+      </div>
+      <div style="padding:14px 20px;display:flex;align-items:center;gap:12px">
+        <div class="signal-icon" style="background:var(--border-light);color:var(--text-secondary);font-size:11px;font-weight:800">1</div>
+        <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:2px"><span style="font-size:13px;font-weight:700;color:var(--text-primary)">PIF announces sports entertainment ambition</span><span class="conviction-badge conv-low">Low</span></div><div style="font-size:11px;color:var(--text-secondary)">Public statement on Newcastle and LIV Golf expansion. Track if capital follows rhetoric within 12-18 months.</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:600;color:var(--text-tertiary)">Sep 2025</div><div style="font-size:10px;color:var(--text-tertiary)">PIF</div></div>
+      </div>
+    </div>
+  </div>
+
   <div class="section"><div class="section-header"><div class="section-title"><span class="level-badge level-2">Level 2</span> Contextual Intelligence</div></div>
     <div class="grid-2"><div class="card"><div class="card-title">Signal Timeline</div><div class="card-subtitle" id="ctxTimelineSub">Key events affecting EGA's score trajectory</div><div id="signalTimeline"></div></div><div class="card"><div class="card-title">News Sentiment Analysis</div><div class="card-subtitle">Rolling 30-day sentiment score (-1 to +1)</div><div class="chart-summary" id="sentimentSummary"></div><div class="chart-container-tall"><canvas id="sentimentChart"></canvas></div></div></div></div>
   <div class="section"><div class="grid-3"><div class="card"><div class="card-title">Talent Signals</div><div class="card-subtitle">LinkedIn intelligence proxy</div><div id="talentSignals"></div></div><div class="card"><div class="card-title">Financial Proxies</div><div class="card-subtitle">Estimated from public signals</div><div id="financialSignals"></div></div><div class="card"><div class="card-title">Market Context</div><div class="card-subtitle">Sector and macro factors</div><div id="marketContext"></div></div></div></div>
@@ -1303,8 +1413,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="section">
     <div class="grid-2">
       <div class="card">
-        <div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Signal Conviction Ranking System</div><span class="collapse-icon">+</span></div>
-        <div class="collapsible-content">
+        <div class="collapsible-header expanded" onclick="toggleCollapsible(this)" aria-expanded="true"><div class="card-title" style="margin:0">Signal Conviction Ranking System</div><span class="collapse-icon" style="transform:rotate(45deg)">+</span></div>
+        <div class="collapsible-content expanded">
         <div class="card-subtitle" style="margin-top:12px">How to interpret SWF signals (6-tier framework)</div>
         <div style="margin-top:8px">
           <div class="signal-item"><div class="signal-icon" style="background:#059669;color:#fff;font-size:11px;font-weight:800">5</div><div class="signal-content"><div class="signal-title">New Subsidiary Created <span class="conviction-badge conv-very-high">Very High</span></div><div class="signal-detail">Multi-year commitment, dedicated capital + talent. Example: PIF creates Alat ($100B+ electronics)</div></div></div>

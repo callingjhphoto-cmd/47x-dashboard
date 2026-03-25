@@ -298,14 +298,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <div class="grid-2 section fade-in">
   <div class="card">
-    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Liquidity Cycle &amp; GCC Deployment</div>
-    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">How GCC funds deploy within the global liquidity cycle</div>
-    <div class="macro-placeholder">
-      <h3>Michael Howell Liquidity Cycle Visualization</h3>
-      <p>Placeholder for CrossBorder Capital liquidity data overlay. Will map GCC fund deployment cadence against global liquidity peaks and troughs.</p>
-      <div style="margin-top:16px">
-        <div class="chart-container-tall"><canvas id="liquidityPlaceholder"></canvas></div>
-      </div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Global Liquidity Cycle &amp; GCC Deployment</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">CrossBorder Capital (Michael Howell) &mdash; 65-month cycle model</div>
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="padding:6px 12px;background:var(--red-light);border-radius:6px;font-size:11px;font-weight:600;color:var(--red)">CYCLE PHASE: EARLY CONTRACTION</div>
+      <div style="padding:6px 12px;background:var(--orange-light);border-radius:6px;font-size:11px;font-weight:600;color:var(--orange)">SWF SIGNAL: AMBER &mdash; DEFENSIVE ROTATION</div>
+      <div style="padding:6px 12px;background:var(--accent-light);border-radius:6px;font-size:11px;font-weight:600;color:var(--accent)">PEAK: ~$188.8T (Q3 2025)</div>
+    </div>
+    <div class="chart-container-tall"><canvas id="liquidityPlaceholder"></canvas></div>
+    <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;line-height:1.5">
+      <strong>Howell Cycle Dates:</strong> Trough Oct 2022 &rarr; Peak Q3 2025 (~$188.8T) &rarr; <em>Early contraction now</em> &rarr; Expected trough ~March 2028 (65-month frequency).
+      <strong>Refinancing wall:</strong> $33T+ rolls over in 2026; $40T by 2027. Debt/liquidity ratio exceeds 2.7x danger threshold by 2027.
     </div>
   </div>
   <div class="card">
@@ -357,89 +360,89 @@ var funds = [
     deals:[{q:'Q1 2026',count:5,value:3.8},{q:'Q4 2025',count:6,value:4.1},{q:'Q3 2025',count:4,value:3.2},{q:'Q2 2025',count:5,value:3.6},{q:'Q1 2025',count:5,value:3.4}]},
 
   {rank:4,name:'Qatar Investment Authority (QIA)',short:'QIA',country:'Qatar',aum:526,type:'SWF',tier:1,status:'Expanding',founded:2005,
-    mandate:'Qatar\'s sovereign wealth fund managing the state\'s surplus petroleum revenues. Active global investor with significant stakes in European banking, luxury brands, real estate, and technology.',
-    sectors:{FinancialServices:22,RealEstate:18,Technology:14,Luxury:12,Infrastructure:10,Energy:8,Healthcare:8,Sports:8},
-    investments:[{name:'Barclays',sector:'Financial',value:'Significant stake',year:2008},{name:'Volkswagen Group',sector:'Automotive',value:'17% stake',year:2009},{name:'Harrods',sector:'Retail/Luxury',value:'$2.2B',year:2010},{name:'The Shard',sector:'Real Estate',value:'95% stake',year:2013},{name:'Paris Saint-Germain',sector:'Sports',value:'$100M+',year:2011}],
-    geoFocus:{Europe:40,NorthAmerica:20,AsiaPacific:15,MiddleEast:15,Africa:10},
-    deals:[{q:'Q1 2026',count:8,value:5.5},{q:'Q4 2025',count:10,value:6.8},{q:'Q3 2025',count:7,value:4.2},{q:'Q2 2025',count:9,value:5.9},{q:'Q1 2025',count:8,value:5.1}]},
+    mandate:'Qatar\'s SWF managing LNG surplus revenues. Historically Eurocentric with ~80-90% in Europe/US, now pivoting to Asia (target 20% EM allocation). Pledged $500B to US economy over next decade focused on AI, digital infrastructure, and life sciences. No longer deploys new capital into hydrocarbons (since 2020). 46% of power generation assets in renewables.',
+    sectors:{RealEstateInfra:28,FinancialServices:22,PublicEquities:20,TechMediaHealth:18,FixedIncome:12},
+    investments:[{name:'Volkswagen Group (~17%)',sector:'Automotive',value:'Multi-billion',year:2009},{name:'Barclays (~7%)',sector:'Banking',value:'Multi-billion',year:2008},{name:'Glencore (~8.2%)',sector:'Mining',value:'Multi-billion',year:2012},{name:'Harrods (100%)',sector:'Luxury Retail',value:'\u00a31.5B',year:2010},{name:'The Shard (95%)',sector:'Real Estate',value:'Multi-billion',year:2013},{name:'Canary Wharf',sector:'Real Estate',value:'\u00a32.6B consortium',year:2015},{name:'Heathrow Airport (20%)',sector:'Infrastructure',value:'Multi-billion',year:2012},{name:'J Sainsbury (~26%)',sector:'Retail',value:'Multi-billion',year:2010},{name:'PSG (via QSI)',sector:'Sports',value:'$4B+ current value',year:2011},{name:'Anthropic',sector:'AI',value:'$30B+ total deals',year:2024}],
+    geoFocus:{Europe:45,NorthAmerica:25,MiddleEast:15,AsiaPacific:10,Africa:5},
+    deals:[{q:'Q1 2026',count:9,value:6.5},{q:'Q4 2025',count:11,value:7.8},{q:'Q3 2025',count:8,value:5.2},{q:'Q2 2025',count:10,value:6.9},{q:'Q1 2025',count:9,value:5.1}]},
 
   {rank:5,name:'Investment Corporation of Dubai (ICD)',short:'ICD',country:'UAE',aum:429,type:'SWF',tier:1,status:'Active',founded:2006,
-    mandate:'The principal investment arm of the Government of Dubai. Manages a diversified portfolio including Emirates airline, DEWA, Dubai Airports, and stakes in major global companies. Focuses on sustainable long-term returns.',
-    sectors:{Aviation:20,FinancialServices:18,RealEstate:15,Energy:12,Hospitality:10,Technology:10,Infrastructure:8,Other:7},
-    investments:[{name:'Emirates Group',sector:'Aviation',value:'100% ownership',year:2006},{name:'DEWA',sector:'Utilities',value:'Major stake',year:2006},{name:'Emirates NBD',sector:'Banking',value:'55.7% stake',year:2007},{name:'Dubai Airports',sector:'Infrastructure',value:'100%',year:2006}],
-    geoFocus:{MiddleEast:55,Europe:18,AsiaPacific:12,NorthAmerica:10,Africa:5},
-    deals:[{q:'Q1 2026',count:5,value:3.2},{q:'Q4 2025',count:6,value:3.8},{q:'Q3 2025',count:4,value:2.5},{q:'Q2 2025',count:5,value:3.0},{q:'Q1 2025',count:5,value:2.8}]},
+    mandate:'Principal investment arm of the Government of Dubai. Hybrid developmental fund consolidating Dubai\'s crown jewels: Emirates, Emirates NBD, Emaar, ENOC, Dubai Duty Free, flydubai, DAE. Record AED 67.5B net profit in 2024. 55 investee companies across 86 countries. Expanding into international VC and private equity.',
+    sectors:{BankingFinancial:35,TransportAviation:22,RealEstate:14,Hospitality:17,Industrial:7,OilGas:3,Telecom:2},
+    investments:[{name:'Emirates Group (100%)',sector:'Aviation',value:'AED 119.8B revenue',year:2006},{name:'Emirates NBD (40.92%)',sector:'Banking',value:'AED 1.086T assets',year:2007},{name:'Emaar Properties (22.27%)',sector:'Real Estate',value:'AED 8.8B dividends',year:2006},{name:'Dubai Islamic Bank (28%)',sector:'Banking',value:'Major stake',year:2006},{name:'ENOC (100%)',sector:'Oil & Gas',value:'Full value chain',year:2006},{name:'Dubai Duty Free (100%)',sector:'Retail',value:'Billions annual turnover',year:2006},{name:'flydubai',sector:'Aviation',value:'Full ownership',year:2008},{name:'Borse Dubai (100%)',sector:'Capital Markets',value:'DFM + Nasdaq Dubai',year:2006},{name:'Dubai Aerospace Enterprise',sector:'Aircraft Leasing',value:'Full ownership',year:2019},{name:'du (11.5%)',sector:'Telecom',value:'$800M+',year:2006}],
+    geoFocus:{MiddleEast:65,Europe:12,AsiaPacific:10,NorthAmerica:8,Africa:5},
+    deals:[{q:'Q1 2026',count:6,value:4.2},{q:'Q4 2025',count:7,value:4.8},{q:'Q3 2025',count:5,value:3.5},{q:'Q2 2025',count:6,value:4.0},{q:'Q1 2025',count:6,value:3.8}]},
 
   {rank:6,name:'General Organization for Social Insurance (GOSI)',short:'GOSI',country:'Saudi Arabia',aum:374,type:'Pension',tier:1,status:'Active',founded:1969,
-    mandate:'Saudi Arabia\'s primary social insurance institution. Manages pension and retirement funds for private sector workers. Conservative investment approach with growing allocation to alternatives and international assets.',
-    sectors:{FixedIncome:30,Equities:25,RealEstate:15,PrivateEquity:10,Infrastructure:8,Cash:7,Other:5},
-    investments:[{name:'Saudi Tadawul equities',sector:'Diversified',value:'Large portfolio',year:'Ongoing'},{name:'Saudi real estate assets',sector:'Real Estate',value:'$20B+',year:'Ongoing'},{name:'International fixed income',sector:'Bonds',value:'$50B+',year:'Ongoing'}],
-    geoFocus:{MiddleEast:60,NorthAmerica:15,Europe:12,AsiaPacific:8,Other:5},
-    deals:[{q:'Q1 2026',count:3,value:1.8},{q:'Q4 2025',count:4,value:2.2},{q:'Q3 2025',count:2,value:1.5},{q:'Q2 2025',count:3,value:1.9},{q:'Q1 2025',count:3,value:1.7}]},
+    mandate:'Saudi Arabia\'s unified social insurance system (merged with PPA in 2021). SAR 1.2T in assets managed via Hassana Investment Company. Liability-driven pension fund covering 10M+ contributors. 8th largest public pension globally. Holds ~12% of Saudi GDP in domestic equities. 2024 reforms raised retirement age to 65, extending investable horizon.',
+    sectors:{FixedIncome:50,PublicEquities:17,PrivateEquity:7,Infrastructure:5,RealEstate:6,Cash:15},
+    investments:[{name:'Aramco Gas Pipelines (49% consortium)',sector:'Infrastructure',value:'$15.5B',year:2021},{name:'Tadawul blue-chips (Al Rajhi, SNB, SABIC, STC)',sector:'Public Equities',value:'$129B',year:'Ongoing'},{name:'TPG Rise Climate',sector:'Climate/PE',value:'$1.5B commitment',year:2023},{name:'Berain Water (40%)',sector:'Consumer/FMCG',value:'Undisclosed',year:2025},{name:'AviLease (PIF JV)',sector:'Aviation Finance',value:'JV partnership',year:2023},{name:'Maarif Education',sector:'Education',value:'Significant stake',year:2022}],
+    geoFocus:{MiddleEast:65,NorthAmerica:14,Europe:10,AsiaPacific:8,Other:3},
+    deals:[{q:'Q1 2026',count:4,value:2.8},{q:'Q4 2025',count:5,value:3.2},{q:'Q3 2025',count:3,value:2.1},{q:'Q2 2025',count:4,value:2.9},{q:'Q1 2025',count:4,value:2.4}]},
 
   {rank:7,name:'Mubadala Investment Company',short:'Mubadala',country:'UAE',aum:330,type:'SWF',tier:1,status:'Expanding',founded:2002,
-    mandate:'Abu Dhabi\'s strategic investment arm. Operates across six continents with a mandate to generate sustainable financial returns. Key sectors include aerospace, ICT, semiconductors, metals & mining, and healthcare. Portfolio includes GlobalFoundries, Cleveland Clinic Abu Dhabi, and Cepsa.',
-    sectors:{Technology:22,Aerospace:14,Healthcare:12,Energy:12,FinancialServices:10,MetalsMining:10,RealEstate:8,LifeSciences:6,Other:6},
-    investments:[{name:'GlobalFoundries',sector:'Semiconductors',value:'$20B+ invested',year:2009},{name:'Cleveland Clinic Abu Dhabi',sector:'Healthcare',value:'$2B',year:2015},{name:'Cepsa',sector:'Energy',value:'Major stake',year:2011},{name:'Silver Lake Partners',sector:'PE/Tech',value:'$2B+',year:2020},{name:'G42',sector:'AI/Technology',value:'Significant stake',year:2023}],
-    geoFocus:{NorthAmerica:30,MiddleEast:25,Europe:20,AsiaPacific:18,Africa:7},
-    deals:[{q:'Q1 2026',count:9,value:6.1},{q:'Q4 2025',count:11,value:7.5},{q:'Q3 2025',count:8,value:5.2},{q:'Q2 2025',count:10,value:6.8},{q:'Q1 2025',count:9,value:5.9}]},
+    mandate:'Abu Dhabi\'s strategic investment arm (AED 1.2T AUM). Dual mandate: financial returns + economic diversification. 10.1% five-year annualized return. 40% in PE, migrating from public to private markets. Co-founded MGX ($100B AI fund) with G42. Deployed $32.5B in 2024 alone. Plans to double Asia exposure to 25%. Private credit portfolio at ~$20B via Apollo, Ares, Carlyle, KKR.',
+    sectors:{PrivateEquity:40,PublicEquity:23,RealEstateInfra:17,Alternatives:15,Credit:5},
+    investments:[{name:'GlobalFoundries (81.46%)',sector:'Semiconductors',value:'$20B+ invested',year:2009},{name:'MGX / GAIIP ($30B AI fund)',sector:'AI Infrastructure',value:'$30B (w/ BlackRock, MSFT)',year:2024},{name:'Cleveland Clinic Abu Dhabi',sector:'Healthcare',value:'$2B',year:2015},{name:'Cepsa',sector:'Energy/Petrochemicals',value:'Major stake',year:2011},{name:'Silver Lake Partners',sector:'PE/Tech',value:'$2B+',year:2020},{name:'Strata Manufacturing',sector:'Aerospace',value:'Full ownership',year:2009},{name:'Emirates Global Aluminium (JV)',sector:'Industrial',value:'Major stake',year:2013},{name:'Masdar (33%)',sector:'Clean Energy',value:'100GW target by 2030',year:2006},{name:'Space42',sector:'Space/AI',value:'Yahsat+Bayanat merger',year:2024},{name:'Stargate Project (via MGX)',sector:'AI',value:'Co-investor w/ OpenAI',year:2025}],
+    geoFocus:{NorthAmerica:41,MiddleEast:23,Europe:16,AsiaPacific:15,LatinAmerica:2,Other:3},
+    deals:[{q:'Q1 2026',count:11,value:8.1},{q:'Q4 2025',count:13,value:9.5},{q:'Q3 2025',count:10,value:7.2},{q:'Q2 2025',count:12,value:8.8},{q:'Q1 2025',count:11,value:7.9}]},
 
-  {rank:8,name:'Hassana Investment Company',short:'Hassana',country:'Saudi Arabia',aum:320,type:'Pension',tier:1,status:'Active',founded:2009,
-    mandate:'The investment arm of GOSI, managing Saudi Arabia\'s largest pension pool. Focus on long-term returns through diversified global portfolio spanning public equities, fixed income, real estate, and alternatives.',
-    sectors:{PublicEquities:30,FixedIncome:25,RealEstate:15,PrivateEquity:12,Alternatives:10,Cash:8},
-    investments:[{name:'Saudi Aramco IPO',sector:'Energy',value:'Anchor investor',year:2019},{name:'Global equity portfolio',sector:'Diversified',value:'$100B+',year:'Ongoing'},{name:'Saudi real estate',sector:'Real Estate',value:'$25B+',year:'Ongoing'}],
-    geoFocus:{MiddleEast:50,NorthAmerica:20,Europe:15,AsiaPacific:10,Other:5},
-    deals:[{q:'Q1 2026',count:4,value:2.5},{q:'Q4 2025',count:5,value:3.0},{q:'Q3 2025',count:3,value:2.1},{q:'Q2 2025',count:4,value:2.6},{q:'Q1 2025',count:4,value:2.3}]},
+  {rank:8,name:'Hassana Investment Company',short:'Hassana',country:'Saudi Arabia',aum:320,type:'Pension',tier:1,status:'Active',founded:2014,
+    mandate:'Independent investment manager for GOSI, managing SAR 1.2T ($320B) pension assets. Top 10 global pension manager. Liability-driven strategy prioritizing stable, long-term yield. New CEO Sabty Al-Sabty (ex-Riyad Capital) from Dec 2025. Aggressive pivot into alternatives (~18% of portfolio), private credit, and climate-focused investments.',
+    sectors:{FixedIncome:46,PublicEquities:21,PrivateEquity:8,Infrastructure:6,RealEstate:5,Cash:14},
+    investments:[{name:'Aramco Gas Pipelines (consortium)',sector:'Infrastructure',value:'$15.5B (w/ BlackRock)',year:2021},{name:'TPG Rise Climate',sector:'Climate PE',value:'$1.5B anchor LP',year:2023},{name:'Berain Water (40%)',sector:'Consumer',value:'Undisclosed',year:2025},{name:'Franklin Templeton Saudi Credit',sector:'Private Credit',value:'$150M MoU',year:2025},{name:'State Street Saudi ETFs',sector:'Fixed Income',value:'MoU partnership',year:2025},{name:'Maarif Education',sector:'Education',value:'Significant stake',year:2022},{name:'Tadawul Blue-Chips',sector:'Public Equities',value:'$129B+ domestic',year:'Ongoing'},{name:'DP World',sector:'Logistics',value:'Strategic exposure',year:2022}],
+    geoFocus:{MiddleEast:55,NorthAmerica:18,Europe:13,AsiaPacific:10,Other:4},
+    deals:[{q:'Q1 2026',count:5,value:3.5},{q:'Q4 2025',count:6,value:4.0},{q:'Q3 2025',count:4,value:2.8},{q:'Q2 2025',count:5,value:3.6},{q:'Q1 2025',count:5,value:3.3}]},
 
   {rank:9,name:'Royal Group',short:'Royal',country:'UAE',aum:164,type:'Family Office',tier:1,status:'Active',founded:1997,
-    mandate:'Abu Dhabi-based conglomerate controlled by Sheikh Tahnoun bin Zayed. Diversified investments across technology, healthcare, construction, real estate, media, and financial services. Increasingly active in AI and cybersecurity.',
-    sectors:{Technology:20,Construction:18,Healthcare:14,RealEstate:14,FinancialServices:12,Media:8,FoodBeverage:8,Other:6},
-    investments:[{name:'G42',sector:'AI/Technology',value:'Major stake',year:2018},{name:'International Golden Group',sector:'Defence/Contracting',value:'Full ownership',year:2000},{name:'Multiply Group',sector:'Holding Company',value:'Listed entity',year:2021},{name:'PAX Global Technology',sector:'Technology',value:'Major stake',year:2019}],
-    geoFocus:{MiddleEast:60,AsiaPacific:15,Europe:12,NorthAmerica:8,Africa:5},
-    deals:[{q:'Q1 2026',count:5,value:2.8},{q:'Q4 2025',count:6,value:3.2},{q:'Q3 2025',count:4,value:2.1},{q:'Q2 2025',count:5,value:2.6},{q:'Q1 2025',count:5,value:2.4}]},
+    mandate:'Private conglomerate of Sheikh Tahnoun bin Zayed (UAE National Security Advisor, Chairman of ADIA, ADQ, FAB, G42, MGX). Controls ~63.5% of ADX market cap via IHC. Not a traditional SWF but a family office managing ~60 companies and 20,000+ employees. Nexus of finance, intelligence, and statecraft. $1.5B Microsoft-G42 deal required severing Chinese tech ties.',
+    sectors:{Technology:25,Financial:18,Construction:14,Healthcare:12,RealEstate:10,FoodBeverage:8,Media:7,Other:6},
+    investments:[{name:'International Holding Company (61%)',sector:'Conglomerate',value:'~$240B market cap',year:2019},{name:'G42 (AI)',sector:'AI/Technology',value:'$1.5B MSFT investment',year:2024},{name:'First Abu Dhabi Bank (Chair)',sector:'Banking',value:'UAE\'s largest bank',year:2017},{name:'PAX Global Technology',sector:'Fintech Hardware',value:'Major stake',year:2019},{name:'Multiply Group',sector:'Holding Company',value:'Listed on ADX',year:2021},{name:'World Liberty Financial (crypto)',sector:'Digital Assets',value:'Undisclosed',year:2025},{name:'Zambia Critical Minerals',sector:'Mining',value:'Strategic investment',year:2025}],
+    geoFocus:{MiddleEast:55,AsiaPacific:18,Europe:12,NorthAmerica:8,Africa:7},
+    deals:[{q:'Q1 2026',count:7,value:3.8},{q:'Q4 2025',count:8,value:4.2},{q:'Q3 2025',count:6,value:3.1},{q:'Q2 2025',count:7,value:3.6},{q:'Q1 2025',count:7,value:3.4}]},
 
-  {rank:10,name:'ADQ',short:'ADQ',country:'UAE',aum:157,type:'SWF',tier:1,status:'Expanding',founded:2018,
-    mandate:'Abu Dhabi\'s newest sovereign wealth fund focused on transforming Abu Dhabi into a globally competitive economy. Manages a portfolio of major national enterprises including airports, utilities, food, and logistics. Aggressive acquisition strategy.',
-    sectors:{Utilities:18,FoodAgriculture:16,Logistics:14,Healthcare:12,RealEstate:10,Financial:10,Energy:10,Technology:10},
-    investments:[{name:'Abu Dhabi Airports',sector:'Infrastructure',value:'Full ownership',year:2020},{name:'TAQA',sector:'Utilities/Energy',value:'Major stake',year:2020},{name:'Louis Dreyfus Company',sector:'Agriculture',value:'45% stake',year:2021},{name:'Etihad Rail',sector:'Infrastructure',value:'Stake',year:2022}],
-    geoFocus:{MiddleEast:50,Africa:15,AsiaPacific:15,Europe:12,NorthAmerica:8},
-    deals:[{q:'Q1 2026',count:8,value:4.5},{q:'Q4 2025',count:10,value:5.8},{q:'Q3 2025',count:7,value:4.0},{q:'Q2 2025',count:9,value:5.1},{q:'Q1 2025',count:8,value:4.3}]},
+  {rank:10,name:'ADQ',short:'ADQ',country:'UAE',aum:263,type:'SWF',tier:1,status:'Expanding',founded:2018,
+    mandate:'Abu Dhabi\'s developmental SWF grown from $117B to ~$263B since 2018. "Cluster ecosystem" approach connecting cross-sector companies. Being consolidated into L\'imad Holding Company in 2026. Key bilateral diplomacy tool: $35B Ras El-Hekma deal in Egypt, $300M Turkey tech fund. Controls Abu Dhabi\'s food security, utilities, transport, and logistics infrastructure.',
+    sectors:{EnergyUtilities:22,FoodAgriculture:18,TransportLogistics:20,Healthcare:12,Financial:10,RealEstate:8,Technology:10},
+    investments:[{name:'AD Ports Group',sector:'Logistics',value:'Controlling stake (IPO 2022)',year:2018},{name:'Etihad Airways',sector:'Aviation',value:'Full ownership',year:2022},{name:'TAQA',sector:'Utilities',value:'Major stake',year:2020},{name:'Louis Dreyfus Company (45%)',sector:'Agriculture',value:'Multi-billion',year:2021},{name:'Etihad Rail',sector:'Infrastructure',value:'$13B railway network',year:2020},{name:'Aramex (63.16%)',sector:'Logistics',value:'Controlling stake',year:2022},{name:'Ras El-Hekma Egypt',sector:'Real Estate/Infra',value:'$35B',year:2024},{name:'Energy Capital Partners JV',sector:'Energy',value:'$25B partnership',year:2024},{name:'ENEC/Barakah Nuclear',sector:'Nuclear Energy',value:'Full ownership',year:2020},{name:'Agthia + Al Dahra',sector:'Food Security',value:'Full value chain',year:2020}],
+    geoFocus:{MiddleEast:55,Africa:15,AsiaPacific:12,Europe:10,NorthAmerica:8},
+    deals:[{q:'Q1 2026',count:10,value:6.5},{q:'Q4 2025',count:12,value:7.8},{q:'Q3 2025',count:9,value:5.5},{q:'Q2 2025',count:11,value:6.8},{q:'Q1 2025',count:10,value:5.8}]},
 
   // TIER 2
-  {rank:11,name:'Lunate',short:'Lunate',country:'UAE',aum:115,type:'IHC',tier:2,status:'Expanding',founded:2022,
-    mandate:'Abu Dhabi-based alternative asset management firm spun out of Mubadala. Manages private equity, credit, and infrastructure assets with a focus on value creation across global markets. Rapidly growing platform.',
-    sectors:{PrivateEquity:35,Credit:20,Infrastructure:18,Technology:12,RealEstate:10,Other:5},
-    investments:[{name:'Fortress Investment Group',sector:'Alt. Asset Mgmt',value:'$3.3B acquisition',year:2023},{name:'Various PE portfolio',sector:'Diversified',value:'$50B+',year:'Ongoing'}],
-    geoFocus:{NorthAmerica:35,Europe:25,MiddleEast:20,AsiaPacific:15,Other:5},
-    deals:[{q:'Q1 2026',count:6,value:3.2},{q:'Q4 2025',count:7,value:4.0},{q:'Q3 2025',count:5,value:2.8},{q:'Q2 2025',count:6,value:3.4},{q:'Q1 2025',count:5,value:2.9}]},
+  {rank:11,name:'Lunate',short:'Lunate',country:'UAE',aum:115,type:'IHC',tier:2,status:'Expanding',founded:2023,
+    mandate:'Independent partner-led alternative investment manager. NOT a Mubadala spin-out; formed from Chimera Investment (Royal Group) + ADQ alternative portfolios. $50B at launch, doubled to $115B by 2026. Deploying $8-10B annually. New Executive Chairman Mohamed Hassan Alsuwaidi (ex-ADQ CEO). Manages ALTERRA ($30B climate fund) and Blue Owl GP stakes JV ($3B).',
+    sectors:{PrivateEquity:30,Credit:18,RealAssets:15,GPStakes:12,PublicEquities:10,ClimateInfra:10,VentureCapital:5},
+    investments:[{name:'Brevan Howard (minority)',sector:'Hedge Funds',value:'$2B strategic capital',year:2025},{name:'ADNOC Oil Pipelines (40%)',sector:'Infrastructure',value:'Multi-billion',year:2024},{name:'Blue Owl GP Stakes JV',sector:'GP Stakes',value:'$3B fund',year:2024},{name:'ALTERRA Climate Fund',sector:'Climate Finance',value:'$30B',year:2023},{name:'Azura Partners',sector:'Wealth Management',value:'Stake acquired',year:2025},{name:'ICD Brookfield Place',sector:'Real Estate',value:'Significant stake',year:2024},{name:'42XFund (China)',sector:'Asia Tech',value:'China-focused fund',year:2024},{name:'Linden Capital Partners',sector:'Healthcare PE',value:'Minority stake',year:2024}],
+    geoFocus:{NorthAmerica:32,Europe:22,MiddleEast:25,AsiaPacific:16,Other:5},
+    deals:[{q:'Q1 2026',count:8,value:4.2},{q:'Q4 2025',count:9,value:5.0},{q:'Q3 2025',count:7,value:3.8},{q:'Q2 2025',count:8,value:4.4},{q:'Q1 2025',count:7,value:3.9}]},
 
-  {rank:12,name:'SNB Capital',short:'SNBCap',country:'Saudi Arabia',aum:64,type:'IHC',tier:2,status:'Active',founded:2007,
-    mandate:'The investment banking and asset management arm of Saudi National Bank. Provides brokerage, asset management, and advisory services. Significant manager of Saudi equity and fixed income portfolios.',
-    sectors:{PublicEquities:35,FixedIncome:25,RealEstate:15,PrivateEquity:10,Alternatives:10,Cash:5},
-    investments:[{name:'Saudi Tadawul equities',sector:'Public Markets',value:'Large AUM',year:'Ongoing'},{name:'Saudi fixed income',sector:'Bonds',value:'$15B+',year:'Ongoing'}],
-    geoFocus:{MiddleEast:70,NorthAmerica:12,Europe:10,AsiaPacific:5,Other:3},
-    deals:[{q:'Q1 2026',count:3,value:1.2},{q:'Q4 2025',count:4,value:1.5},{q:'Q3 2025',count:2,value:0.9},{q:'Q2 2025',count:3,value:1.1},{q:'Q1 2025',count:3,value:1.0}]},
+  {rank:12,name:'SNB Capital',short:'SNBCap',country:'Saudi Arabia',aum:78,type:'IHC',tier:2,status:'Active',founded:2007,
+    mandate:'Largest asset manager in Saudi Arabia (22.1% market share, SAR 294.3B AUM). Investment arm of Saudi National Bank (PIF owns 37.2% of parent). World\'s largest Shariah-compliant asset manager. 50%+ IPO market share, 65%+ debt capital markets share. Launched Market Access Services in 2026 to facilitate foreign institutional investment.',
+    sectors:{PublicEquities:30,FixedIncomeSukuk:27,MoneyMarket:18,RealEstate:10,AlternativeAssets:10,WaqfEndowments:5},
+    investments:[{name:'Al Rajhi Bank (core holding)',sector:'Islamic Banking',value:'14.71% of flagship fund',year:'Ongoing'},{name:'SABIC',sector:'Petrochemicals',value:'10.92% of flagship fund',year:'Ongoing'},{name:'STC',sector:'Telecom',value:'7.63% of flagship fund',year:'Ongoing'},{name:'AlAhli REIT Fund',sector:'Real Estate',value:'Income-generating properties',year:2017},{name:'Edmond de Rothschild JV',sector:'Infrastructure Debt',value:'Strategic partnership',year:2024},{name:'Saudi Aramco IPO (advisor)',sector:'Investment Banking',value:'Lead advisor',year:2019}],
+    geoFocus:{MiddleEast:75,NorthAmerica:10,Europe:8,AsiaPacific:4,Other:3},
+    deals:[{q:'Q1 2026',count:4,value:1.8},{q:'Q4 2025',count:5,value:2.1},{q:'Q3 2025',count:3,value:1.4},{q:'Q2 2025',count:4,value:1.7},{q:'Q1 2025',count:4,value:1.5}]},
 
   {rank:13,name:'Oman Investment Authority (OIA)',short:'OIA',country:'Oman',aum:53,type:'SWF',tier:2,status:'Active',founded:2020,
-    mandate:'Oman\'s unified sovereign wealth fund formed by merging the State General Reserve Fund and Oman Investment Fund. Focuses on economic diversification aligned with Oman Vision 2040. Invests in energy transition, logistics, tourism, and technology.',
-    sectors:{Energy:25,Logistics:15,Tourism:12,RealEstate:12,FinancialServices:10,Mining:10,Technology:8,Other:8},
-    investments:[{name:'OQ Energy',sector:'Energy',value:'Full ownership',year:2020},{name:'Omantel',sector:'Telecom',value:'Major stake',year:2020},{name:'Duqm Special Economic Zone',sector:'Infrastructure',value:'Strategic investment',year:2021}],
-    geoFocus:{MiddleEast:55,AsiaPacific:18,Europe:12,Africa:10,NorthAmerica:5},
-    deals:[{q:'Q1 2026',count:3,value:1.0},{q:'Q4 2025',count:4,value:1.3},{q:'Q3 2025',count:2,value:0.7},{q:'Q2 2025',count:3,value:0.9},{q:'Q1 2025',count:3,value:0.8}]},
+    mandate:'Oman\'s unified SWF (merged SGRF + OIF in 2020, Royal Decree 61/2020). Three portfolios: National Development Fund (domestic SOEs), Future Generations Fund (international, 6.6% return 2024), and Future Fund Oman ($5.2B for non-oil FDI). 61.3% domestic / 38.7% international. Manages 160+ state enterprises across 50+ countries. Invested in xAI (Elon Musk).',
+    sectors:{Energy:40,TransportLogistics:15,FinancialServices:10,Mining:10,Tourism:8,Technology:7,RealEstate:5,FoodAg:5},
+    investments:[{name:'OQ Group',sector:'Energy',value:'Full ownership',year:2020},{name:'Omantel',sector:'Telecom',value:'Major stake',year:2020},{name:'Bank Muscat',sector:'Banking',value:'Strategic stake',year:2020},{name:'Sohar PolySilicon Plant',sector:'Semiconductors',value:'World\'s largest outside China',year:2024},{name:'IDG Oman Sustainable Fund',sector:'Clean Tech/EV',value:'$200M (w/ IDG Capital)',year:2024},{name:'Templewater Oman Fund',sector:'Industrial Localization',value:'$200M',year:2024},{name:'xAI',sector:'AI',value:'Early investor',year:2024},{name:'Duqm Special Economic Zone',sector:'Infrastructure',value:'Strategic',year:2020}],
+    geoFocus:{Oman:61,NorthAmerica:12,Europe:10,AsiaPacific:10,Other:7},
+    deals:[{q:'Q1 2026',count:5,value:1.8},{q:'Q4 2025',count:6,value:2.3},{q:'Q3 2025',count:4,value:1.5},{q:'Q2 2025',count:5,value:1.9},{q:'Q1 2025',count:4,value:1.4}]},
 
-  {rank:14,name:'Investcorp',short:'Investcorp',country:'Bahrain',aum:53,type:'IHC',tier:2,status:'Active',founded:1982,
-    mandate:'Bahrain-headquartered global alternative investment firm. Manages investments across private equity, real estate, credit, and absolute return strategies. One of the oldest alternative investment firms in the MENA region.',
-    sectors:{PrivateEquity:30,RealEstate:25,Credit:20,AbsoluteReturn:15,Technology:10},
-    investments:[{name:'Tiffany & Co (historical)',sector:'Luxury',value:'$1.5B (exited)',year:1984},{name:'Gucci (historical)',sector:'Luxury',value:'$300M (exited)',year:1993},{name:'US real estate portfolio',sector:'Real Estate',value:'$5B+',year:'Ongoing'}],
-    geoFocus:{NorthAmerica:40,Europe:25,MiddleEast:20,AsiaPacific:10,Other:5},
-    deals:[{q:'Q1 2026',count:4,value:1.5},{q:'Q4 2025',count:5,value:1.8},{q:'Q3 2025',count:3,value:1.2},{q:'Q2 2025',count:4,value:1.4},{q:'Q1 2025',count:4,value:1.3}]},
+  {rank:14,name:'Investcorp',short:'Investcorp',country:'Bahrain',aum:60,type:'IHC',tier:2,status:'Active',founded:1982,
+    mandate:'Premier GCC-linked global alternative investment firm ($53-60B AUM). Founded by Nemir Kirdar in 1982 to bridge Gulf capital with Western opportunities. Mubadala owns 20% (since 2016). Famous for historic Tiffany, Gucci, Saks Fifth Avenue acquisitions. Now structured across PE, Real Assets, Global Credit, and GP Stakes. 14 offices globally, 500+ professionals.',
+    sectors:{PrivateEquity:28,RealEstate:22,GlobalCredit:25,AbsoluteReturn:12,Infrastructure:8,GPStakes:5},
+    investments:[{name:'Tiffany & Co (historical)',sector:'Luxury',value:'$1.5B (exited)',year:1984},{name:'Gucci (historical)',sector:'Luxury',value:'$300M (exited)',year:1993},{name:'US Industrial Real Estate',sector:'Logistics RE',value:'$5B+ portfolio',year:'Ongoing'},{name:'European Tech/Services PE',sector:'Private Equity',value:'EUR 10-40M EBITDA targets',year:'Ongoing'},{name:'India mid-market PE',sector:'Private Equity',value:'$1B+ deployed',year:2018},{name:'CLO Portfolio',sector:'Credit',value:'Major platform',year:'Ongoing'},{name:'GP Staking Operations',sector:'Financial Services',value:'Growing platform',year:2023}],
+    geoFocus:{NorthAmerica:38,Europe:28,MiddleEast:18,AsiaPacific:12,Other:4},
+    deals:[{q:'Q1 2026',count:6,value:2.2},{q:'Q4 2025',count:7,value:2.5},{q:'Q3 2025',count:5,value:1.8},{q:'Q2 2025',count:6,value:2.1},{q:'Q1 2025',count:5,value:1.9}]},
 
-  {rank:15,name:'Dubai Holding',short:'DH',country:'UAE',aum:35,type:'IHC',tier:2,status:'Active',founded:2004,
-    mandate:'A diversified global investment holding company with operations and investments in hospitality, real estate, media, ICT, and design. Wholly owned by His Highness Sheikh Mohammed bin Rashid Al Maktoum.',
-    sectors:{RealEstate:30,Hospitality:20,Media:15,Technology:12,Financial:10,Design:8,Other:5},
-    investments:[{name:'Jumeirah Group',sector:'Hospitality',value:'Full ownership',year:2004},{name:'TECOM Group',sector:'Business Parks',value:'Major stake',year:2004},{name:'Dubai Properties',sector:'Real Estate',value:'Full ownership',year:2004}],
-    geoFocus:{MiddleEast:60,Europe:15,AsiaPacific:12,NorthAmerica:8,Africa:5},
-    deals:[{q:'Q1 2026',count:3,value:0.8},{q:'Q4 2025',count:4,value:1.2},{q:'Q3 2025',count:2,value:0.6},{q:'Q2 2025',count:3,value:0.9},{q:'Q1 2025',count:3,value:0.7}]},
+  {rank:15,name:'Dubai Holding',short:'DH',country:'UAE',aum:136,type:'IHC',tier:2,status:'Expanding',founded:2004,
+    mandate:'Personal investment portfolio of Sheikh Mohammed bin Rashid. Massively expanded via 2024 merger of Nakheel (Palm Jumeirah) and Meydan, growing total assets to AED 500B+ (~$136B). Operates 53 hotels, runs Jumeirah Group (31 properties incl. Burj Al Arab). Controls TECOM Group free zones (100K+ professionals). JV with Palantir (Aither). Strategic JV with Aldar Properties. IPO of Dubai Residential REIT (May 2025).',
+    sectors:{RealEstate:40,Hospitality:22,AssetManagement:12,Entertainment:10,Technology:8,Financial:8},
+    investments:[{name:'Jumeirah Group (31 hotels)',sector:'Luxury Hospitality',value:'Burj Al Arab flagship',year:2004},{name:'TECOM Group (majority)',sector:'Free Zones/Tech Parks',value:'DIC, DMC, d3',year:2004},{name:'Nakheel + Meydan (absorbed)',sector:'Real Estate',value:'Palm Jumeirah, World Islands',year:2024},{name:'Dubai Properties + Meraas',sector:'Real Estate',value:'JBR, Business Bay, Bluewaters',year:2004},{name:'Emirates NBD (14.84% via ICD transfer)',sector:'Banking',value:'$Multi-billion',year:2023},{name:'Emaar Properties (~7.5%)',sector:'Real Estate',value:'Via Creek Harbour deal',year:2024},{name:'Westin Paris Vend\u00f4me (100%)',sector:'Hospitality',value:'Full ownership',year:2024},{name:'Aither (Palantir JV)',sector:'AI/Data',value:'Strategic JV',year:2025},{name:'Global Village',sector:'Entertainment',value:'Millions annual visitors',year:2004}],
+    geoFocus:{MiddleEast:68,Europe:12,AsiaPacific:10,NorthAmerica:5,Africa:5},
+    deals:[{q:'Q1 2026',count:5,value:2.5},{q:'Q4 2025',count:6,value:3.2},{q:'Q3 2025',count:4,value:2.0},{q:'Q2 2025',count:5,value:2.8},{q:'Q1 2025',count:5,value:2.2}]},
 
   {rank:16,name:'Al Rajhi Capital',short:'AlRajhi',country:'Saudi Arabia',aum:33,type:'IHC',tier:2,status:'Active',founded:2007,
     mandate:'Investment banking and asset management subsidiary of Al Rajhi Bank. Provides Sharia-compliant investment solutions, brokerage, and asset management. Major player in Saudi capital markets.',
