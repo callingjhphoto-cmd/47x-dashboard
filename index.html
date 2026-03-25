@@ -328,7 +328,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .glossary-item{padding:16px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--navy)}
 .glossary-term{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
 .glossary-def{font-size:12px;color:var(--text-secondary);line-height:1.5}
-@media(max-width:768px){.glossary-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.glossary-grid{grid-template-columns:1fr}.dim-explainer-grid{grid-template-columns:1fr}}
 
 /* NEW STYLES for Macro Overlay, SWF, Sectoral, Stress, Composite tabs */
 .macro-indicator-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;position:relative;overflow:hidden}
@@ -597,6 +597,50 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .macro-indicator-card{cursor:pointer;transition:all 0.25s}
 .macro-indicator-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
 
+/* Score Tooltip */
+.score-tooltip-wrap{position:relative;display:inline-flex;align-items:center;gap:4px}
+.score-tooltip-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--border-light);color:var(--text-tertiary);font-size:10px;font-weight:700;font-style:italic;font-family:Georgia,serif;cursor:help;transition:all 0.2s;flex-shrink:0}
+.score-tooltip-icon:hover{background:var(--accent-light);color:var(--accent)}
+.score-tooltip-popup{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:260px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);font-size:12px;color:var(--text-secondary);line-height:1.5;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:50}
+.score-tooltip-popup::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--surface)}
+.score-tooltip-wrap:hover .score-tooltip-popup{opacity:1;pointer-events:auto}
+.score-tooltip-popup strong{color:var(--text-primary);font-weight:700}
+
+/* Score Band Legend */
+.score-band-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.score-band-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;background:var(--bg)}
+.score-band-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* Dimension Explainer */
+.dim-explainer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.dim-explainer-item{padding:12px 14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--navy)}
+.dim-explainer-item .dei-name{font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.dim-explainer-item .dei-desc{font-size:11px;color:var(--text-secondary);line-height:1.4}
+.dim-explainer-item .dei-weight{font-size:10px;font-weight:700;color:var(--accent);margin-top:4px;text-transform:uppercase;letter-spacing:0.3px}
+
+/* EGA Dimension Analysis */
+.ega-dim-analysis{margin-top:10px}
+.ega-dim-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light)}
+.ega-dim-row:last-child{border-bottom:none}
+.ega-dim-bar-wrap{flex:1;min-width:0}
+.ega-dim-name{font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.ega-dim-track{height:22px;background:var(--border-light);border-radius:6px;overflow:hidden;position:relative}
+.ega-dim-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;color:#fff;transition:width 1s ease}
+.ega-dim-comment{font-size:11px;color:var(--text-secondary);line-height:1.4;margin-top:4px}
+
+/* Arbitrage Matrix */
+.arb-matrix-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+.arb-matrix-table thead th{text-align:left;padding:12px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border)}
+.arb-matrix-table tbody td{padding:12px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.arb-matrix-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
+.arb-matrix-table tbody tr:hover{background:var(--accent-light)}
+.arb-gap-positive{color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace}
+.arb-gap-negative{color:var(--red);font-weight:700;font-family:'JetBrains Mono',monospace}
+.arb-signal-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px}
+.arb-signal-buy{background:var(--green-light);color:var(--green)}
+.arb-signal-hold{background:var(--orange-light);color:var(--orange)}
+.arb-signal-watch{background:var(--accent-light);color:var(--accent)}
+
 /* API dot stop pulsing when live */
 .api-dot.live{animation:none}
 
@@ -819,7 +863,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <div class="dr-plus">+</div>
           <div class="dual-ring-item"><div class="dr-score" id="heroResScore" style="color:var(--red)"><span style="position:relative;z-index:1">35</span></div><div class="dr-label">Resilience</div></div>
           <div class="dr-equals">=</div>
-          <div class="dual-ring-item"><div class="dr-score" id="heroTotalScore" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff"><span style="position:relative;z-index:1">45</span></div><div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite</div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="heroTotalBand">Below Average</div><div class="kpi-change down" id="heroScoreChange" style="margin-top:4px">&darr; -4 vs Q3</div></div>
+          <div class="dual-ring-item"><div class="dr-score" id="heroTotalScore" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff"><span style="position:relative;z-index:1">45</span></div><div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite <span class="score-tooltip-wrap" style="display:inline-flex;vertical-align:middle"><span class="score-tooltip-icon">i</span><span class="score-tooltip-popup" id="heroScoreTooltip"><strong>45 &mdash; Below Average (30-49).</strong> Operational score held back by weak social media and employer brand. Financial health impacted by $765M Guinea write-down. Macro resilience is critical due to dual China + oil exposure.</span></span></div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="heroTotalBand">Below Average</div><div class="kpi-change down" id="heroScoreChange" style="margin-top:4px">&darr; -4 vs Q3</div></div>
         </div>
       </div>
       <div class="card fade-in" style="border-left:3px solid var(--accent)">
@@ -865,7 +909,26 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="opp-score"><div><div class="opp-score-value" id="arbOppScore">87</div></div><div><div class="opp-score-label" id="arbOppHeadline">Active Arbitrage Window Detected</div><div class="opp-score-detail" id="arbOppFormula">Urgency (9/10) x Impact (8/10) x Feasibility (7/10) = 87/100</div></div></div>
     <div class="grid-2" style="margin-bottom:20px"><div class="card arb-card"><div class="card-title"><span id="arbOpp1Title">Talent Acquisition Window</span><span class="arb-urgency urgency-high" id="arbOpp1Urgency">High Urgency</span></div><div class="card-subtitle" id="arbOpp1Desc"></div><div id="arbOpp1Metrics"></div></div><div class="card arb-card"><div class="card-title"><span id="arbOpp2Title">Client Migration</span><span class="arb-urgency urgency-medium" id="arbOpp2Urgency">Medium Urgency</span></div><div class="card-subtitle" id="arbOpp2Desc"></div><div id="arbOpp2Metrics"></div></div></div>
     <div class="card" style="margin-bottom:20px"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Recommended Action Plan</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="card-subtitle" style="margin-top:12px" id="arbActionSub">Sequenced actions to exploit the current arbitrage window</div><div id="actionPlan" style="margin-top:16px"></div></div></div>
-    <div class="grid-2"><div class="card"><div class="card-title">Timing Window Analysis</div><div class="card-subtitle">When to act and why</div><div class="chart-container-tall"><canvas id="timingChart"></canvas></div></div><div class="card"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Cross-Signal Correlation</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="card-subtitle" style="margin-top:12px" id="arbCorrSub">How EGA's weaknesses create opportunities</div><div id="correlationSignals"></div></div></div></div></div>
+    <div class="grid-2"><div class="card"><div class="card-title">Timing Window Analysis</div><div class="card-subtitle">When to act and why</div><div class="chart-container-tall"><canvas id="timingChart"></canvas></div></div><div class="card"><div class="collapsible-header" onclick="toggleCollapsible(this)"><div class="card-title" style="margin:0">Cross-Signal Correlation</div><span class="collapse-icon">+</span></div><div class="collapsible-content"><div class="card-subtitle" style="margin-top:12px" id="arbCorrSub">How EGA's weaknesses create opportunities</div><div id="correlationSignals"></div></div></div></div>
+
+    <!-- Arbitrage Opportunity Matrix -->
+    <div class="section" style="margin-top:24px">
+      <div class="card" style="border-top:3px solid var(--green)">
+        <div class="card-title" style="color:var(--green);display:flex;align-items:center;gap:8px">Arbitrage Opportunity Matrix <span class="score-tooltip-wrap"><span class="score-tooltip-icon">i</span><span class="score-tooltip-popup"><strong>Information Arbitrage:</strong> Where operational intelligence reveals value the market hasn't priced in. The gap between a company's 47X score (what the data says) and market perception (what investors believe) creates windows for informed capital deployment.</span></span></div>
+        <div class="card-subtitle">Where operational intelligence reveals value the market hasn't priced in. When the 47X score diverges from market perception, sovereign capital can deploy with conviction before the gap closes.</div>
+        <div class="table-scroll">
+          <table class="arb-matrix-table" id="arbMatrixTable">
+            <thead><tr><th>Company</th><th>47X Score</th><th>Market Perception</th><th>Gap</th><th>Signal</th><th>Thesis</th></tr></thead>
+            <tbody id="arbMatrixBody"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:16px;padding:14px 18px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--green)">
+          <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">How to Read This Matrix</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.6"><strong>Positive Gap</strong> (47X > Market): The company is operationally stronger than the market believes. Buy signal &mdash; the data sees value before the market does. <strong>Negative Gap</strong> (47X < Market): The company is operationally weaker than its reputation suggests. Caution signal &mdash; perception hasn't caught up with deteriorating fundamentals. The <strong>wider the gap</strong>, the stronger the arbitrage conviction.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ====== NEW TAB 1: MACRO OVERLAY PANEL ====== -->
@@ -1707,6 +1770,59 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </div>
 
+  <!-- Composite Score Framework Explainer -->
+  <div class="section">
+    <div class="card" style="border-top:3px solid var(--navy)">
+      <div class="card-title">Composite Score Framework</div>
+      <div class="card-subtitle">How the 47X Composite Score is calculated &mdash; 9 operational dimensions, weighted and combined into a single 0-100 intelligence rating for sovereign fund portfolio committees.</div>
+      <div style="margin-top:16px;padding:16px 20px;background:var(--bg);border-radius:var(--radius-sm);border-left:4px solid var(--accent)">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px">What the Composite Means</div>
+        <div style="font-size:13px;color:var(--text-primary);line-height:1.6">The 47X Composite is the GCC equivalent of a credit score for operational quality. It synthesises <strong>9 automated dimension scores</strong> (Patrick's outside-in scan) with <strong>balance sheet proxy signals</strong> and <strong>macro resilience stress tests</strong> into a single number. A score of 70+ indicates a company with strong digital maturity, healthy talent signals, and resilience to macro shocks. Below 50 signals operational weakness that the market may not yet have priced in &mdash; creating either risk or arbitrage opportunity depending on trajectory.</div>
+      </div>
+      <div style="margin-top:20px">
+        <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:8px">Score Bands</div>
+        <div class="score-band-legend">
+          <div class="score-band-item"><div class="score-band-dot" style="background:#059669"></div><span style="color:#059669">85-100 Exceptional</span></div>
+          <div class="score-band-item"><div class="score-band-dot" style="background:#2563EB"></div><span style="color:#2563EB">70-84 Strong</span></div>
+          <div class="score-band-item"><div class="score-band-dot" style="background:#D97706"></div><span style="color:#D97706">50-69 Average</span></div>
+          <div class="score-band-item"><div class="score-band-dot" style="background:#EA580C"></div><span style="color:#EA580C">30-49 Below Average</span></div>
+          <div class="score-band-item"><div class="score-band-dot" style="background:#DC2626"></div><span style="color:#DC2626">0-29 Critical</span></div>
+        </div>
+      </div>
+      <div class="dim-explainer-grid">
+        <div class="dim-explainer-item"><div class="dei-name">Website Performance</div><div class="dei-desc">Lighthouse audit, page speed, mobile responsiveness, SEO signals, and Core Web Vitals.</div><div class="dei-weight">Weight: 12%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Social Media</div><div class="dei-desc">Platform presence, engagement rates, posting frequency, follower growth, and content quality.</div><div class="dei-weight">Weight: 10%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Media Coverage</div><div class="dei-desc">News volume, sentiment polarity, source quality, topic coverage, and share of voice vs peers.</div><div class="dei-weight">Weight: 12%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Employer Brand</div><div class="dei-desc">Glassdoor/Indeed ratings, CEO approval, hiring velocity, "open to work" signals, and tenure data.</div><div class="dei-weight">Weight: 14%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Google Ads</div><div class="dei-desc">Active campaigns, ad spend proxy, keyword coverage, competitor overlap, and landing page quality.</div><div class="dei-weight">Weight: 8%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Tech Stack</div><div class="dei-desc">Technology footprint, framework modernity, cloud adoption, CDN usage, and third-party integrations.</div><div class="dei-weight">Weight: 10%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Brand Audit</div><div class="dei-desc">Brand consistency, visual identity, messaging clarity, domain authority, and backlink profile.</div><div class="dei-weight">Weight: 10%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Reviews &amp; Maps</div><div class="dei-desc">Google Maps ratings, review volume, response rate, sentiment across review platforms.</div><div class="dei-weight">Weight: 10%</div></div>
+        <div class="dim-explainer-item"><div class="dei-name">Registration</div><div class="dei-desc">Corporate registration status, domain registration, trademark filings, and regulatory compliance signals.</div><div class="dei-weight">Weight: 14%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EGA Dimension Analysis -->
+  <div class="section">
+    <div class="card" style="border-top:3px solid var(--orange)">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">EGA Dimension Analysis <span class="score-tooltip-wrap"><span class="score-tooltip-icon">i</span><span class="score-tooltip-popup"><strong>45.47 &mdash; Below Average.</strong> Strong operational footprint and registration compliance, but critically weak digital maturity, employer brand, and talent sentiment drag the composite below sector average.</span></span></div>
+      <div class="card-subtitle">Horizontal bar chart showing EGA's score per dimension, color-coded by performance band. Overall composite: <strong style="color:var(--orange)">45.47 &mdash; Below Average</strong>. Strong operational footprint but weak digital maturity and talent sentiment.</div>
+      <div class="chart-container-tall"><canvas id="egaDimensionChart"></canvas></div>
+      <div class="ega-dim-analysis" id="egaDimAnalysis">
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name">Website Performance &mdash; 72</div><div class="ega-dim-comment">Solid Lighthouse scores and reasonable page speed for an industrial company. Core Web Vitals pass, though mobile experience trails banking peers like FAB (85).</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name" style="color:var(--red)">Social Media &mdash; 38</div><div class="ega-dim-comment">Critical weakness. Minimal posting frequency, negligible engagement rates, and no active community management. B2B industrial companies often underinvest here, but peers like Alba (65) prove it's possible.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name">Media Coverage &mdash; 68</div><div class="ega-dim-comment">Decent news volume driven by the Guinea write-down coverage. However, sentiment has turned negative (-0.2), dragging quality metrics. Share of voice is high but for the wrong reasons.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name" style="color:var(--red)">Employer Brand &mdash; 42</div><div class="ega-dim-comment">Glassdoor at 3.2, CEO approval 58%, and 14 senior departures in 6 months. This is the dimension most likely to cause cascading damage to innovation output and client confidence.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name">Google Ads &mdash; 55</div><div class="ega-dim-comment">Ad spend paused entirely since December 2025. Branded search terms now available at 40% lower CPC. This represents both a weakness and an arbitrage opportunity for competitors.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name">Tech Stack &mdash; 61</div><div class="ega-dim-comment">Mid-range. Uses a reasonable enterprise stack but lacks modern cloud-native infrastructure. CDN coverage adequate but not optimised. Trails sector average (67) by 6 points.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name">Brand Audit &mdash; 65</div><div class="ega-dim-comment">Consistent visual identity and reasonable domain authority. The brand itself is well-established in the aluminium sector, but messaging has not adapted to post-Guinea narrative requirements.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name">Reviews &amp; Maps &mdash; 71</div><div class="ega-dim-comment">Above sector average (64). Industrial companies don't rely heavily on reviews, but EGA's presence on Google Maps and supplier review platforms is adequate. Response rate could improve.</div></div></div>
+        <div class="ega-dim-row"><div class="ega-dim-bar-wrap"><div class="ega-dim-name" style="color:var(--green)">Registration &mdash; 82</div><div class="ega-dim-comment">Strongest dimension. Full corporate registration compliance, active trademark filings, and clean regulatory record. This is table stakes for a Mubadala portfolio company but still noteworthy as a strength.</div></div></div>
+      </div>
+    </div>
+  </div>
+
   <div class="section">
     <div class="card" style="padding:32px" id="compositeHero">
       <div style="text-align:center;margin-bottom:8px"><span style="font-size:14px;font-weight:700;color:var(--navy)" id="compositeCompanyName">Emirates Global Aluminium</span></div>
@@ -1731,7 +1847,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <div class="dr-equals">=</div>
         <div class="dual-ring-item">
           <div class="dr-score" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff" id="compTotalScore"><span style="position:relative;z-index:1">45</span></div>
-          <div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite</div>
+          <div class="dr-label" style="color:var(--navy);font-weight:800">47X Composite <span class="score-tooltip-wrap" style="display:inline-flex;vertical-align:middle"><span class="score-tooltip-icon">i</span><span class="score-tooltip-popup" id="compScoreTooltip"><strong>45 &mdash; Below Average (30-49).</strong> Strong operational footprint but weak digital maturity and talent sentiment pull the composite below the sector average of 71.</span></span></div>
           <div style="font-size:11px;color:var(--text-secondary);margin-top:2px" id="compTotalBand">Below Average</div>
         </div>
       </div>
@@ -2220,7 +2336,7 @@ document.getElementById('arbOppScore').textContent=c.arbOppScore;document.getEle
 document.getElementById('arbOpp1Title').textContent=c.arbOpp1.title;document.getElementById('arbOpp1Urgency').textContent=c.arbOpp1.urgency;document.getElementById('arbOpp1Urgency').className='arb-urgency '+c.arbOpp1.urgencyClass;document.getElementById('arbOpp1Desc').textContent=c.arbOpp1.desc;
 document.getElementById('arbOpp2Title').textContent=c.arbOpp2.title;document.getElementById('arbOpp2Urgency').textContent=c.arbOpp2.urgency;document.getElementById('arbOpp2Urgency').className='arb-urgency '+c.arbOpp2.urgencyClass;document.getElementById('arbOpp2Desc').textContent=c.arbOpp2.desc;
 document.getElementById('arbActionSub').textContent='Sequenced actions to exploit the current '+c.short+' arbitrage window';document.getElementById('arbCorrSub').textContent='How '+c.short+"'s signals create opportunities";
-renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);
+renderArbMetrics(c);renderActionPlan(c);renderCorrelations(c);renderArbMatrix();updateScoreTooltips(c);
 // Composite tab
 renderCompositeTab(c);
 renderStressScenario();
@@ -2265,6 +2381,31 @@ function renderSignalCards(c){function r(id,d){document.getElementById(id).inner
 function renderArbMetrics(c){['arbOpp1Metrics','arbOpp2Metrics'].forEach(function(id,i){var o=i===0?c.arbOpp1:c.arbOpp2;document.getElementById(id).innerHTML=o.metrics.map(function(m){return'<div class="arb-metric"><span class="arb-metric-label">'+m.label+'</span><span class="arb-metric-value">'+m.value+'</span></div>'}).join('')})}
 function renderActionPlan(c){document.getElementById('actionPlan').innerHTML=c.actionPlan.map(function(a,i){return'<div class="action-step"><div class="action-number">'+(i+1)+'</div><div class="action-text">'+a.text+'<br><span class="impact">'+a.impact+'</span></div></div>'}).join('')}
 function renderCorrelations(c){document.getElementById('correlationSignals').innerHTML=c.correlations.map(function(r){return'<div class="signal-item"><div class="signal-icon" style="background:'+r.color+'12;color:'+r.color+';font-size:14px">\u2192</div><div class="signal-content"><div class="signal-title" style="font-size:12px">'+r.from+' \u2192 '+r.to+'</div><div class="signal-detail">'+r.label+'</div></div></div>'}).join('')}
+
+function renderArbMatrix(){
+var matrixData=[
+{company:'Emirates Global Aluminium',score:45,perception:'Undervalued by market',gap:'+18',gapClass:'arb-gap-positive',signal:'BUY',signalClass:'arb-signal-buy',thesis:'Guinea write-down and talent exodus have cratered sentiment, but $8.7B revenue and Mubadala backing provide a floor. Market overweights recent negatives; 47X sees structural value in operational footprint and registration compliance (82).'},
+{company:'First Abu Dhabi Bank',score:67,perception:'Fairly valued',gap:'+3',gapClass:'arb-gap-positive',signal:'HOLD',signalClass:'arb-signal-hold',thesis:'Market perception aligns closely with operational reality. Strong across all 9 dimensions. Minor arbitrage in ADCB digital gap capture, but no significant mispricing. Monitor for upside if fintech partnerships close.'},
+{company:'Aldar Properties',score:56,perception:'Slightly overvalued',gap:'-6',gapClass:'arb-gap-negative',signal:'WATCH',signalClass:'arb-signal-watch',thesis:'Sales pipeline (+35%) and Yas Island expansion drive positive market sentiment, but tech stack lag (52) and PropTech hiring gaps create hidden operational risk. Market prices the topline growth but misses the digital infrastructure deficit.'},
+{company:'e&',score:73,perception:'Fairly valued',gap:'+1',gapClass:'arb-gap-positive',signal:'HOLD',signalClass:'arb-signal-hold',thesis:'Strong digital maturity across all dimensions. Market perception correctly reflects operational quality. No significant arbitrage window, but a benchmark for what "strong" looks like in the 47X framework.'},
+{company:'ADNOC Distribution',score:66,perception:'Slightly undervalued',gap:'+8',gapClass:'arb-gap-positive',signal:'BUY',signalClass:'arb-signal-buy',thesis:'Government-backed energy distributor with stable cash flows. Market underestimates digital transformation progress and diversification into convenience retail and EV charging. Oil sensitivity is priced in; operational improvements are not.'},
+{company:'DP World',score:59,perception:'Fairly valued',gap:'+2',gapClass:'arb-gap-positive',signal:'HOLD',signalClass:'arb-signal-hold',thesis:'Logistics giant correctly priced by the market. China trade dependency and de-globalisation risks are known. Operational score reflects both strengths (infrastructure) and weaknesses (digital customer experience).'}
+];
+var tbody=document.getElementById('arbMatrixBody');
+if(!tbody)return;
+tbody.innerHTML=matrixData.map(function(d){
+return'<tr><td>'+d.company+'</td><td class="score-cell" style="font-family:\'JetBrains Mono\',monospace;font-weight:700">'+d.score+'</td><td>'+d.perception+'</td><td class="'+d.gapClass+'">'+d.gap+'</td><td><span class="arb-signal-badge '+d.signalClass+'">'+d.signal+'</span></td><td style="font-size:12px;max-width:300px;line-height:1.4">'+d.thesis+'</td></tr>'}).join('')}
+
+function updateScoreTooltips(c){
+var comp=c.composite;
+var bandName=comp.total>=85?'Exceptional':comp.total>=70?'Strong':comp.total>=50?'Average':comp.total>=30?'Below Average':'Critical';
+var bandRange=comp.total>=85?'85-100':comp.total>=70?'70-84':comp.total>=50?'50-69':comp.total>=30?'30-49':'0-29';
+var topDim=c.services.reduce(function(a,b){return a.score>b.score?a:b});
+var bottomDim=c.services.reduce(function(a,b){return a.score<b.score?a:b});
+var tipText='<strong>'+comp.total+' \u2014 '+bandName+' ('+bandRange+').</strong> Strongest dimension: '+topDim.name+' ('+topDim.score+'). Weakest: '+bottomDim.name+' ('+bottomDim.score+'). Financial health: '+comp.finScore+'. Macro resilience: '+comp.resScore+'.';
+var heroTip=document.getElementById('heroScoreTooltip');if(heroTip)heroTip.innerHTML=tipText;
+var compTip=document.getElementById('compScoreTooltip');if(compTip)compTip.innerHTML=tipText}
+
 // renderEventCalendar removed (dead code - no container element)
 
 var gC='#F3F4F6',lO={position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}};
@@ -2596,7 +2737,19 @@ function renderCompositeCharts(c){
 destroyChart('compositeComparison');var cc=document.getElementById('compositeComparisonChart');
 if(cc&&cc.offsetParent!==null){charts.compositeComparison=new Chart(cc,{type:'bar',data:{labels:['EGA','FAB','Aldar','e&','ADNOC','DP World'],datasets:[{label:'Operational (L1)',data:[58,78,65,82,74,69],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4},{label:'Financial (L2)',data:[42,72,62,65,78,62],backgroundColor:'rgba(124,58,237,0.7)',borderRadius:4},{label:'Resilience (L3)',data:[35,52,41,72,58,48],backgroundColor:'rgba(5,150,105,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{y:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}})}
 destroyChart('compositeRadar');var cr=document.getElementById('compositeRadarChart');
-if(cr&&cr.offsetParent!==null){var comp=c.composite;charts.compositeRadar=new Chart(cr,{type:'radar',data:{labels:['Website','Social','Media','Employer','Ads','Tech Stack','Brand','Reviews','Registry','Financial','Resilience'],datasets:[{label:c.short,data:[c.services[0].score,c.services[1].score,c.services[2].score,c.services[3].score,c.services[4].score,c.services[5].score,c.services[6].score,c.services[7].score,c.services[8].score,comp.finScore,comp.resScore],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3},{label:'Sector Average',data:[71,65,62,68,58,67,68,64,78,65,55],borderColor:'#9CA3AF',backgroundColor:'rgba(156,163,175,0.05)',borderWidth:1.5,borderDash:[4,4],pointBackgroundColor:'#9CA3AF',pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:20},pointLabels:{font:{size:10,family:"'Inter'"}},grid:{color:gC}}}}})}}
+if(cr&&cr.offsetParent!==null){var comp=c.composite;charts.compositeRadar=new Chart(cr,{type:'radar',data:{labels:['Website','Social','Media','Employer','Ads','Tech Stack','Brand','Reviews','Registry','Financial','Resilience'],datasets:[{label:c.short,data:[c.services[0].score,c.services[1].score,c.services[2].score,c.services[3].score,c.services[4].score,c.services[5].score,c.services[6].score,c.services[7].score,c.services[8].score,comp.finScore,comp.resScore],borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3},{label:'Sector Average',data:[71,65,62,68,58,67,68,64,78,65,55],borderColor:'#9CA3AF',backgroundColor:'rgba(156,163,175,0.05)',borderWidth:1.5,borderDash:[4,4],pointBackgroundColor:'#9CA3AF',pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:lO},scales:{r:{min:0,max:100,ticks:{font:{size:9},stepSize:20},pointLabels:{font:{size:10,family:"'Inter'"}},grid:{color:gC}}}}})}
+// EGA Dimension Horizontal Bar Chart
+renderEgaDimensionChart(c);
+}
+
+function renderEgaDimensionChart(c){
+destroyChart('egaDimension');var el=document.getElementById('egaDimensionChart');
+if(!el||el.offsetParent===null)return;
+var dims=c.services.map(function(s){return s.name});
+var scores=c.services.map(function(s){return s.score});
+var benchmarks=c.services.map(function(s){return s.benchmark});
+var colors=scores.map(function(s){return s>=85?'#059669':s>=70?'#2563EB':s>=50?'#D97706':s>=30?'#EA580C':'#DC2626'});
+charts.egaDimension=new Chart(el,{type:'bar',data:{labels:dims,datasets:[{label:c.short+' Score',data:scores,backgroundColor:colors,borderRadius:4,barPercentage:0.7},{label:'Sector Average',data:benchmarks,backgroundColor:'rgba(156,163,175,0.3)',borderRadius:4,barPercentage:0.7}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:lO,tooltip:{callbacks:{afterBody:function(ctx){var idx=ctx[0].dataIndex;var s=scores[idx];return s>=85?'Band: Exceptional':s>=70?'Band: Strong':s>=50?'Band: Average':s>=30?'Band: Below Average':'Band: Critical'}}}},scales:{x:{min:0,max:100,grid:{color:gC},ticks:{font:{size:11}}},y:{grid:{display:false},ticks:{font:{size:11,family:"'Inter'"}}}}}})}
 
 function renderAllCharts(){
 var c=companies[currentCompany];
