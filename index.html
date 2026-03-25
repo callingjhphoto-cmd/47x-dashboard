@@ -1434,21 +1434,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </div>
 
-  <!-- PIF + Mubadala Sector Pies -->
-  <div class="section">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">PIF Sector Allocation</div>
-        <div class="card-subtitle">Estimated portfolio distribution</div>
-        <div class="chart-container-tall"><canvas id="swfPifPieChart"></canvas></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Mubadala Sector Allocation</div>
-        <div class="card-subtitle">Based on annual report disclosures</div>
-        <div class="chart-container-tall"><canvas id="swfMubadalaPieChart"></canvas></div>
-      </div>
-    </div>
-  </div>
+  <!-- PIF + Mubadala sector pies removed — now inside each fund's drill-down report on swf.html -->
 </div>
 
 <!-- ====== NEW TAB 3: SECTORAL FINGERPRINTS ====== -->
@@ -2832,10 +2818,7 @@ renderSwfFundTable();
 renderSwfAumChart();
 renderSwfHeatmap();
 renderSwfCountryPie();
-destroyChart('swfPifPie');var pp=document.getElementById('swfPifPieChart');
-if(pp&&pp.offsetParent!==null){charts.swfPifPie=new Chart(pp,{type:'doughnut',data:{labels:['Giga-projects','Technology & AI','Entertainment & Sports','Energy & Mining','Automotive & EV','Financial Services','Real Estate','Other'],datasets:[{data:[25,18,12,14,8,10,8,5],backgroundColor:['#0B1D3A','#2563EB','#7C3AED','#059669','#D97706','#DC2626','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}
-destroyChart('swfMubadalaPie');var mp=document.getElementById('swfMubadalaPieChart');
-if(mp&&mp.offsetParent!==null){charts.swfMubadalaPie=new Chart(mp,{type:'doughnut',data:{labels:['Technology & Semis','Energy Transition','Healthcare','Aerospace & Defence','Financial Services','Real Assets','Metals & Mining','Other'],datasets:[{data:[28,20,14,10,12,8,4,4],backgroundColor:['#2563EB','#059669','#DC2626','#0B1D3A','#D97706','#7C3AED','#6B7280','#9CA3AF'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:8}}}}})}}
+// PIF + Mubadala sector pies removed — now inside each fund's drill-down on swf.html}
 
 function renderStressTabCharts(){
 renderStressCharts();
@@ -3164,8 +3147,8 @@ function closeBottomSheet(){
 
 // Entity sheets
 function openEntitySheet(type,id){
-if(type==='swf'){var d={pif:{n:'Public Investment Fund (PIF)',c:'Saudi Arabia | AUM: $1.15T+',s:'Largest SWF deployment globally. Vision 2030 execution vehicle. Created Alat ($100B+ electronics subsidiary). EA take-private with Silver Lake ($55B).'},adia:{n:'Abu Dhabi Investment Authority (ADIA)',c:'Abu Dhabi | AUM: $1.1T+',s:'World\'s second-largest SWF. Long-term, diversified global portfolio spanning equities, fixed income, real estate, infrastructure and alternatives. Known for patience and discretion.'},kia:{n:'Kuwait Investment Authority (KIA)',c:'Kuwait | AUM: $1.02T',s:'World\'s oldest SWF (est. 1953). Manages the Future Generations Fund and General Reserve Fund. Major stakes in Mercedes-Benz (~7%), BP. Key investor in Aligned Data Centers ($40B deal with Mubadala/BlackRock).'},mubadala:{n:'Mubadala Investment Company',c:'Abu Dhabi | AUM: $350B+',s:'Most transparent GCC SWF. GlobalFoundries anchor. Masdar 100GW clean energy target. Key partner in $40B Aligned Data Centers deal.'},adq:{n:'Abu Dhabi Developmental Holding',c:'Abu Dhabi | AUM: $157B',s:'Fast-growing Abu Dhabi state holder. Ras El Hekma $35B Egypt mega-project. Terna Energy JV ($2.9B). $7B global bond. EU acquisition strategy accelerating.'},qia:{n:'Qatar Investment Authority',c:'Qatar | AUM: $560B+',s:'Diversified global investor. PSG, Harrods, The Shard. $500B US tech pledge over 10 years. Post-World Cup pivot toward tech and sustainability.'}};
-var s=d[id];if(s)openBottomSheet(s.n,s.c,'<div style="font-size:13px;color:var(--text-primary);line-height:1.6">'+s.s+'</div>')}}
+if(type==='swf'){var rankMap={pif:1,adia:2,kia:3,qia:4,mubadala:7,adq:10,icd:5,gosi:6};
+var rank=rankMap[id];if(rank){window.location.href='swf.html#fund-'+rank;}else{window.location.href='swf.html';}}}
 
 // Collapsible toggle
 function toggleCollapsible(header){

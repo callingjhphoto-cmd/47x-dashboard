@@ -766,7 +766,9 @@ function renderMacroCharts(){
 }
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('reportOverlay').classList.contains('open'))closeReport();});
-document.addEventListener('DOMContentLoaded',function(){renderFundTable();renderMacroCharts();});
+document.addEventListener('DOMContentLoaded',function(){renderFundTable();renderMacroCharts();
+  var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
+});
 </script>
 </body>
 </html>
