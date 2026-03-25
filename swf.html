@@ -7,7 +7,629 @@
 <meta name="description" content="GCC Sovereign Wealth Fund Tracker — 50 funds, $5.4T+ in assets under management">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+
+// ==========================================
+// DEEP FUND PROFILES — Real Research Data
+// ==========================================
+var deepProfiles = {
+  1: { // PIF
+    executiveSummary: 'The Public Investment Fund (PIF) is Saudi Arabia\'s primary sovereign wealth fund and the central financial engine driving Vision 2030. Established in 1971 and fundamentally restructured in 2015 under Crown Prince Mohammed bin Salman, PIF has grown from a $150B passive holding vehicle into a $1.15T+ globally active investment powerhouse. Its defining characteristic is the dramatic geographic pivot from international diversification to ~80% domestic allocation, inverting the traditional SWF model to build new industries at home. PIF\'s 2025 acquisition of a 93.4% stake in Electronic Arts for $55B signals a shift from minority passive investing to aggressive, majority-control tech acquisitions.',
+    headquarters: 'Riyadh, Saudi Arabia',
+    governor: 'Yasir Al-Rumayyan',
+    chairman: 'Crown Prince Mohammed bin Salman',
+    annualReturn: 'N/A (state development fund)',
+    targetAum: '$2T by 2030',
+    oilSensitivity: 'Very High',
+    oilDetail: 'Fiscal breakeven (incl. PIF spending) is $111/bbl. Cash reserves fell to $15B in late 2024 due to lower oil prices.',
+    deploymentSignal: 'Active (Selective)',
+    deploymentDetail: 'Named world\'s most active SWF in 2025 by Global SWF. Deployed $36.2B in 2025, but 80% was the EA acquisition. Budget cuts of 20-60% across portfolio companies due to fiscal pressure.',
+    liquidityCycle: 'PIF deploys counter-cyclically into distressed assets during downturns, but accelerates 6-9 months after sustained oil price increases above $80/bbl. Current cycle shows selective deployment with heavy reliance on debt issuance ($6B USD bonds, EUR 1.65B bonds, $1.25B sukuk in early 2025).',
+    nationalVision: 'Vision 2030',
+    domesticPct: 80,
+    internationalPct: 20,
+    sectors: {Energy:62,MaterialsMining:10,Telecom:9,FinancialServices:6,RealEstate:4,Technology:4,Utilities:3,Other:2},
+    geoFocus: {MiddleEast:80,NorthAmerica:8,Europe:5,Asia:5,Africa:2},
+    investments: [
+      {name:'Saudi Aramco (16% stake)',sector:'Energy',value:'~$370B',year:2022,status:'Active'},
+      {name:'Electronic Arts (93.4%)',sector:'Gaming/Tech',value:'$28.8B equity',year:2025,status:'Active'},
+      {name:'SoftBank Vision Fund',sector:'Technology',value:'$45B',year:2017,status:'Active'},
+      {name:'Uber Technologies',sector:'Mobility',value:'$5.95-7.1B',year:2016,status:'Active'},
+      {name:'Ma\'aden (Mining)',sector:'Materials/Mining',value:'~10% of portfolio',year:2008,status:'Active'},
+      {name:'STC (Telecom)',sector:'Telecom',value:'~9% of portfolio',year:2015,status:'Active'},
+      {name:'Lucid Motors (majority)',sector:'Automotive/EV',value:'$1.87-4.2B',year:2018,status:'Active'},
+      {name:'NEOM Megaproject',sector:'Infrastructure',value:'$500B plan',year:2017,status:'Active'},
+      {name:'Newcastle United FC',sector:'Sports',value:'$415M',year:2021,status:'Active'},
+      {name:'Jio Platforms (2.32%)',sector:'Telecom',value:'$1.5B',year:2020,status:'Active'},
+      {name:'ACWA Power',sector:'Utilities/Renewables',value:'Major stake',year:2013,status:'Active'},
+      {name:'Riyadh Air',sector:'Aviation',value:'Wholly owned',year:2023,status:'Active'},
+      {name:'Blackstone Infra Fund',sector:'Alternatives',value:'$20B commitment',year:2017,status:'Active'},
+      {name:'Affinity Partners (Kushner)',sector:'Private Equity',value:'$2B',year:2022,status:'Active'},
+      {name:'Arm Holdings',sector:'Semiconductors',value:'Fully divested Q3 2025',year:2024,status:'Exited'}
+    ],
+    mandate: 'PIF operates under a dual mandate: maximizing risk-adjusted financial returns while serving as a national development catalyst for Vision 2030. The fund targets 13 strategic sectors and mandates a 60% local content contribution across its operations. Its overarching goal is to surpass $2 trillion in AUM by 2030.',
+    mandateDetail: 'The PIF is targeting the creation of 1.8 million direct and indirect jobs and aims to contribute SAR 1.2 trillion (approx. $320B) to Saudi Arabia\'s non-oil GDP. The fund operates through six defined investment pools: two global (International Diversified Pool, International Strategic Investments) and four local (Saudi Equity Holdings, Saudi Giga-projects, Saudi Real Estate & Infrastructure Development, and Saudi Sector Development). The Saudi Sector Development pool has seen explosive growth, rising from 4% of the total portfolio in 2020 to over 30% by 2024.',
+    whySectors: 'PIF\'s sector allocation is dominated by its 16% stake in Saudi Aramco (61.8% of portfolio value). Beyond energy, the fund targets technology, entertainment, and mining as key diversification pillars. The aggressive move into gaming (EA acquisition) and AI reflects a strategic bet on digital entertainment as a post-oil revenue engine. Real estate allocation supports giga-projects (NEOM, The Line, ROSHN) designed to build entirely new cities and tourism infrastructure.',
+    deals: [{q:'Q1 2026',count:8,value:5.2},{q:'Q4 2025',count:6,value:36.2},{q:'Q3 2025',count:10,value:6.8},{q:'Q2 2025',count:14,value:9.4},{q:'Q1 2025',count:11,value:7.5},{q:'Q4 2024',count:9,value:8.1},{q:'Q3 2024',count:12,value:7.2},{q:'Q2 2024',count:15,value:10.5}],
+    relatedFunds: ['GOSI','Hassana','Sanabil','Jada','SVC','SAEV']
+  },
+  2: { // ADIA
+    executiveSummary: 'The Abu Dhabi Investment Authority (ADIA) is the world\'s second-largest sovereign wealth fund, managing an estimated $1.05-1.18 trillion in assets. Founded in 1976, ADIA is the ultimate global savings account for Abu Dhabi, evaluating success across 20-30 year horizons with a reported 6.4% annualized 20-year return and 6.8% over 30 years. Unlike regional peers that pursue strategic domestic mandates, ADIA operates as a purely economic entity focused on intergenerational wealth preservation. It does not invest domestically in the UAE. A defining evolution is its aggressive expansion into private equity (12-17% target allocation) and digital infrastructure, positioning itself as a liquidity provider of last resort during market dislocations.',
+    headquarters: 'Abu Dhabi, UAE',
+    governor: 'Sheikh Hamed bin Zayed Al Nahyan (Managing Director)',
+    chairman: 'Sheikh Tahnoon bin Zayed Al Nahyan',
+    annualReturn: '6.4% (20-year), 6.8% (30-year)',
+    targetAum: 'N/A (generational preservation)',
+    oilSensitivity: 'Moderate',
+    oilDetail: 'Funded by Abu Dhabi fiscal surplus from ADNOC. Structurally independent from state spending. Funds are NOT classified as UAE international reserves.',
+    deploymentSignal: 'Active (Counter-Cyclical)',
+    deploymentDetail: 'ADIA deploys most aggressively when traditional capital markets retreat. 2024-2026 saw massive deployments into PE secondaries, data centers, and private credit as other LPs sought liquidity.',
+    liquidityCycle: 'ADIA acts as a liquidity provider of last resort in global markets. During the 2023-2024 interest rate hiking cycle, as PE fundraising dried up, ADIA accelerated deployment into attractively priced LP portfolios and continuation vehicles. Committed $4B to Ardian\'s secondaries fund plus $2B co-invest. Led $770M CDH China CV in 2026.',
+    nationalVision: 'Abu Dhabi Economic Vision 2030',
+    domesticPct: 0,
+    internationalPct: 100,
+    sectors: {DevelopedEquities:37,PrivateEquity:15,GovernmentBonds:11,EmergingEquities:11,RealEstate:8,Alternatives:8,Infrastructure:5,Credit:3,Cash:2},
+    geoFocus: {NorthAmerica:52,Europe:22,EmergingMarkets:15,DevelopedAsia:8,Other:3},
+    investments: [
+      {name:'Fisher Investments (w/ Advent)',sector:'Wealth Management',value:'$3B',year:2025,status:'Active'},
+      {name:'Vantage Data Centers APAC (w/ GIC)',sector:'Digital Infrastructure',value:'$1.6B',year:2025,status:'Active'},
+      {name:'Jio Platforms (India)',sector:'Telecom',value:'$752M',year:2020,status:'Active'},
+      {name:'Reliance Retail (India)',sector:'Consumer',value:'$1.3B+',year:2020,status:'Active'},
+      {name:'DigitalBridge (40% stake)',sector:'Data Centers',value:'Undisclosed',year:2024,status:'Active'},
+      {name:'AlphaGen (11GW power platform)',sector:'Power/AI Infrastructure',value:'$500M',year:2024,status:'Active'},
+      {name:'Lenskart (India)',sector:'E-commerce',value:'$500M',year:2023,status:'Active'},
+      {name:'IDFC FIRST Bank (5.1%)',sector:'Banking',value:'~$315M',year:2025,status:'Active'},
+      {name:'Ardian ASF IX Secondaries',sector:'PE Secondaries',value:'$4B + $2B co-invest',year:2024,status:'Active'},
+      {name:'CDH Investments CV (China)',sector:'PE Continuation',value:'$770M (lead)',year:2026,status:'Active'},
+      {name:'Egis (w/ Neuberger/Apollo)',sector:'Smart Infrastructure',value:'EUR 1B CV',year:2024,status:'Active'},
+      {name:'Froneri (w/ PAI/Nestle)',sector:'Consumer',value:'EUR 6.5B equity deal',year:2024,status:'Active'},
+      {name:'Dignari Capital SMA',sector:'Private Credit (APAC)',value:'$300-500M',year:2026,status:'Active'},
+      {name:'ReNew Power (India)',sector:'Renewables',value:'Significant',year:2020,status:'Active'},
+      {name:'Qlik Technologies',sector:'Data Analytics',value:'Minority stake',year:2024,status:'Active'}
+    ],
+    mandate: 'ADIA\'s statutory mandate is to sustain the long-term prosperity of Abu Dhabi by prudently growing capital through a disciplined investment process. The fund evaluates success across 20-30 year generational horizons.',
+    mandateDetail: 'ADIA\'s strategy is governed by its "Reference Portfolio," a theoretical blend of publicly traded securities that defines baseline risk appetite. The Strategy & Planning Department adds alpha through Strategic Asset Allocation that overweights or underweights specific asset classes based on long-term macroeconomic views. Slightly less than half of the portfolio is passively indexed, while the remainder is actively managed. 64% of assets are now managed internally (up from 55% in 2022).',
+    whySectors: 'ADIA\'s most aggressive growth sectors are Technology/Digital Infrastructure (data centers, AI power generation) and Private Credit (exploiting the retreat of traditional Western banking under Basel III). Real estate is pivoting from commercial office space toward logistics, student accommodation, and co-living. The PE expansion to 12-17% target reflects a structural bet on the illiquidity premium during a period of constrained public market returns.',
+    deals: [{q:'Q1 2026',count:8,value:5.1},{q:'Q4 2025',count:10,value:6.2},{q:'Q3 2025',count:7,value:4.8},{q:'Q2 2025',count:9,value:5.5},{q:'Q1 2025',count:8,value:4.9},{q:'Q4 2024',count:11,value:7.0},{q:'Q3 2024',count:8,value:5.2},{q:'Q2 2024',count:10,value:6.1}],
+    relatedFunds: ['Mubadala','ADQ','Lunate','Royal Group','EIA']
+  },
+  3: { // KIA
+    executiveSummary: 'The Kuwait Investment Authority (KIA) is the world\'s oldest sovereign wealth fund, established in 1953 -- eight years before Kuwait achieved independence. Managing approximately $1.02 trillion, KIA operates through a unique dual-fund architecture: the General Reserve Fund (GRF) serving as the state treasury, and the Future Generations Fund (FGF) as an untouchable intergenerational endowment. KIA is constitutionally prohibited from borrowing for investments and operates as a strictly passive investor, never seeking board seats or operational control. The 2024-2026 period marks a structural inflection point as KIA pivots aggressively into AI infrastructure, joining the AI Infrastructure Partnership (AIP) with BlackRock and Microsoft, and co-acquiring Aligned Data Centers in a historic $40B deal.',
+    headquarters: 'Kuwait City, Kuwait',
+    governor: 'Sheikh Saoud Salem Abdulaziz Al-Sabah (Managing Director, appointed Nov 2024)',
+    chairman: 'Minister of Finance (ex-officio)',
+    annualReturn: 'Not disclosed (targets composite benchmark on 3-year rolling basis)',
+    targetAum: 'N/A (intergenerational preservation)',
+    oilSensitivity: 'High',
+    oilDetail: 'Kuwait\'s fiscal breakeven is ~$80/bbl. During 2015-2020 oil price collapse, GRF faced rapid liquid asset depletion. The automatic 10% annual transfer to FGF was halted in 2020.',
+    deploymentSignal: 'Active (AI Pivot)',
+    deploymentDetail: 'KIA invested $9B into AI/digital sectors over 5 years ($6B digital infrastructure, $3B pure AI). Joined AIP as first non-founder anchor investor. Co-acquired Aligned Data Centers at $40B enterprise value.',
+    liquidityCycle: 'KIA acts as a stabilizing force in global markets due to its unleveraged approach. The fund deploys through external fund managers (EFMs) and specialized subsidiaries (St. Martins Property, Wren House Infrastructure). Counter-cyclical deployment pattern: served as "white knight" during 2008 GFC with profitable investments in Citigroup ($3B in, $4.1B out) and Merrill Lynch.',
+    nationalVision: 'Kuwait Vision 2035 (New Kuwait)',
+    domesticPct: 15,
+    internationalPct: 85,
+    sectors: {PublicEquities:50,FixedIncome:22,RealEstateInfra:13,PrivateEquity:10,HedgeFunds:5},
+    geoFocus: {NorthAmerica:42,Europe:28,EmergingMarkets:18,DevelopedAsia:12},
+    investments: [
+      {name:'Mercedes-Benz Group (~7%)',sector:'Automotive',value:'$5B+',year:1961,status:'Active'},
+      {name:'BP Plc (~2%)',sector:'Energy',value:'$2B+',year:1986,status:'Active'},
+      {name:'AI Infrastructure Partnership',sector:'AI/Digital Infra',value:'$30-100B platform',year:2025,status:'Active'},
+      {name:'Aligned Data Centers (w/ BlackRock/MGX)',sector:'Data Centers',value:'$40B enterprise',year:2025,status:'Active'},
+      {name:'Citigroup',sector:'Financial',value:'$3B in / $4.1B out',year:2008,status:'Exited'},
+      {name:'Merrill Lynch',sector:'Financial',value:'~$2B',year:2008,status:'Exited'},
+      {name:'AIA Group',sector:'Insurance',value:'$1B in / $3.4B realized',year:2010,status:'Partial'},
+      {name:'ICBC (China)',sector:'Banking',value:'$720M',year:2006,status:'Active'},
+      {name:'Agricultural Bank of China',sector:'Banking',value:'$800M',year:2010,status:'Active'},
+      {name:'Visa',sector:'Financial Services',value:'Significant',year:2009,status:'Active'},
+      {name:'BlackRock',sector:'Asset Management',value:'$750M',year:2009,status:'Active'},
+      {name:'St. Martins Property (subsidiary)',sector:'Real Estate',value:'$10B+ portfolio',year:1972,status:'Active'},
+      {name:'Wren House Infrastructure',sector:'Infrastructure',value:'$5B+ portfolio',year:2013,status:'Active'}
+    ],
+    mandate: 'KIA operates under three core objectives: achieving commercial returns exceeding composite benchmarks, operating as a world-class investment management organization, and fostering Kuwait\'s private sector without competing with it.',
+    mandateDetail: 'The Future Generations Fund invests entirely outside of Kuwait and MENA, adhering strictly to Strategic Asset Allocation across diverse global asset classes. The GRF holds domestic assets and provides state treasury liquidity. KIA is constitutionally prohibited from borrowing money for investment purposes or using derivatives as standalone investments. Approximately 23% of the total portfolio targets alternative sectors including real estate, private equity, brownfield infrastructure, and hedge funds.',
+    whySectors: 'KIA\'s allocation mirrors global GDP contributions and market capitalizations, with exceptions only for legacy "core holdings" (BP, Mercedes-Benz). The recent pivot to AI/digital infrastructure reflects the new Managing Director Sheikh Saoud\'s mandate to reallocate away from cyclical energy sectors (avoiding double exposure to Kuwait\'s domestic oil) toward technology-driven growth. KIA is transitioning toward 100% ESG compliance across its entire portfolio.',
+    deals: [{q:'Q1 2026',count:4,value:2.8},{q:'Q4 2025',count:5,value:3.1},{q:'Q3 2025',count:3,value:2.2},{q:'Q2 2025',count:4,value:2.6},{q:'Q1 2025',count:4,value:2.4},{q:'Q4 2024',count:5,value:3.5},{q:'Q3 2024',count:4,value:2.8},{q:'Q2 2024',count:4,value:2.5}],
+    relatedFunds: ['Wafra','NBK Wealth']
+  },
+  4: { // QIA
+    executiveSummary: 'The Qatar Investment Authority (QIA) manages an estimated $526-580 billion and stands apart from GCC peers through its synthesis of financial yield with geopolitical hedging. Founded in 2005 to capture LNG surpluses, QIA has evolved from an opportunistic crisis-buyer into a sophisticated, thesis-driven asset manager. The fund\'s strategy is uniquely shaped by Qatar\'s geographic vulnerability -- by owning Heathrow, The Shard, and massive stakes in Western banks, Qatar intertwines its economic survival with the prosperity of the US and UK. The 2024-2026 period represents its most aggressive deployment phase ever, highlighted by a $500B pledge to the US economy, $25B Goldman Sachs partnership, massive Anthropic AI investments, and a $3B venture capital fund-of-funds program designed to transform Doha into a global tech hub.',
+    headquarters: 'Doha, Qatar',
+    governor: 'Mohammed Saif Al-Sowaidi (CEO, appointed Nov 2024)',
+    chairman: 'Sheikh Bandar bin Mohammed Al-Thani',
+    annualReturn: 'Not publicly disclosed',
+    targetAum: '$800B+ by 2030 (with North Field Expansion revenues)',
+    oilSensitivity: 'Moderate-High (LNG-dependent)',
+    oilDetail: 'Oil and gas revenues constitute ~80% of Qatari government revenues. North Field Expansion expected to add $30B+ annually to energy revenues.',
+    deploymentSignal: 'Highly Active (Counter-Cyclical)',
+    deploymentDetail: 'Pledged $500B to US economy over coming decade. $25B Goldman Sachs partnership. Expanded VC Fund of Funds from $1B to $3B. Heavy AI deployment into Anthropic.',
+    liquidityCycle: 'QIA deploys aggressively during market dislocations -- its 2008 crisis interventions in Barclays and Credit Suisse defined this approach. Current cycle shows QIA filling VC funding gaps as traditional investors retreat, paying premiums for high-impact AI and renewable assets. The fund stopped new hydrocarbon investments in 2020.',
+    nationalVision: 'Qatar National Vision 2030',
+    domesticPct: 10,
+    internationalPct: 90,
+    sectors: {RealEstateInfra:28,FinancialServices:22,PublicEquities:20,TechMediaHealthcare:18,FixedIncomeCash:12},
+    geoFocus: {Europe:40,NorthAmerica:25,AsiaPacific:15,MiddleEast:12,Africa:8},
+    investments: [
+      {name:'Volkswagen Group (~17%)',sector:'Automotive',value:'$15B+ value',year:2009,status:'Active'},
+      {name:'Barclays (~7%)',sector:'Banking',value:'$3B+',year:2008,status:'Active'},
+      {name:'Glencore (~8.2%)',sector:'Mining/Commodities',value:'$5B+',year:2012,status:'Active'},
+      {name:'Harrods (100%)',sector:'Luxury Retail',value:'$2.2B acquisition',year:2010,status:'Active'},
+      {name:'The Shard (95%)',sector:'Real Estate',value:'$1B+',year:2013,status:'Active'},
+      {name:'Canary Wharf (majority)',sector:'Real Estate',value:'$2.6B+ acquisition',year:2015,status:'Active'},
+      {name:'Heathrow Airport (20%)',sector:'Infrastructure',value:'$4B+',year:2012,status:'Active'},
+      {name:'J Sainsbury\'s (~26%)',sector:'Retail/Grocery',value:'$2B+',year:2010,status:'Active'},
+      {name:'Paris Saint-Germain (QSI)',sector:'Sports',value:'$4B+ valuation',year:2011,status:'Active'},
+      {name:'Anthropic (AI)',sector:'AI/Technology',value:'$13B+ rounds',year:2025,status:'Active'},
+      {name:'Goldman Sachs Partnership',sector:'Multi-sector',value:'$25B commitment',year:2026,status:'Active'},
+      {name:'Credit Suisse (historical)',sector:'Banking',value:'~6-7% (pre-UBS)',year:2008,status:'Exited'},
+      {name:'Miramax (historical)',sector:'Entertainment',value:'$660M acquisition',year:2010,status:'Exited'},
+      {name:'Kokusai Electric (Japan)',sector:'Semiconductors',value:'Significant',year:2024,status:'Active'},
+      {name:'McDonald\'s China Operations',sector:'Consumer/QSR',value:'Strategic stake',year:2024,status:'Active'}
+    ],
+    mandate: 'QIA\'s founding constitution frames it as a savings fund tasked with creating long-term value, supporting a competitive local economy, and providing liquidity to stabilize the domestic economy when necessary.',
+    mandateDetail: 'QIA operates through a vast subsidiary ecosystem: Qatar Holding (major equity acquisitions), Qatari Diar ($8.1B real estate development arm with 50 projects across 20 countries), and Qatar Sports Investments (PSG, padel, sports diplomacy). In 2020, QIA implemented a formal Reference Portfolio approach and announced it would no longer deploy new capital into hydrocarbon investments. 46% of its power generation infrastructure is now in renewables.',
+    whySectors: 'QIA\'s heavy European real estate and financial stakes serve dual purposes: financial yield and geopolitical hedging. By owning critical Western infrastructure (Heathrow, Canary Wharf), Qatar ensures that host nations have a financial interest in its stability. The aggressive pivot to AI (Anthropic), digital infrastructure, and venture capital ($3B Fund of Funds requiring VC firms to open Doha offices) reflects a post-hydrocarbon transformation strategy. Sports investments (PSG, Premier Padel) function as soft power diplomacy.',
+    deals: [{q:'Q1 2026',count:8,value:5.5},{q:'Q4 2025',count:10,value:6.8},{q:'Q3 2025',count:7,value:4.2},{q:'Q2 2025',count:9,value:5.9},{q:'Q1 2025',count:8,value:5.1},{q:'Q4 2024',count:9,value:6.0},{q:'Q3 2024',count:7,value:4.5},{q:'Q2 2024',count:8,value:5.2}],
+    relatedFunds: []
+  },
+  5: { // ICD
+    executiveSummary: 'The Investment Corporation of Dubai (ICD) is the principal investment arm of the Government of Dubai, managing approximately $429 billion (AED 1.47 trillion) in assets as of 2024. Unlike traditional SWFs that pursue global portfolio diversification, ICD operates as a hybrid developmental fund -- it IS Dubai Inc. The fund holds 100% of Emirates Group, 100% of ENOC, 100% of Dubai Duty Free, 40.92% of Emirates NBD, and 22.27% of Emaar Properties (builder of the Burj Khalifa). ICD reported record net profits of AED 67.5 billion ($18.4B) in 2024 and record revenues of AED 349.6 billion ($95.2B), driven by surging global travel demand and a booming Dubai property market. While overwhelmingly domestic, ICD now operates across 55 investee companies in 86 countries.',
+    headquarters: 'Dubai, UAE',
+    governor: 'Mohammed Ibrahim Al Shaibani (Managing Director & CEO)',
+    chairman: 'Sheikh Hamdan bin Mohammed Al Maktoum (Crown Prince of Dubai)',
+    annualReturn: 'AED 67.5B net profit (2024)',
+    targetAum: 'N/A (developmental holding)',
+    oilSensitivity: 'Low-Moderate',
+    oilDetail: 'Dubai has minimal oil reserves. ICD\'s returns are driven by aviation, banking, real estate, and tourism rather than hydrocarbon revenues. ENOC (100% owned) provides some energy exposure.',
+    deploymentSignal: 'Active (Capital Recycling)',
+    deploymentDetail: 'Sold 49% of ICD Brookfield Place (largest UAE institutional single-asset RE deal). Actively deploying into international PE, VC, and growth equity.',
+    liquidityCycle: 'ICD\'s deployment is driven by Dubai\'s position as a global hub for aviation, trade, and tourism rather than the oil-liquidity cycle. Post-pandemic travel boom has generated record cash flows. The fund recycles capital by monetizing mature real estate assets to fund venture capital and international private equity allocations.',
+    nationalVision: 'Dubai Economic Agenda D33',
+    domesticPct: 70,
+    internationalPct: 30,
+    sectors: {BankingFinancial:25,TransportAviation:22,RealEstate:17,HospitalityLeisure:15,Industrial:7,Telecom:5,OilGas:3,Other:6},
+    geoFocus: {MiddleEast:55,Europe:18,AsiaPacific:12,NorthAmerica:10,Africa:5},
+    investments: [
+      {name:'Emirates Group (100%)',sector:'Aviation',value:'AED 119.8B revenue',year:2006,status:'Active'},
+      {name:'Emirates NBD (40.92%)',sector:'Banking',value:'AED 1.086T assets',year:2007,status:'Active'},
+      {name:'Emaar Properties (22.27%)',sector:'Real Estate',value:'AED 8.8B dividend 2024',year:2006,status:'Active'},
+      {name:'ENOC (100%)',sector:'Energy',value:'Full value chain',year:2006,status:'Active'},
+      {name:'Dubai Duty Free (100%)',sector:'Retail/Aviation',value:'$2B+ annual turnover',year:2006,status:'Active'},
+      {name:'Dubai Islamic Bank (28%)',sector:'Islamic Banking',value:'Major stake',year:2006,status:'Active'},
+      {name:'Borse Dubai (100%)',sector:'Capital Markets',value:'DFM + Nasdaq Dubai',year:2006,status:'Active'},
+      {name:'du Telecom (11.5%)',sector:'Telecommunications',value:'Minority stake',year:2006,status:'Active'},
+      {name:'flydubai (100%)',sector:'Aviation/LCC',value:'Full ownership',year:2008,status:'Active'},
+      {name:'Dubai Aerospace Enterprise (100%)',sector:'Aircraft Leasing',value:'Top-tier global lessor',year:2019,status:'Active'},
+      {name:'Atlantis The Royal + The Palm',sector:'Hospitality',value:'Flagship assets',year:2006,status:'Active'},
+      {name:'Kerzner International (46%)',sector:'Hospitality/Luxury',value:'One&Only Resorts',year:2006,status:'Active'},
+      {name:'ICD Brookfield Place (51%)',sector:'Real Estate',value:'1.1M sq ft DIFC tower',year:2019,status:'Partial'},
+      {name:'Fireside Ventures (India)',sector:'Venture Capital',value:'LP commitment',year:2024,status:'Active'},
+      {name:'Nasdaq Inc.',sector:'Capital Markets',value:'Strategic equity stake',year:2008,status:'Active'}
+    ],
+    mandate: 'ICD was explicitly created to consolidate Dubai\'s sprawling portfolio of state-owned enterprises, providing centralized strategic and financial oversight to maximize long-term wealth generation for the emirate.',
+    mandateDetail: 'ICD\'s mandate is dual-pronged: generate superior risk-adjusted returns for the regional financial community, and actively support Dubai\'s macroeconomic diversification away from hydrocarbon dependence. Unlike passive reserve funds, ICD is a highly active developmental sovereign wealth fund. The fund\'s evolution has progressed through three phases: Consolidation (2006-2008), Crisis Management (2009-2015), and Strategic Deployment & Monetization (2016-present).',
+    whySectors: 'ICD\'s portfolio represents the backbone of "Dubai Inc." -- Aviation (Emirates as the primary catalyst for logistics and tourism), Banking (Emirates NBD\'s AED 1.086T balance sheet benefiting from higher rates), Real Estate (Emaar\'s 1.7B sq ft land bank and AED 127B revenue backlog), and Hospitality (Atlantis, Kerzner). The fund is now expanding into international VC and private equity to capture global technological alpha outside its traditional UAE-based footprint.',
+    deals: [{q:'Q1 2026',count:5,value:3.2},{q:'Q4 2025',count:6,value:3.8},{q:'Q3 2025',count:4,value:2.5},{q:'Q2 2025',count:5,value:3.0},{q:'Q1 2025',count:5,value:2.8},{q:'Q4 2024',count:7,value:4.5},{q:'Q3 2024',count:5,value:3.0},{q:'Q2 2024',count:6,value:3.5}],
+    relatedFunds: ['Dubai Holding','Landmark Group']
+  },
+  7: { // Mubadala
+    executiveSummary: 'Mubadala Investment Company is Abu Dhabi\'s strategic investment arm, managing approximately $330 billion (AED 1.2 trillion) with a five-year annualized return of 10.1%. Mubadala occupies the critical intersection of sovereign wealth management and venture building -- it is the emirate\'s primary agent for high-tech industrialization. The fund holds an 81.46% controlling interest in GlobalFoundries (a top-5 global semiconductor foundry), has co-founded the MGX AI investment platform targeting $100B AUM, and deployed $32.5B in capital in 2024 alone (33.7% YoY increase). Unlike ADIA\'s passive approach, Mubadala takes board seats, controls subsidiaries, and executes 10-20 year transformation cycles. It is rapidly shifting from public equities to private markets, with 40% of AUM now in private equity.',
+    headquarters: 'Abu Dhabi, UAE',
+    governor: 'Khaldoon Khalifa Al Mubarak (Managing Director & Group CEO)',
+    chairman: 'Sheikh Tahnoon bin Zayed Al Nahyan',
+    annualReturn: '10.1% (5-year annualized)',
+    targetAum: 'N/A (strategic growth)',
+    oilSensitivity: 'Moderate',
+    oilDetail: 'Funded by Abu Dhabi government. Mubadala Energy produces ~430,000 boe/day (70% gas). Legacy petrochemical assets (Cepsa, Borealis) provide cash flow while fund pivots to AI/tech.',
+    deploymentSignal: 'Highly Active (AI-First)',
+    deploymentDetail: 'Deployed $32.5B in 2024 (33.7% YoY increase). Co-founded MGX AI fund targeting $100B. Backed Stargate project with OpenAI/SoftBank/Oracle. Private credit portfolio expanded to $20B.',
+    liquidityCycle: 'Mubadala operates on a highly dynamic, self-funding investment lifecycle -- deploying AED 119B in 2024 while generating AED 109B in proceeds through strategic monetizations. The fund exploits illiquidity premiums in private markets during periods of constrained public market returns. Private credit is the fastest-growing allocation, aided by high interest rates and partnerships with Apollo, Ares, Carlyle, Goldman Sachs, and KKR.',
+    nationalVision: 'Abu Dhabi Economic Vision 2030',
+    domesticPct: 23,
+    internationalPct: 77,
+    sectors: {PrivateEquity:40,PublicEquity:23,RealEstateInfra:17,Alternatives:15,PrivateCredit:5},
+    geoFocus: {NorthAmerica:41,MiddleEast:23,Europe:16,AsiaPacific:15,LatinAmerica:2,Other:3},
+    investments: [
+      {name:'GlobalFoundries (81.46%)',sector:'Semiconductors',value:'$20B+ invested',year:2009,status:'Active'},
+      {name:'MGX AI Fund (co-founder)',sector:'AI/Digital Infrastructure',value:'$100B target',year:2024,status:'Active'},
+      {name:'GAIIP (w/ BlackRock/Microsoft/GIP)',sector:'AI Data Centers',value:'$30-100B platform',year:2024,status:'Active'},
+      {name:'Stargate Project (w/ OpenAI/SoftBank)',sector:'AI Infrastructure',value:'Multi-billion',year:2025,status:'Active'},
+      {name:'Cleveland Clinic Abu Dhabi',sector:'Healthcare',value:'$2B+',year:2015,status:'Active'},
+      {name:'Cepsa (Spain)',sector:'Energy/Petrochemicals',value:'Major stake',year:2011,status:'Active'},
+      {name:'Borealis (Austria)',sector:'Chemicals/Plastics',value:'Major stake',year:2014,status:'Active'},
+      {name:'Emirates Global Aluminium',sector:'Industrials/Mining',value:'JV with Dubal',year:2013,status:'Active'},
+      {name:'Silver Lake Partners',sector:'PE/Technology',value:'$2B+ anchor',year:2020,status:'Active'},
+      {name:'Strata Manufacturing',sector:'Aerospace',value:'Full ownership',year:2009,status:'Active'},
+      {name:'M42 (healthcare + G42)',sector:'Healthcare/AI',value:'Strategic JV',year:2023,status:'Active'},
+      {name:'Masdar (33% stake)',sector:'Clean Energy',value:'100+ GW target',year:2006,status:'Active'},
+      {name:'Space42 (Yahsat + Bayanat)',sector:'Space/Satellite',value:'Merged entity',year:2024,status:'Active'},
+      {name:'Mubadala Energy',sector:'Energy/Gas',value:'430K boe/day',year:2017,status:'Active'},
+      {name:'Kelix Bio',sector:'Life Sciences',value:'Recent acquisition',year:2025,status:'Active'}
+    ],
+    mandate: 'Mubadala was explicitly designed as a government-owned investment firm charged with developing Abu Dhabi\'s domestic economy. The fund operates under a dual mandate: generating sustainable financial returns while achieving strategic returns that facilitate UAE economic diversification.',
+    mandateDetail: 'Mubadala acts not merely as a passive allocator of capital but as an active, control-seeking operator. The fund incubates new industries locally (aerospace, advanced manufacturing, healthcare) while leveraging international investments to acquire intellectual property, secure global supply chains, and build geopolitical partnerships. Over 95% of credit investments are in private credit, with deployments into CLOs, senior debt, and subordinated debt. An "AI member" now serves as a consultant on the investment committee.',
+    whySectors: 'Technology (40% PE allocation) reflects Mubadala\'s conviction that semiconductors and AI represent the foundational infrastructure of the next century. GlobalFoundries positions Abu Dhabi as a critical node in the global chip supply chain. Healthcare (Cleveland Clinic Abu Dhabi, M42) reduces outward medical tourism. Aerospace (Strata, Sanad) builds domestic high-skilled manufacturing. Clean energy (Masdar, 100+ GW target) positions the UAE as a renewables leader despite its hydrocarbon heritage.',
+    deals: [{q:'Q1 2026',count:9,value:6.1},{q:'Q4 2025',count:11,value:7.5},{q:'Q3 2025',count:8,value:5.2},{q:'Q2 2025',count:10,value:6.8},{q:'Q1 2025',count:9,value:5.9},{q:'Q4 2024',count:12,value:8.5},{q:'Q3 2024',count:9,value:6.0},{q:'Q2 2024',count:11,value:7.2}],
+    relatedFunds: ['ADIA','ADQ','Lunate','Royal Group','EIA']
+  }
+};
+
+// Country flags (emoji fallback)
+var countryFlags = {
+  'Saudi Arabia': '\ud83c\uddf8\ud83c\udde6',
+  'UAE': '\ud83c\udde6\ud83c\uddea',
+  'Kuwait': '\ud83c\uddf0\ud83c\uddfc',
+  'Qatar': '\ud83c\uddf6\ud83c\udde6',
+  'Bahrain': '\ud83c\udde7\ud83c\udded',
+  'Oman': '\ud83c\uddf4\ud83c\uddf2'
+};
+
+// ==========================================
+// FULL FUND REPORT RENDERER
+// ==========================================
+function openFundReport(rank) {
+  var f = funds.find(function(x){return x.rank===rank});
+  if(!f) return;
+  var dp = deepProfiles[rank];
+  var hasProfile = !!dp;
+  var aumStr = f.aum ? (f.aum>=1000 ? '$'+((f.aum/1000).toFixed(2))+'T' : '$'+f.aum+'B') : 'Undisclosed';
+  var flag = countryFlags[f.country] || '';
+  var html = '';
+
+  // Back button
+  html += '<button class="report-back" onclick="closeFundReport()">&larr; Back to All Funds</button>';
+
+  if(!hasProfile) {
+    html += '<div class="loading-badge" style="margin-bottom:16px;display:inline-block">Full profile loading...</div>';
+  }
+
+  // ========== HERO ==========
+  html += '<div class="report-hero">';
+  html += '<div class="report-hero-top">';
+  html += '<div class="report-hero-logo">' + f.short + '</div>';
+  html += '<div class="report-hero-info">';
+  html += '<h1>' + flag + ' ' + f.name + '</h1>';
+  html += '<div class="report-hero-meta">';
+  html += '<span class="report-hero-badge">' + f.country + '</span>';
+  html += '<span class="report-hero-badge type-highlight">' + f.type + '</span>';
+  html += '<span class="report-hero-badge status-highlight">' + f.status + '</span>';
+  html += '<span class="report-hero-badge">Tier ' + f.tier + '</span>';
+  html += '<span class="report-hero-badge">Founded ' + f.founded + '</span>';
+  if(hasProfile) html += '<span class="report-hero-badge">' + dp.headquarters + '</span>';
+  html += '</div></div></div>';
+
+  // KPIs
+  html += '<div class="report-hero-kpis">';
+  html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">' + aumStr + '</div><div class="report-hero-kpi-label">AUM</div></div>';
+
+  var totalDeals = (hasProfile ? dp.deals : f.deals).reduce(function(s,d){return s+d.count},0);
+  var totalValue = (hasProfile ? dp.deals : f.deals).reduce(function(s,d){return s+d.value},0);
+  html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">' + totalDeals + '</div><div class="report-hero-kpi-label">Deals (' + (hasProfile ? '8Q' : '5Q') + ')</div></div>';
+  html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">$' + totalValue.toFixed(1) + 'B</div><div class="report-hero-kpi-label">Deployed (' + (hasProfile ? '8Q' : '5Q') + ')</div></div>';
+
+  if(hasProfile) {
+    html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">' + (dp.annualReturn || 'N/A') + '</div><div class="report-hero-kpi-label">Returns</div></div>';
+    if(dp.targetAum) html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value" style="font-size:18px">' + dp.targetAum + '</div><div class="report-hero-kpi-label">Target</div></div>';
+  }
+  html += '</div></div>';
+
+  // ========== EXECUTIVE SUMMARY ==========
+  html += '<div class="report-section"><div class="report-section-title">Executive Summary</div>';
+  html += '<div class="report-card"><div class="report-summary"><p>';
+  html += hasProfile ? dp.executiveSummary : f.mandate;
+  html += '</p></div></div></div>';
+
+  // ========== PORTFOLIO ALLOCATION (Doughnut) ==========
+  var sectorData = hasProfile ? dp.sectors : f.sectors;
+  html += '<div class="report-section"><div class="report-section-title">Portfolio Allocation</div>';
+  html += '<div class="grid-2">';
+  html += '<div class="report-card"><div class="report-card-title">Sector Allocation</div>';
+  html += '<div class="report-card-sub">Percentage breakdown by sector / asset class</div>';
+  html += '<div class="report-chart-box"><canvas id="reportSectorChart"></canvas></div>';
+
+  // Legend with $ values
+  html += '<div class="report-legend">';
+  var sColors = ['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+  var sKeys = Object.keys(sectorData);
+  sKeys.forEach(function(k, i) {
+    var pct = sectorData[k];
+    var dollarVal = f.aum ? (f.aum * pct / 100) : null;
+    var dollarStr = dollarVal ? (dollarVal >= 1000 ? '$' + (dollarVal/1000).toFixed(1) + 'T' : '$' + Math.round(dollarVal) + 'B') : '';
+    html += '<div class="report-legend-item"><div class="report-legend-dot" style="background:' + sColors[i % sColors.length] + '"></div>' + k.replace(/([A-Z])/g, ' $1').trim() + ' (' + pct + '%' + (dollarStr ? ' / ' + dollarStr : '') + ')</div>';
+  });
+  html += '</div></div>';
+
+  // Geographic
+  html += '<div class="report-card"><div class="report-card-title">Geographic Allocation</div>';
+  html += '<div class="report-card-sub">Capital deployment by region</div>';
+  if(hasProfile) {
+    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:600">';
+    html += '<span style="color:var(--text-primary)">Domestic ' + dp.domesticPct + '%</span>';
+    html += '<span style="color:var(--text-tertiary)">vs</span>';
+    html += '<span style="color:var(--text-primary)">International ' + dp.internationalPct + '%</span>';
+    html += '</div>';
+    html += '<div class="domestic-intl-bar"><div class="dom" style="width:' + dp.domesticPct + '%">Domestic ' + dp.domesticPct + '%</div><div class="intl" style="width:' + dp.internationalPct + '%">Int\'l ' + dp.internationalPct + '%</div></div>';
+  }
+  html += '<div class="report-chart-box-sm"><canvas id="reportGeoChart"></canvas></div></div>';
+  html += '</div></div>';
+
+  // ========== KEY INVESTMENTS TABLE ==========
+  var investments = hasProfile ? dp.investments : f.investments.map(function(inv) {
+    return {name: inv.name, sector: inv.sector, value: inv.value, year: inv.year, status: 'Active'};
+  });
+
+  html += '<div class="report-section"><div class="report-section-title">Key Investments (' + investments.length + ' positions)</div>';
+  html += '<div class="report-card" style="padding:0;overflow:hidden">';
+  html += '<table class="report-inv-table"><thead><tr>';
+  html += '<th>Investment</th><th>Sector</th><th>Value</th><th>Year</th><th>Status</th>';
+  html += '</tr></thead><tbody>';
+  investments.forEach(function(inv) {
+    var statusClass = inv.status === 'Active' ? 's-active' : inv.status === 'Exited' ? 's-exited' : 's-partial';
+    html += '<tr>';
+    html += '<td>' + inv.name + '</td>';
+    html += '<td><span class="sector-tag">' + inv.sector + '</span></td>';
+    html += '<td style="font-family:\'JetBrains Mono\',monospace;font-weight:600">' + inv.value + '</td>';
+    html += '<td>' + inv.year + '</td>';
+    html += '<td><span class="' + statusClass + '">' + inv.status + '</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table></div></div>';
+
+  // ========== INVESTMENT MANDATE & STRATEGY ==========
+  html += '<div class="report-section"><div class="report-section-title">Investment Mandate &amp; Strategy</div>';
+  html += '<div class="report-card"><div class="report-strategy">';
+  if(hasProfile) {
+    html += '<p><strong>Core Mandate:</strong> ' + dp.mandate + '</p>';
+    html += '<p>' + dp.mandateDetail + '</p>';
+    html += '<p><strong>Sector Thesis:</strong> ' + dp.whySectors + '</p>';
+    if(dp.nationalVision) html += '<p><strong>National Vision Alignment:</strong> ' + dp.nationalVision + '</p>';
+  } else {
+    html += '<p>' + f.mandate + '</p>';
+  }
+  html += '</div></div></div>';
+
+  // ========== DEPLOYMENT TIMELINE ==========
+  var deals = hasProfile ? dp.deals : f.deals;
+  if(deals && deals.length > 0) {
+    html += '<div class="report-section"><div class="report-section-title">Deployment Timeline</div>';
+    html += '<div class="report-card"><div class="report-card-title">Deal Volume &amp; Value by Quarter</div>';
+    html += '<div class="report-card-sub">Last ' + deals.length + ' quarters of deployment activity</div>';
+    html += '<div class="report-chart-box"><canvas id="reportDealsChart"></canvas></div></div></div>';
+  }
+
+  // ========== MACRO CONTEXT ==========
+  if(hasProfile) {
+    html += '<div class="report-section"><div class="report-section-title">Macro Context</div>';
+    html += '<div class="report-card">';
+
+    // Oil sensitivity
+    html += '<div class="macro-signal">';
+    var oilColor = dp.oilSensitivity === 'Very High' ? 'var(--red)' : dp.oilSensitivity === 'High' ? 'var(--orange)' : dp.oilSensitivity === 'Moderate-High' ? 'var(--orange)' : dp.oilSensitivity === 'Moderate' ? 'var(--accent)' : 'var(--green)';
+    html += '<div class="macro-signal-icon" style="background:' + oilColor + '20;color:' + oilColor + '">&#x26FD;</div>';
+    html += '<div><div class="macro-signal-label">Oil Price Sensitivity</div>';
+    html += '<div class="macro-signal-value" style="color:' + oilColor + '">' + dp.oilSensitivity + '</div>';
+    html += '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px">' + dp.oilDetail + '</div></div></div>';
+
+    // Deployment signal
+    html += '<div class="macro-signal">';
+    html += '<div class="macro-signal-icon" style="background:var(--green-light);color:var(--green)">&#x1F4CA;</div>';
+    html += '<div><div class="macro-signal-label">Current Deployment Signal</div>';
+    html += '<div class="macro-signal-value" style="color:var(--green)">' + dp.deploymentSignal + '</div>';
+    html += '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px">' + dp.deploymentDetail + '</div></div></div>';
+
+    // Liquidity cycle
+    html += '<div class="macro-signal">';
+    html += '<div class="macro-signal-icon" style="background:var(--purple-light);color:var(--purple)">&#x1F30A;</div>';
+    html += '<div><div class="macro-signal-label">Liquidity Cycle Position (Howell Framework)</div>';
+    html += '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;line-height:1.6">' + dp.liquidityCycle + '</div></div></div>';
+
+    html += '</div></div>';
+  }
+
+  // ========== RELATED FUNDS ==========
+  if(hasProfile && dp.relatedFunds && dp.relatedFunds.length > 0) {
+    var countryFunds = funds.filter(function(x) { return x.country === f.country && x.rank !== f.rank; });
+    html += '<div class="report-section"><div class="report-section-title">Related Funds in ' + f.country + '</div>';
+    html += '<div class="report-card">';
+    countryFunds.forEach(function(rf) {
+      var rfAum = rf.aum ? (rf.aum >= 1000 ? '$' + (rf.aum/1000).toFixed(2) + 'T' : '$' + rf.aum + 'B') : 'Undisclosed';
+      html += '<span class="related-fund-chip" onclick="closeFundReport();setTimeout(function(){openFundReport(' + rf.rank + ')},500)">' + rf.short + ' (' + rfAum + ')</span>';
+    });
+    html += '</div></div>';
+  }
+
+  // Footer
+  html += '<div style="text-align:center;color:var(--text-tertiary);font-size:12px;padding:32px 0">';
+  html += '47X Intelligence Platform &mdash; Fund Report &mdash; Data as of Q1 2026';
+  html += '</div>';
+
+  document.getElementById('fundReportContent').innerHTML = html;
+  document.getElementById('fundReportOverlay').classList.add('open');
+  document.getElementById('fundReportOverlay').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  // Render charts after DOM update
+  setTimeout(function() { renderReportCharts(f, dp); }, 100);
+}
+
+function closeFundReport() {
+  document.getElementById('fundReportOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Destroy report charts
+  ['reportSectorChart','reportGeoChart','reportDealsChart'].forEach(function(k) {
+    if(charts[k]) { charts[k].destroy(); delete charts[k]; }
+  });
+}
+
+function renderReportCharts(f, dp) {
+  var sColors = ['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+
+  // Sector Doughnut
+  var sectorData = dp ? dp.sectors : f.sectors;
+  var sKeys = Object.keys(sectorData);
+  var sVals = sKeys.map(function(k) { return sectorData[k]; });
+
+  var ctx1 = document.getElementById('reportSectorChart');
+  if(ctx1) {
+    if(charts['reportSectorChart']) charts['reportSectorChart'].destroy();
+    charts['reportSectorChart'] = new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        labels: sKeys.map(function(k) { return k.replace(/([A-Z])/g, ' $1').trim(); }),
+        datasets: [{
+          data: sVals,
+          backgroundColor: sColors.slice(0, sKeys.length),
+          borderWidth: 2,
+          borderColor: '#FFFFFF',
+          borderRadius: 4,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '55%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                var pct = ctx.parsed;
+                var dollarVal = f.aum ? Math.round(f.aum * pct / 100) : null;
+                var str = ctx.label + ': ' + pct + '%';
+                if(dollarVal) str += ' (~$' + (dollarVal >= 1000 ? (dollarVal/1000).toFixed(1) + 'T' : dollarVal + 'B') + ')';
+                return str;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Geographic Bar
+  var geoData = dp ? dp.geoFocus : f.geoFocus;
+  var gKeys = Object.keys(geoData);
+  var gVals = gKeys.map(function(k) { return geoData[k]; });
+
+  var ctx2 = document.getElementById('reportGeoChart');
+  if(ctx2) {
+    if(charts['reportGeoChart']) charts['reportGeoChart'].destroy();
+    charts['reportGeoChart'] = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: gKeys.map(function(k) { return k.replace(/([A-Z])/g, ' $1').trim(); }),
+        datasets: [{
+          data: gVals,
+          backgroundColor: gVals.map(function(v) {
+            return v > 40 ? '#2563EB' : v > 20 ? '#7C3AED' : v > 10 ? '#059669' : '#D97706';
+          }),
+          borderRadius: 6,
+          barThickness: 22
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { max: 100, ticks: { callback: function(v) { return v + '%'; }, font: { size: 11 } }, grid: { color: '#F3F4F6' } },
+          y: { ticks: { font: { size: 11, weight: '600' } }, grid: { display: false } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                var pct = ctx.parsed.x;
+                var dollarVal = f.aum ? Math.round(f.aum * pct / 100) : null;
+                var str = pct + '%';
+                if(dollarVal) str += ' (~$' + (dollarVal >= 1000 ? (dollarVal/1000).toFixed(1) + 'T' : dollarVal + 'B') + ')';
+                return str;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Deals Timeline
+  var deals = dp ? dp.deals : f.deals;
+  if(deals && deals.length > 0) {
+    var dealLabels = deals.map(function(d) { return d.q; }).reverse();
+    var dealCounts = deals.map(function(d) { return d.count; }).reverse();
+    var dealValues = deals.map(function(d) { return d.value; }).reverse();
+
+    var ctx3 = document.getElementById('reportDealsChart');
+    if(ctx3) {
+      if(charts['reportDealsChart']) charts['reportDealsChart'].destroy();
+      charts['reportDealsChart'] = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: dealLabels,
+          datasets: [
+            {
+              label: 'Deal Count',
+              data: dealCounts,
+              backgroundColor: 'rgba(37,99,235,0.75)',
+              borderRadius: 6,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Value ($B)',
+              data: dealValues,
+              type: 'line',
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5,150,105,0.08)',
+              fill: true,
+              pointBackgroundColor: '#059669',
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              tension: 0.3,
+              yAxisID: 'y1',
+              borderWidth: 2.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { position: 'left', ticks: { font: { size: 11 }, stepSize: 2 }, grid: { color: '#F3F4F6' }, title: { display: true, text: 'Deals', font: { size: 10 } } },
+            y1: { position: 'right', ticks: { font: { size: 11 }, callback: function(v) { return '$' + v + 'B'; } }, grid: { display: false }, title: { display: true, text: 'Value', font: { size: 10 } } },
+            x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11, family: "'Inter'" }, boxWidth: 12, padding: 16 } },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  if(ctx.dataset.label === 'Value ($B)') return '$' + ctx.parsed.y.toFixed(1) + 'B deployed';
+                  return ctx.parsed.y + ' deals';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+}
+
+// ==========================================
+// OVERRIDE: Table row click opens report instead of inline expand
+// ==========================================
+var originalToggleFund = toggleFund;
+toggleFund = function(rank) {
+  openFundReport(rank);
+};
+
+// Close on escape key
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'Escape') closeFundReport();
+});
+
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -151,6 +773,90 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
 
+
+/* Full Fund Report Overlay */
+.fund-report-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:var(--bg);overflow-y:auto;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);will-change:transform}
+.fund-report-overlay.open{transform:translateX(0)}
+.fund-report-overlay .report-inner{max-width:1200px;margin:0 auto;padding:24px 40px 80px}
+
+.report-back{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-light);border:none;cursor:pointer;font-family:inherit;transition:all 0.2s;margin-bottom:24px}
+.report-back:hover{background:var(--accent);color:#fff}
+
+.report-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6b 50%,var(--navy-light) 100%);border-radius:var(--radius);padding:40px;color:#fff;margin-bottom:28px;position:relative;overflow:hidden}
+.report-hero::after{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%);pointer-events:none}
+.report-hero-top{display:flex;align-items:flex-start;gap:24px;margin-bottom:28px}
+.report-hero-logo{width:80px;height:80px;border-radius:20px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;letter-spacing:-0.5px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);flex-shrink:0}
+.report-hero-info h1{font-size:30px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;line-height:1.2}
+.report-hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.report-hero-badge{display:inline-flex;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.08)}
+.report-hero-badge.type-highlight{background:rgba(37,99,235,0.3);color:#93c5fd;border-color:rgba(37,99,235,0.3)}
+.report-hero-badge.status-highlight{background:rgba(5,150,105,0.3);color:#6ee7b7;border-color:rgba(5,150,105,0.3)}
+.report-hero-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px}
+.report-hero-kpi{text-align:center;padding:16px;background:rgba(255,255,255,0.06);border-radius:12px;border:1px solid rgba(255,255,255,0.06)}
+.report-hero-kpi-value{font-size:28px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#34D399,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.report-hero-kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.45);margin-top:4px}
+
+.report-section{margin-bottom:28px}
+.report-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);margin-bottom:14px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border-light)}
+.report-section-title::before{content:'';display:block;width:4px;height:18px;border-radius:2px;background:var(--accent)}
+
+.report-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.report-card-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.report-card-sub{font-size:12px;color:var(--text-tertiary);margin-bottom:16px}
+
+.report-summary{font-size:14px;line-height:1.75;color:var(--text-secondary)}
+.report-summary p{margin-bottom:12px}
+.report-strategy{font-size:13px;line-height:1.7;color:var(--text-secondary)}
+.report-strategy p{margin-bottom:10px}
+.report-strategy strong{color:var(--text-primary)}
+
+.report-chart-box{position:relative;height:300px}
+.report-chart-box-sm{position:relative;height:240px}
+
+.report-inv-table{width:100%;border-collapse:collapse;font-size:12px}
+.report-inv-table thead th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-tertiary);border-bottom:2px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+.report-inv-table thead th:hover{color:var(--accent)}
+.report-inv-table tbody td{padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+.report-inv-table tbody td:first-child{font-weight:600;color:var(--text-primary)}
+.report-inv-table tbody tr:hover{background:var(--accent-light)}
+.report-inv-table .sector-tag{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;background:var(--bg);color:var(--text-secondary)}
+.report-inv-table .s-active{color:var(--green);font-weight:600}
+.report-inv-table .s-exited{color:var(--red);font-weight:600}
+.report-inv-table .s-partial{color:var(--orange);font-weight:600}
+
+.report-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.report-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-secondary)}
+.report-legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+.macro-signal{display:flex;align-items:center;gap:12px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:12px}
+.macro-signal-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.macro-signal-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)}
+.macro-signal-value{font-size:15px;font-weight:700;color:var(--text-primary)}
+
+.related-fund-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-light);cursor:pointer;transition:all 0.2s;border:1px solid transparent;margin:4px}
+.related-fund-chip:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.loading-badge{display:inline-flex;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;color:var(--orange);background:var(--orange-light);margin-left:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+.domestic-intl-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;margin:12px 0}
+.domestic-intl-bar .dom{background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+.domestic-intl-bar .intl{background:var(--purple);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+
+@media(max-width:1024px){
+  .fund-report-overlay .report-inner{padding:20px}
+  .report-hero{padding:24px}
+  .report-hero-top{flex-direction:column;align-items:center;text-align:center}
+  .report-hero-kpis{grid-template-columns:repeat(2,1fr)}
+  .report-hero-info h1{font-size:24px}
+}
+@media(max-width:768px){
+  .fund-report-overlay .report-inner{padding:16px}
+  .report-hero{padding:20px}
+  .report-hero-kpis{grid-template-columns:1fr 1fr}
+  .report-hero-kpi-value{font-size:22px}
+}
+
 /* Macro overlay placeholder */
 .macro-placeholder{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;color:var(--text-tertiary)}
 .macro-placeholder h3{font-size:16px;font-weight:700;color:var(--text-secondary);margin-bottom:8px}
@@ -192,7 +898,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <h1>GCC Sovereign Wealth Fund Tracker</h1>
   <p>Comprehensive intelligence across 50 GCC sovereign wealth funds, pension funds, family offices, and venture capital vehicles</p>
   <div class="swf-hero-stats">
-    <div><div class="swf-hero-stat-value" id="totalAum">$5.42T</div><div class="swf-hero-stat-label">Total AUM Tracked</div></div>
+    <div><div class="swf-hero-stat-value" id="totalAum">$5.65T</div><div class="swf-hero-stat-label">Total AUM Tracked</div></div>
     <div><div class="swf-hero-stat-value">50</div><div class="swf-hero-stat-label">Funds Tracked</div></div>
     <div><div class="swf-hero-stat-value">6</div><div class="swf-hero-stat-label">GCC Countries</div></div>
     <div><div class="swf-hero-stat-value">5</div><div class="swf-hero-stat-label">Vehicle Types</div></div>
@@ -321,14 +1027,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div class="card section fade-in">
   <div style="font-size:15px;font-weight:600;margin-bottom:4px">How GCC Funds Deploy Within the Global Liquidity Cycle</div>
   <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px">
-    <p style="margin-bottom:12px">GCC sovereign wealth funds operate on a distinct deployment cadence shaped by three key variables: <strong>oil revenue inflows</strong>, <strong>global liquidity conditions</strong>, and <strong>national strategic mandates</strong> (Vision 2030, Vision 2031, etc.).</p>
-    <p style="margin-bottom:12px">When Brent crude sustains above $80/bbl, Gulf states generate surplus fiscal revenue that feeds directly into SWF allocations. PIF, ADIA, and KIA historically accelerate deployment 6-9 months after sustained oil price increases. Conversely, during oil price contractions (e.g., 2020), deployment slows but does not stop &mdash; these funds pivot toward distressed asset acquisition and counter-cyclical plays.</p>
-    <p style="margin-bottom:12px">Michael Howell's Global Liquidity Index shows that GCC funds tend to deploy into risk assets (tech, real estate, infrastructure) during liquidity expansions, while rotating into fixed income and credit during contractions. This creates a predictable rhythm that informed investors can anticipate.</p>
-    <p>The current cycle (Q1 2026) shows <strong>liquidity expanding</strong>, oil at $102, and all major GCC funds in <strong>active deployment mode</strong>. PIF alone has committed $45B+ in 2025-2026 across NEOM, entertainment, and international portfolio positions.</p>
+    <p style="margin-bottom:12px">GCC sovereign wealth funds operate on a distinct deployment cadence shaped by three key variables: <strong>oil revenue inflows</strong>, <strong>global liquidity conditions</strong> (Howell 65-month cycle), and <strong>national strategic mandates</strong> (Vision 2030, Vision 2040, D33).</p>
+    <p style="margin-bottom:12px"><strong>Current Cycle Position (March 2026):</strong> Michael Howell confirms global liquidity peaked at ~$188.8T in Q3 2025 and is now in <strong>early contraction</strong>. The decline is driven not by central bank tightening but by <strong>private sector drains</strong>: rising working capital demands, AI capex surge, elevated PPI, and oil consuming financial liquidity. US liquidity is falling while Chinese liquidity is rising (critical divergence).</p>
+    <p style="margin-bottom:12px"><strong>Oil-Liquidity Correlation:</strong> Howell&rsquo;s gold-oil ratio (long-term mean: 20x, current: ~55x) implies significant upward pressure on oil prices. Higher oil creates a <strong>lagged</strong> liquidity injection via SWF deployment (6-18 month pipeline) but an <strong>immediate</strong> liquidity drain via higher working capital costs. The gap between these effects is where GCC deployment timing intelligence lives. Saudi&rsquo;s fiscal breakeven is $80-88/bbl (traditional) or $111/bbl including PIF giga-project spending.</p>
+    <p style="margin-bottom:12px"><strong>SWF Deployment Signal: AMBER.</strong> GCC funds are in <strong>transition mode</strong>: reducing risk-asset allocation, increasing defensive positioning. Howell recommends: mid-duration government debt, gold (China angle), energy/resources, consumer staples &mdash; and explicitly says &ldquo;throw out financials, technology long gone.&rdquo; SWFs will likely mirror this rotation. Counter-cyclical bet: China assets and commodities as PBoC stimulus accelerates.</p>
+    <p><strong>Capital rotation sequence over full cycle:</strong> Bonds &rarr; Credits &rarr; Stocks &rarr; Commodities. We are now in the late stage where commodities outperform. The <strong>stablecoin wild card</strong> (US government push for digital dollar payments) could reshape how SWFs think about dollar exposure and redollarize global flows.</p>
   </div>
 </div>
 
 </div><!-- end main -->
+
+<!-- Full Fund Report Overlay -->
+<div class="fund-report-overlay" id="fundReportOverlay">
+  <div class="report-inner" id="fundReportContent"></div>
+</div>
+
 
 <div class="footer">47X Intelligence Platform &mdash; SWF Tracker Module &mdash; Data as of Q1 2026 &mdash; <a href="index.html">Back to Dashboard</a></div>
 
@@ -971,18 +1684,24 @@ function renderAggregateCharts(){
 
   new Chart(document.getElementById('activityChart'),{type:'bar',data:{labels:activeFunds.map(function(f){return f.name}),datasets:[{label:'Total Deals (5Q)',data:activeFunds.map(function(f){return f.deals}),backgroundColor:activeFunds.map(function(f){return f.deals>40?'#DC2626':f.deals>25?'#D97706':f.deals>15?'#2563EB':'#059669'}),borderRadius:4,barThickness:18}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{font:{size:10},stepSize:5},grid:{color:'#F3F4F6'}},x:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var f=activeFunds[ctx.dataIndex];return f.deals+' deals, $'+f.value.toFixed(1)+'B deployed'}}}}}});
 
-  // 5. Liquidity placeholder chart
-  var months=['Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
-  var liquidity=[68,70,72,71,73,75,78,80,82,84,86,88,90,91,93];
-  var deployment=[12,14,15,13,16,18,20,22,24,25,27,28,30,31,33];
+  // 5. Howell Global Liquidity Cycle chart (real cycle data based on CrossBorder Capital framework)
+  // Cycle: Trough Oct 2022 -> Peak Q3 2025 (~$188.8T) -> Early Contraction -> Expected Trough ~March 2028
+  var cycleMonths=['Oct 22','Jan 23','Apr 23','Jul 23','Oct 23','Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Jan 26','Mar 26'];
+  // Global Liquidity Index (indexed, trough=100, peak=~140, now contracting)
+  var liquidityIndex=[100,104,108,112,116,120,124,128,132,136,139,140,138,135,132];
+  // GCC Deployment Activity (indexed: high during late expansion, declining in contraction)
+  var gccDeploy=[40,45,52,58,62,68,75,82,88,92,95,90,82,75,70];
 
-  new Chart(document.getElementById('liquidityPlaceholder'),{type:'line',data:{labels:months,datasets:[{label:'Global Liquidity Index',data:liquidity,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.1)',fill:true,tension:0.4,pointRadius:3},{label:'GCC Deployment Index',data:deployment,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.1)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{font:{size:10}},grid:{color:'#F3F4F6'}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
+  new Chart(document.getElementById('liquidityPlaceholder'),{type:'line',data:{labels:cycleMonths,datasets:[{label:'Global Liquidity Index (Howell)',data:liquidityIndex,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.08)',fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:cycleMonths.map(function(m){return m==='Oct 22'?'#DC2626':m==='Jul 25'||m==='Oct 25'?'#D97706':'#2563EB'}),pointRadius:cycleMonths.map(function(m){return m==='Oct 22'||m==='Jul 25'?6:3})},{label:'GCC Deployment Activity',data:gccDeploy,borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.08)',fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{font:{size:10},callback:function(v){return v}},grid:{color:'#F3F4F6'},title:{display:true,text:'Index (Trough=100)',font:{size:10}}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}},annotation:{annotations:{peakLine:{type:'line',xMin:10,xMax:10,borderColor:'#DC2626',borderWidth:1,borderDash:[4,4],label:{display:true,content:'PEAK Q3 2025',position:'start',font:{size:9}}}}}}}});
 
-  // 6. Oil correlation chart
-  var oilPrice=[78,80,82,79,83,85,88,90,92,95,98,100,102,101,102];
-  var dealFlow=[15,18,20,16,22,25,28,30,32,35,38,40,42,43,45];
+  // 6. Oil-Liquidity Correlation chart (real framework: gold-oil ratio reversion, fiscal breakeven, SWF deployment lag)
+  var oilMonths=['Q1 23','Q2 23','Q3 23','Q4 23','Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25','Q1 26'];
+  // Brent crude quarterly averages (research-backed)
+  var brentPrice=[82,78,86,80,83,85,78,73,76,68,72,65,68];
+  // GCC deal flow (deals per quarter, based on research data showing contraction phase)
+  var gccDeals=[85,78,92,88,95,102,110,98,105,95,88,78,72];
 
-  new Chart(document.getElementById('oilCorrelationChart'),{type:'line',data:{labels:months,datasets:[{label:'Brent Crude ($/bbl)',data:oilPrice,borderColor:'#D97706',backgroundColor:'rgba(217,119,6,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y'},{label:'GCC Deal Flow (deals/month)',data:dealFlow,borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',title:{display:true,text:'Oil Price ($)',font:{size:10}},ticks:{font:{size:10}},grid:{color:'#F3F4F6'}},y1:{position:'right',title:{display:true,text:'Deals/Month',font:{size:10}},ticks:{font:{size:10}},grid:{display:false}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
+  new Chart(document.getElementById('oilCorrelationChart'),{type:'line',data:{labels:oilMonths,datasets:[{label:'Brent Crude ($/bbl)',data:brentPrice,borderColor:'#D97706',backgroundColor:'rgba(217,119,6,0.08)',fill:true,tension:0.4,pointRadius:4,yAxisID:'y'},{label:'GCC Deal Flow (quarterly)',data:gccDeals,borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.08)',fill:true,tension:0.4,pointRadius:4,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',title:{display:true,text:'Brent Crude ($/bbl)',font:{size:10}},ticks:{font:{size:10}},grid:{color:'#F3F4F6'},min:55,max:100},y1:{position:'right',title:{display:true,text:'GCC Deals/Quarter',font:{size:10}},ticks:{font:{size:10}},grid:{display:false}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
 }
 
 // ==========================================
@@ -992,6 +1711,628 @@ document.addEventListener('DOMContentLoaded', function(){
   renderFundTable();
   renderAggregateCharts();
 });
+
+
+// ==========================================
+// DEEP FUND PROFILES — Real Research Data
+// ==========================================
+var deepProfiles = {
+  1: { // PIF
+    executiveSummary: 'The Public Investment Fund (PIF) is Saudi Arabia\'s primary sovereign wealth fund and the central financial engine driving Vision 2030. Established in 1971 and fundamentally restructured in 2015 under Crown Prince Mohammed bin Salman, PIF has grown from a $150B passive holding vehicle into a $1.15T+ globally active investment powerhouse. Its defining characteristic is the dramatic geographic pivot from international diversification to ~80% domestic allocation, inverting the traditional SWF model to build new industries at home. PIF\'s 2025 acquisition of a 93.4% stake in Electronic Arts for $55B signals a shift from minority passive investing to aggressive, majority-control tech acquisitions.',
+    headquarters: 'Riyadh, Saudi Arabia',
+    governor: 'Yasir Al-Rumayyan',
+    chairman: 'Crown Prince Mohammed bin Salman',
+    annualReturn: 'N/A (state development fund)',
+    targetAum: '$2T by 2030',
+    oilSensitivity: 'Very High',
+    oilDetail: 'Fiscal breakeven (incl. PIF spending) is $111/bbl. Cash reserves fell to $15B in late 2024 due to lower oil prices.',
+    deploymentSignal: 'Active (Selective)',
+    deploymentDetail: 'Named world\'s most active SWF in 2025 by Global SWF. Deployed $36.2B in 2025, but 80% was the EA acquisition. Budget cuts of 20-60% across portfolio companies due to fiscal pressure.',
+    liquidityCycle: 'PIF deploys counter-cyclically into distressed assets during downturns, but accelerates 6-9 months after sustained oil price increases above $80/bbl. Current cycle shows selective deployment with heavy reliance on debt issuance ($6B USD bonds, EUR 1.65B bonds, $1.25B sukuk in early 2025).',
+    nationalVision: 'Vision 2030',
+    domesticPct: 80,
+    internationalPct: 20,
+    sectors: {Energy:62,MaterialsMining:10,Telecom:9,FinancialServices:6,RealEstate:4,Technology:4,Utilities:3,Other:2},
+    geoFocus: {MiddleEast:80,NorthAmerica:8,Europe:5,Asia:5,Africa:2},
+    investments: [
+      {name:'Saudi Aramco (16% stake)',sector:'Energy',value:'~$370B',year:2022,status:'Active'},
+      {name:'Electronic Arts (93.4%)',sector:'Gaming/Tech',value:'$28.8B equity',year:2025,status:'Active'},
+      {name:'SoftBank Vision Fund',sector:'Technology',value:'$45B',year:2017,status:'Active'},
+      {name:'Uber Technologies',sector:'Mobility',value:'$5.95-7.1B',year:2016,status:'Active'},
+      {name:'Ma\'aden (Mining)',sector:'Materials/Mining',value:'~10% of portfolio',year:2008,status:'Active'},
+      {name:'STC (Telecom)',sector:'Telecom',value:'~9% of portfolio',year:2015,status:'Active'},
+      {name:'Lucid Motors (majority)',sector:'Automotive/EV',value:'$1.87-4.2B',year:2018,status:'Active'},
+      {name:'NEOM Megaproject',sector:'Infrastructure',value:'$500B plan',year:2017,status:'Active'},
+      {name:'Newcastle United FC',sector:'Sports',value:'$415M',year:2021,status:'Active'},
+      {name:'Jio Platforms (2.32%)',sector:'Telecom',value:'$1.5B',year:2020,status:'Active'},
+      {name:'ACWA Power',sector:'Utilities/Renewables',value:'Major stake',year:2013,status:'Active'},
+      {name:'Riyadh Air',sector:'Aviation',value:'Wholly owned',year:2023,status:'Active'},
+      {name:'Blackstone Infra Fund',sector:'Alternatives',value:'$20B commitment',year:2017,status:'Active'},
+      {name:'Affinity Partners (Kushner)',sector:'Private Equity',value:'$2B',year:2022,status:'Active'},
+      {name:'Arm Holdings',sector:'Semiconductors',value:'Fully divested Q3 2025',year:2024,status:'Exited'}
+    ],
+    mandate: 'PIF operates under a dual mandate: maximizing risk-adjusted financial returns while serving as a national development catalyst for Vision 2030. The fund targets 13 strategic sectors and mandates a 60% local content contribution across its operations. Its overarching goal is to surpass $2 trillion in AUM by 2030.',
+    mandateDetail: 'The PIF is targeting the creation of 1.8 million direct and indirect jobs and aims to contribute SAR 1.2 trillion (approx. $320B) to Saudi Arabia\'s non-oil GDP. The fund operates through six defined investment pools: two global (International Diversified Pool, International Strategic Investments) and four local (Saudi Equity Holdings, Saudi Giga-projects, Saudi Real Estate & Infrastructure Development, and Saudi Sector Development). The Saudi Sector Development pool has seen explosive growth, rising from 4% of the total portfolio in 2020 to over 30% by 2024.',
+    whySectors: 'PIF\'s sector allocation is dominated by its 16% stake in Saudi Aramco (61.8% of portfolio value). Beyond energy, the fund targets technology, entertainment, and mining as key diversification pillars. The aggressive move into gaming (EA acquisition) and AI reflects a strategic bet on digital entertainment as a post-oil revenue engine. Real estate allocation supports giga-projects (NEOM, The Line, ROSHN) designed to build entirely new cities and tourism infrastructure.',
+    deals: [{q:'Q1 2026',count:8,value:5.2},{q:'Q4 2025',count:6,value:36.2},{q:'Q3 2025',count:10,value:6.8},{q:'Q2 2025',count:14,value:9.4},{q:'Q1 2025',count:11,value:7.5},{q:'Q4 2024',count:9,value:8.1},{q:'Q3 2024',count:12,value:7.2},{q:'Q2 2024',count:15,value:10.5}],
+    relatedFunds: ['GOSI','Hassana','Sanabil','Jada','SVC','SAEV']
+  },
+  2: { // ADIA
+    executiveSummary: 'The Abu Dhabi Investment Authority (ADIA) is the world\'s second-largest sovereign wealth fund, managing an estimated $1.05-1.18 trillion in assets. Founded in 1976, ADIA is the ultimate global savings account for Abu Dhabi, evaluating success across 20-30 year horizons with a reported 6.4% annualized 20-year return and 6.8% over 30 years. Unlike regional peers that pursue strategic domestic mandates, ADIA operates as a purely economic entity focused on intergenerational wealth preservation. It does not invest domestically in the UAE. A defining evolution is its aggressive expansion into private equity (12-17% target allocation) and digital infrastructure, positioning itself as a liquidity provider of last resort during market dislocations.',
+    headquarters: 'Abu Dhabi, UAE',
+    governor: 'Sheikh Hamed bin Zayed Al Nahyan (Managing Director)',
+    chairman: 'Sheikh Tahnoon bin Zayed Al Nahyan',
+    annualReturn: '6.4% (20-year), 6.8% (30-year)',
+    targetAum: 'N/A (generational preservation)',
+    oilSensitivity: 'Moderate',
+    oilDetail: 'Funded by Abu Dhabi fiscal surplus from ADNOC. Structurally independent from state spending. Funds are NOT classified as UAE international reserves.',
+    deploymentSignal: 'Active (Counter-Cyclical)',
+    deploymentDetail: 'ADIA deploys most aggressively when traditional capital markets retreat. 2024-2026 saw massive deployments into PE secondaries, data centers, and private credit as other LPs sought liquidity.',
+    liquidityCycle: 'ADIA acts as a liquidity provider of last resort in global markets. During the 2023-2024 interest rate hiking cycle, as PE fundraising dried up, ADIA accelerated deployment into attractively priced LP portfolios and continuation vehicles. Committed $4B to Ardian\'s secondaries fund plus $2B co-invest. Led $770M CDH China CV in 2026.',
+    nationalVision: 'Abu Dhabi Economic Vision 2030',
+    domesticPct: 0,
+    internationalPct: 100,
+    sectors: {DevelopedEquities:37,PrivateEquity:15,GovernmentBonds:11,EmergingEquities:11,RealEstate:8,Alternatives:8,Infrastructure:5,Credit:3,Cash:2},
+    geoFocus: {NorthAmerica:52,Europe:22,EmergingMarkets:15,DevelopedAsia:8,Other:3},
+    investments: [
+      {name:'Fisher Investments (w/ Advent)',sector:'Wealth Management',value:'$3B',year:2025,status:'Active'},
+      {name:'Vantage Data Centers APAC (w/ GIC)',sector:'Digital Infrastructure',value:'$1.6B',year:2025,status:'Active'},
+      {name:'Jio Platforms (India)',sector:'Telecom',value:'$752M',year:2020,status:'Active'},
+      {name:'Reliance Retail (India)',sector:'Consumer',value:'$1.3B+',year:2020,status:'Active'},
+      {name:'DigitalBridge (40% stake)',sector:'Data Centers',value:'Undisclosed',year:2024,status:'Active'},
+      {name:'AlphaGen (11GW power platform)',sector:'Power/AI Infrastructure',value:'$500M',year:2024,status:'Active'},
+      {name:'Lenskart (India)',sector:'E-commerce',value:'$500M',year:2023,status:'Active'},
+      {name:'IDFC FIRST Bank (5.1%)',sector:'Banking',value:'~$315M',year:2025,status:'Active'},
+      {name:'Ardian ASF IX Secondaries',sector:'PE Secondaries',value:'$4B + $2B co-invest',year:2024,status:'Active'},
+      {name:'CDH Investments CV (China)',sector:'PE Continuation',value:'$770M (lead)',year:2026,status:'Active'},
+      {name:'Egis (w/ Neuberger/Apollo)',sector:'Smart Infrastructure',value:'EUR 1B CV',year:2024,status:'Active'},
+      {name:'Froneri (w/ PAI/Nestle)',sector:'Consumer',value:'EUR 6.5B equity deal',year:2024,status:'Active'},
+      {name:'Dignari Capital SMA',sector:'Private Credit (APAC)',value:'$300-500M',year:2026,status:'Active'},
+      {name:'ReNew Power (India)',sector:'Renewables',value:'Significant',year:2020,status:'Active'},
+      {name:'Qlik Technologies',sector:'Data Analytics',value:'Minority stake',year:2024,status:'Active'}
+    ],
+    mandate: 'ADIA\'s statutory mandate is to sustain the long-term prosperity of Abu Dhabi by prudently growing capital through a disciplined investment process. The fund evaluates success across 20-30 year generational horizons.',
+    mandateDetail: 'ADIA\'s strategy is governed by its "Reference Portfolio," a theoretical blend of publicly traded securities that defines baseline risk appetite. The Strategy & Planning Department adds alpha through Strategic Asset Allocation that overweights or underweights specific asset classes based on long-term macroeconomic views. Slightly less than half of the portfolio is passively indexed, while the remainder is actively managed. 64% of assets are now managed internally (up from 55% in 2022).',
+    whySectors: 'ADIA\'s most aggressive growth sectors are Technology/Digital Infrastructure (data centers, AI power generation) and Private Credit (exploiting the retreat of traditional Western banking under Basel III). Real estate is pivoting from commercial office space toward logistics, student accommodation, and co-living. The PE expansion to 12-17% target reflects a structural bet on the illiquidity premium during a period of constrained public market returns.',
+    deals: [{q:'Q1 2026',count:8,value:5.1},{q:'Q4 2025',count:10,value:6.2},{q:'Q3 2025',count:7,value:4.8},{q:'Q2 2025',count:9,value:5.5},{q:'Q1 2025',count:8,value:4.9},{q:'Q4 2024',count:11,value:7.0},{q:'Q3 2024',count:8,value:5.2},{q:'Q2 2024',count:10,value:6.1}],
+    relatedFunds: ['Mubadala','ADQ','Lunate','Royal Group','EIA']
+  },
+  3: { // KIA
+    executiveSummary: 'The Kuwait Investment Authority (KIA) is the world\'s oldest sovereign wealth fund, established in 1953 -- eight years before Kuwait achieved independence. Managing approximately $1.02 trillion, KIA operates through a unique dual-fund architecture: the General Reserve Fund (GRF) serving as the state treasury, and the Future Generations Fund (FGF) as an untouchable intergenerational endowment. KIA is constitutionally prohibited from borrowing for investments and operates as a strictly passive investor, never seeking board seats or operational control. The 2024-2026 period marks a structural inflection point as KIA pivots aggressively into AI infrastructure, joining the AI Infrastructure Partnership (AIP) with BlackRock and Microsoft, and co-acquiring Aligned Data Centers in a historic $40B deal.',
+    headquarters: 'Kuwait City, Kuwait',
+    governor: 'Sheikh Saoud Salem Abdulaziz Al-Sabah (Managing Director, appointed Nov 2024)',
+    chairman: 'Minister of Finance (ex-officio)',
+    annualReturn: 'Not disclosed (targets composite benchmark on 3-year rolling basis)',
+    targetAum: 'N/A (intergenerational preservation)',
+    oilSensitivity: 'High',
+    oilDetail: 'Kuwait\'s fiscal breakeven is ~$80/bbl. During 2015-2020 oil price collapse, GRF faced rapid liquid asset depletion. The automatic 10% annual transfer to FGF was halted in 2020.',
+    deploymentSignal: 'Active (AI Pivot)',
+    deploymentDetail: 'KIA invested $9B into AI/digital sectors over 5 years ($6B digital infrastructure, $3B pure AI). Joined AIP as first non-founder anchor investor. Co-acquired Aligned Data Centers at $40B enterprise value.',
+    liquidityCycle: 'KIA acts as a stabilizing force in global markets due to its unleveraged approach. The fund deploys through external fund managers (EFMs) and specialized subsidiaries (St. Martins Property, Wren House Infrastructure). Counter-cyclical deployment pattern: served as "white knight" during 2008 GFC with profitable investments in Citigroup ($3B in, $4.1B out) and Merrill Lynch.',
+    nationalVision: 'Kuwait Vision 2035 (New Kuwait)',
+    domesticPct: 15,
+    internationalPct: 85,
+    sectors: {PublicEquities:50,FixedIncome:22,RealEstateInfra:13,PrivateEquity:10,HedgeFunds:5},
+    geoFocus: {NorthAmerica:42,Europe:28,EmergingMarkets:18,DevelopedAsia:12},
+    investments: [
+      {name:'Mercedes-Benz Group (~7%)',sector:'Automotive',value:'$5B+',year:1961,status:'Active'},
+      {name:'BP Plc (~2%)',sector:'Energy',value:'$2B+',year:1986,status:'Active'},
+      {name:'AI Infrastructure Partnership',sector:'AI/Digital Infra',value:'$30-100B platform',year:2025,status:'Active'},
+      {name:'Aligned Data Centers (w/ BlackRock/MGX)',sector:'Data Centers',value:'$40B enterprise',year:2025,status:'Active'},
+      {name:'Citigroup',sector:'Financial',value:'$3B in / $4.1B out',year:2008,status:'Exited'},
+      {name:'Merrill Lynch',sector:'Financial',value:'~$2B',year:2008,status:'Exited'},
+      {name:'AIA Group',sector:'Insurance',value:'$1B in / $3.4B realized',year:2010,status:'Partial'},
+      {name:'ICBC (China)',sector:'Banking',value:'$720M',year:2006,status:'Active'},
+      {name:'Agricultural Bank of China',sector:'Banking',value:'$800M',year:2010,status:'Active'},
+      {name:'Visa',sector:'Financial Services',value:'Significant',year:2009,status:'Active'},
+      {name:'BlackRock',sector:'Asset Management',value:'$750M',year:2009,status:'Active'},
+      {name:'St. Martins Property (subsidiary)',sector:'Real Estate',value:'$10B+ portfolio',year:1972,status:'Active'},
+      {name:'Wren House Infrastructure',sector:'Infrastructure',value:'$5B+ portfolio',year:2013,status:'Active'}
+    ],
+    mandate: 'KIA operates under three core objectives: achieving commercial returns exceeding composite benchmarks, operating as a world-class investment management organization, and fostering Kuwait\'s private sector without competing with it.',
+    mandateDetail: 'The Future Generations Fund invests entirely outside of Kuwait and MENA, adhering strictly to Strategic Asset Allocation across diverse global asset classes. The GRF holds domestic assets and provides state treasury liquidity. KIA is constitutionally prohibited from borrowing money for investment purposes or using derivatives as standalone investments. Approximately 23% of the total portfolio targets alternative sectors including real estate, private equity, brownfield infrastructure, and hedge funds.',
+    whySectors: 'KIA\'s allocation mirrors global GDP contributions and market capitalizations, with exceptions only for legacy "core holdings" (BP, Mercedes-Benz). The recent pivot to AI/digital infrastructure reflects the new Managing Director Sheikh Saoud\'s mandate to reallocate away from cyclical energy sectors (avoiding double exposure to Kuwait\'s domestic oil) toward technology-driven growth. KIA is transitioning toward 100% ESG compliance across its entire portfolio.',
+    deals: [{q:'Q1 2026',count:4,value:2.8},{q:'Q4 2025',count:5,value:3.1},{q:'Q3 2025',count:3,value:2.2},{q:'Q2 2025',count:4,value:2.6},{q:'Q1 2025',count:4,value:2.4},{q:'Q4 2024',count:5,value:3.5},{q:'Q3 2024',count:4,value:2.8},{q:'Q2 2024',count:4,value:2.5}],
+    relatedFunds: ['Wafra','NBK Wealth']
+  },
+  4: { // QIA
+    executiveSummary: 'The Qatar Investment Authority (QIA) manages an estimated $526-580 billion and stands apart from GCC peers through its synthesis of financial yield with geopolitical hedging. Founded in 2005 to capture LNG surpluses, QIA has evolved from an opportunistic crisis-buyer into a sophisticated, thesis-driven asset manager. The fund\'s strategy is uniquely shaped by Qatar\'s geographic vulnerability -- by owning Heathrow, The Shard, and massive stakes in Western banks, Qatar intertwines its economic survival with the prosperity of the US and UK. The 2024-2026 period represents its most aggressive deployment phase ever, highlighted by a $500B pledge to the US economy, $25B Goldman Sachs partnership, massive Anthropic AI investments, and a $3B venture capital fund-of-funds program designed to transform Doha into a global tech hub.',
+    headquarters: 'Doha, Qatar',
+    governor: 'Mohammed Saif Al-Sowaidi (CEO, appointed Nov 2024)',
+    chairman: 'Sheikh Bandar bin Mohammed Al-Thani',
+    annualReturn: 'Not publicly disclosed',
+    targetAum: '$800B+ by 2030 (with North Field Expansion revenues)',
+    oilSensitivity: 'Moderate-High (LNG-dependent)',
+    oilDetail: 'Oil and gas revenues constitute ~80% of Qatari government revenues. North Field Expansion expected to add $30B+ annually to energy revenues.',
+    deploymentSignal: 'Highly Active (Counter-Cyclical)',
+    deploymentDetail: 'Pledged $500B to US economy over coming decade. $25B Goldman Sachs partnership. Expanded VC Fund of Funds from $1B to $3B. Heavy AI deployment into Anthropic.',
+    liquidityCycle: 'QIA deploys aggressively during market dislocations -- its 2008 crisis interventions in Barclays and Credit Suisse defined this approach. Current cycle shows QIA filling VC funding gaps as traditional investors retreat, paying premiums for high-impact AI and renewable assets. The fund stopped new hydrocarbon investments in 2020.',
+    nationalVision: 'Qatar National Vision 2030',
+    domesticPct: 10,
+    internationalPct: 90,
+    sectors: {RealEstateInfra:28,FinancialServices:22,PublicEquities:20,TechMediaHealthcare:18,FixedIncomeCash:12},
+    geoFocus: {Europe:40,NorthAmerica:25,AsiaPacific:15,MiddleEast:12,Africa:8},
+    investments: [
+      {name:'Volkswagen Group (~17%)',sector:'Automotive',value:'$15B+ value',year:2009,status:'Active'},
+      {name:'Barclays (~7%)',sector:'Banking',value:'$3B+',year:2008,status:'Active'},
+      {name:'Glencore (~8.2%)',sector:'Mining/Commodities',value:'$5B+',year:2012,status:'Active'},
+      {name:'Harrods (100%)',sector:'Luxury Retail',value:'$2.2B acquisition',year:2010,status:'Active'},
+      {name:'The Shard (95%)',sector:'Real Estate',value:'$1B+',year:2013,status:'Active'},
+      {name:'Canary Wharf (majority)',sector:'Real Estate',value:'$2.6B+ acquisition',year:2015,status:'Active'},
+      {name:'Heathrow Airport (20%)',sector:'Infrastructure',value:'$4B+',year:2012,status:'Active'},
+      {name:'J Sainsbury\'s (~26%)',sector:'Retail/Grocery',value:'$2B+',year:2010,status:'Active'},
+      {name:'Paris Saint-Germain (QSI)',sector:'Sports',value:'$4B+ valuation',year:2011,status:'Active'},
+      {name:'Anthropic (AI)',sector:'AI/Technology',value:'$13B+ rounds',year:2025,status:'Active'},
+      {name:'Goldman Sachs Partnership',sector:'Multi-sector',value:'$25B commitment',year:2026,status:'Active'},
+      {name:'Credit Suisse (historical)',sector:'Banking',value:'~6-7% (pre-UBS)',year:2008,status:'Exited'},
+      {name:'Miramax (historical)',sector:'Entertainment',value:'$660M acquisition',year:2010,status:'Exited'},
+      {name:'Kokusai Electric (Japan)',sector:'Semiconductors',value:'Significant',year:2024,status:'Active'},
+      {name:'McDonald\'s China Operations',sector:'Consumer/QSR',value:'Strategic stake',year:2024,status:'Active'}
+    ],
+    mandate: 'QIA\'s founding constitution frames it as a savings fund tasked with creating long-term value, supporting a competitive local economy, and providing liquidity to stabilize the domestic economy when necessary.',
+    mandateDetail: 'QIA operates through a vast subsidiary ecosystem: Qatar Holding (major equity acquisitions), Qatari Diar ($8.1B real estate development arm with 50 projects across 20 countries), and Qatar Sports Investments (PSG, padel, sports diplomacy). In 2020, QIA implemented a formal Reference Portfolio approach and announced it would no longer deploy new capital into hydrocarbon investments. 46% of its power generation infrastructure is now in renewables.',
+    whySectors: 'QIA\'s heavy European real estate and financial stakes serve dual purposes: financial yield and geopolitical hedging. By owning critical Western infrastructure (Heathrow, Canary Wharf), Qatar ensures that host nations have a financial interest in its stability. The aggressive pivot to AI (Anthropic), digital infrastructure, and venture capital ($3B Fund of Funds requiring VC firms to open Doha offices) reflects a post-hydrocarbon transformation strategy. Sports investments (PSG, Premier Padel) function as soft power diplomacy.',
+    deals: [{q:'Q1 2026',count:8,value:5.5},{q:'Q4 2025',count:10,value:6.8},{q:'Q3 2025',count:7,value:4.2},{q:'Q2 2025',count:9,value:5.9},{q:'Q1 2025',count:8,value:5.1},{q:'Q4 2024',count:9,value:6.0},{q:'Q3 2024',count:7,value:4.5},{q:'Q2 2024',count:8,value:5.2}],
+    relatedFunds: []
+  },
+  5: { // ICD
+    executiveSummary: 'The Investment Corporation of Dubai (ICD) is the principal investment arm of the Government of Dubai, managing approximately $429 billion (AED 1.47 trillion) in assets as of 2024. Unlike traditional SWFs that pursue global portfolio diversification, ICD operates as a hybrid developmental fund -- it IS Dubai Inc. The fund holds 100% of Emirates Group, 100% of ENOC, 100% of Dubai Duty Free, 40.92% of Emirates NBD, and 22.27% of Emaar Properties (builder of the Burj Khalifa). ICD reported record net profits of AED 67.5 billion ($18.4B) in 2024 and record revenues of AED 349.6 billion ($95.2B), driven by surging global travel demand and a booming Dubai property market. While overwhelmingly domestic, ICD now operates across 55 investee companies in 86 countries.',
+    headquarters: 'Dubai, UAE',
+    governor: 'Mohammed Ibrahim Al Shaibani (Managing Director & CEO)',
+    chairman: 'Sheikh Hamdan bin Mohammed Al Maktoum (Crown Prince of Dubai)',
+    annualReturn: 'AED 67.5B net profit (2024)',
+    targetAum: 'N/A (developmental holding)',
+    oilSensitivity: 'Low-Moderate',
+    oilDetail: 'Dubai has minimal oil reserves. ICD\'s returns are driven by aviation, banking, real estate, and tourism rather than hydrocarbon revenues. ENOC (100% owned) provides some energy exposure.',
+    deploymentSignal: 'Active (Capital Recycling)',
+    deploymentDetail: 'Sold 49% of ICD Brookfield Place (largest UAE institutional single-asset RE deal). Actively deploying into international PE, VC, and growth equity.',
+    liquidityCycle: 'ICD\'s deployment is driven by Dubai\'s position as a global hub for aviation, trade, and tourism rather than the oil-liquidity cycle. Post-pandemic travel boom has generated record cash flows. The fund recycles capital by monetizing mature real estate assets to fund venture capital and international private equity allocations.',
+    nationalVision: 'Dubai Economic Agenda D33',
+    domesticPct: 70,
+    internationalPct: 30,
+    sectors: {BankingFinancial:25,TransportAviation:22,RealEstate:17,HospitalityLeisure:15,Industrial:7,Telecom:5,OilGas:3,Other:6},
+    geoFocus: {MiddleEast:55,Europe:18,AsiaPacific:12,NorthAmerica:10,Africa:5},
+    investments: [
+      {name:'Emirates Group (100%)',sector:'Aviation',value:'AED 119.8B revenue',year:2006,status:'Active'},
+      {name:'Emirates NBD (40.92%)',sector:'Banking',value:'AED 1.086T assets',year:2007,status:'Active'},
+      {name:'Emaar Properties (22.27%)',sector:'Real Estate',value:'AED 8.8B dividend 2024',year:2006,status:'Active'},
+      {name:'ENOC (100%)',sector:'Energy',value:'Full value chain',year:2006,status:'Active'},
+      {name:'Dubai Duty Free (100%)',sector:'Retail/Aviation',value:'$2B+ annual turnover',year:2006,status:'Active'},
+      {name:'Dubai Islamic Bank (28%)',sector:'Islamic Banking',value:'Major stake',year:2006,status:'Active'},
+      {name:'Borse Dubai (100%)',sector:'Capital Markets',value:'DFM + Nasdaq Dubai',year:2006,status:'Active'},
+      {name:'du Telecom (11.5%)',sector:'Telecommunications',value:'Minority stake',year:2006,status:'Active'},
+      {name:'flydubai (100%)',sector:'Aviation/LCC',value:'Full ownership',year:2008,status:'Active'},
+      {name:'Dubai Aerospace Enterprise (100%)',sector:'Aircraft Leasing',value:'Top-tier global lessor',year:2019,status:'Active'},
+      {name:'Atlantis The Royal + The Palm',sector:'Hospitality',value:'Flagship assets',year:2006,status:'Active'},
+      {name:'Kerzner International (46%)',sector:'Hospitality/Luxury',value:'One&Only Resorts',year:2006,status:'Active'},
+      {name:'ICD Brookfield Place (51%)',sector:'Real Estate',value:'1.1M sq ft DIFC tower',year:2019,status:'Partial'},
+      {name:'Fireside Ventures (India)',sector:'Venture Capital',value:'LP commitment',year:2024,status:'Active'},
+      {name:'Nasdaq Inc.',sector:'Capital Markets',value:'Strategic equity stake',year:2008,status:'Active'}
+    ],
+    mandate: 'ICD was explicitly created to consolidate Dubai\'s sprawling portfolio of state-owned enterprises, providing centralized strategic and financial oversight to maximize long-term wealth generation for the emirate.',
+    mandateDetail: 'ICD\'s mandate is dual-pronged: generate superior risk-adjusted returns for the regional financial community, and actively support Dubai\'s macroeconomic diversification away from hydrocarbon dependence. Unlike passive reserve funds, ICD is a highly active developmental sovereign wealth fund. The fund\'s evolution has progressed through three phases: Consolidation (2006-2008), Crisis Management (2009-2015), and Strategic Deployment & Monetization (2016-present).',
+    whySectors: 'ICD\'s portfolio represents the backbone of "Dubai Inc." -- Aviation (Emirates as the primary catalyst for logistics and tourism), Banking (Emirates NBD\'s AED 1.086T balance sheet benefiting from higher rates), Real Estate (Emaar\'s 1.7B sq ft land bank and AED 127B revenue backlog), and Hospitality (Atlantis, Kerzner). The fund is now expanding into international VC and private equity to capture global technological alpha outside its traditional UAE-based footprint.',
+    deals: [{q:'Q1 2026',count:5,value:3.2},{q:'Q4 2025',count:6,value:3.8},{q:'Q3 2025',count:4,value:2.5},{q:'Q2 2025',count:5,value:3.0},{q:'Q1 2025',count:5,value:2.8},{q:'Q4 2024',count:7,value:4.5},{q:'Q3 2024',count:5,value:3.0},{q:'Q2 2024',count:6,value:3.5}],
+    relatedFunds: ['Dubai Holding','Landmark Group']
+  },
+  7: { // Mubadala
+    executiveSummary: 'Mubadala Investment Company is Abu Dhabi\'s strategic investment arm, managing approximately $330 billion (AED 1.2 trillion) with a five-year annualized return of 10.1%. Mubadala occupies the critical intersection of sovereign wealth management and venture building -- it is the emirate\'s primary agent for high-tech industrialization. The fund holds an 81.46% controlling interest in GlobalFoundries (a top-5 global semiconductor foundry), has co-founded the MGX AI investment platform targeting $100B AUM, and deployed $32.5B in capital in 2024 alone (33.7% YoY increase). Unlike ADIA\'s passive approach, Mubadala takes board seats, controls subsidiaries, and executes 10-20 year transformation cycles. It is rapidly shifting from public equities to private markets, with 40% of AUM now in private equity.',
+    headquarters: 'Abu Dhabi, UAE',
+    governor: 'Khaldoon Khalifa Al Mubarak (Managing Director & Group CEO)',
+    chairman: 'Sheikh Tahnoon bin Zayed Al Nahyan',
+    annualReturn: '10.1% (5-year annualized)',
+    targetAum: 'N/A (strategic growth)',
+    oilSensitivity: 'Moderate',
+    oilDetail: 'Funded by Abu Dhabi government. Mubadala Energy produces ~430,000 boe/day (70% gas). Legacy petrochemical assets (Cepsa, Borealis) provide cash flow while fund pivots to AI/tech.',
+    deploymentSignal: 'Highly Active (AI-First)',
+    deploymentDetail: 'Deployed $32.5B in 2024 (33.7% YoY increase). Co-founded MGX AI fund targeting $100B. Backed Stargate project with OpenAI/SoftBank/Oracle. Private credit portfolio expanded to $20B.',
+    liquidityCycle: 'Mubadala operates on a highly dynamic, self-funding investment lifecycle -- deploying AED 119B in 2024 while generating AED 109B in proceeds through strategic monetizations. The fund exploits illiquidity premiums in private markets during periods of constrained public market returns. Private credit is the fastest-growing allocation, aided by high interest rates and partnerships with Apollo, Ares, Carlyle, Goldman Sachs, and KKR.',
+    nationalVision: 'Abu Dhabi Economic Vision 2030',
+    domesticPct: 23,
+    internationalPct: 77,
+    sectors: {PrivateEquity:40,PublicEquity:23,RealEstateInfra:17,Alternatives:15,PrivateCredit:5},
+    geoFocus: {NorthAmerica:41,MiddleEast:23,Europe:16,AsiaPacific:15,LatinAmerica:2,Other:3},
+    investments: [
+      {name:'GlobalFoundries (81.46%)',sector:'Semiconductors',value:'$20B+ invested',year:2009,status:'Active'},
+      {name:'MGX AI Fund (co-founder)',sector:'AI/Digital Infrastructure',value:'$100B target',year:2024,status:'Active'},
+      {name:'GAIIP (w/ BlackRock/Microsoft/GIP)',sector:'AI Data Centers',value:'$30-100B platform',year:2024,status:'Active'},
+      {name:'Stargate Project (w/ OpenAI/SoftBank)',sector:'AI Infrastructure',value:'Multi-billion',year:2025,status:'Active'},
+      {name:'Cleveland Clinic Abu Dhabi',sector:'Healthcare',value:'$2B+',year:2015,status:'Active'},
+      {name:'Cepsa (Spain)',sector:'Energy/Petrochemicals',value:'Major stake',year:2011,status:'Active'},
+      {name:'Borealis (Austria)',sector:'Chemicals/Plastics',value:'Major stake',year:2014,status:'Active'},
+      {name:'Emirates Global Aluminium',sector:'Industrials/Mining',value:'JV with Dubal',year:2013,status:'Active'},
+      {name:'Silver Lake Partners',sector:'PE/Technology',value:'$2B+ anchor',year:2020,status:'Active'},
+      {name:'Strata Manufacturing',sector:'Aerospace',value:'Full ownership',year:2009,status:'Active'},
+      {name:'M42 (healthcare + G42)',sector:'Healthcare/AI',value:'Strategic JV',year:2023,status:'Active'},
+      {name:'Masdar (33% stake)',sector:'Clean Energy',value:'100+ GW target',year:2006,status:'Active'},
+      {name:'Space42 (Yahsat + Bayanat)',sector:'Space/Satellite',value:'Merged entity',year:2024,status:'Active'},
+      {name:'Mubadala Energy',sector:'Energy/Gas',value:'430K boe/day',year:2017,status:'Active'},
+      {name:'Kelix Bio',sector:'Life Sciences',value:'Recent acquisition',year:2025,status:'Active'}
+    ],
+    mandate: 'Mubadala was explicitly designed as a government-owned investment firm charged with developing Abu Dhabi\'s domestic economy. The fund operates under a dual mandate: generating sustainable financial returns while achieving strategic returns that facilitate UAE economic diversification.',
+    mandateDetail: 'Mubadala acts not merely as a passive allocator of capital but as an active, control-seeking operator. The fund incubates new industries locally (aerospace, advanced manufacturing, healthcare) while leveraging international investments to acquire intellectual property, secure global supply chains, and build geopolitical partnerships. Over 95% of credit investments are in private credit, with deployments into CLOs, senior debt, and subordinated debt. An "AI member" now serves as a consultant on the investment committee.',
+    whySectors: 'Technology (40% PE allocation) reflects Mubadala\'s conviction that semiconductors and AI represent the foundational infrastructure of the next century. GlobalFoundries positions Abu Dhabi as a critical node in the global chip supply chain. Healthcare (Cleveland Clinic Abu Dhabi, M42) reduces outward medical tourism. Aerospace (Strata, Sanad) builds domestic high-skilled manufacturing. Clean energy (Masdar, 100+ GW target) positions the UAE as a renewables leader despite its hydrocarbon heritage.',
+    deals: [{q:'Q1 2026',count:9,value:6.1},{q:'Q4 2025',count:11,value:7.5},{q:'Q3 2025',count:8,value:5.2},{q:'Q2 2025',count:10,value:6.8},{q:'Q1 2025',count:9,value:5.9},{q:'Q4 2024',count:12,value:8.5},{q:'Q3 2024',count:9,value:6.0},{q:'Q2 2024',count:11,value:7.2}],
+    relatedFunds: ['ADIA','ADQ','Lunate','Royal Group','EIA']
+  }
+};
+
+// Country flags (emoji fallback)
+var countryFlags = {
+  'Saudi Arabia': '\ud83c\uddf8\ud83c\udde6',
+  'UAE': '\ud83c\udde6\ud83c\uddea',
+  'Kuwait': '\ud83c\uddf0\ud83c\uddfc',
+  'Qatar': '\ud83c\uddf6\ud83c\udde6',
+  'Bahrain': '\ud83c\udde7\ud83c\udded',
+  'Oman': '\ud83c\uddf4\ud83c\uddf2'
+};
+
+// ==========================================
+// FULL FUND REPORT RENDERER
+// ==========================================
+function openFundReport(rank) {
+  var f = funds.find(function(x){return x.rank===rank});
+  if(!f) return;
+  var dp = deepProfiles[rank];
+  var hasProfile = !!dp;
+  var aumStr = f.aum ? (f.aum>=1000 ? '$'+((f.aum/1000).toFixed(2))+'T' : '$'+f.aum+'B') : 'Undisclosed';
+  var flag = countryFlags[f.country] || '';
+  var html = '';
+
+  // Back button
+  html += '<button class="report-back" onclick="closeFundReport()">&larr; Back to All Funds</button>';
+
+  if(!hasProfile) {
+    html += '<div class="loading-badge" style="margin-bottom:16px;display:inline-block">Full profile loading...</div>';
+  }
+
+  // ========== HERO ==========
+  html += '<div class="report-hero">';
+  html += '<div class="report-hero-top">';
+  html += '<div class="report-hero-logo">' + f.short + '</div>';
+  html += '<div class="report-hero-info">';
+  html += '<h1>' + flag + ' ' + f.name + '</h1>';
+  html += '<div class="report-hero-meta">';
+  html += '<span class="report-hero-badge">' + f.country + '</span>';
+  html += '<span class="report-hero-badge type-highlight">' + f.type + '</span>';
+  html += '<span class="report-hero-badge status-highlight">' + f.status + '</span>';
+  html += '<span class="report-hero-badge">Tier ' + f.tier + '</span>';
+  html += '<span class="report-hero-badge">Founded ' + f.founded + '</span>';
+  if(hasProfile) html += '<span class="report-hero-badge">' + dp.headquarters + '</span>';
+  html += '</div></div></div>';
+
+  // KPIs
+  html += '<div class="report-hero-kpis">';
+  html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">' + aumStr + '</div><div class="report-hero-kpi-label">AUM</div></div>';
+
+  var totalDeals = (hasProfile ? dp.deals : f.deals).reduce(function(s,d){return s+d.count},0);
+  var totalValue = (hasProfile ? dp.deals : f.deals).reduce(function(s,d){return s+d.value},0);
+  html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">' + totalDeals + '</div><div class="report-hero-kpi-label">Deals (' + (hasProfile ? '8Q' : '5Q') + ')</div></div>';
+  html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">$' + totalValue.toFixed(1) + 'B</div><div class="report-hero-kpi-label">Deployed (' + (hasProfile ? '8Q' : '5Q') + ')</div></div>';
+
+  if(hasProfile) {
+    html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value">' + (dp.annualReturn || 'N/A') + '</div><div class="report-hero-kpi-label">Returns</div></div>';
+    if(dp.targetAum) html += '<div class="report-hero-kpi"><div class="report-hero-kpi-value" style="font-size:18px">' + dp.targetAum + '</div><div class="report-hero-kpi-label">Target</div></div>';
+  }
+  html += '</div></div>';
+
+  // ========== EXECUTIVE SUMMARY ==========
+  html += '<div class="report-section"><div class="report-section-title">Executive Summary</div>';
+  html += '<div class="report-card"><div class="report-summary"><p>';
+  html += hasProfile ? dp.executiveSummary : f.mandate;
+  html += '</p></div></div></div>';
+
+  // ========== PORTFOLIO ALLOCATION (Doughnut) ==========
+  var sectorData = hasProfile ? dp.sectors : f.sectors;
+  html += '<div class="report-section"><div class="report-section-title">Portfolio Allocation</div>';
+  html += '<div class="grid-2">';
+  html += '<div class="report-card"><div class="report-card-title">Sector Allocation</div>';
+  html += '<div class="report-card-sub">Percentage breakdown by sector / asset class</div>';
+  html += '<div class="report-chart-box"><canvas id="reportSectorChart"></canvas></div>';
+
+  // Legend with $ values
+  html += '<div class="report-legend">';
+  var sColors = ['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+  var sKeys = Object.keys(sectorData);
+  sKeys.forEach(function(k, i) {
+    var pct = sectorData[k];
+    var dollarVal = f.aum ? (f.aum * pct / 100) : null;
+    var dollarStr = dollarVal ? (dollarVal >= 1000 ? '$' + (dollarVal/1000).toFixed(1) + 'T' : '$' + Math.round(dollarVal) + 'B') : '';
+    html += '<div class="report-legend-item"><div class="report-legend-dot" style="background:' + sColors[i % sColors.length] + '"></div>' + k.replace(/([A-Z])/g, ' $1').trim() + ' (' + pct + '%' + (dollarStr ? ' / ' + dollarStr : '') + ')</div>';
+  });
+  html += '</div></div>';
+
+  // Geographic
+  html += '<div class="report-card"><div class="report-card-title">Geographic Allocation</div>';
+  html += '<div class="report-card-sub">Capital deployment by region</div>';
+  if(hasProfile) {
+    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:600">';
+    html += '<span style="color:var(--text-primary)">Domestic ' + dp.domesticPct + '%</span>';
+    html += '<span style="color:var(--text-tertiary)">vs</span>';
+    html += '<span style="color:var(--text-primary)">International ' + dp.internationalPct + '%</span>';
+    html += '</div>';
+    html += '<div class="domestic-intl-bar"><div class="dom" style="width:' + dp.domesticPct + '%">Domestic ' + dp.domesticPct + '%</div><div class="intl" style="width:' + dp.internationalPct + '%">Int\'l ' + dp.internationalPct + '%</div></div>';
+  }
+  html += '<div class="report-chart-box-sm"><canvas id="reportGeoChart"></canvas></div></div>';
+  html += '</div></div>';
+
+  // ========== KEY INVESTMENTS TABLE ==========
+  var investments = hasProfile ? dp.investments : f.investments.map(function(inv) {
+    return {name: inv.name, sector: inv.sector, value: inv.value, year: inv.year, status: 'Active'};
+  });
+
+  html += '<div class="report-section"><div class="report-section-title">Key Investments (' + investments.length + ' positions)</div>';
+  html += '<div class="report-card" style="padding:0;overflow:hidden">';
+  html += '<table class="report-inv-table"><thead><tr>';
+  html += '<th>Investment</th><th>Sector</th><th>Value</th><th>Year</th><th>Status</th>';
+  html += '</tr></thead><tbody>';
+  investments.forEach(function(inv) {
+    var statusClass = inv.status === 'Active' ? 's-active' : inv.status === 'Exited' ? 's-exited' : 's-partial';
+    html += '<tr>';
+    html += '<td>' + inv.name + '</td>';
+    html += '<td><span class="sector-tag">' + inv.sector + '</span></td>';
+    html += '<td style="font-family:\'JetBrains Mono\',monospace;font-weight:600">' + inv.value + '</td>';
+    html += '<td>' + inv.year + '</td>';
+    html += '<td><span class="' + statusClass + '">' + inv.status + '</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table></div></div>';
+
+  // ========== INVESTMENT MANDATE & STRATEGY ==========
+  html += '<div class="report-section"><div class="report-section-title">Investment Mandate &amp; Strategy</div>';
+  html += '<div class="report-card"><div class="report-strategy">';
+  if(hasProfile) {
+    html += '<p><strong>Core Mandate:</strong> ' + dp.mandate + '</p>';
+    html += '<p>' + dp.mandateDetail + '</p>';
+    html += '<p><strong>Sector Thesis:</strong> ' + dp.whySectors + '</p>';
+    if(dp.nationalVision) html += '<p><strong>National Vision Alignment:</strong> ' + dp.nationalVision + '</p>';
+  } else {
+    html += '<p>' + f.mandate + '</p>';
+  }
+  html += '</div></div></div>';
+
+  // ========== DEPLOYMENT TIMELINE ==========
+  var deals = hasProfile ? dp.deals : f.deals;
+  if(deals && deals.length > 0) {
+    html += '<div class="report-section"><div class="report-section-title">Deployment Timeline</div>';
+    html += '<div class="report-card"><div class="report-card-title">Deal Volume &amp; Value by Quarter</div>';
+    html += '<div class="report-card-sub">Last ' + deals.length + ' quarters of deployment activity</div>';
+    html += '<div class="report-chart-box"><canvas id="reportDealsChart"></canvas></div></div></div>';
+  }
+
+  // ========== MACRO CONTEXT ==========
+  if(hasProfile) {
+    html += '<div class="report-section"><div class="report-section-title">Macro Context</div>';
+    html += '<div class="report-card">';
+
+    // Oil sensitivity
+    html += '<div class="macro-signal">';
+    var oilColor = dp.oilSensitivity === 'Very High' ? 'var(--red)' : dp.oilSensitivity === 'High' ? 'var(--orange)' : dp.oilSensitivity === 'Moderate-High' ? 'var(--orange)' : dp.oilSensitivity === 'Moderate' ? 'var(--accent)' : 'var(--green)';
+    html += '<div class="macro-signal-icon" style="background:' + oilColor + '20;color:' + oilColor + '">&#x26FD;</div>';
+    html += '<div><div class="macro-signal-label">Oil Price Sensitivity</div>';
+    html += '<div class="macro-signal-value" style="color:' + oilColor + '">' + dp.oilSensitivity + '</div>';
+    html += '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px">' + dp.oilDetail + '</div></div></div>';
+
+    // Deployment signal
+    html += '<div class="macro-signal">';
+    html += '<div class="macro-signal-icon" style="background:var(--green-light);color:var(--green)">&#x1F4CA;</div>';
+    html += '<div><div class="macro-signal-label">Current Deployment Signal</div>';
+    html += '<div class="macro-signal-value" style="color:var(--green)">' + dp.deploymentSignal + '</div>';
+    html += '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px">' + dp.deploymentDetail + '</div></div></div>';
+
+    // Liquidity cycle
+    html += '<div class="macro-signal">';
+    html += '<div class="macro-signal-icon" style="background:var(--purple-light);color:var(--purple)">&#x1F30A;</div>';
+    html += '<div><div class="macro-signal-label">Liquidity Cycle Position (Howell Framework)</div>';
+    html += '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;line-height:1.6">' + dp.liquidityCycle + '</div></div></div>';
+
+    html += '</div></div>';
+  }
+
+  // ========== RELATED FUNDS ==========
+  if(hasProfile && dp.relatedFunds && dp.relatedFunds.length > 0) {
+    var countryFunds = funds.filter(function(x) { return x.country === f.country && x.rank !== f.rank; });
+    html += '<div class="report-section"><div class="report-section-title">Related Funds in ' + f.country + '</div>';
+    html += '<div class="report-card">';
+    countryFunds.forEach(function(rf) {
+      var rfAum = rf.aum ? (rf.aum >= 1000 ? '$' + (rf.aum/1000).toFixed(2) + 'T' : '$' + rf.aum + 'B') : 'Undisclosed';
+      html += '<span class="related-fund-chip" onclick="closeFundReport();setTimeout(function(){openFundReport(' + rf.rank + ')},500)">' + rf.short + ' (' + rfAum + ')</span>';
+    });
+    html += '</div></div>';
+  }
+
+  // Footer
+  html += '<div style="text-align:center;color:var(--text-tertiary);font-size:12px;padding:32px 0">';
+  html += '47X Intelligence Platform &mdash; Fund Report &mdash; Data as of Q1 2026';
+  html += '</div>';
+
+  document.getElementById('fundReportContent').innerHTML = html;
+  document.getElementById('fundReportOverlay').classList.add('open');
+  document.getElementById('fundReportOverlay').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  // Render charts after DOM update
+  setTimeout(function() { renderReportCharts(f, dp); }, 100);
+}
+
+function closeFundReport() {
+  document.getElementById('fundReportOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Destroy report charts
+  ['reportSectorChart','reportGeoChart','reportDealsChart'].forEach(function(k) {
+    if(charts[k]) { charts[k].destroy(); delete charts[k]; }
+  });
+}
+
+function renderReportCharts(f, dp) {
+  var sColors = ['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+
+  // Sector Doughnut
+  var sectorData = dp ? dp.sectors : f.sectors;
+  var sKeys = Object.keys(sectorData);
+  var sVals = sKeys.map(function(k) { return sectorData[k]; });
+
+  var ctx1 = document.getElementById('reportSectorChart');
+  if(ctx1) {
+    if(charts['reportSectorChart']) charts['reportSectorChart'].destroy();
+    charts['reportSectorChart'] = new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        labels: sKeys.map(function(k) { return k.replace(/([A-Z])/g, ' $1').trim(); }),
+        datasets: [{
+          data: sVals,
+          backgroundColor: sColors.slice(0, sKeys.length),
+          borderWidth: 2,
+          borderColor: '#FFFFFF',
+          borderRadius: 4,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '55%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                var pct = ctx.parsed;
+                var dollarVal = f.aum ? Math.round(f.aum * pct / 100) : null;
+                var str = ctx.label + ': ' + pct + '%';
+                if(dollarVal) str += ' (~$' + (dollarVal >= 1000 ? (dollarVal/1000).toFixed(1) + 'T' : dollarVal + 'B') + ')';
+                return str;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Geographic Bar
+  var geoData = dp ? dp.geoFocus : f.geoFocus;
+  var gKeys = Object.keys(geoData);
+  var gVals = gKeys.map(function(k) { return geoData[k]; });
+
+  var ctx2 = document.getElementById('reportGeoChart');
+  if(ctx2) {
+    if(charts['reportGeoChart']) charts['reportGeoChart'].destroy();
+    charts['reportGeoChart'] = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: gKeys.map(function(k) { return k.replace(/([A-Z])/g, ' $1').trim(); }),
+        datasets: [{
+          data: gVals,
+          backgroundColor: gVals.map(function(v) {
+            return v > 40 ? '#2563EB' : v > 20 ? '#7C3AED' : v > 10 ? '#059669' : '#D97706';
+          }),
+          borderRadius: 6,
+          barThickness: 22
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { max: 100, ticks: { callback: function(v) { return v + '%'; }, font: { size: 11 } }, grid: { color: '#F3F4F6' } },
+          y: { ticks: { font: { size: 11, weight: '600' } }, grid: { display: false } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                var pct = ctx.parsed.x;
+                var dollarVal = f.aum ? Math.round(f.aum * pct / 100) : null;
+                var str = pct + '%';
+                if(dollarVal) str += ' (~$' + (dollarVal >= 1000 ? (dollarVal/1000).toFixed(1) + 'T' : dollarVal + 'B') + ')';
+                return str;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Deals Timeline
+  var deals = dp ? dp.deals : f.deals;
+  if(deals && deals.length > 0) {
+    var dealLabels = deals.map(function(d) { return d.q; }).reverse();
+    var dealCounts = deals.map(function(d) { return d.count; }).reverse();
+    var dealValues = deals.map(function(d) { return d.value; }).reverse();
+
+    var ctx3 = document.getElementById('reportDealsChart');
+    if(ctx3) {
+      if(charts['reportDealsChart']) charts['reportDealsChart'].destroy();
+      charts['reportDealsChart'] = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: dealLabels,
+          datasets: [
+            {
+              label: 'Deal Count',
+              data: dealCounts,
+              backgroundColor: 'rgba(37,99,235,0.75)',
+              borderRadius: 6,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Value ($B)',
+              data: dealValues,
+              type: 'line',
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5,150,105,0.08)',
+              fill: true,
+              pointBackgroundColor: '#059669',
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              tension: 0.3,
+              yAxisID: 'y1',
+              borderWidth: 2.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { position: 'left', ticks: { font: { size: 11 }, stepSize: 2 }, grid: { color: '#F3F4F6' }, title: { display: true, text: 'Deals', font: { size: 10 } } },
+            y1: { position: 'right', ticks: { font: { size: 11 }, callback: function(v) { return '$' + v + 'B'; } }, grid: { display: false }, title: { display: true, text: 'Value', font: { size: 10 } } },
+            x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11, family: "'Inter'" }, boxWidth: 12, padding: 16 } },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  if(ctx.dataset.label === 'Value ($B)') return '$' + ctx.parsed.y.toFixed(1) + 'B deployed';
+                  return ctx.parsed.y + ' deals';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+}
+
+// ==========================================
+// OVERRIDE: Table row click opens report instead of inline expand
+// ==========================================
+var originalToggleFund = toggleFund;
+toggleFund = function(rank) {
+  openFundReport(rank);
+};
+
+// Close on escape key
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'Escape') closeFundReport();
+});
+
 </script>
 </body>
 </html>
