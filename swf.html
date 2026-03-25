@@ -74,6 +74,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .search-input:focus{border-color:var(--accent)}
 .filter-btn{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:inherit;background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .filter-btn:hover,.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.filter-btn:active{transform:scale(0.97)}
+.filter-btn:focus-visible,.nav-tab:focus-visible,.report-back:focus-visible,.related-fund-chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--radius-sm)}
+.fund-table tbody tr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tier-filters{display:flex;gap:6px;flex-wrap:wrap}
 
 .fund-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -83,6 +86,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .fund-table thead th .sort-arrow{margin-left:4px;font-size:9px}
 .fund-table tbody tr{cursor:pointer;transition:background 0.15s}
 .fund-table tbody tr:hover{background:var(--accent-light)}
+.fund-table tbody tr:active{background:#DBEAFE}
 .fund-table tbody td{padding:12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
 .fund-table tbody td:first-child{font-weight:600;color:var(--text-tertiary);font-family:'JetBrains Mono',monospace;font-size:12px}
 .fund-table tbody td:nth-child(2){font-weight:600;color:var(--text-primary)}
@@ -1214,12 +1218,11 @@ function renderFundTable(){
     if(q && f.name.toLowerCase().indexOf(q)===-1 && f.country.toLowerCase().indexOf(q)===-1 && f.type.toLowerCase().indexOf(q)===-1) return false;
     return true;
   });
+  var sortKeys=['rank','name','country','aum','type','tier'];
   filtered.sort(function(a,b){
-    var va,vb;
-    switch(currentSort.col){
-      case 0:va=a.rank;vb=b.rank;break;case 1:va=a.name;vb=b.name;break;case 2:va=a.country;vb=b.country;break;
-      case 3:va=(a.aum||0);vb=(b.aum||0);break;case 4:va=a.type;vb=b.type;break;case 5:va=a.tier;vb=b.tier;break;
-    }
+    var key=sortKeys[currentSort.col]||'rank';
+    var va=key==='aum'?(a[key]||0):a[key];
+    var vb=key==='aum'?(b[key]||0):b[key];
     if(typeof va==='string'){va=va.toLowerCase();vb=vb.toLowerCase()}
     if(va<vb)return currentSort.asc?-1:1;if(va>vb)return currentSort.asc?1:-1;return 0;
   });
@@ -1524,13 +1527,16 @@ function closeReport(){
 }
 
 function renderReportCharts(f){
+  try{
   var sc=['#2563EB','#7C3AED','#059669','#D97706','#DC2626','#0891B2','#DB2777','#4F46E5','#EA580C','#16A34A','#8B5CF6','#F59E0B'];
+  if(!f.sectors)return;
   var sk=Object.keys(f.sectors),sv=sk.map(function(k){return f.sectors[k]});
   var c1=document.getElementById('rSector');
   var legendPos=window.innerWidth<=768?'bottom':'right';
   if(c1)reportCharts.rSector=new Chart(c1,{type:'doughnut',data:{labels:sk.map(function(k){return k.replace(/([A-Z])/g,' $1').trim()}),datasets:[{data:sv,backgroundColor:sc.slice(0,sk.length),borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:legendPos,labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:6}}}}});
   if(f.geoFocus){var gk=Object.keys(f.geoFocus),gv=gk.map(function(k){return f.geoFocus[k]});var c2=document.getElementById('rGeo');if(c2)reportCharts.rGeo=new Chart(c2,{type:'bar',data:{labels:gk.map(function(k){return k.replace(/([A-Z])/g,' $1').trim()}),datasets:[{data:gv,backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{max:100,ticks:{callback:function(v){return v+'%'},font:{size:10}},grid:{color:'#F3F4F6'}},y:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{display:false}}}});}
   if(f.deals&&f.deals.length>0){var dl=f.deals.map(function(d){return d.q}).reverse(),dc=f.deals.map(function(d){return d.count}).reverse(),dv=f.deals.map(function(d){return d.value}).reverse();var c3=document.getElementById('rDeals');if(c3)reportCharts.rDeals=new Chart(c3,{type:'bar',data:{labels:dl,datasets:[{label:'Deal Count',data:dc,backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4,yAxisID:'y'},{label:'Value ($B)',data:dv,type:'line',borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.1)',pointBackgroundColor:'#059669',pointRadius:4,tension:0.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',ticks:{font:{size:10},stepSize:1},grid:{color:'#F3F4F6'}},y1:{position:'right',ticks:{font:{size:10},callback:function(v){return '$'+v+'B'}},grid:{display:false}},x:{ticks:{font:{size:10}},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:10,family:"'Inter'"},boxWidth:10,padding:12}}}}});}
+  }catch(e){console.warn('Chart render error:',e.message)}
 }
 
 function sortTable(col){
