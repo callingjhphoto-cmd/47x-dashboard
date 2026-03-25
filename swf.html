@@ -219,7 +219,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .fund-table-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
   .fund-table{font-size:12px;min-width:600px}
   .fund-table thead th{padding:10px 8px;font-size:9px;position:sticky;top:0;background:var(--surface);z-index:1}
-  .fund-table tbody td{padding:10px 8px}
+  .fund-table tbody td{padding:12px 8px}
   .fund-table tbody tr{-webkit-tap-highlight-color:rgba(37,99,235,0.1)}
 
   /* Section headers */
@@ -483,6 +483,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <tbody id="fundTableBody"></tbody>
   </table>
   </div>
+  <div id="fundCount" style="padding:10px 16px;font-size:11px;color:var(--text-tertiary);text-align:right"></div>
 </div>
 
 <div class="section-divider"></div>
@@ -1261,6 +1262,8 @@ function renderFundTable(){
     html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
   });
   fundTableBodyEl.innerHTML=html;
+  var countEl=document.getElementById('fundCount');
+  if(countEl)countEl.textContent='Showing '+filtered.length+' of '+funds.length+' funds';
 }
 
 function openReport(rank){
