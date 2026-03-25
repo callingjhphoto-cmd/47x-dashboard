@@ -2150,7 +2150,7 @@ sectorImpact:{labels:['Energy','Banking','Real Estate','Industrial','Telecom','H
 
 var activeScenario=0;
 var chartRenderFrame=null;
-var resizeDebounceTimer=null;
+// resizeDebounceTimer removed — debounce() now uses per-handler closures
 var lastFocusedElement=null;
 var TAB_ORDER=['overview','benchmarking','signals','arbitrage','macropanel','swftracker','sectoral','stress','composite'];
 var CHART_MONTHS=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
@@ -2169,11 +2169,12 @@ async function safeFetchJson(url,timeout){
 }
 
 function debounce(fn,wait){
+  var timer=null;
   return function(){
     var args=arguments;
     var ctx=this;
-    clearTimeout(resizeDebounceTimer);
-    resizeDebounceTimer=setTimeout(function(){fn.apply(ctx,args)},wait);
+    clearTimeout(timer);
+    timer=setTimeout(function(){fn.apply(ctx,args)},wait);
   };
 }
 
@@ -3277,10 +3278,18 @@ var MARKET_SYMBOLS = {
   fed:    { symbol: null,         fallback: 4.50,   label: 'Fed Funds',     prefix: '',  suffix: '%', decimals: 2 }
 };
 
-// Chart.js sparklines handle macro indicator display.
-// fetchMarketData kept as no-op for backward compatibility.
+// fetchMarketData refreshes live API data on a periodic interval.
+var _marketRefreshTimer=null;
 function fetchMarketData() {
-  console.log('Market data rendered via Chart.js sparklines.');
+  checkApi();
+}
+function startMarketRefresh(intervalMs) {
+  if(_marketRefreshTimer) clearInterval(_marketRefreshTimer);
+  intervalMs = intervalMs || 300000; // default 5 minutes
+  _marketRefreshTimer = setInterval(fetchMarketData, intervalMs);
+}
+function stopMarketRefresh() {
+  if(_marketRefreshTimer) { clearInterval(_marketRefreshTimer); _marketRefreshTimer=null; }
 }
 
 // openMacroSheet - simplified, no longer references hardcoded prices
@@ -3329,6 +3338,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateTableOverflowIndicators();
   renderAll();
   checkApi();
+  startMarketRefresh(300000); // refresh API data every 5 minutes
   ensureWidgetsForTab(getActiveTab());
   requestAnimationFrame(function(){
     animateHeroScores();

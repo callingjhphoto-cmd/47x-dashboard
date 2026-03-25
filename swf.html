@@ -1227,7 +1227,7 @@ function renderFundTable(){
   filtered.forEach(function(f){
     var tc=f.type==='SWF'?'type-swf':f.type==='Pension'?'type-pension':f.type==='Family Office'?'type-fo':f.type==='VC'?'type-vc':'type-ihc';
     var a=f.aum?(f.aum>=1000?'$'+((f.aum/1000).toFixed(2))+'T':'$'+f.aum+'B'):'Undisclosed';
-    html+='<tr onclick="openReport('+f.rank+')"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+    html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
   });
   document.getElementById('fundTableBody').innerHTML=html;
 }
