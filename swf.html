@@ -383,6 +383,25 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .investment-hero-stat-value{font-size:16px}
 }
 
+/* ===== LOADING SKELETON ===== */
+.skeleton-container{max-width:1200px;margin:0 auto;padding:28px 40px}
+.skeleton-line{height:14px;background:linear-gradient(90deg,var(--border-light) 25%,var(--border) 50%,var(--border-light) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:12px}
+.skeleton-line.w60{width:60%}.skeleton-line.w80{width:80%}.skeleton-line.w40{width:40%}.skeleton-line.w100{width:100%}
+.skeleton-hero{height:160px;background:linear-gradient(90deg,var(--navy) 25%,var(--navy-light) 50%,var(--navy) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius);margin-bottom:24px}
+.skeleton-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ===== SCROLL TO TOP (REPORT) ===== */
+.report-scroll-top{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:250;opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;font-size:18px}
+.report-scroll-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+.report-scroll-top:hover{background:var(--accent);transform:translateY(-2px)}
+
+/* ===== BREADCRUMB ===== */
+.report-breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-tertiary);margin-bottom:12px}
+.report-breadcrumb a{color:var(--accent);text-decoration:none;cursor:pointer}
+.report-breadcrumb a:hover{text-decoration:underline}
+.report-breadcrumb .sep{color:var(--border)}
+
 /* ===== REDUCED MOTION ===== */
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}
@@ -1212,12 +1231,16 @@ var currentFilter = 'all';
 var currentTypeFilter = null;
 var currentSort = {col:0, asc:true};
 var reportCharts = {};
+var fundSearchEl = null;
+var fundTableBodyEl = null;
 
 function renderFundTable(){
+  if(!fundSearchEl)fundSearchEl=document.getElementById('fundSearch');
+  if(!fundTableBodyEl)fundTableBodyEl=document.getElementById('fundTableBody');
   var filtered = funds.filter(function(f){
     if(currentFilter !== 'all' && 'tier'+f.tier !== currentFilter) return false;
     if(currentTypeFilter && f.type !== currentTypeFilter) return false;
-    var q = document.getElementById('fundSearch').value.toLowerCase();
+    var q = fundSearchEl.value.toLowerCase();
     if(q && f.name.toLowerCase().indexOf(q)===-1 && f.country.toLowerCase().indexOf(q)===-1 && f.type.toLowerCase().indexOf(q)===-1) return false;
     return true;
   });
@@ -1235,18 +1258,27 @@ function renderFundTable(){
     var a=f.aum?(f.aum>=1000?'$'+((f.aum/1000).toFixed(2))+'T':'$'+f.aum+'B'):'Undisclosed';
     html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
   });
-  document.getElementById('fundTableBody').innerHTML=html;
+  fundTableBodyEl.innerHTML=html;
 }
 
 function openReport(rank){
   var f=funds.find(function(x){return x.rank===rank});if(!f)return;
+  var overlay=document.getElementById('reportOverlay');
+  // Show skeleton + scroll to top immediately
+  overlay.innerHTML='<div class="skeleton-container"><div class="skeleton-hero"></div><div class="skeleton-card"><div class="skeleton-line w60"></div><div class="skeleton-line w80"></div><div class="skeleton-line w40"></div></div><div class="skeleton-card"><div class="skeleton-line w100"></div><div class="skeleton-line w80"></div></div></div>';
+  overlay.classList.add('open');
+  overlay.scrollTop=0;
+  document.body.style.overflow='hidden';
+  // Render real content after a frame to let skeleton paint
+  requestAnimationFrame(function(){
   Object.keys(reportCharts).forEach(function(k){reportCharts[k].destroy()});reportCharts={};
   var deep=deepProfiles[rank]||{};
   var enh=enhancedProfiles[rank]||{};
   var a=f.aum?(f.aum>=1000?'$'+((f.aum/1000).toFixed(2))+'T':'$'+f.aum+'B'):'Undisclosed';
   var td=f.deals?f.deals.reduce(function(s,d){return s+d.count},0):0;
   var tv=f.deals?f.deals.reduce(function(s,d){return s+d.value},0):0;
-  var h='<button class="report-back" onclick="closeReport()">\u2190 Back to Fund Directory</button>';
+  var h='<div class="report-breadcrumb"><a onclick="closeReport()">Fund Directory</a><span class="sep">/</span><span>'+f.name+'</span></div>';
+  h+='<button class="report-back" onclick="closeReport()">\u2190 Back to Fund Directory</button>';
   // Hero
   h+='<div class="report-hero"><div class="report-logo">'+f.short+'</div><div class="report-info"><h2>'+f.name+'</h2><div class="report-meta">'+f.country+' \u2022 Founded '+f.founded+' \u2022 <strong>'+f.type+'</strong> \u2022 Tier '+f.tier+' \u2022 '+f.status+'</div></div><div class="report-stats"><div class="report-stat"><div class="report-stat-value">'+a+'</div><div class="report-stat-label">AUM</div></div>';
   if(td>0)h+='<div class="report-stat"><div class="report-stat-value">'+td+'</div><div class="report-stat-label">Deals (5Q)</div></div><div class="report-stat"><div class="report-stat-value">$'+tv.toFixed(1)+'B</div><div class="report-stat-label">Deployed (5Q)</div></div>';
@@ -1317,7 +1349,7 @@ function openReport(rank){
   document.getElementById('reportOverlay').classList.add('open');
   document.getElementById('reportOverlay').scrollTop=0;
   document.body.style.overflow='hidden';
-  if(history.replaceState)history.replaceState(null,null,'#fund-'+rank);
+  if(history.pushState)history.pushState({fund:rank},null,'#fund-'+rank);
   setTimeout(function(){renderReportCharts(f)},50);
 }
 
@@ -1562,6 +1594,10 @@ function renderMacroCharts(){
 }
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('reportOverlay').classList.contains('open'))closeReport();});
+window.addEventListener('popstate',function(e){
+  if(e.state&&e.state.fund){openReport(e.state.fund);}
+  else if(document.getElementById('reportOverlay').classList.contains('open')){document.getElementById('reportOverlay').classList.remove('open');document.body.style.overflow='';Object.keys(reportCharts).forEach(function(k){reportCharts[k].destroy()});reportCharts={};}
+});
 function computeHeroStats(){
   var totalAum = funds.reduce(function(s,f){return s+(f.aum||0)},0);
   var aumStr = totalAum >= 1000 ? '$'+(totalAum/1000).toFixed(2)+'T' : '$'+totalAum+'B';
