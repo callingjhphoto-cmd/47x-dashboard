@@ -477,7 +477,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div class="section-header"><div class="section-title"><span class="level-badge level-2">Fund Directory</span> All 50 GCC Funds</div></div>
 
 <div class="search-bar">
-  <input type="text" class="search-input" id="fundSearch" placeholder="Search funds by name, country, or type..." oninput="filterFunds()" aria-label="Search funds" role="searchbox">
+  <input type="text" class="search-input" id="fundSearch" placeholder="Search funds, investments, sectors, mandates..." oninput="filterFunds()" aria-label="Search funds" role="searchbox">
   <div class="tier-filters" id="tierFilters">
     <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
     <button class="filter-btn" data-filter="tier1" onclick="setFilter('tier1',this)">Tier 1</button>
@@ -1286,7 +1286,13 @@ function renderFundTable(){
     if(currentFilter !== 'all' && 'tier'+f.tier !== currentFilter) return false;
     if(currentTypeFilter && f.type !== currentTypeFilter) return false;
     var q = fundSearchEl.value.toLowerCase();
-    if(q && f.name.toLowerCase().indexOf(q)===-1 && f.country.toLowerCase().indexOf(q)===-1 && f.type.toLowerCase().indexOf(q)===-1) return false;
+    if(q){
+      // Search across table data AND report content
+      var match=f.name.toLowerCase().indexOf(q)>-1||f.country.toLowerCase().indexOf(q)>-1||f.type.toLowerCase().indexOf(q)>-1||(f.mandate&&f.mandate.toLowerCase().indexOf(q)>-1)||(f.short&&f.short.toLowerCase().indexOf(q)>-1);
+      if(!match){var dp=deepProfiles[f.rank];if(dp&&dp.executive&&dp.executive.toLowerCase().indexOf(q)>-1)match=true;}
+      if(!match&&f.investments){f.investments.forEach(function(inv){if(inv.name.toLowerCase().indexOf(q)>-1||inv.sector.toLowerCase().indexOf(q)>-1)match=true;});}
+      if(!match)return false;
+    }
     return true;
   });
   var sortKeys=['rank','name','country','aum','type','tier'];
@@ -1330,7 +1336,7 @@ function openReport(rank){
   var td=f.deals?f.deals.reduce(function(s,d){return s+d.count},0):0;
   var tv=f.deals?f.deals.reduce(function(s,d){return s+d.value},0):0;
   var h='<div class="report-breadcrumb"><a onclick="closeReport()">Fund Directory</a><span class="sep">/</span><span>'+f.name+'</span></div>';
-  h+='<button class="report-back" onclick="closeReport()">\u2190 Back to Fund Directory</button>';
+  h+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px"><button class="report-back" onclick="closeReport()" style="margin-bottom:0">\u2190 Back</button><button class="report-back" onclick="exportReportPDF()" style="margin-bottom:0">\u2399 Export PDF</button></div>';
   // Hero
   h+='<div class="report-hero"><div class="report-logo">'+f.short+'</div><div class="report-info"><h2>'+f.name+'</h2><div class="report-meta">'+f.country+' \u2022 Founded '+f.founded+' \u2022 <strong>'+f.type+'</strong> \u2022 Tier '+f.tier+' \u2022 '+f.status+'</div></div><div class="report-stats"><div class="report-stat"><div class="report-stat-value">'+a+'</div><div class="report-stat-label">AUM</div></div>';
   if(td>0)h+='<div class="report-stat"><div class="report-stat-value">'+td+'</div><div class="report-stat-label">Deals (5Q)</div></div><div class="report-stat"><div class="report-stat-value">$'+tv.toFixed(1)+'B</div><div class="report-stat-label">Deployed (5Q)</div></div>';
@@ -1666,6 +1672,9 @@ function computeHeroStats(){
   document.getElementById('heroCountries').textContent = Object.keys(countries).length;
   document.getElementById('heroTypes').textContent = Object.keys(types).length;
 }
+
+// ===== EXPORT TO PDF =====
+function exportReportPDF(){window.print();}
 
 // ===== FUND COMPARISON =====
 var compareMode=false;
