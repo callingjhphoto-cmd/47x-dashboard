@@ -194,6 +194,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .main{padding:12px 12px 80px}
   .logo-text span{display:none}
   .logo-text{font-size:15px}
+  .logo-mark{width:32px;height:32px;font-size:11px;border-radius:8px}
+  .logo{gap:8px}
   .nav-tabs{padding:2px;gap:1px;background:var(--bg);border-radius:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
   .nav-tabs::-webkit-scrollbar{display:none}
   .nav-tab{padding:8px 14px;font-size:12px;flex-shrink:0}
@@ -404,6 +406,32 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .report-breadcrumb a:hover{text-decoration:underline}
 .report-breadcrumb .sep{color:var(--border)}
 
+/* ===== FUND COMPARISON ===== */
+.compare-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:#fff;padding:12px 40px;z-index:180;box-shadow:0 -4px 20px rgba(0,0,0,0.15);align-items:center;gap:16px}
+.compare-bar.active{display:flex}
+.compare-chips{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+.compare-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,255,255,0.15);border-radius:100px;font-size:12px;font-weight:600}
+.compare-chip .remove{cursor:pointer;opacity:0.6;font-size:14px}
+.compare-chip .remove:hover{opacity:1}
+.compare-btn{padding:8px 20px;background:#34D399;color:#0B1D3A;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.compare-btn:hover{background:#10B981}
+.compare-btn:disabled{opacity:0.5;cursor:not-allowed}
+.compare-clear{padding:8px 16px;background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:inherit}
+.compare-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:210;overflow-y:auto}
+.compare-overlay.open{display:block;animation:fadeIn 0.3s ease}
+.compare-grid{display:grid;gap:16px;margin-bottom:24px}
+.compare-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.compare-col h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.compare-col .compare-meta{font-size:11px;color:var(--text-tertiary);margin-bottom:16px}
+.compare-stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light);font-size:13px}
+.compare-stat-row .label{color:var(--text-secondary)}.compare-stat-row .value{font-weight:600;font-family:'JetBrains Mono',monospace}
+.compare-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin:20px 0 12px;padding-top:16px;border-top:1px solid var(--border-light)}
+.compare-sector-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.compare-sector-bar .bar{flex:1;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden}
+.compare-sector-bar .bar-fill{height:100%;border-radius:3px;background:var(--accent)}
+.compare-sector-bar .pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-tertiary);min-width:32px;text-align:right}
+@media(max-width:768px){.compare-bar{padding:12px 16px;flex-wrap:wrap}.compare-grid{grid-template-columns:1fr}}
+
 /* ===== REDUCED MOTION ===== */
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}
@@ -465,6 +493,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="filter-btn" data-type="VC" onclick="setTypeFilter('VC',this)">VC</button>
     <button class="filter-btn" data-type="IHC" onclick="setTypeFilter('IHC',this)">IHC</button>
   </div>
+  <button class="filter-btn" id="compareToggle" onclick="toggleCompareMode()" style="margin-left:auto">Compare Funds</button>
 </div>
 
 <div class="card" style="padding:0;overflow:hidden">
@@ -518,6 +547,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <!-- REPORT OVERLAY -->
 <div class="report-overlay" id="reportOverlay" role="dialog" aria-label="Fund Report" aria-modal="true">
   <div class="main" id="reportContent"></div>
+</div>
+
+<!-- Compare Bar -->
+<div class="compare-bar" id="compareBar">
+  <div class="compare-chips" id="compareChips"></div>
+  <button class="compare-btn" id="compareLaunch" onclick="launchComparison()" disabled>Compare</button>
+  <button class="compare-clear" onclick="clearComparison()">Clear</button>
+</div>
+
+<!-- Compare Overlay -->
+<div class="compare-overlay" id="compareOverlay" role="dialog" aria-label="Fund Comparison" aria-modal="true">
+  <div class="main" id="compareContent"></div>
 </div>
 
 <div class="footer">47X Intelligence Platform &mdash; SWF Tracker Module &mdash; Data as of Q1 2026 &mdash; <a href="index.html">Back to Dashboard</a></div>
@@ -1236,6 +1277,7 @@ var currentSort = {col:0, asc:true};
 var reportCharts = {};
 var fundSearchEl = null;
 var fundTableBodyEl = null;
+function formatAum(aum){return aum?(aum>=1000?'$'+(aum/1000).toFixed(2)+'T':'$'+aum+'B'):'Undisclosed'}
 
 function renderFundTable(){
   if(!fundSearchEl)fundSearchEl=document.getElementById('fundSearch');
@@ -1258,12 +1300,17 @@ function renderFundTable(){
   var html='';
   filtered.forEach(function(f){
     var tc=f.type==='SWF'?'type-swf':f.type==='Pension'?'type-pension':f.type==='Family Office'?'type-fo':f.type==='VC'?'type-vc':'type-ihc';
-    var a=f.aum?(f.aum>=1000?'$'+((f.aum/1000).toFixed(2))+'T':'$'+f.aum+'B'):'Undisclosed';
-    html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+    var a=formatAum(f.aum);
+    if(compareMode){
+      var ck=compareList.indexOf(f.rank)>-1;var dis=!ck&&compareList.length>=3;
+      html+='<tr onclick="toggleCompare('+f.rank+')" style="'+(ck?'background:var(--accent-light)':'')+'" role="button" tabindex="0"><td><input type="checkbox" '+(ck?'checked':'')+' '+(dis?'disabled':'')+' onclick="toggleCompare('+f.rank+',event)" style="cursor:pointer;width:16px;height:16px"></td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+    } else {
+      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+    }
   });
   fundTableBodyEl.innerHTML=html;
   var countEl=document.getElementById('fundCount');
-  if(countEl)countEl.textContent='Showing '+filtered.length+' of '+funds.length+' funds';
+  if(countEl){var filteredAum=filtered.reduce(function(s,f){return s+(f.aum||0)},0);countEl.textContent='Showing '+filtered.length+' of '+funds.length+' funds \u2022 '+formatAum(filteredAum)+' combined AUM';}
 }
 
 function openReport(rank){
@@ -1279,7 +1326,7 @@ function openReport(rank){
   Object.keys(reportCharts).forEach(function(k){reportCharts[k].destroy()});reportCharts={};
   var deep=deepProfiles[rank]||{};
   var enh=enhancedProfiles[rank]||{};
-  var a=f.aum?(f.aum>=1000?'$'+((f.aum/1000).toFixed(2))+'T':'$'+f.aum+'B'):'Undisclosed';
+  var a=formatAum(f.aum);
   var td=f.deals?f.deals.reduce(function(s,d){return s+d.count},0):0;
   var tv=f.deals?f.deals.reduce(function(s,d){return s+d.value},0):0;
   var h='<div class="report-breadcrumb"><a onclick="closeReport()">Fund Directory</a><span class="sep">/</span><span>'+f.name+'</span></div>';
@@ -1472,7 +1519,7 @@ function openInvestment(fundRank, investmentIndex){
   // Fund context
   panel += '<div class="inv-detail-research"><h4>Fund Context</h4>';
   panel += '<p><strong>' + f.short + '</strong> is a ' + f.type + ' based in ' + f.country + ' with ';
-  var aumStr = f.aum ? (f.aum >= 1000 ? '$' + (f.aum/1000).toFixed(2) + 'T' : '$' + f.aum + 'B') : 'undisclosed';
+  var aumStr = formatAum(f.aum);
   panel += aumStr + ' in AUM. ' + f.mandate + '</p>';
 
   // Sector fit
@@ -1604,7 +1651,7 @@ function renderMacroCharts(){
   new Chart(document.getElementById('oilCorrelationChart'),{type:'line',data:{labels:m,datasets:[{label:'Brent Crude ($/bbl)',data:[78,80,82,79,83,85,88,90,92,95,98,100,102,101,102],borderColor:'#D97706',backgroundColor:'rgba(217,119,6,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y'},{label:'GCC Deal Flow (deals/mo)',data:[15,18,20,16,22,25,28,30,32,35,38,40,42,43,45],borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',title:{display:true,text:'Oil Price ($)',font:{size:10}},ticks:{font:{size:10}},grid:{color:'#F3F4F6'}},y1:{position:'right',title:{display:true,text:'Deals/Month',font:{size:10}},ticks:{font:{size:10}},grid:{display:false}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
 }
 
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('reportOverlay').classList.contains('open'))closeReport();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('compareOverlay').classList.contains('open'))closeComparison();else if(document.getElementById('reportOverlay').classList.contains('open'))closeReport();}});
 window.addEventListener('popstate',function(e){
   if(e.state&&e.state.fund){openReport(e.state.fund);}
   else if(document.getElementById('reportOverlay').classList.contains('open')){document.getElementById('reportOverlay').classList.remove('open');document.body.style.overflow='';Object.keys(reportCharts).forEach(function(k){reportCharts[k].destroy()});reportCharts={};}
@@ -1618,6 +1665,85 @@ function computeHeroStats(){
   funds.forEach(function(f){countries[f.country]=1;types[f.type]=1;});
   document.getElementById('heroCountries').textContent = Object.keys(countries).length;
   document.getElementById('heroTypes').textContent = Object.keys(types).length;
+}
+
+// ===== FUND COMPARISON =====
+var compareMode=false;
+var compareList=[];
+function toggleCompareMode(){
+  compareMode=!compareMode;
+  var btn=document.getElementById('compareToggle');
+  if(compareMode){btn.classList.add('active');btn.textContent='Exit Compare';}
+  else{btn.classList.remove('active');btn.textContent='Compare Funds';clearComparison();}
+  renderFundTable();
+}
+function toggleCompare(rank,evt){
+  if(evt)evt.stopPropagation();
+  var idx=compareList.indexOf(rank);
+  if(idx>-1)compareList.splice(idx,1);
+  else if(compareList.length<3)compareList.push(rank);
+  updateCompareBar();
+  renderFundTable();
+}
+function updateCompareBar(){
+  var bar=document.getElementById('compareBar');
+  var chips=document.getElementById('compareChips');
+  var btn=document.getElementById('compareLaunch');
+  if(compareList.length>0){bar.classList.add('active');}else{bar.classList.remove('active');}
+  chips.innerHTML=compareList.map(function(r){
+    var f=funds.find(function(x){return x.rank===r});
+    return '<span class="compare-chip">'+f.short+' <span class="remove" onclick="toggleCompare('+r+')">\u00d7</span></span>';
+  }).join('');
+  btn.disabled=compareList.length<2;
+}
+function clearComparison(){compareList=[];updateCompareBar();renderFundTable();}
+function closeComparison(){document.getElementById('compareOverlay').classList.remove('open');document.body.style.overflow='';}
+function launchComparison(){
+  var overlay=document.getElementById('compareOverlay');
+  var cols=compareList.length;
+  var html='<button class="report-back" onclick="closeComparison()">\u2190 Back to Fund Directory</button>';
+  html+='<h2 style="font-size:22px;font-weight:800;margin-bottom:20px">Fund Comparison</h2>';
+  html+='<div class="compare-grid" style="grid-template-columns:repeat('+cols+',1fr)">';
+  compareList.forEach(function(rank){
+    var f=funds.find(function(x){return x.rank===rank});
+    var a=f.aum?(f.aum>=1000?'$'+((f.aum/1000).toFixed(2))+'T':'$'+f.aum+'B'):'Undisclosed';
+    var td=f.deals?f.deals.reduce(function(s,d){return s+d.count},0):0;
+    var tv=f.deals?f.deals.reduce(function(s,d){return s+d.value},0):0;
+    var col='<div class="compare-col"><h3>'+f.short+'</h3><div class="compare-meta">'+f.name+'</div>';
+    col+='<div class="compare-stat-row"><span class="label">AUM</span><span class="value">'+a+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Country</span><span class="value">'+f.country+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Type</span><span class="value">'+f.type+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Tier</span><span class="value">'+f.tier+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Founded</span><span class="value">'+f.founded+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Status</span><span class="value">'+f.status+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Deals (5Q)</span><span class="value">'+td+'</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Deployed (5Q)</span><span class="value">$'+tv.toFixed(1)+'B</span></div>';
+    col+='<div class="compare-stat-row"><span class="label">Investments</span><span class="value">'+(f.investments?f.investments.length:0)+'</span></div>';
+    // Sector breakdown
+    col+='<div class="compare-section-title">Sector Allocation</div>';
+    if(f.sectors){
+      var sorted=Object.entries(f.sectors).sort(function(a,b){return b[1]-a[1]});
+      sorted.slice(0,6).forEach(function(s){
+        col+='<div class="compare-sector-bar"><span style="min-width:80px">'+s[0]+'</span><div class="bar"><div class="bar-fill" style="width:'+s[1]+'%"></div></div><span class="pct">'+s[1]+'%</span></div>';
+      });
+    }
+    // Geographic breakdown
+    col+='<div class="compare-section-title">Geographic Focus</div>';
+    if(f.geoFocus){
+      var gSorted=Object.entries(f.geoFocus).sort(function(a,b){return b[1]-a[1]});
+      gSorted.forEach(function(g){
+        col+='<div class="compare-sector-bar"><span style="min-width:80px">'+g[0]+'</span><div class="bar"><div class="bar-fill" style="width:'+g[1]+'%;background:var(--green)"></div></div><span class="pct">'+g[1]+'%</span></div>';
+      });
+    }
+    col+='<div style="margin-top:16px"><button class="filter-btn" onclick="closeComparison();openReport('+rank+')" style="width:100%;text-align:center">View Full Report \u2192</button></div>';
+    col+='</div>';
+    html+=col;
+  });
+  html+='</div>';
+  document.getElementById('compareContent').innerHTML=html;
+  overlay.classList.add('open');
+  overlay.scrollTop=0;
+  document.body.style.overflow='hidden';
 }
 
 document.addEventListener('DOMContentLoaded',function(){
