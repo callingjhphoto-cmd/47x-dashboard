@@ -246,11 +246,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .report-section .card{padding:16px}
   .mandate-text{font-size:12px;padding:12px;line-height:1.6}
 
-  /* Investment table in reports */
+  /* Investment table in reports — touch-friendly */
   .investment-table-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .investment-table{min-width:500px;font-size:11px}
   .investment-table th{padding:6px 8px;font-size:8px}
-  .investment-table td{padding:6px 8px}
+  .investment-table td{padding:12px 8px}
+  .investment-table tbody tr{-webkit-tap-highlight-color:rgba(37,99,235,0.15)}
+  .investment-table tbody tr:active{background:#DBEAFE;transform:scale(0.99)}
 
   /* Related funds chips */
   .related-funds{gap:6px}
@@ -1345,12 +1347,18 @@ function openReport(rank){
     deep.relatedFunds.forEach(function(r){var rf=funds.find(function(x){return x.rank===r});if(rf)h+='<div class="related-fund-chip" onclick="openReport('+r+')">'+rf.name+'</div>';});
     h+='</div></div>';
   }
-  document.getElementById('reportContent').innerHTML=h;
-  document.getElementById('reportOverlay').classList.add('open');
-  document.getElementById('reportOverlay').scrollTop=0;
-  document.body.style.overflow='hidden';
+  // Add scroll-to-top button
+  h+='<button class="report-scroll-top" id="reportScrollTop" onclick="document.getElementById(\'reportOverlay\').scrollTop=0" aria-label="Scroll to top">\u2191</button>';
+  overlay.innerHTML='<div class="main" id="reportContent">'+h+'</div>';
+  overlay.scrollTop=0;
   if(history.pushState)history.pushState({fund:rank},null,'#fund-'+rank);
   setTimeout(function(){renderReportCharts(f)},50);
+  // Scroll-to-top visibility
+  overlay.addEventListener('scroll',function(){
+    var btn=document.getElementById('reportScrollTop');
+    if(btn){if(overlay.scrollTop>400)btn.classList.add('visible');else btn.classList.remove('visible');}
+  });
+  }); // end requestAnimationFrame
 }
 
 // Research availability map: fundShort -> [investmentSlug, ...]
@@ -1610,11 +1618,13 @@ function computeHeroStats(){
 }
 
 document.addEventListener('DOMContentLoaded',function(){
-  // Data integrity check
-  var requiredFields=['rank','name','short','country','type','tier','status','founded','mandate','sectors'];
-  funds.forEach(function(f){requiredFields.forEach(function(field){if(!f[field])console.warn('Fund rank '+f.rank+' ('+f.name+') missing field: '+field)})});
-  computeHeroStats();renderFundTable();renderMacroCharts();
-  var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
+  try{
+    // Data integrity check
+    var requiredFields=['rank','name','short','country','type','tier','status','founded','mandate','sectors'];
+    funds.forEach(function(f){requiredFields.forEach(function(field){if(!f[field])console.warn('Fund rank '+f.rank+' ('+f.name+') missing field: '+field)})});
+    computeHeroStats();renderFundTable();renderMacroCharts();
+    var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
+  }catch(e){console.error('Init error:',e.message)}
 });
 </script>
 </body>
