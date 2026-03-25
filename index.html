@@ -2973,7 +2973,7 @@ function renderSwfFundTable(){
   var html='';
   for(var i=0;i<limit;i++){
     var d=f[i];
-    html+='<tr><td style="color:var(--text-tertiary);font-family:JetBrains Mono,monospace;font-size:11px">'+d.rank+'</td>';
+    html+='<tr onclick="window.location.href=\'swf.html#fund-'+d.rank+'\'" style="cursor:pointer"><td style="color:var(--text-tertiary);font-family:JetBrains Mono,monospace;font-size:11px">'+d.rank+'</td>';
     html+='<td>'+d.name+'</td>';
     html+='<td>'+d.country+'</td>';
     html+='<td><span class="swf-type-badge '+getTypeClass(d.type)+'">'+getTypeLabel(d.type)+'</span></td>';
