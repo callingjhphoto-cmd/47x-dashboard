@@ -1317,6 +1317,7 @@ function openReport(rank){
   document.getElementById('reportOverlay').classList.add('open');
   document.getElementById('reportOverlay').scrollTop=0;
   document.body.style.overflow='hidden';
+  if(history.replaceState)history.replaceState(null,null,'#fund-'+rank);
   setTimeout(function(){renderReportCharts(f)},50);
 }
 
@@ -1526,6 +1527,7 @@ function openInvestment(fundRank, investmentIndex){
 function closeReport(){
   document.getElementById('reportOverlay').classList.remove('open');
   document.body.style.overflow='';
+  if(history.replaceState)history.replaceState(null,null,window.location.pathname);
   Object.keys(reportCharts).forEach(function(k){reportCharts[k].destroy()});reportCharts={};
 }
 
