@@ -707,9 +707,21 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .grid-hero{grid-template-columns:1fr}
   .chart-container{height:200px}
   .chart-container-tall{height:240px}
-  .swf-filter-bar{gap:6px}
+  .swf-filter-bar{gap:6px;flex-direction:column}
+  .swf-filter-bar>div[style*="width:1px"]{display:none}
   .swf-filter-group{flex-wrap:wrap}
-  .swf-search-input{width:100%}
+  .swf-search-input{width:100%;font-size:14px;padding:10px 16px}
+  .swf-card{padding:16px}
+  .swf-card .swf-aum{font-size:22px}
+  .swf-card .swf-name{font-size:14px}
+  .swf-fund-table{font-size:11px}
+  .swf-fund-table thead th{padding:8px}
+  .swf-fund-table tbody td{padding:8px}
+  .kpi-card{padding:14px}
+  .kpi-value{font-size:24px}
+  .bottom-nav{padding:6px 4px env(safe-area-inset-bottom)}
+  .bottom-nav-item{padding:4px 8px;min-width:50px}
+  .bottom-nav-item span{font-size:9px}
 }
 @media(max-width:520px){
   #macroIndicatorGrid{grid-template-columns:1fr}
@@ -831,11 +843,11 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <button class="bottom-nav-item" onclick="mobileNav('macropanel',this)" data-tab="macropanel">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg><span>Macro</span>
   </button>
+  <button class="bottom-nav-item" onclick="mobileNav('swftracker',this)" data-tab="swftracker">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span>SWF</span>
+  </button>
   <button class="bottom-nav-item" onclick="mobileNav('stress',this)" data-tab="stress">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg><span>Risk</span>
-  </button>
-  <button class="bottom-nav-item" onclick="openSearch()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Search</span>
   </button>
 </div>
 
