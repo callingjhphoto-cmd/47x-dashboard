@@ -145,6 +145,24 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .related-fund-chip{display:inline-flex;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;background:var(--accent-light);color:var(--accent);cursor:pointer;transition:all 0.2s}
 .related-fund-chip:hover{background:var(--accent);color:#fff}
 
+.investment-table tbody tr{cursor:pointer;transition:background 0.15s}
+.investment-table tbody tr:hover{background:var(--accent-light)}
+
+.inv-detail{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;margin-top:16px;animation:fadeIn 0.3s ease}
+.inv-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.inv-detail-title{font-size:16px;font-weight:700;color:var(--text-primary)}
+.inv-detail-close{padding:6px 14px;border:1px solid var(--border);border-radius:var(--radius-xs);font-size:12px;font-weight:600;font-family:inherit;background:var(--surface);color:var(--text-secondary);cursor:pointer;transition:all 0.2s}
+.inv-detail-close:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.inv-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.inv-detail-field{padding:10px;background:var(--surface);border-radius:var(--radius-xs);border:1px solid var(--border-light)}
+.inv-detail-field-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:2px}
+.inv-detail-field-value{font-size:13px;font-weight:600;color:var(--text-primary)}
+.inv-detail-research{padding:16px;background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border-light);font-size:13px;color:var(--text-secondary);line-height:1.7}
+.inv-detail-research h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px}
+.inv-detail-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:600}
+.inv-detail-status.available{background:var(--green-light);color:var(--green)}
+.inv-detail-status.pending{background:var(--orange-light);color:var(--orange)}
+
 .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:32px 0}
 
 /* ===== TABLET (1024px and below) ===== */
@@ -228,6 +246,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   /* Related funds chips */
   .related-funds{gap:6px}
   .related-fund-chip{font-size:11px;padding:5px 12px}
+
+  /* Investment detail panel */
+  .inv-detail{padding:12px}
+  .inv-detail-grid{grid-template-columns:1fr;gap:8px}
+  .inv-detail-title{font-size:14px}
 
   /* Section divider */
   .section-divider{margin:20px 0}
@@ -367,12 +390,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 <div class="swf-hero fade-in">
   <h1>GCC Sovereign Wealth Fund Tracker</h1>
-  <p>Comprehensive intelligence across 50 GCC sovereign wealth funds, pension funds, family offices, and venture capital vehicles</p>
-  <div class="swf-hero-stats">
-    <div><div class="swf-hero-stat-value">$5.42T</div><div class="swf-hero-stat-label">Total AUM Tracked</div></div>
-    <div><div class="swf-hero-stat-value">50</div><div class="swf-hero-stat-label">Funds Tracked</div></div>
-    <div><div class="swf-hero-stat-value">6</div><div class="swf-hero-stat-label">GCC Countries</div></div>
-    <div><div class="swf-hero-stat-value">5</div><div class="swf-hero-stat-label">Vehicle Types</div></div>
+  <p id="heroDesc">Comprehensive intelligence across GCC sovereign wealth funds, pension funds, family offices, and venture capital vehicles</p>
+  <div class="swf-hero-stats" id="heroStats">
+    <div><div class="swf-hero-stat-value" id="heroAum">--</div><div class="swf-hero-stat-label">Total AUM Tracked</div></div>
+    <div><div class="swf-hero-stat-value" id="heroFunds">--</div><div class="swf-hero-stat-label">Funds Tracked</div></div>
+    <div><div class="swf-hero-stat-value" id="heroCountries">--</div><div class="swf-hero-stat-label">GCC Countries</div></div>
+    <div><div class="swf-hero-stat-value" id="heroTypes">--</div><div class="swf-hero-stat-label">Vehicle Types</div></div>
   </div>
 </div>
 
@@ -1192,7 +1215,7 @@ function openReport(rank){
   // Key Investments
   if(f.investments&&f.investments.length>0){
     h+='<div class="card report-section report-section-investments"><div class="report-section-title">Key Investments &amp; Holdings</div><div class="investment-table-wrapper"><table class="investment-table"><thead><tr><th>Investment</th><th>Sector</th><th>Value</th><th>Year</th></tr></thead><tbody>';
-    f.investments.forEach(function(i){h+='<tr data-investment="'+i.name+'" data-sector="'+i.sector+'" data-value="'+i.value+'" data-year="'+i.year+'"><td>'+i.name+'</td><td>'+i.sector+'</td><td>'+i.value+'</td><td>'+i.year+'</td></tr>';});
+    f.investments.forEach(function(i,idx){h+='<tr data-investment="'+i.name+'" data-sector="'+i.sector+'" data-value="'+i.value+'" data-year="'+i.year+'" onclick="openInvestment('+f.rank+','+idx+')" title="Click for investment detail"><td>'+i.name+' <span style="color:var(--accent);font-size:10px">\u2197</span></td><td>'+i.sector+'</td><td>'+i.value+'</td><td>'+i.year+'</td></tr>';});
     h+='</tbody></table></div><div class="investment-detail" id="investmentDetail"></div></div>';
   }
   // Risk Analysis (NEW)
@@ -1252,6 +1275,116 @@ function openReport(rank){
   setTimeout(function(){renderReportCharts(f)},50);
 }
 
+// Research availability map: fundShort -> [investmentSlug, ...]
+var researchAvailable = {
+  'PIF': ['saudi_aramco_16_stake','electronic_arts_93_4','softbank_vision_fund','uber_technologies','ma_aden','stc','lucid_motors_majority','neom','newcastle_united','jio_platforms_2_32','humain_ai','savvy_games_group','qiddiya','red_sea_global','diriyah_gate'],
+  'ADIA': ['fisher_investments','vantage_data_centers_apac','jio_platforms','reliance_retail']
+};
+
+function investmentSlug(name){
+  return name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').replace(/_+/g,'_');
+}
+
+function fundDirSlug(f){
+  // Map fund short names to their research directory names
+  var dirMap = {
+    'PIF':'pif','ADIA':'adia','KIA':'kia','QIA':'qia','ICD':'icd','Mubadala':'mubadala',
+    'ADQ':'adq','GOSI':'gosi','Hassana':'hassana','NEOM':'neom','OIA':'oia',
+    'Sanabil':'sanabil','SNB Cap':'snbcap','Investcorp':'investcorp','DH':'dh',
+    'ARCI':'alrajhi','Jadwa':'jadwa','GFH':'gfh','NBK Wealth':'nbkw',
+    'ADCG':'adcg','Kanoo':'kanoo','Mumtalakat':'mumtalakat','AlQasimi':'alqasimi',
+    'EIA':'eia','SAEV':'saev','Landmark':'landmark','FFO':'ffo','Waha':'waha',
+    'Lunate':'lunate','MEVP':'mevp','MAF':'maf','ESAG':'algurg','GulfCap':'gulfcap',
+    'SVC':'svc','STV':'stv','Jada':'jada','Shorooq':'shorooq','Wamda':'wamda',
+    'GV Invest':'gcinv','Riyadh Cap':'riyadcap','Royal Group':'royal','TVM':'tvm',
+    'Wafra':'wafra','STV VC':'stv','ADG':'adg','STCV':'stcv','Taqnia':'taqnia',
+    'Hub71':'hub71','BECO':'beco','GV':'gv','Nuwa':'nuwa'
+  };
+  return dirMap[f.short] || f.short.toLowerCase().replace(/[^a-z0-9]+/g,'');
+}
+
+function openInvestment(fundRank, investmentIndex){
+  var f = funds.find(function(x){return x.rank===fundRank});
+  if(!f || !f.investments || !f.investments[investmentIndex]) return;
+  var inv = f.investments[investmentIndex];
+  var slug = investmentSlug(inv.name);
+  var fundDir = fundDirSlug(f);
+  var hasResearch = researchAvailable[f.short] && researchAvailable[f.short].indexOf(slug) !== -1;
+
+  // Remove existing detail panel if any
+  var existing = document.getElementById('invDetailPanel');
+  if(existing) existing.remove();
+
+  var panel = '<div id="invDetailPanel" class="inv-detail">';
+  panel += '<div class="inv-detail-header"><div class="inv-detail-title">' + inv.name + '</div>';
+  panel += '<button class="inv-detail-close" onclick="document.getElementById(\'invDetailPanel\').remove()">\u2715 Close</button></div>';
+
+  // Core data grid
+  panel += '<div class="inv-detail-grid">';
+  panel += '<div class="inv-detail-field"><div class="inv-detail-field-label">Sector</div><div class="inv-detail-field-value">' + inv.sector + '</div></div>';
+  panel += '<div class="inv-detail-field"><div class="inv-detail-field-label">Value / Size</div><div class="inv-detail-field-value">' + inv.value + '</div></div>';
+  panel += '<div class="inv-detail-field"><div class="inv-detail-field-label">Year</div><div class="inv-detail-field-value">' + inv.year + '</div></div>';
+  panel += '<div class="inv-detail-field"><div class="inv-detail-field-label">Held By</div><div class="inv-detail-field-value">' + f.name + ' (' + f.type + ', Tier ' + f.tier + ')</div></div>';
+  panel += '</div>';
+
+  // Fund context
+  panel += '<div class="inv-detail-research"><h4>Fund Context</h4>';
+  panel += '<p><strong>' + f.short + '</strong> is a ' + f.type + ' based in ' + f.country + ' with ';
+  var aumStr = f.aum ? (f.aum >= 1000 ? '$' + (f.aum/1000).toFixed(2) + 'T' : '$' + f.aum + 'B') : 'undisclosed';
+  panel += aumStr + ' in AUM. ' + f.mandate + '</p>';
+
+  // Sector fit
+  if(f.sectors){
+    var sectorKeys = Object.keys(f.sectors);
+    var topSectors = sectorKeys.sort(function(a,b){return f.sectors[b]-f.sectors[a]}).slice(0,3);
+    panel += '<p style="margin-top:8px"><strong>Top sectors:</strong> ' + topSectors.map(function(s){return s.replace(/([A-Z])/g,' $1').trim() + ' (' + f.sectors[s] + '%)'}).join(', ') + '</p>';
+  }
+  panel += '</div>';
+
+  // Research status
+  panel += '<div style="margin-top:12px;display:flex;align-items:center;gap:8px">';
+  if(hasResearch){
+    panel += '<span class="inv-detail-status available">\u2713 Deep Research Available</span>';
+    panel += '<span style="font-size:11px;color:var(--text-tertiary)">File: research/swf_investments/' + fundDir + '/' + slug + '.md</span>';
+  } else {
+    panel += '<span class="inv-detail-status pending">\u25CB Research In Progress</span>';
+    panel += '<span style="font-size:11px;color:var(--text-tertiary)">Full research report queued for generation</span>';
+  }
+  panel += '</div>';
+
+  // If there's a deep profile with related info, show investment strategy context
+  var deep = deepProfiles[fundRank];
+  var enh = enhancedProfiles[fundRank] || {};
+  if(deep && deep.executive){
+    panel += '<div class="inv-detail-research" style="margin-top:12px"><h4>Investment Strategy Context</h4>';
+    // Truncate executive to first 300 chars
+    var execText = deep.executive;
+    if(execText.length > 400) execText = execText.substring(0, 400) + '...';
+    panel += '<p>' + execText + '</p></div>';
+  }
+
+  // Related investments from same fund
+  if(f.investments.length > 1){
+    panel += '<div style="margin-top:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:6px">Other Holdings by ' + f.short + '</div>';
+    panel += '<div style="display:flex;flex-wrap:wrap;gap:4px">';
+    f.investments.forEach(function(other, idx){
+      if(idx === investmentIndex) return;
+      panel += '<span style="display:inline-flex;padding:3px 8px;border-radius:100px;font-size:10px;font-weight:600;background:var(--border-light);color:var(--text-secondary);cursor:pointer" onclick="openInvestment(' + fundRank + ',' + idx + ')">' + other.name + '</span>';
+    });
+    panel += '</div></div>';
+  }
+
+  panel += '</div>';
+
+  // Insert panel after the investment table
+  var invSection = document.querySelector('#reportContent .investment-table-wrapper');
+  if(invSection){
+    invSection.parentNode.insertAdjacentHTML('beforeend', panel);
+    // Scroll to panel
+    document.getElementById('invDetailPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+
 function closeReport(){
   document.getElementById('reportOverlay').classList.remove('open');
   document.body.style.overflow='';
@@ -1285,7 +1418,18 @@ function renderMacroCharts(){
 }
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('reportOverlay').classList.contains('open'))closeReport();});
-document.addEventListener('DOMContentLoaded',function(){renderFundTable();renderMacroCharts();
+function computeHeroStats(){
+  var totalAum = funds.reduce(function(s,f){return s+(f.aum||0)},0);
+  var aumStr = totalAum >= 1000 ? '$'+(totalAum/1000).toFixed(2)+'T' : '$'+totalAum+'B';
+  document.getElementById('heroAum').textContent = aumStr;
+  document.getElementById('heroFunds').textContent = funds.length;
+  var countries = {};var types = {};
+  funds.forEach(function(f){countries[f.country]=1;types[f.type]=1;});
+  document.getElementById('heroCountries').textContent = Object.keys(countries).length;
+  document.getElementById('heroTypes').textContent = Object.keys(types).length;
+}
+
+document.addEventListener('DOMContentLoaded',function(){computeHeroStats();renderFundTable();renderMacroCharts();
   var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
 });
 </script>
