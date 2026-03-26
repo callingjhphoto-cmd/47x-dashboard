@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>47X Intelligence Platform</title>
 <meta name="description" content="47X Performance Benchmark &amp; Arbitrage Intelligence — GCC company benchmarking across 9 dimensions">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230B1D3A'/><text x='50' y='68' font-family='system-ui' font-size='48' font-weight='800' fill='white' text-anchor='middle'>47X</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -35,6 +36,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 [hidden]{display:none!important}
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+/* Export button */
+.export-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font:inherit;font-size:11px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all 0.15s}
+.export-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.export-btn svg{width:14px;height:14px}
+
+/* Skeleton loading animation */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skeleton{background:linear-gradient(90deg,var(--border-light) 25%,var(--bg) 50%,var(--border-light) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-xs)}
+.skeleton-text{height:14px;margin-bottom:8px;border-radius:4px}
+.skeleton-text.short{width:60%}
+.skeleton-text.medium{width:80%}
+.skeleton-heading{height:22px;width:40%;margin-bottom:12px;border-radius:4px}
+.skeleton-chart{height:200px;border-radius:var(--radius-sm)}
+.skeleton-kpi{height:80px;border-radius:var(--radius-sm)}
 
 .page-loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(245,245,247,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:400;transition:opacity 0.25s ease,visibility 0.25s ease}
 .page-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
@@ -798,6 +814,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <button class="nav-tab" data-tab="sectoral" onclick="switchTab('sectoral',this)">Sectoral</button>
     <button class="nav-tab" data-tab="stress" onclick="switchTab('stress',this)">Stress Test</button>
     <button class="nav-tab" data-tab="composite" onclick="switchTab('composite',this)">Composite</button>
+    <button class="nav-tab" onclick="window.location.href='crossfund.html'" style="border-left:1px solid var(--border);margin-left:4px;padding-left:16px">Cross-Fund</button>
     <!-- Pricing tab hidden for SWF demo — content preserved in tab-pricing div -->
     <!-- <button class="nav-tab" onclick="switchTab('pricing',this)">Pricing</button> -->
   </div>
@@ -1075,39 +1092,39 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="section">
     <div class="section-header"><div class="section-title">Live Macro Indicators <span class="level-badge level-2">Intelligence Layer</span></div>
       <div class="market-data-bar">
-        <span class="api-badge" style="font-size:11px"><span class="api-dot live" style="background:var(--green);animation:none"></span> Chart.js Rendered</span>
+        <span class="api-badge" id="macroApiStatus" style="font-size:11px"><span class="api-dot live" id="macroApiDot" style="background:var(--orange);animation:none"></span> <span id="macroApiLabel">Static data &mdash; connect API key for live feed</span></span>
       </div>
     </div>
     <div class="grid-5 fade-in" id="macroIndicatorGrid">
-      <div class="macro-spark-card" id="sparkBrent">
+      <div class="macro-spark-card" id="sparkBrent" data-api-source="yahoo" data-api-symbol="BZ=F" data-api-fred="">
         <div class="macro-spark-label">Brent Crude</div>
         <div class="macro-spark-price" id="sparkBrentPrice">$74.20</div>
         <div class="macro-spark-change down" id="sparkBrentChange">-1.8% (24h)</div>
         <div class="macro-spark-chart"><canvas id="sparkBrentCanvas"></canvas></div>
         <div class="macro-spark-explainer">The global oil benchmark. GCC government revenues are directly tied to this price. Above $80 = fiscal surplus, SWFs deploy. Below $60 = fiscal pressure, SWFs conserve.</div>
       </div>
-      <div class="macro-spark-card" id="sparkWTI">
+      <div class="macro-spark-card" id="sparkWTI" data-api-source="yahoo" data-api-symbol="CL=F" data-api-fred="">
         <div class="macro-spark-label">WTI Crude</div>
         <div class="macro-spark-price" id="sparkWTIPrice">$70.45</div>
         <div class="macro-spark-change down" id="sparkWTIChange">-1.6% (24h)</div>
         <div class="macro-spark-chart"><canvas id="sparkWTICanvas"></canvas></div>
         <div class="macro-spark-explainer">US oil benchmark. The Brent-WTI spread indicates global vs US supply dynamics.</div>
       </div>
-      <div class="macro-spark-card" id="sparkDXY">
+      <div class="macro-spark-card" id="sparkDXY" data-api-source="yahoo" data-api-symbol="DX-Y.NYB" data-api-fred="">
         <div class="macro-spark-label">DXY (USD Index)</div>
         <div class="macro-spark-price" id="sparkDXYPrice">104.30</div>
         <div class="macro-spark-change up" id="sparkDXYChange">+0.4% (24h)</div>
         <div class="macro-spark-chart"><canvas id="sparkDXYCanvas"></canvas></div>
         <div class="macro-spark-explainer">US Dollar strength index. GCC currencies are pegged to USD, so a strong dollar means GCC exports (oil, aluminium, petrochemicals) cost more for buyers paying in euros or yuan.</div>
       </div>
-      <div class="macro-spark-card" id="sparkGold">
+      <div class="macro-spark-card" id="sparkGold" data-api-source="yahoo" data-api-symbol="GC=F" data-api-fred="">
         <div class="macro-spark-label">Gold (XAU/USD)</div>
         <div class="macro-spark-price" id="sparkGoldPrice">$3,028</div>
         <div class="macro-spark-change up" id="sparkGoldChange">+0.6% (24h)</div>
         <div class="macro-spark-chart"><canvas id="sparkGoldCanvas"></canvas></div>
         <div class="macro-spark-explainer">Safe haven and monetary inflation hedge. Rising gold signals institutional caution. Michael Howell notes the gold-oil ratio at 55x vs 20x long-term mean &mdash; suggesting oil is historically cheap relative to gold.</div>
       </div>
-      <div class="macro-spark-card" id="sparkUS10Y">
+      <div class="macro-spark-card" id="sparkUS10Y" data-api-source="fred" data-api-symbol="" data-api-fred="DGS10">
         <div class="macro-spark-label">US 10Y Yield</div>
         <div class="macro-spark-price" id="sparkUS10YPrice">4.28%</div>
         <div class="macro-spark-change down" id="sparkUS10YChange">-0.3% (24h)</div>
@@ -1402,8 +1419,11 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         </div>
       </div>
       <div class="card">
-        <div class="card-title">Recent Allocation Shifts by Sector</div>
-        <div class="card-subtitle">Major moves detected (2025-2026)</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div class="card-title">Recent Allocation Shifts by Sector</div>
+          <div class="card-subtitle">Major moves detected (2025-2026)</div></div>
+          <button class="export-btn" onclick="exportTableCSV(this.closest('.card').querySelector('table'),'swf_allocation_shifts')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
+        </div>
         <div class="table-scroll"><table class="comp-table" style="margin-top:8px">
           <thead><tr><th>Fund</th><th>Sector</th><th>Move</th><th>Signal</th><th>Conviction</th></tr></thead>
           <tbody>
@@ -2395,6 +2415,29 @@ async function renderLiveApiCards(list){
   }).join('');
 }
 
+// CSV Export utility
+function exportTableCSV(tableEl, filename) {
+  if (!tableEl) return;
+  var csv = [];
+  var rows = tableEl.querySelectorAll('tr');
+  rows.forEach(function(row) {
+    var cols = row.querySelectorAll('td, th');
+    var rowData = [];
+    cols.forEach(function(col) {
+      var text = col.innerText.replace(/"/g, '""').replace(/\n/g, ' ').trim();
+      rowData.push('"' + text + '"');
+    });
+    csv.push(rowData.join(','));
+  });
+  var blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = (filename || '47x_export') + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+  URL.revokeObjectURL(link.href);
+  setStatusMessage('Exported ' + filename + ' to CSV');
+}
+
 function switchTab(t,b){activateTab(t,b||document.querySelector('.nav-tab[data-tab="'+t+'"]'))}
 function switchCompany(k){
   currentCompany=k;
@@ -2814,6 +2857,95 @@ function renderOilGccChart(){
   var corr=oilGccData.correlations[currentOilGccRange]||0.82;
   document.getElementById('oilGccCorrBadge').textContent='r = '+corr.toFixed(2);
   new Chart(canvas,{type:'line',data:{labels:labels,datasets:[{label:'Brent Crude ($/bbl)',data:brent,borderColor:'#0B1D3A',backgroundColor:'rgba(11,29,58,0.06)',fill:true,tension:0.35,borderWidth:2.5,pointRadius:2,pointBackgroundColor:'#0B1D3A',yAxisID:'y'},{label:'GCC Market Index',data:gcc,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.04)',fill:true,tension:0.35,borderWidth:2,borderDash:[5,3],pointRadius:2,pointBackgroundColor:'#2563EB',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:12}},tooltip:{mode:'index',intersect:false,callbacks:{label:function(ctx){return ctx.dataset.label+': '+(ctx.datasetIndex===0?'$':'')+ctx.raw.toLocaleString()}}}},scales:{y:{position:'left',min:40,max:130,grid:{color:'rgba(229,231,235,0.5)'},ticks:{font:{size:10},callback:function(v){return'$'+v}},title:{display:true,text:'Brent Crude ($/bbl)',font:{size:10,weight:'600'}}},y1:{position:'right',min:750,max:1100,grid:{display:false},ticks:{font:{size:10}},title:{display:true,text:'GCC Index',font:{size:10,weight:'600'}}},x:{grid:{display:false},ticks:{font:{size:10},maxTicksLimit:12}}},interaction:{mode:'nearest',axis:'x',intersect:false}}});
+}
+
+// ===== LIVE MACRO DATA API INTEGRATION =====
+// Placeholder: connects to FRED/Yahoo Finance when API keys are configured
+var MACRO_API_CONFIG = {
+  fredApiKey: null,    // Set to FRED API key when available (e.g., 'abc123')
+  yahooProxy: null,    // Set to Yahoo Finance proxy URL when available
+  refreshInterval: 300000, // 5 minutes
+  indicators: {
+    brent:  { el: 'sparkBrentPrice', changeEl: 'sparkBrentChange', symbol: 'BZ=F',    fred: null,    prefix: '$', suffix: '',  decimals: 2, fallback: 74.20 },
+    wti:    { el: 'sparkWTIPrice',   changeEl: 'sparkWTIChange',   symbol: 'CL=F',    fred: null,    prefix: '$', suffix: '',  decimals: 2, fallback: 70.45 },
+    dxy:    { el: 'sparkDXYPrice',   changeEl: 'sparkDXYChange',   symbol: 'DX-Y.NYB',fred: null,    prefix: '',  suffix: '',  decimals: 2, fallback: 104.30 },
+    gold:   { el: 'sparkGoldPrice',  changeEl: 'sparkGoldChange',  symbol: 'GC=F',    fred: null,    prefix: '$', suffix: '',  decimals: 0, fallback: 3028 },
+    us10y:  { el: 'sparkUS10YPrice', changeEl: 'sparkUS10YChange', symbol: null,       fred: 'DGS10', prefix: '',  suffix: '%', decimals: 2, fallback: 4.28 },
+    fedfunds:{ el: null,             changeEl: null,                symbol: null,       fred: 'FEDFUNDS',prefix:'', suffix: '%', decimals: 2, fallback: 4.50 },
+    eibor:  { el: null,              changeEl: null,                symbol: null,       fred: null,    prefix: '',  suffix: '%', decimals: 2, fallback: 4.85 }
+  }
+};
+
+function fetchMacroData(){
+  var cfg = MACRO_API_CONFIG;
+  var statusEl = document.getElementById('macroApiLabel');
+  var dotEl = document.getElementById('macroApiDot');
+
+  // Check if any API key is configured
+  if(!cfg.fredApiKey && !cfg.yahooProxy){
+    if(statusEl) statusEl.innerHTML = 'Static data &mdash; <a href="#" onclick="event.preventDefault();prompt(\'Set FRED API key at https://fred.stlouisfed.org/docs/api/api_key.html\\nThen add to MACRO_API_CONFIG.fredApiKey in index.html\',\'\')" style="color:var(--accent);text-decoration:underline;font-size:11px">connect API key for live feed</a>';
+    if(dotEl) dotEl.style.background = 'var(--orange)';
+    return;
+  }
+
+  // FRED API fetch (when key available)
+  if(cfg.fredApiKey){
+    Object.keys(cfg.indicators).forEach(function(key){
+      var ind = cfg.indicators[key];
+      if(!ind.fred || !ind.el) return;
+      var url = 'https://api.stlouisfed.org/fred/series/observations?series_id=' + ind.fred + '&api_key=' + cfg.fredApiKey + '&file_type=json&sort_order=desc&limit=1';
+      fetch(url).then(function(r){return r.json()}).then(function(data){
+        if(data.observations && data.observations.length > 0){
+          var val = parseFloat(data.observations[0].value);
+          var el = document.getElementById(ind.el);
+          if(el) el.textContent = ind.prefix + val.toFixed(ind.decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ind.suffix;
+        }
+      }).catch(function(err){
+        console.warn('FRED fetch failed for ' + ind.fred + ':', err);
+      });
+    });
+  }
+
+  // Yahoo Finance fetch (when proxy available)
+  if(cfg.yahooProxy){
+    var symbols = Object.keys(cfg.indicators).filter(function(k){return cfg.indicators[k].symbol}).map(function(k){return cfg.indicators[k].symbol}).join(',');
+    fetch(cfg.yahooProxy + '?symbols=' + encodeURIComponent(symbols)).then(function(r){return r.json()}).then(function(data){
+      Object.keys(cfg.indicators).forEach(function(key){
+        var ind = cfg.indicators[key];
+        if(!ind.symbol || !ind.el) return;
+        var quote = data && data[ind.symbol];
+        if(quote && typeof quote.price === 'number'){
+          var el = document.getElementById(ind.el);
+          if(el) el.textContent = ind.prefix + quote.price.toFixed(ind.decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ind.suffix;
+          var changeEl = document.getElementById(ind.changeEl);
+          if(changeEl && typeof quote.changePercent === 'number'){
+            var pct = quote.changePercent;
+            var dir = pct >= 0 ? 'up' : 'down';
+            changeEl.className = 'macro-spark-change ' + dir;
+            changeEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '% (24h)';
+          }
+        }
+      });
+      if(statusEl) statusEl.textContent = 'Live data \u2022 Last updated: ' + new Date().toLocaleTimeString();
+      if(dotEl){ dotEl.style.background = 'var(--green)'; dotEl.style.animation = 'pulse 2s infinite'; }
+    }).catch(function(err){
+      console.warn('Yahoo Finance fetch failed:', err);
+      if(statusEl) statusEl.textContent = 'API error \u2014 showing cached data';
+      if(dotEl) dotEl.style.background = 'var(--red)';
+    });
+  }
+
+  // Update status if at least one source connected
+  if(cfg.fredApiKey && !cfg.yahooProxy){
+    if(statusEl) statusEl.textContent = 'FRED connected \u2022 Yahoo: awaiting proxy';
+    if(dotEl) dotEl.style.background = 'var(--green)';
+  }
+}
+
+// Attempt live fetch on load; set interval if API keys present
+fetchMacroData();
+if(MACRO_API_CONFIG.fredApiKey || MACRO_API_CONFIG.yahooProxy){
+  setInterval(fetchMacroData, MACRO_API_CONFIG.refreshInterval);
 }
 
 function renderMacroCharts(){
@@ -3333,6 +3465,24 @@ function animateHeroScores(){
   animateCount(document.getElementById('heroTotalScore'),comp.total);
 }
 
+// Auto-add export buttons to cards containing tables
+function addExportButtons(){
+  document.querySelectorAll('.card').forEach(function(card){
+    var table=card.querySelector('table.comp-table, table.arb-matrix-table');
+    if(!table||card.querySelector('.export-btn'))return;
+    var header=card.querySelector('.card-title');
+    if(!header)return;
+    var name=(header.textContent||'data').trim().replace(/[^a-zA-Z0-9]/g,'_').substring(0,30).toLowerCase();
+    var btn=document.createElement('button');
+    btn.className='export-btn';
+    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> CSV';
+    btn.onclick=function(){exportTableCSV(table,name)};
+    btn.style.position='absolute';btn.style.top='20px';btn.style.right='20px';
+    card.style.position='relative';
+    card.appendChild(btn);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   enhanceAccessibility();
   updateTableOverflowIndicators();
@@ -3340,6 +3490,7 @@ document.addEventListener('DOMContentLoaded', function() {
   checkApi();
   startMarketRefresh(300000); // refresh API data every 5 minutes
   ensureWidgetsForTab(getActiveTab());
+  addExportButtons();
   requestAnimationFrame(function(){
     animateHeroScores();
     window.setTimeout(hidePageLoader,180);
