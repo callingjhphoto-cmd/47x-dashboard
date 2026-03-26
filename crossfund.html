@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>47X Intelligence Platform — Cross-Fund Analysis</title>
+<meta name="description" content="Cross-Fund Analysis — Shared holdings, co-investment networks, sector convergence signals">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F5F7;--surface:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;
+  --navy:#0B1D3A;--navy-light:#1E3A5F;
+  --text-primary:#111827;--text-secondary:#6B7280;--text-tertiary:#9CA3AF;
+  --accent:#2563EB;--accent-light:#EFF6FF;--accent-dark:#1D4ED8;
+  --green:#059669;--green-light:#ECFDF5;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --orange:#D97706;--orange-light:#FFFBEB;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.08);
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+.header{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{width:36px;height:36px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
+.logo-text{font-size:18px;font-weight:700;letter-spacing:-0.3px;color:var(--navy)}
+.logo-text span{color:var(--text-tertiary);font-weight:400;font-size:13px;margin-left:8px}
+.nav-tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px}
+.nav-tab{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;border:none;background:none;white-space:nowrap;font-family:inherit;text-decoration:none}
+.nav-tab:hover{color:var(--text-primary);background:rgba(255,255,255,0.6)}
+.nav-tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+.main{max-width:1440px;margin:0 auto;padding:28px 40px 60px}
+.section{margin-bottom:32px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-tertiary);display:flex;align-items:center;gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.level-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.level-1{background:var(--accent-light);color:var(--accent)}
+.level-2{background:var(--purple-light);color:var(--purple)}
+.level-3{background:var(--green-light);color:var(--green)}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--radius);padding:32px;color:#fff;margin-bottom:24px}
+.hero h1{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.hero p{font-size:14px;color:rgba(255,255,255,0.7)}
+.hero-stats{display:flex;gap:40px;margin-top:20px}
+.hero-stat-value{font-size:36px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#34D399,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.5);margin-top:2px}
+.hero-stats>div+div{padding-left:40px;border-left:1px solid rgba(255,255,255,0.12)}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.xfund-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.xfund-table{width:100%;border-collapse:collapse;font-size:12px}
+.xfund-table th{text-align:left;padding:8px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border);white-space:nowrap}
+.xfund-table td{padding:8px 12px;border-bottom:1px solid var(--border-light);vertical-align:top}
+.xfund-table tr:hover{background:var(--accent-light)}
+.xfund-inv-name{font-weight:600;color:var(--text-primary);font-size:13px}
+.xfund-fund-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.xfund-fund-chip{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.xfund-fund-chip:hover{transform:scale(1.05)}
+.xfund-count{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent)}
+.xfund-sector-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.xfund-sector-bar .bar{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden}
+.xfund-sector-bar .bar-fill{height:100%;border-radius:4px;transition:width 0.5s ease}
+.xfund-sector-label{font-size:11px;font-weight:600;color:var(--text-secondary);min-width:120px}
+.xfund-sector-count{font-size:11px;font-weight:600;color:var(--text-primary);min-width:24px;text-align:right}
+.xfund-pair{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--radius-xs);margin-bottom:4px;font-size:12px;background:var(--bg);transition:background 0.15s}
+.xfund-pair:hover{background:var(--accent-light)}
+.xfund-pair-count{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--purple);min-width:20px}
+.xfund-pair-names{font-weight:600;color:var(--text-primary)}
+.xfund-pair-assets{font-size:11px;color:var(--text-secondary);margin-left:auto}
+.xfund-signal{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border)}
+.xfund-signal-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.xfund-signal-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
+.xfund-signal-text strong{color:var(--text-primary)}
+.footer{max-width:1440px;margin:0 auto;padding:32px 40px;text-align:center;border-top:1px solid var(--border);color:var(--text-tertiary);font-size:12px}
+.footer a{color:var(--accent);text-decoration:none}
+@media(max-width:768px){.xfund-grid{grid-template-columns:1fr}.hero-stats{flex-wrap:wrap;gap:20px}.hero-stats>div+div{padding-left:0;border-left:none}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">47X</div>
+      <div class="logo-text">Intelligence<span>GCC Capital Tracker</span></div>
+    </a>
+    <nav class="nav-tabs">
+      <button class="nav-tab" onclick="window.location.href='index.html'">Overview</button>
+      <button class="nav-tab" onclick="window.location.href='swf.html'">SWF Tracker</button>
+      <button class="nav-tab active" aria-current="page">Cross-Fund Analysis</button>
+    </nav>
+  </div>
+</div>
+
+<div class="main">
+  <div class="hero">
+    <h1>Cross-Fund Analysis</h1>
+    <p>Shared holdings, co-investment networks, and sector convergence signals across GCC sovereign wealth funds</p>
+    <div class="hero-stats">
+      <div><div class="hero-stat-value" id="heroHoldings">0</div><div class="hero-stat-label">Shared Holdings</div></div>
+      <div><div class="hero-stat-value" id="heroFunds">0</div><div class="hero-stat-label">Tracked Funds</div></div>
+      <div><div class="hero-stat-value" id="heroPairs">0</div><div class="hero-stat-label">Co-Investment Pairs</div></div>
+    </div>
+  </div>
+
+  <div class="section-header"><div class="section-title"><span class="level-badge level-1">Shared Holdings</span> Investments held by multiple GCC funds</div></div>
+  <div class="card" style="margin-bottom:24px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Shared Investment Holdings</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Sorted by number of co-investors &mdash; click any fund chip to view in SWF Tracker</div>
+    <div style="overflow-x:auto">
+      <table class="xfund-table" id="xfundTable">
+        <thead><tr><th>Investment</th><th>Funds</th><th style="text-align:center">Co-investors</th><th>Sector Signal</th></tr></thead>
+        <tbody id="xfundTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="xfund-grid" style="margin-bottom:24px">
+    <div class="card">
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px">Co-Investment Frequency</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Which fund pairs invest together most often</div>
+      <div id="xfundPairs"></div>
+    </div>
+    <div class="card">
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px">Sector Convergence</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Sectors attracting capital from multiple funds</div>
+      <div id="xfundSectors"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Convergence Signals</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">What the cross-fund holdings tell us about where GCC capital is heading</div>
+    <div id="xfundSignals"></div>
+  </div>
+
+  <div class="section-header"><div class="section-title"><span class="level-badge level-2">Fund Connectivity Matrix</span> Which funds share the most holdings</div></div>
+  <div class="card" style="margin-bottom:24px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Fund Overlap Heatmap</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Number of shared investments between each fund pair</div>
+    <div id="overlapMatrix" style="overflow-x:auto"></div>
+  </div>
+
+  <div class="section-header"><div class="section-title"><span class="level-badge level-3">Capital Convergence</span> Where multiple sovereign funds are building positions simultaneously</div></div>
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Multi-Fund Convergence Map</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Assets backed by 3+ GCC sovereign funds represent high-conviction institutional bets</div>
+    <div id="convergenceMap"></div>
+  </div>
+</div>
+
+<div class="footer">47X Intelligence &mdash; Cross-Fund Analysis &mdash; <a href="swf.html">Back to SWF Tracker</a></div>
+
+<script>
+// Minimal fund data needed for cross-fund rendering (short names, tiers, sectors)
+var fundMeta={1:{short:'PIF',tier:1,name:'PIF',sectors:['Energy','MaterialsMining','Telecom']},2:{short:'ADIA',tier:1,name:'ADIA',sectors:['DevelopedEquities','PrivateEquity','FixedIncome']},3:{short:'KIA',tier:1,name:'KIA',sectors:['PublicEquities','FixedIncome']},4:{short:'QIA',tier:1,name:'QIA',sectors:['RealEstateInfra','FinancialServices']},5:{short:'ICD',tier:1,name:'ICD',sectors:['RealEstate','Financial']},6:{short:'Mubadala',tier:1,name:'Mubadala',sectors:['Technology','Energy','Healthcare']},7:{short:'ADQ',tier:1,name:'ADQ',sectors:['Infrastructure','Healthcare']},8:{short:'GOSI',tier:2,name:'GOSI',sectors:['RealEstate','PrivateEquity']},10:{short:'NEOM',tier:2,name:'NEOM',sectors:['Technology']},11:{short:'OIA',tier:2,name:'OIA',sectors:['Energy','Infrastructure']},12:{short:'Sanabil',tier:2,name:'Sanabil',sectors:['Technology','Venture']},13:{short:'SNB Cap',tier:2,name:'SNB Capital',sectors:['Financial']},14:{short:'Investcorp',tier:2,name:'Investcorp',sectors:['PrivateEquity']},24:{short:'ADCG',tier:3,name:'ADCG',sectors:['Financial']},27:{short:'Mumtalakat',tier:3,name:'Mumtalakat',sectors:['Industrial']},29:{short:'EIA',tier:3,name:'EIA',sectors:['Infrastructure']},30:{short:'DigitalBridge',tier:3,name:'DigitalBridge',sectors:['Digital']},31:{short:'Landmark',tier:3,name:'Landmark',sectors:['Retail']},33:{short:'Waha',tier:3,name:'Waha',sectors:['Diversified']},35:{short:'SVC',tier:3,name:'SVC',sectors:['Venture']},38:{short:'MEVP',tier:4,name:'MEVP',sectors:['Venture']},39:{short:'MAF',tier:4,name:'MAF',sectors:['Retail']},41:{short:'Shorooq',tier:4,name:'Shorooq',sectors:['Venture']},42:{short:'Wamda',tier:4,name:'Wamda',sectors:['Venture']},45:{short:'GV Invest',tier:4,name:'GV Invest',sectors:['Venture']},47:{short:'Nuwa',tier:5,name:'Nuwa',sectors:['Venture']},48:{short:'Hub71',tier:5,name:'Hub71',sectors:['Technology']},49:{short:'BECO',tier:5,name:'BECO',sectors:['Venture']}};
+
+var crossFundInvestments = {
+  'Aramco Gas Pipelines': [6,8],
+  'Berain Water': [6,8],
+  'BlackRock': [3,11],
+  'Brookfield': [8,11],
+  'Careem': [35,42,45,48],
+  'DigitalBridge': [2,30],
+  'Emirates': [5,7,10,24],
+  'Gulf Investment': [24,29],
+  'Jio Platforms': [1,2],
+  'Kitopi': [42,48],
+  'Lucid Motors': [1,38],
+  'Mall of the Emirates': [5,31],
+  'Metito': [29,33],
+  'Mubadala': [14,41,47],
+  'Mubadala Capital': [14,47],
+  'Oman Tourism Development': [13,27],
+  'SWVL': [39,42,48,49],
+  'Saudi Aramco': [1,12],
+  'SpaceX': [13,38],
+  'TPG Rise Climate': [6,8,11],
+  'Tabby': [41,47,49],
+  'Tamara': [35,41],
+};
+
+var tierColors={1:'var(--navy)',2:'var(--accent)',3:'var(--purple)',4:'var(--orange)',5:'var(--text-tertiary)'};
+
+function getMeta(rank){return fundMeta[rank]||{short:'Fund#'+rank,tier:5,name:'Fund#'+rank,sectors:[]}}
+
+function render(){
+  var sorted=Object.entries(crossFundInvestments).sort(function(a,b){return b[1].length-a[1].length});
+
+  // Hero stats
+  document.getElementById('heroHoldings').textContent=sorted.length;
+  var allFunds={};sorted.forEach(function(e){e[1].forEach(function(r){allFunds[r]=1})});
+  document.getElementById('heroFunds').textContent=Object.keys(allFunds).length;
+
+  // 1. Shared holdings table
+  var tbody='';
+  sorted.forEach(function(entry){
+    var name=entry[0],ranks=entry[1];
+    tbody+='<tr>';
+    tbody+='<td><div class="xfund-inv-name">'+name+'</div></td>';
+    tbody+='<td><div class="xfund-fund-chips">';
+    ranks.forEach(function(r){
+      var m=getMeta(r);
+      var bg=tierColors[m.tier]||'var(--text-tertiary)';
+      tbody+='<span class="xfund-fund-chip" style="background:'+bg+';color:#fff" onclick="window.location.href=\'swf.html#fund-'+r+'\'" title="'+m.name+'">'+m.short+'</span>';
+    });
+    tbody+='</div></td>';
+    tbody+='<td style="text-align:center"><span class="xfund-count">'+ranks.length+'</span></td>';
+    tbody+='<td style="font-size:11px;color:var(--text-secondary)">'+detectSector(name)+'</td>';
+    tbody+='</tr>';
+  });
+  document.getElementById('xfundTableBody').innerHTML=tbody;
+
+  // 2. Co-investment frequency
+  var pairCount={};
+  sorted.forEach(function(entry){
+    var ranks=entry[1];
+    for(var i=0;i<ranks.length;i++){
+      for(var j=i+1;j<ranks.length;j++){
+        var key=Math.min(ranks[i],ranks[j])+'-'+Math.max(ranks[i],ranks[j]);
+        if(!pairCount[key])pairCount[key]={a:Math.min(ranks[i],ranks[j]),b:Math.max(ranks[i],ranks[j]),count:0,assets:[]};
+        pairCount[key].count++;
+        pairCount[key].assets.push(entry[0]);
+      }
+    }
+  });
+  var pairsSorted=Object.values(pairCount).sort(function(a,b){return b.count-a.count}).slice(0,15);
+  document.getElementById('heroPairs').textContent=Object.keys(pairCount).length;
+  var pairsHtml='';
+  pairsSorted.forEach(function(p){
+    var mA=getMeta(p.a),mB=getMeta(p.b);
+    pairsHtml+='<div class="xfund-pair">';
+    pairsHtml+='<span class="xfund-pair-count">'+p.count+'</span>';
+    pairsHtml+='<span class="xfund-pair-names">'+mA.short+' \u2194 '+mB.short+'</span>';
+    pairsHtml+='<span class="xfund-pair-assets">'+p.assets.slice(0,3).join(', ')+(p.assets.length>3?' +'+(p.assets.length-3):'')+'</span>';
+    pairsHtml+='</div>';
+  });
+  document.getElementById('xfundPairs').innerHTML=pairsHtml||'<div style="color:var(--text-tertiary);font-size:12px">No co-investment pairs detected</div>';
+
+  // 3. Sector convergence
+  var sectorCount={};
+  sorted.forEach(function(entry){
+    var sector=detectSector(entry[0]);
+    if(!sectorCount[sector])sectorCount[sector]={count:0,funds:new Set(),assets:[]};
+    sectorCount[sector].count++;
+    entry[1].forEach(function(r){sectorCount[sector].funds.add(r)});
+    sectorCount[sector].assets.push(entry[0]);
+  });
+  var sectorsSorted=Object.entries(sectorCount).sort(function(a,b){return b[1].count-a[1].count});
+  var maxSectorCount=sectorsSorted.length>0?sectorsSorted[0][1].count:1;
+  var sectorsHtml='';
+  sectorsSorted.forEach(function(s){
+    var pct=Math.round((s[1].count/maxSectorCount)*100);
+    var color=s[1].funds.size>=3?'var(--accent)':s[1].funds.size>=2?'var(--purple)':'var(--text-tertiary)';
+    sectorsHtml+='<div class="xfund-sector-bar">';
+    sectorsHtml+='<span class="xfund-sector-label">'+s[0]+'</span>';
+    sectorsHtml+='<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+    sectorsHtml+='<span class="xfund-sector-count">'+s[1].count+'</span>';
+    sectorsHtml+='</div>';
+  });
+  document.getElementById('xfundSectors').innerHTML=sectorsHtml;
+
+  // 4. Convergence signals
+  var signals=[];
+  sectorsSorted.forEach(function(s){
+    var tier1Funds=[];
+    s[1].funds.forEach(function(r){var m=getMeta(r);if(m.tier===1)tier1Funds.push(m.short)});
+    if(tier1Funds.length>=2){
+      signals.push({icon:'\uD83D\uDFE2',bg:'var(--green-light)',text:'<strong>Sector convergence: '+s[0]+'</strong> \u2014 '+tier1Funds.join(', ')+' all hold positions. '+s[1].assets.slice(0,3).join(', ')+(s[1].assets.length>3?' and '+(s[1].assets.length-3)+' more':'')+'.'});
+    }
+  });
+  var fundConnections={};
+  sorted.forEach(function(entry){entry[1].forEach(function(r){if(!fundConnections[r])fundConnections[r]=0;fundConnections[r]++})});
+  var topConnected=Object.entries(fundConnections).sort(function(a,b){return b[1]-a[1]}).slice(0,3);
+  if(topConnected.length>0){
+    var connNames=topConnected.map(function(c){var m=getMeta(parseInt(c[0]));return m.short+' ('+c[1]+' shared)'}).join(', ');
+    signals.push({icon:'\uD83D\uDD17',bg:'var(--accent-light)',text:'<strong>Most connected funds:</strong> '+connNames+'. These funds show the highest co-investment overlap.'});
+  }
+  sorted.forEach(function(entry){
+    if(entry[1].length>=4){
+      var fundNames=entry[1].map(function(r){return getMeta(r).short}).join(', ');
+      signals.push({icon:'\u26A1',bg:'var(--orange-light)',text:'<strong>High convergence: '+entry[0]+'</strong> \u2014 held by '+entry[1].length+' funds ('+fundNames+'). Multiple sovereign funds backing the same asset signals strong institutional conviction.'});
+    }
+  });
+  var signalsHtml='';
+  signals.forEach(function(s){
+    signalsHtml+='<div class="xfund-signal"><div class="xfund-signal-icon" style="background:'+s.bg+'">'+s.icon+'</div><div class="xfund-signal-text">'+s.text+'</div></div>';
+  });
+  document.getElementById('xfundSignals').innerHTML=signalsHtml||'<div style="color:var(--text-tertiary);font-size:12px">Signals will appear as more data is processed</div>';
+
+  // 5. Fund overlap matrix
+  var activeFunds=Object.keys(allFunds).map(Number).sort(function(a,b){return a-b});
+  var overlapData={};
+  activeFunds.forEach(function(a){overlapData[a]={};activeFunds.forEach(function(b){overlapData[a][b]=0})});
+  sorted.forEach(function(entry){
+    var ranks=entry[1];
+    for(var i=0;i<ranks.length;i++){for(var j=i+1;j<ranks.length;j++){overlapData[ranks[i]][ranks[j]]++;overlapData[ranks[j]][ranks[i]]++}}
+  });
+  var matrixHtml='<table style="border-collapse:collapse;font-size:10px;width:100%"><thead><tr><th style="padding:6px;font-size:9px;color:var(--text-tertiary)"></th>';
+  activeFunds.forEach(function(r){matrixHtml+='<th style="padding:6px;font-size:9px;color:var(--text-tertiary);writing-mode:vertical-rl;text-orientation:mixed;height:80px">'+getMeta(r).short+'</th>'});
+  matrixHtml+='</tr></thead><tbody>';
+  activeFunds.forEach(function(a){
+    matrixHtml+='<tr><td style="padding:6px;font-weight:700;font-size:10px;color:var(--text-secondary);white-space:nowrap">'+getMeta(a).short+'</td>';
+    activeFunds.forEach(function(b){
+      var val=a===b?'':overlapData[a][b];
+      var bg=val===''?'var(--surface)':val>=3?'var(--navy)':val>=2?'var(--accent)':val>=1?'#DBEAFE':'var(--surface)';
+      var col=val>=2?'#fff':'var(--text-secondary)';
+      matrixHtml+='<td style="padding:6px;text-align:center;background:'+bg+';color:'+col+';font-weight:700;border:1px solid var(--border-light);min-width:32px">'+val+'</td>';
+    });
+    matrixHtml+='</tr>';
+  });
+  matrixHtml+='</tbody></table>';
+  document.getElementById('overlapMatrix').innerHTML=matrixHtml;
+
+  // 6. Convergence map (assets with 3+ fund backers)
+  var highConv=sorted.filter(function(e){return e[1].length>=3});
+  var convHtml='';
+  if(highConv.length===0){
+    convHtml='<div style="padding:20px;text-align:center;color:var(--text-tertiary)">No assets currently held by 3+ funds</div>';
+  } else {
+    highConv.forEach(function(entry){
+      convHtml+='<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px">';
+      convHtml+='<div style="font-size:20px;font-weight:800;color:var(--accent);min-width:32px;text-align:center">'+entry[1].length+'</div>';
+      convHtml+='<div style="flex:1"><div style="font-weight:700;font-size:14px">'+entry[0]+'</div>';
+      convHtml+='<div style="font-size:12px;color:var(--text-secondary);margin-top:2px">'+detectSector(entry[0])+' \u2022 ';
+      convHtml+=entry[1].map(function(r){return getMeta(r).short}).join(', ')+'</div></div></div>';
+    });
+  }
+  document.getElementById('convergenceMap').innerHTML=convHtml;
+}
+
+function detectSector(name){
+  var map={'Aramco':'Energy','Berain':'Consumer','BlackRock':'Asset Management','Brookfield':'Infrastructure','Careem':'Mobility','DigitalBridge':'Digital Infrastructure','Emirates':'Aviation','Gulf Investment':'Financial','Jio':'Telecom','Kitopi':'FoodTech','Lucid':'Automotive/EV','Mall':'Retail','Metito':'Water/Utilities','Mubadala':'Financial','Oman Tourism':'Tourism','SWVL':'Mobility','Saudi Aramco':'Energy','SpaceX':'Aerospace','TPG Rise':'Climate/ESG','Tabby':'Fintech','Tamara':'Fintech'};
+  var keys=Object.keys(map);
+  for(var i=0;i<keys.length;i++){if(name.indexOf(keys[i])!==-1)return map[keys[i]]}
+  return 'Diversified';
+}
+
+document.addEventListener('DOMContentLoaded',render);
+</script>
+</body>
+</html>

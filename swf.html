@@ -541,7 +541,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .network-controls select{padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);font-size:12px;font-family:inherit;background:var(--surface);color:var(--text-primary)}
 
 /* ===== FEATURE 6: PREDICTION SIGNALS ===== */
-.prediction-card{padding:20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);margin-bottom:12px}
+.prediction-card{padding:20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);margin-bottom:12px;position:relative}
+.prediction-card.dismissed{display:none}
+.prediction-dismiss{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text-tertiary);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.2s;line-height:1}
+.prediction-dismiss:hover{background:var(--red-light);color:var(--red);border-color:var(--red)}
 .prediction-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .prediction-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .prediction-title{font-size:14px;font-weight:700;color:var(--text-primary)}
@@ -605,6 +608,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <nav class="nav-tabs" role="navigation" aria-label="Main navigation">
     <button class="nav-tab" onclick="window.location.href='index.html'">Overview</button>
     <button class="nav-tab active" aria-current="page">SWF Tracker</button>
+    <button class="nav-tab" onclick="window.location.href='crossfund.html'">Cross-Fund Analysis</button>
   </nav>
 </div></div>
 
@@ -931,7 +935,7 @@ var funds = [
   {rank:7,name:'Mubadala Investment Company',short:'Mubadala',country:'UAE',aum:330,type:'SWF',tier:1,status:'Expanding',founded:2002,mandate:'Abu Dhabi\'s strategic arm. 10.1% 5yr return. 40% PE. Co-founded MGX ($100B AI fund). $32.5B deployed in 2024.',sectors:{PrivateEquity:40,PublicEquities:23,RealEstateInfra:17,Alternatives:15,Credit:5},investments:[{name:'GlobalFoundries (81.46%)',sector:'Semiconductors',value:'$20B+ invested',year:2009},{name:'MGX / GAIIP ($30B AI fund)',sector:'AI Infrastructure',value:'$30B (w/ BlackRock, MSFT)',year:2024},{name:'Cleveland Clinic Abu Dhabi',sector:'Healthcare',value:'$2B',year:2015},{name:'Cepsa',sector:'Energy/Petrochemicals',value:'Major stake',year:2011},{name:'Silver Lake Partners',sector:'PE/Tech',value:'$2B+',year:2020},{name:'Strata Manufacturing',sector:'Aerospace',value:'Full ownership',year:2009},{name:'Emirates Global Aluminium',sector:'Industrial',value:'Major stake (JV)',year:2013},{name:'Masdar (33%)',sector:'Clean Energy',value:'100GW target by 2030',year:2006},{name:'Space42',sector:'Space/AI',value:'Yahsat+Bayanat',year:2024},{name:'Stargate Project (via MGX)',sector:'AI',value:'Co-investor w/ OpenAI',year:2025},{name:'Clear Channel Outdoor',sector:'Media',value:'$6.2B take-private',year:2026},{name:'CI Financial',sector:'Wealth Mgmt',value:'$12.1B (C$32/share)',year:2025},{name:'Techem International',sector:'Energy Mgmt',value:'$7.48B',year:2024}],geoFocus:{NorthAmerica:41,MiddleEast:23,Europe:16,AsiaPacific:15,LatinAmerica:2,Other:3},deals:[{q:'Q1 2026',count:11,value:8.1},{q:'Q4 2025',count:13,value:9.5},{q:'Q3 2025',count:10,value:7.2},{q:'Q2 2025',count:12,value:8.8},{q:'Q1 2025',count:11,value:7.9}]},
   {rank:8,name:'Hassana Investment Company',short:'Hassana',country:'Saudi Arabia',aum:320,type:'Pension',tier:1,status:'Active',founded:2014,mandate:'Investment manager for GOSI. SAR 1.2T. Top 10 global pension manager.',sectors:{FixedIncome:46,PublicEquities:21,PrivateEquity:8,Infrastructure:6,RealEstate:5,Cash:14},investments:[{name:'Aramco Gas Pipelines',sector:'Infrastructure',value:'$15.5B (w/ BlackRock)',year:2021},{name:'TPG Rise Climate',sector:'Climate PE',value:'$1.5B anchor LP',year:2023},{name:'Berain Water (40%)',sector:'Consumer',value:'Undisclosed',year:2025},{name:'Franklin Templeton Saudi Credit',sector:'Private Credit',value:'$150M MoU',year:2025},{name:'Tadawul Blue-Chips',sector:'Public Equities',value:'$129B+ domestic',year:'Ongoing'},{name:'Brookfield Asset Management LP',sector:'Private Equity',value:'$2.4B',year:2024},{name:'Franklin Templeton Saudi Credit',sector:'Private Credit',value:'$150M MoU',year:2025},{name:'Warburg Pincus (LP)',sector:'Private Equity',value:'Undisclosed',year:2023}],geoFocus:{MiddleEast:55,NorthAmerica:18,Europe:13,AsiaPacific:10,Other:4},deals:[{q:'Q1 2026',count:5,value:3.5},{q:'Q4 2025',count:6,value:4.0},{q:'Q3 2025',count:4,value:2.8},{q:'Q2 2025',count:5,value:3.6},{q:'Q1 2025',count:5,value:3.3}]},
   {rank:9,name:'Royal Group',short:'Royal',country:'UAE',aum:164,type:'Family Office',tier:1,status:'Active',founded:1997,mandate:'Sheikh Tahnoun bin Zayed\'s conglomerate. Tech, healthcare, construction, AI.',sectors:{Technology:20,Construction:18,Healthcare:14,RealEstate:14,FinancialServices:12,Media:8,FoodBeverage:8,Other:6},investments:[{name:'G42',sector:'AI/Technology',value:'Major stake',year:2018},{name:'International Golden Group',sector:'Defence',value:'Full ownership',year:2000},{name:'Multiply Group',sector:'Holding',value:'Listed',year:2021},{name:'PAX Global Technology',sector:'Technology',value:'Major stake',year:2019},{name:'IHC (International Holding Co)',sector:'Holding Company',value:'$233B mkt cap',year:2018},{name:'2PointZero (AI subsidiary)',sector:'AI/Technology',value:'$27B entity',year:2024},{name:'Presight AI',sector:'AI/Technology',value:'Listed ADX',year:2023},{name:'Alpha Dhabi Holding',sector:'Diversified',value:'IHC subsidiary',year:2021},{name:'Response Plus Medical',sector:'Healthcare',value:'IHC subsidiary',year:2021},{name:'Burjeel Holdings',sector:'Healthcare',value:'IHC stake',year:2022}],geoFocus:{MiddleEast:60,AsiaPacific:15,Europe:12,NorthAmerica:8,Africa:5},deals:[{q:'Q1 2026',count:5,value:2.8},{q:'Q4 2025',count:6,value:3.2},{q:'Q3 2025',count:4,value:2.1},{q:'Q2 2025',count:5,value:2.6},{q:'Q1 2025',count:5,value:2.4}]},
-  {rank:10,name:'ADQ',short:'ADQ',country:'UAE',aum:263,type:'SWF',tier:1,status:'Expanding',founded:2018,mandate:'Abu Dhabi domestic development. Airports, utilities, food, logistics.',sectors:{Utilities:18,FoodAgriculture:16,Logistics:14,Healthcare:12,RealEstate:10,Financial:10,Energy:10,Technology:10},investments:[{name:'Abu Dhabi Airports',sector:'Infrastructure',value:'Full ownership',year:2020},{name:'TAQA',sector:'Utilities/Energy',value:'Major stake',year:2020},{name:'Louis Dreyfus Company',sector:'Agriculture',value:'45% stake',year:2021},{name:'Etihad Rail',sector:'Infrastructure',value:'Stake',year:2022},{name:'TAQA (90% stake)',sector:'Energy/Utilities',value:'$20B+ mkt cap',year:2020},{name:'AD Ports Group (75.4%)',sector:'Logistics/Transport',value:'Listed ADX',year:2020},{name:'PureHealth (43.9%)',sector:'Healthcare',value:'Listed ADX',year:2021},{name:'Etihad Airways (100%)',sector:'Aviation',value:'Full ownership',year:2022},{name:'Agthia Group (62.9%)',sector:'Food/Agriculture',value:'Listed ADX',year:2020},{name:'Emirates Steel Arkan (87.5%)',sector:'Industrial',value:'Listed ADX',year:2020},{name:'ENEC/Barakah Nuclear',sector:'Energy',value:'Full ownership',year:2020},{name:'Aramex (40.45%)',sector:'Logistics',value:'Listed DFM',year:2020},{name:'Al Dahra (50%)',sector:'Agriculture',value:'Strategic stake',year:2021},{name:'Wio Bank',sector:'Digital Banking',value:'Subsidiary',year:2022},{name:'Ras El Hekma (Egypt)',sector:'Real Estate',value:'$35B megaproject',year:2024}],geoFocus:{MiddleEast:50,Africa:15,AsiaPacific:15,Europe:12,NorthAmerica:8},deals:[{q:'Q1 2026',count:8,value:4.5},{q:'Q4 2025',count:10,value:5.8},{q:'Q3 2025',count:7,value:4.0},{q:'Q2 2025',count:9,value:5.1},{q:'Q1 2025',count:8,value:4.3}]},
+  {rank:10,name:'ADQ',short:'ADQ',country:'UAE',aum:263,type:'SWF',tier:1,status:'Expanding',founded:2018,mandate:'Abu Dhabi domestic development. Airports, utilities, food, logistics. Being consolidated into L\'IMAD Holding (Q1 2026).',sectors:{Utilities:18,FoodAgriculture:16,Logistics:14,Healthcare:12,RealEstate:10,Financial:10,Energy:10,Technology:10},investments:[{name:'Abu Dhabi Airports',sector:'Infrastructure',value:'Full ownership',year:2020},{name:'TAQA',sector:'Utilities/Energy',value:'Major stake',year:2020},{name:'Louis Dreyfus Company',sector:'Agriculture',value:'45% stake',year:2021},{name:'Etihad Rail',sector:'Infrastructure',value:'Stake',year:2022},{name:'TAQA (90% stake)',sector:'Energy/Utilities',value:'$20B+ mkt cap',year:2020},{name:'AD Ports Group (75.4%)',sector:'Logistics/Transport',value:'Listed ADX',year:2020},{name:'PureHealth (43.9%)',sector:'Healthcare',value:'Listed ADX',year:2021},{name:'Etihad Airways (100%)',sector:'Aviation',value:'Full ownership',year:2022},{name:'Agthia Group (62.9%)',sector:'Food/Agriculture',value:'Listed ADX',year:2020},{name:'Emirates Steel Arkan (87.5%)',sector:'Industrial',value:'Listed ADX',year:2020},{name:'ENEC/Barakah Nuclear',sector:'Energy',value:'Full ownership',year:2020},{name:'Aramex (40.45%)',sector:'Logistics',value:'Listed DFM',year:2020},{name:'Al Dahra (50%)',sector:'Agriculture',value:'Strategic stake',year:2021},{name:'Wio Bank',sector:'Digital Banking',value:'Subsidiary',year:2022},{name:'Ras El Hekma (Egypt)',sector:'Real Estate',value:'$35B megaproject',year:2024}],geoFocus:{MiddleEast:50,Africa:15,AsiaPacific:15,Europe:12,NorthAmerica:8},deals:[{q:'Q1 2026',count:8,value:4.5},{q:'Q4 2025',count:10,value:5.8},{q:'Q3 2025',count:7,value:4.0},{q:'Q2 2025',count:9,value:5.1},{q:'Q1 2025',count:8,value:4.3}]},
   {rank:11,name:'Lunate',short:'Lunate',country:'UAE',aum:115,type:'IHC',tier:2,status:'Expanding',founded:2023,mandate:'Alt asset mgmt spun from Mubadala.',sectors:{PrivateEquity:35,Credit:20,Infrastructure:18,Technology:12,RealEstate:10,Other:5},investments:[{name:'Fortress Investment Group',sector:'Alt. Asset Mgmt',value:'$3.3B',year:2023},{name:'ALTERRA Climate Fund (mgr)',sector:'Climate Finance',value:'$30B vehicle',year:2023},{name:'Blue Owl Capital JV (GP Stakes)',sector:'Financial Services',value:'JV partnership',year:2024},{name:'Linden Capital Partners',sector:'Healthcare PE',value:'Minority stake',year:2024},{name:'Revolution Medicines',sector:'Biotech',value:'$264M 13F',year:2025},{name:'Brookfield (ALTERRA LP)',sector:'Infrastructure',value:'$3B allocation',year:2023},{name:'BlackRock (ALTERRA LP)',sector:'Climate/Credit',value:'$2B allocation',year:2023},{name:'TPG Rise Climate (ALTERRA LP)',sector:'Climate PE',value:'$1.5B allocation',year:2023}],geoFocus:{NorthAmerica:35,Europe:25,MiddleEast:20,AsiaPacific:15,Other:5},deals:[{q:'Q1 2026',count:6,value:3.2},{q:'Q4 2025',count:7,value:4.0},{q:'Q3 2025',count:5,value:2.8},{q:'Q2 2025',count:6,value:3.4},{q:'Q1 2025',count:5,value:2.9}]},
   {rank:12,name:'SNB Capital',short:'SNBCap',country:'Saudi Arabia',aum:64,type:'IHC',tier:2,status:'Active',founded:2007,mandate:'Saudi National Bank investment arm.',sectors:{PublicEquities:35,FixedIncome:25,RealEstate:15,PrivateEquity:10,Alternatives:10,Cash:5},investments:[{name:'Saudi Tadawul equities',sector:'Public Markets',value:'Large AUM',year:'Ongoing'},{name:'Nice One Beauty IPO (lead mgr)',sector:'E-Commerce',value:'SAR 1.2B raised',year:2024},{name:'Entaj Agriculture IPO (lead)',sector:'Agriculture',value:'SAR 450M raised',year:2024},{name:'Saudi Aramco Secondary (lead)',sector:'Energy',value:'$12.4B offering',year:2024},{name:'STC Accelerated Bookbuild',sector:'Telecom',value:'SAR 3.86B',year:2024},{name:'SNB Capital SAR Multi-Asset Fund',sector:'Asset Management',value:'SAR 125M NAV',year:2025},{name:'Almoosa Health IPO (joint)',sector:'Healthcare',value:'SAR 1.69B',year:2024},{name:'DIFC Subsidiary (alt assets)',sector:'Financial Services',value:'Regional',year:2023}],geoFocus:{MiddleEast:70,NorthAmerica:12,Europe:10,AsiaPacific:5,Other:3},deals:[{q:'Q1 2026',count:3,value:1.2},{q:'Q4 2025',count:4,value:1.5},{q:'Q3 2025',count:2,value:0.9},{q:'Q2 2025',count:3,value:1.1},{q:'Q1 2025',count:3,value:1.0}]},
   {rank:13,name:'Oman Investment Authority (OIA)',short:'OIA',country:'Oman',aum:53,type:'SWF',tier:2,status:'Active',founded:2020,mandate:'Oman\'s unified SWF. Vision 2040.',sectors:{Energy:25,Logistics:15,Tourism:12,RealEstate:12,FinancialServices:10,Mining:10,Technology:8,Other:8},investments:[{name:'OQ Energy',sector:'Energy',value:'Full ownership',year:2020},{name:'Omantel',sector:'Telecom',value:'Major stake',year:2020},{name:'SpaceX (FGF stake)',sector:'Space/Technology',value:'37% IRR',year:2022},{name:'xAI (Elon Musk, via FGF)',sector:'AI/Technology',value:'Part of $6B round',year:2024},{name:'OQ Group (petrochemicals)',sector:'Energy/Chemicals',value:'$40B revenue',year:2020},{name:'Oman Tourism Development Co',sector:'Tourism',value:'Full ownership',year:2020},{name:'Duqm Refinery (OQ8 JV)',sector:'Energy',value:'$7B project',year:2024},{name:'Future Fund Oman ($5.2B)',sector:'Diversified',value:'$5.2B subsidiary',year:2023},{name:'Asyad Group (logistics)',sector:'Logistics',value:'Full ownership',year:2020},{name:'Bank Muscat (strategic stake)',sector:'Banking',value:'Significant',year:2020}],geoFocus:{MiddleEast:55,AsiaPacific:18,Europe:12,Africa:10,NorthAmerica:5},deals:[{q:'Q1 2026',count:3,value:1.0},{q:'Q4 2025',count:4,value:1.3},{q:'Q3 2025',count:2,value:0.7},{q:'Q2 2025',count:3,value:0.9},{q:'Q1 2025',count:3,value:0.8}]},
@@ -2288,10 +2292,16 @@ function renderCrossFundAnalysis(){
 // ===== FEATURE 1: SECTOR HEATMAP =====
 function renderSectorHeatmap(){
   var topFunds=funds.filter(function(f){return f.tier<=2}).sort(function(a,b){return(b.aum||0)-(a.aum||0)});
-  var allSectors={};
-  funds.forEach(function(f){if(f.sectors){Object.keys(f.sectors).forEach(function(s){allSectors[s]=1})}});
-  var sectorList=Object.keys(allSectors).sort();
-  var html='<table class="heatmap-table"><thead><tr><th>Sector</th>';
+  // Calculate capital concentration per sector (sum of AUM-weighted allocation)
+  var sectorCapital={};
+  funds.forEach(function(f){if(f.sectors){Object.keys(f.sectors).forEach(function(s){
+    if(!sectorCapital[s])sectorCapital[s]=0;
+    sectorCapital[s]+=f.sectors[s]*(f.aum||1)/100;
+  })}});
+  // Sort by capital concentration and take top 18 sectors
+  var sectorList=Object.keys(sectorCapital).sort(function(a,b){return sectorCapital[b]-sectorCapital[a]}).slice(0,18);
+  var html='<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:8px">Showing top '+sectorList.length+' sectors by capital concentration (filtered from '+Object.keys(sectorCapital).length+' total)</div>';
+  html+='<table class="heatmap-table"><thead><tr><th>Sector</th>';
   topFunds.forEach(function(f){html+='<th style="cursor:pointer" onclick="openReport('+f.rank+')" title="'+f.name+'">'+f.short+'</th>'});
   html+='</tr></thead><tbody>';
   sectorList.forEach(function(sector){
@@ -2551,9 +2561,13 @@ function renderPredictions(){
       watch:'Watch for: Cybersecurity acquisitions, satellite communication companies, autonomous defence systems. EDGE Group (UAE) may seek external investors.'
     }
   ];
+  var dismissed=[];
+  try{dismissed=JSON.parse(localStorage.getItem('47x_dismissed_predictions')||'[]')}catch(e){}
   var html='';
-  predictions.forEach(function(p){
-    html+='<div class="prediction-card">';
+  predictions.forEach(function(p,i){
+    var isDismissed=dismissed.indexOf(i)!==-1;
+    html+='<div class="prediction-card'+(isDismissed?' dismissed':'')+'" id="prediction-'+i+'">';
+    html+='<button class="prediction-dismiss" onclick="dismissPrediction('+i+')" title="Dismiss this signal">\u00d7</button>';
     html+='<div class="prediction-header">';
     html+='<div class="prediction-icon" style="background:'+p.bg+'">'+p.icon+'</div>';
     html+='<div><div class="prediction-title">'+p.title+'</div>';
@@ -2562,8 +2576,25 @@ function renderPredictions(){
     html+='<div class="prediction-watch">'+p.watch+'</div>';
     html+='</div>';
   });
+  if(dismissed.length>0){
+    html+='<button class="filter-btn" onclick="resetDismissedPredictions()" style="margin-top:8px;font-size:11px">Show '+dismissed.length+' dismissed signal'+(dismissed.length>1?'s':'')+'</button>';
+  }
   var container=document.getElementById('predictionsContent');
   if(container)container.innerHTML=html;
+}
+
+function dismissPrediction(idx){
+  var dismissed=[];
+  try{dismissed=JSON.parse(localStorage.getItem('47x_dismissed_predictions')||'[]')}catch(e){}
+  if(dismissed.indexOf(idx)===-1)dismissed.push(idx);
+  try{localStorage.setItem('47x_dismissed_predictions',JSON.stringify(dismissed))}catch(e){}
+  var card=document.getElementById('prediction-'+idx);
+  if(card)card.classList.add('dismissed');
+  renderPredictions();
+}
+function resetDismissedPredictions(){
+  try{localStorage.removeItem('47x_dismissed_predictions')}catch(e){}
+  renderPredictions();
 }
 
 // ===== FEATURE 7: COUNTRY DEEP DIVE =====
@@ -2629,10 +2660,55 @@ function openCountryDeepDive(country){
     html+='<div style="flex:1;text-align:center"><div style="height:'+ht+'px;background:var(--accent);border-radius:4px 4px 0 0;margin-bottom:6px;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;font-weight:700;padding-top:2px">'+(count>0?count:'')+'</div><div style="font-size:11px;color:var(--text-tertiary);font-weight:600">'+yr+'</div></div>';
   });
   html+='</div></div>';
+  // Country vs Country Comparison
+  var allCountries=[];
+  funds.forEach(function(f){if(allCountries.indexOf(f.country)===-1)allCountries.push(f.country)});
+  allCountries.sort();
+  html+='<div class="section-header" style="margin-top:24px"><div class="section-title"><span class="level-badge level-1">Country Comparison</span></div></div>';
+  html+='<div class="card"><div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Compare '+country+' against another GCC country</div>';
+  html+='<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">';
+  allCountries.forEach(function(c){
+    if(c!==country){
+      html+='<button class="filter-btn" onclick="showCountryComparison(\''+country+'\',\''+c+'\')" style="font-size:11px">vs '+c+'</button>';
+    }
+  });
+  html+='</div><div id="countryCompareResult"></div></div>';
   document.getElementById('countryContent').innerHTML=html;
   overlay.classList.add('open');
   overlay.scrollTop=0;
   document.body.style.overflow='hidden';
+}
+function showCountryComparison(c1,c2){
+  var f1=funds.filter(function(f){return f.country===c1});
+  var f2=funds.filter(function(f){return f.country===c2});
+  var aum1=f1.reduce(function(s,f){return s+(f.aum||0)},0);
+  var aum2=f2.reduce(function(s,f){return s+(f.aum||0)},0);
+  var deals1=f1.reduce(function(s,f){return s+(f.deals?f.deals.reduce(function(s2,d){return s2+d.count},0):0)},0);
+  var deals2=f2.reduce(function(s,f){return s+(f.deals?f.deals.reduce(function(s2,d){return s2+d.count},0):0)},0);
+  var sec1={},sec2={};
+  f1.forEach(function(f){if(f.sectors){Object.entries(f.sectors).forEach(function(e){if(!sec1[e[0]])sec1[e[0]]=0;sec1[e[0]]+=e[1]*(f.aum||1)/100})}});
+  f2.forEach(function(f){if(f.sectors){Object.entries(f.sectors).forEach(function(e){if(!sec2[e[0]])sec2[e[0]]=0;sec2[e[0]]+=e[1]*(f.aum||1)/100})}});
+  var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px">';
+  h+='<div style="text-align:center;padding:16px;background:var(--accent-light);border-radius:var(--radius-sm)"><div style="font-size:18px;font-weight:800;color:var(--accent)">'+c1+'</div>';
+  h+='<div style="font-size:24px;font-weight:800;margin:8px 0">'+formatAum(aum1)+'</div>';
+  h+='<div style="font-size:12px;color:var(--text-secondary)">'+f1.length+' funds \u2022 '+deals1+' deals</div></div>';
+  h+='<div style="text-align:center;padding:16px;background:var(--purple-light);border-radius:var(--radius-sm)"><div style="font-size:18px;font-weight:800;color:var(--purple)">'+c2+'</div>';
+  h+='<div style="font-size:24px;font-weight:800;margin:8px 0">'+formatAum(aum2)+'</div>';
+  h+='<div style="font-size:12px;color:var(--text-secondary)">'+f2.length+' funds \u2022 '+deals2+' deals</div></div></div>';
+  h+='<div style="margin-top:16px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:8px">Sector Allocation Comparison</div>';
+  var allSec={};Object.keys(sec1).forEach(function(s){allSec[s]=1});Object.keys(sec2).forEach(function(s){allSec[s]=1});
+  var secSorted=Object.keys(allSec).sort(function(a,b){return Math.max(sec2[b]||0,sec1[b]||0)-Math.max(sec2[a]||0,sec1[a]||0)}).slice(0,10);
+  var maxSec=1;secSorted.forEach(function(s){maxSec=Math.max(maxSec,sec1[s]||0,sec2[s]||0)});
+  secSorted.forEach(function(s){
+    var v1=sec1[s]||0,v2=sec2[s]||0;
+    h+='<div style="margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="min-width:100px;font-size:11px;font-weight:600">'+s.replace(/([A-Z])/g,' $1').trim()+'</span>';
+    h+='<div style="flex:1;display:flex;gap:4px;align-items:center"><div style="flex:1;height:14px;background:var(--bg);border-radius:3px;overflow:hidden"><div style="width:'+Math.round(v1/maxSec*100)+'%;height:100%;background:var(--accent);border-radius:3px"></div></div>';
+    h+='<div style="flex:1;height:14px;background:var(--bg);border-radius:3px;overflow:hidden"><div style="width:'+Math.round(v2/maxSec*100)+'%;height:100%;background:var(--purple);border-radius:3px"></div></div></div>';
+    h+='<span style="font-size:10px;color:var(--text-tertiary);min-width:90px;text-align:right">'+formatAum(v1)+' / '+formatAum(v2)+'</span></div>';
+  });
+  h+='</div>';
+  var el=document.getElementById('countryCompareResult');
+  if(el)el.innerHTML=h;
 }
 function closeCountryDeepDive(){
   document.getElementById('countryOverlay').classList.remove('open');
