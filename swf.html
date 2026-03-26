@@ -156,6 +156,33 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .co-investor-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:600;background:var(--purple-light);color:var(--purple);cursor:pointer;transition:all 0.2s;border:1px solid transparent}
 .co-investor-chip:hover{background:var(--purple);color:#fff;border-color:var(--purple)}
+
+.xfund-section{margin-top:32px}
+.xfund-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.xfund-table{width:100%;border-collapse:collapse;font-size:12px}
+.xfund-table th{text-align:left;padding:8px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);border-bottom:2px solid var(--border);white-space:nowrap}
+.xfund-table td{padding:8px 12px;border-bottom:1px solid var(--border-light);vertical-align:top}
+.xfund-table tr:hover{background:var(--accent-light)}
+.xfund-inv-name{font-weight:600;color:var(--text-primary);font-size:13px}
+.xfund-fund-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.xfund-fund-chip{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.xfund-fund-chip:hover{transform:scale(1.05)}
+.xfund-count{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent)}
+.xfund-sector-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.xfund-sector-bar .bar{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden}
+.xfund-sector-bar .bar-fill{height:100%;border-radius:4px;transition:width 0.5s ease}
+.xfund-sector-label{font-size:11px;font-weight:600;color:var(--text-secondary);min-width:120px}
+.xfund-sector-count{font-size:11px;font-weight:600;color:var(--text-primary);min-width:24px;text-align:right}
+.xfund-pair{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--radius-xs);margin-bottom:4px;font-size:12px;background:var(--bg);transition:background 0.15s}
+.xfund-pair:hover{background:var(--accent-light)}
+.xfund-pair-count{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--purple);min-width:20px}
+.xfund-pair-names{font-weight:600;color:var(--text-primary)}
+.xfund-pair-assets{font-size:11px;color:var(--text-secondary);margin-left:auto}
+.xfund-signal{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border)}
+.xfund-signal-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.xfund-signal-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
+.xfund-signal-text strong{color:var(--text-primary)}
+@media(max-width:768px){.xfund-grid{grid-template-columns:1fr}}
 .inv-detail{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;margin-top:16px;animation:fadeIn 0.3s ease}
 .inv-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .inv-detail-title{font-size:16px;font-weight:700;color:var(--text-primary)}
@@ -513,6 +540,50 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </table>
   </div>
   <div id="fundCount" style="padding:10px 16px;font-size:11px;color:var(--text-tertiary);text-align:right"></div>
+</div>
+
+<div class="section-divider"></div>
+
+<div class="xfund-section section fade-in">
+<div class="section-header"><div class="section-title"><span class="level-badge level-1">Cross-Fund Analysis</span> Layer 1 &mdash; Shared Holdings Map</div></div>
+
+<div class="xfund-grid">
+  <div class="card" style="grid-column:1/-1">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Shared Investment Holdings</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Investments held by multiple GCC funds &mdash; sorted by number of co-investors</div>
+    <div style="overflow-x:auto">
+      <table class="xfund-table" id="xfundTable">
+        <thead>
+          <tr>
+            <th>Investment</th>
+            <th>Funds</th>
+            <th style="text-align:center">Co-investors</th>
+            <th>Sector Signal</th>
+          </tr>
+        </thead>
+        <tbody id="xfundTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Co-Investment Frequency</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Which fund pairs invest together most often</div>
+    <div id="xfundPairs"></div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Sector Convergence</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Sectors attracting capital from multiple funds</div>
+    <div id="xfundSectors"></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <div style="font-size:15px;font-weight:600;margin-bottom:4px">Convergence Signals</div>
+  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">What the cross-fund holdings tell us about where GCC capital is heading</div>
+  <div id="xfundSignals"></div>
+</div>
 </div>
 
 <div class="section-divider"></div>
@@ -1429,6 +1500,14 @@ var researchSummaries = {
   'adia/jio_platforms': 'DEEP RESEARCH REPORT: Jio Platforms — Investment held by Abu Dhabi Investment Authority (ADIA)\n\nKey Points:\n*   Research suggests that the Abu Dhabi Investment Authority\'s (ADIA) $752 million investment in Jio Platforms in 2020 was a highly strategic maneuver aimed at capturing value from India\'s accelerating digital transformation, moving beyond traditional sovereign wealth infrastructure plays into high-growth digital ecosystems.\n*   It appears likely that ADIA\'s position within Jio Platforms aligns seamlessly with its Private Equities Department\'s (PED) mandate for intergenerational wealth preservation, leveraging India\'s maturing regulatory environment and robust macroeconomic growth.\n*   The evidence indicates that Jio Platforms maintains a dominant market position in the Indian telecommunications sector, though it faces persistent competitive pressures from rivals like Bharti Airtel and Vodafone Idea, as well as emerging regulatory and technological risks.\n*   Current market discussions suggest that ADIA, alongside other marquee investors, is actively preparing for a liquidity event via a monumental 2026 Initial Public Offering (IPO) in Mumbai, which is expected to be structured as an Offer-For-Sale (OFS) to unlock value without diluting the company\'s core operational capital.\n\nExecutive Summary\nThis comprehensive report provides an academic analysis of the Abu Dhabi Investment Authority\'s (ADIA) strategic investment in Jio Platforms Limited.',
   'adia/reliance_retail': 'DEEP RESEARCH REPORT: Abu Dhabi Investment Authority\'s Investment in Reliance Retail\n\nKey Points:\n*   Massive Market Scale: Reliance Retail currently operates as India\'s largest retailer with over 19,800 stores and robust omnichannel capabilities .\n*   Strategic Sovereign Investment: The Abu Dhabi Investment Authority (ADIA) has systematically deployed capital into Reliance Retail since 2020, capturing significant equity stakes alongside other global sovereign wealth funds .\n*   Mandate Alignment: ADIA\'s investments in the Indian consumer space strongly align with its mandate for intergenerational wealth preservation, offering diversification from traditional hydrocarbon revenues .\n*   IPO Horizon: Research suggests that Reliance Retail is targeting an initial public offering (IPO) in the 2027–2028 timeframe, seeking an estimated valuation approaching $200 billion .\n*   Operational Shifts: The evidence leans toward an aggressive pivot into quick commerce via "dark stores" and the strategic demerger of its Fast-Moving Consumer Goods (FMCG) portfolio .\n\nExecutive Summary\nThis report provides a comprehensive examination of the Abu Dhabi Investment Authority\'s (ADIA) strategic investments in Reliance Retail. It appears likely that ADIA’s continued capital injections are motivated by India\'s rapidly expanding middle class and the ongoing digitization of its unorganized retail sector.',
   'adia/vantage_data_centers_apac': 'DEEP RESEARCH REPORT: Strategic Analysis of Abu Dhabi Investment Authority’s (ADIA) 2025 Investment in Vantage Data Centers APAC\n\nResearch suggests that the intersection of sovereign wealth capital and digital infrastructure represents one of the most critical real asset trends of the current economic decade. It seems likely that the proliferation of artificial intelligence (AI) and cloud computing will continue to drive unprecedented demand for hyperscale data centers, particularly in high-growth regions like the Asia-Pacific (APAC). The evidence leans toward a paradigm where sovereign wealth funds (SWFs), driven by intergenerational wealth preservation mandates, are increasingly substituting traditional fixed-income and core real estate allocations with specialized digital infrastructure. \n\n*   The Transaction: In late 2025, a wholly owned subsidiary of the Abu Dhabi Investment Authority (ADIA) and an affiliate of Singapore’s GIC completed a $1.6 billion equity investment into the Asia-Pacific platform of Vantage Data Centers .\n*   The Asset: The capital injection directly facilitated Vantage APAC\'s acquisition of Yondr Group’s 300MW+ hyperscale campus in Johor, Malaysia, bringing Vantage’s total operational and planned APAC capacity to 1 Gigawatt (GW) .',
+  'kia/ai-infrastructure-partnership': 'INVESTMENT DEEP DIVE: AI Infrastructure Partnership — Held by Kuwait Investment Authority (KIA)\n\nKey Points\n*   Fund Profile and Scope: It appears that the AI Infrastructure Partnership (AIP) is not a traditional operational corporation but rather a massive private equity and infrastructure consortium. Established in 2024, the partnership targets an unprecedented $100 billion investment capacity to build next-generation artificial intelligence data centers and energy facilities . \n*   Strategic Motivation: Evidence suggests that the Kuwait Investment Authority (KIA), which injected approximately $6 billion into AI infrastructure in 2025, views this participation as a fundamental shift from oil dependency toward digital resilience, treating AI as a macroeconomic requirement for national survival .\n*   Partnership Structure: The initiative is likely anchored by foundational titans including BlackRock, Global Infrastructure Partners (GIP), Microsoft, and Abu Dhabi’s MGX, with KIA marking the first non-founder financial anchor .\n*   Operational Execution: Research indicates a primary focus on scaling capital-intensive assets, highlighted by the consortium\'s reported $40 billion acquisition of Aligned Data Centers in late 2025 .',
+  'kia/aia-group': 'INVESTMENT DEEP DIVE: AIA Group and the Kuwait Investment Authority\n\nKey Points:\n*   AIA Group stands as the largest independent publicly listed pan-Asian life insurance group, boasting a dominant presence across 18 Asia-Pacific markets.\n*   The Kuwait Investment Authority (KIA), the world\'s oldest sovereign wealth fund, initiated a highly successful strategic investment in AIA as a cornerstone investor during its 2010 Initial Public Offering (IPO).\n*   KIA\'s investment of approximately $1 billion in 2010 culminated in a highly profitable exit in July 2025, where the fund liquidated its entire 3.7% stake for approximately $3.4 billion. \n*   AIA\'s enduring competitive advantage is rooted in its proprietary Premier Agency model, comprising over 1.55 million agents, alongside an aggressive digitalization and integrated healthcare strategy.\n*   Recent strategic maneuvers include the November 2024 acquisition of New Medical Center Holdings (NMC) to bolster its healthcare ecosystem, and the October 2025 appointment of Sir Mark Tucker as Independent Non-executive Chairman.\n\nThe following academic report provides a comprehensive investment deep dive into AIA Group Limited, critically examining its corporate profile, financial performance, and competitive standing within the Asia-Pacific insurance sector. It specifically contextualizes the company\'s trajectory through the lens of its long-term institutional shareholder, the Kuwait Investment Authority (KIA).',
+  'kia/aligned-data-centers-co-acq': 'Investment Deep Dive: Kuwait Investment Authority’s Acquisition of Aligned Data Centers\n\nKey Points:\n*   Historic Transaction Scale: The acquisition of Aligned Data Centers for an estimated enterprise value of $40 billion represents the largest data center merger and acquisition deal in history, reflecting the massive capital requirements of the artificial intelligence (AI) infrastructure supercycle.\n*   Strategic Sovereign Participation: The Kuwait Investment Authority (KIA), participating through its direct infrastructure arm Wren House, continues to signal a strategic shift toward high-growth digital infrastructure and core-plus assets, moving slightly away from traditional, passive hold-to-maturity infrastructure plays.\n*   Technological and Environmental Differentiation: Aligned Data Centers is highly differentiated by its proprietary liquid cooling technology (DeltaFlow~) and its pioneering use of battery energy storage systems (BESS) to bypass grid interconnection delays, making it uniquely positioned to handle high-density AI workloads.\n*   Pivot from Public Markets: Initially exploring an Initial Public Offering (IPO) for 2026/2027, Aligned ultimately pivoted to an open-ended private capital structure via the Artificial Intelligence Infrastructure Partnership (AIP), suggesting that private markets are currently better equipped to fund the trillions needed for global AI expansion.',
+  'kia/blackrock': 'INVESTMENT DEEP DIVE: BlackRock and the Kuwait Investment Authority (KIA)\n\nResearch suggests that BlackRock’s ongoing transformation from a traditional fixed-income manager into a $14 trillion whole-portfolio behemoth represents a structural shift in global financial markets. It seems likely that the Kuwait Investment Authority (KIA)’s initial $750 million investment in 2009 was driven by opportunistic foresight during the global financial crisis, yielding immense capital appreciation. Today, the evidence leans toward BlackRock aggressively positioning itself in private markets and artificial intelligence infrastructure to hedge against public market fee compression. Concurrently, KIA’s holding appears to function as a strategic anchor, facilitating high-level co-investments and advancing Kuwait\'s broader macroeconomic objectives. \n\nKey Points\n*   Company Profile: Founded in 1988, BlackRock is the world\'s largest asset manager, reporting a record $14.04 trillion in Assets Under Management (AUM) as of late 2025 . The firm’s primary engines include its iShares exchange-traded funds (ETFs) and its proprietary Aladdin technology platform .\n*   KIA Strategic Rationale (2009): Amidst the 2009 financial crisis, KIA invested $750 million to back CEO Larry Fink’s acquisition of Barclays Global Investors (BGI). This injection was predicated on strong confidence in the firm\'s leadership and has since multiplied in value more than threefold .',
+  'kia/bp-2': 'INVESTMENT DEEP DIVE: Kuwait Investment Authority’s Strategic Stake in BP p.l.c.\n\nLeading Paragraph\n\n*   Key Points:\n       Evidence suggests that the Kuwait Investment Authority (KIA), through the Kuwait Investment Office (KIO), holds a legacy stake of approximately 2% in BP p.l.c., originating from a highly controversial 21.6% acquisition following the company\'s 1987 privatization and the Black Monday market crash.\n       Research indicates BP is currently undergoing a massive strategic reset (2024–2026), pivoting away from renewable energy targets to refocus on high-margin upstream oil and gas production amid pressure from activist investor Elliott Management.\n       Recent corporate developments show a period of leadership instability, culminating in the December 2025 announcement that Meg O\'Neill (former CEO of Woodside Energy) will take over as BP’s first female CEO in April 2026, following the departure of Murray Auchincloss.\n       Financial data for 2024 reveals BP generated $189.18 billion in revenue and an underlying replacement cost profit of $7.5 billion, demonstrating robust cash flow despite macroeconomic volatility and a weaker pricing environment.\n       It seems likely that KIA views this passive equity stake as a long-term, dividend-yielding asset aligned with the Future Generations Fund\'s mandate for intergenerational wealth preservation, though historical precedent shows KIA is willing to execute block sales to rebalance its portfolio.',
+  'kia/china-qfii-quota': 'Investment Deep Dive: Kuwait Investment Authority (KIA) and the China (QFII Quota) Portfolio\n\nKey Points\n*   Asset Nature: "China (QFII quota)" is not a traditional corporation; rather, it is a regulatory channel (Qualified Foreign Institutional Investor) enabling the Kuwait Investment Authority (KIA) to hold a diversified portfolio of mainland Chinese A-shares and RMB-denominated bonds. \n*   Strategic Rationale: KIA’s allocation to Chinese equities is driven by a necessity to diversify away from Western-centric portfolios and historically low-yielding developed market assets, while strategically aligning with Kuwait\'s "Vision 2035" and China\'s Belt and Road Initiative (BRI).\n*   Recent Activity: Research indicates that between 2024 and 2026, Middle Eastern sovereign wealth funds, prominently including KIA and the Abu Dhabi Investment Authority (ADIA), aggressively expanded their QFII portfolios, heavily targeting Chinese biopharmaceuticals, advanced manufacturing, and technology.\n*   Risk Profile: Investments via QFII face distinct regulatory risks (capital controls), geopolitical friction (US-China relations), and domestic market volatility, though these are mitigated by KIA’s inherently passive, long-term capital horizon.\n\nIntroduction\nIt seems likely that the global pivot of Gulf Cooperation Council (GCC) sovereign wealth toward Asia represents one of the most consequential macroeconomic shifts of the 21st century.',
+  'kia/citigroup-2008': 'INVESTMENT DEEP DIVE: Citigroup (2008) — Held by Kuwait Investment Authority (KIA)\n\nKey Points\n*   The 2008 Investment: Evidence indicates that in January 2008, the Kuwait Investment Authority (KIA) injected $3 billion into Citigroup via preferred stock to provide critical liquidity during the subprime mortgage crisis .\n*   The 2009 Exit: Research confirms that this was not a long-term strategic hold; KIA converted its preferred securities to common shares and fully exited the position in December 2009 for $4.1 billion, realizing an estimated 37% return ($1.1 billion profit) .\n*   Current Company Profile (2026): Citigroup remains a dominant global financial institution, generating $85.2 billion in revenue in 2025 with a market capitalization hovering between $190 billion and $203 billion . \n*   Strategic Restructuring: Recent leadership changes suggest a continuing transformation. CFO Mark Mason is slated to step down in March 2026, succeeded by Gonzalo Luchetti, amid a broader reorganization consolidating Retail Banking into Wealth Management .\n*   Ongoing Risks: It appears likely that regulatory compliance remains a persistent headwind. Leaked internal assessments from late 2024 highlight a "skills shortage" in risk management, complicating efforts to resolve long-standing consent orders from the Federal Reserve Board and the Office of the Comptroller of the Currency .',
+  'kia/mercedes-benz-group-7': 'INVESTMENT DEEP DIVE: Kuwait Investment Authority\'s Strategic Stake in Mercedes-Benz Group AG\n\nKey Points\n*   Historical Anchor Investment: Research suggests that the Kuwait Investment Authority (KIA) has been a vital, long-term anchor shareholder in Mercedes-Benz Group AG. While the mandate of KIA has roots tracing back to the 1950s and Kuwait\'s independence in 1961, the specific acquisition of the Mercedes-Benz stake occurred in 1974 as a mechanism for petrodollar recycling and intergenerational wealth transfer.\n*   Financial Headwinds and Restructuring: It appears that Mercedes-Benz has recently navigated a highly complex macroeconomic environment. The fiscal year 2025 results indicate a contraction in revenue to €132.2 billion and a sharp decline in adjusted EBIT to €8.2 billion, driven largely by intense competition in China, adverse global tariffs, and shifting electric vehicle (EV) demand. \n*   Strategic Evolution: The evidence leans toward a pragmatic shift in Mercedes-Benz\'s product strategy between 2024 and 2026. Moving away from a rigid "electric-only by 2030" dogma, the automaker is adopting a flexible, dual-platform approach to sustain internal combustion engine (ICE) profitability while advancing next-generation EV architectures. \n*   Ownership and Exit Posture: Though historically holding roughly a 7% stake, KIA reduced its position to approximately 4.97% in early 2023 to diversify its portfolio.',
   'pif/diriyah_gate': 'DEEP RESEARCH REPORT: Diriyah Gate — Strategic Investment by the Public Investment Fund (PIF)\n\nExecutive Summary and Leading Paragraph\n\n*   Massive Scale and Vision: Diriyah Gate is a roughly $63.2 billion heritage and tourism giga-project located near Riyadh, Saudi Arabia, fully owned by the Public Investment Fund (PIF). It aims to transform the historic birthplace of the Saudi state into a premier global cultural destination by 2030.\n*   Strategic Alignment: The investment is a cornerstone of Saudi Arabia\'s Vision 2030, designed to diversify the national economy away from oil reliance, boost tourism\'s GDP contribution to 10%, and enhance the Kingdom\'s geopolitical soft power.\n*   Financial and Operational Status: While complete public financial statements are not available due to its private status under PIF, preliminary disclosures indicate the project is generating early revenues ($13.3 million in 2023) with strong profitability targets. Capital expenditure is rapidly scaling, with $15 billion of the $64 billion budget already deployed.\n*   Geopolitical and Global Ambitions: Recent developments suggest that Diriyah Company\'s ambitions extend beyond domestic borders, with early-stage discussions exploring potential roles in the post-conflict reconstruction of historic sites in Syria.',
   'pif/electronic_arts_93_4': 'Deep Research Report: The Privatization of Electronic Arts by the Public Investment Fund (PIF)\n\nKey Points:\n*   Historic Acquisition: In September 2025, a consortium led by Saudi Arabia\'s Public Investment Fund (PIF) agreed to acquire Electronic Arts (EA) for approximately $55 billion, marking the largest leveraged buyout (LBO) in the history of the video game industry .\n*   Ownership Structure: Upon the deal\'s expected closing in 2026, PIF will hold a commanding 93.4% equity stake, with private equity firm Silver Lake taking 5.5%, and Affinity Partners holding 1.1% . \n*   Financial Performance: Electronic Arts generated $7.46 billion in net revenue for fiscal year 2025, heavily driven by its highly lucrative "live services" model, which accounts for roughly 75% of total net bookings . \n*   Strategic Alignment: The investment is fundamentally intertwined with Saudi Arabia\'s Vision 2030 initiative, which seeks to diversify the nation\'s economy away from oil dependency by establishing the Kingdom as a global hub for interactive entertainment and esports .\n*   Regulatory Scrutiny: The deal faces significant regulatory hurdles, most notably a review by the Committee on Foreign Investment in the United States (CFIUS), given concerns over foreign access to the data of EA\'s 700 million users and advanced artificial intelligence technologies .\n\nIntroduction to the Transaction\nThe acquisition of Electronic Arts represents a paradigm shift in the digital entertainment landscape.',
   'pif/humain_ai': 'DEEP RESEARCH REPORT: HUMAIN (AI) — Strategic Investment by the Public Investment Fund (PIF)\n\nExecutive Summary and Key Points\n*   Asset Overview: Launched in May 2025, HUMAIN is a state-backed artificial intelligence entity wholly owned by Saudi Arabia\'s Public Investment Fund (PIF). It operates across the entire AI value chain, encompassing hyper-scale data centers, cloud infrastructure, foundational models, and agentic AI enterprise applications .\n*   Strategic Rationale: Research suggests that HUMAIN represents a pivotal transition in the Kingdom\'s economic diversification strategy, moving away from a reliance on petroleum exports toward establishing a sovereign "intelligence economy." The initiative seeks to harness Saudi Arabia\'s abundant capital and energy resources to export AI compute and digital tokens .\n*   Market Position & Competition: The evidence leans toward an intensifying geopolitical and regional race for AI supremacy. HUMAIN\'s primary regional competitor is the UAE\'s G42. Both entities are actively competing for advanced U.S. semiconductor allocations, although recent diplomatic developments suggest they are concurrently forming the nucleus of a Middle Eastern AI hub .\n*   Financial Footprint: While precise audited financials remain private, estimates suggest early revenues of approximately $72.6 million.',
@@ -1444,11 +1523,14 @@ var researchSummaries = {
   'pif/softbank_vision_fund': 'Deep Research Report: SoftBank Vision Fund and the Public Investment Fund (PIF) Strategic Partnership\n\nKey Points\n*   Massive Scale and Vision: Evidence suggests that the SoftBank Vision Fund (SVF), established in 2017 with approximately $100 billion in commitments, represents the largest technology-focused venture capital vehicle in history. \n*   Strategic Sovereign Alignment: It appears likely that the Public Investment Fund\'s (PIF) $45 billion commitment was driven heavily by Saudi Arabia’s Vision 2030 mandate, seeking to diversify the kingdom\'s economy away from oil dependence by establishing a foothold in the global technology and artificial intelligence (AI) sectors.\n*   Financial Volatility and Structural Risk: The fund’s performance has been highly cyclical, marked by severe losses (e.g., $32 billion in FY2023) followed by substantial recent recoveries driven by AI investments. Research indicates that the fund\'s unique structural reliance on preferred equity bearing a 7% annual coupon has generated significant liquidity pressure.\n*   Leadership and Strategic Pivot (2024–2026): Recent developments highlight a profound pivot toward foundational AI and infrastructure, punctuated by multi-billion-dollar investments in OpenAI and leadership restructuring, with Alex Clavel assuming sole CEO duties following Rajeev Misra\'s departure in late 2024.',
   'pif/stc': 'DEEP RESEARCH REPORT: Saudi Telecom Company (STC) — Strategic Investment by the Public Investment Fund (PIF)\n\nKey Points:\n*   Strategic National Asset: Evidence suggests that Saudi Telecom Company (STC) functions not merely as a commercial telecommunications provider, but as a foundational pillar of Saudi Arabia\'s digital infrastructure, intricately linked to the broader objectives of Vision 2030 .\n*   Capital Recycling Strategy: Research indicates that the Public Investment Fund (PIF) is likely employing a "capital recycling" model regarding its STC holdings. By executing secondary market offerings—such as the November 2024 sale of a 2% stake for $1.03 billion—PIF appears to be reallocating capital toward emerging technological sectors while maintaining a strategic majority .\n*   Market Dominance amidst Evolving Competition: It seems probable that STC will maintain its dominant market position in the Middle East and North Africa (MENA) region, commanding over 40-50% of the domestic mobile market and up to 70% of the fixed-line sector . However, the landscape is rapidly evolving with the encroachment of agile domestic rivals (Mobily, Zain KSA) and global hyperscalers (AWS, Microsoft Azure) .\n*   Infrastructure Consolidation: The evidence leans toward a broader regional consolidation strategy, highlighted by the merger of STC\'s TAWAL unit with PIF\'s Golden Lattice Investment Company (GLIC).',
   'pif/uber_technologies': 'DEEP RESEARCH REPORT: Uber Technologies — Investment held by Public Investment Fund (PIF)\n\nExecutive Summary and Leading Paragraph\n\n*   Key Point 1: The Public Investment Fund (PIF) of Saudi Arabia injected $3.5 billion into Uber Technologies in 2016, marking its first major international transaction under the Vision 2030 mandate.\n*   Key Point 2: Research suggests that this investment was highly strategic, initially designed to diversify the Kingdom\'s oil-dependent economy and support female workforce participation prior to the lifting of the driving ban.\n*   Key Point 3: Uber has transitioned from a cash-burning startup into a highly profitable, free-cash-flow-generating mobility and delivery infrastructure company, reaching a market capitalization of approximately $147 billion to $173 billion by early 2026.\n*   Key Point 4: Recent developments (2024–2026) reveal a massive pivot toward autonomous vehicles (AVs), highlighted by multi-billion-dollar partnerships with Rivian Automotive and Lucid Motors, the latter of which is majority-owned by PIF.\n*   Key Point 5: Evidence leans heavily toward PIF treating Uber as a permanent or long-term strategic hold; while the sovereign wealth fund has aggressively liquidated other US equities to fund domestic projects, it has retained its Uber stake, cementing it as the cornerstone of its international portfolio.',
+  'qia/barclays-7': 'Investment Deep Dive: Barclays PLC and the Qatar Investment Authority (QIA) Stake\n\n*   Strategic Reallocation: Evidence suggests the Qatar Investment Authority (QIA) is actively rebalancing its portfolio, transitioning away from legacy European banking investments made during the 2008 financial crisis toward high-growth sectors and Asian markets. \n*   Partial Exit Executed: It appears that QIA has already executed a significant partial exit from Barclays, selling approximately half of its stake in late 2023 to reduce its holding to roughly 2.9%, potentially signaling a lack of confidence in near-term banking yields or a deliberate strategic pivot.\n*   Barclays\' Financial Resilience: Recent data indicates Barclays has achieved robust financial performance through 2025, posting £9.14 billion in pre-tax profits, though the institution is currently undergoing extensive restructuring to maintain competitiveness.\n*   Geopolitical and Macroeconomic Hedging: Sovereign wealth investments often serve dual purposes; it is highly probable that QIA\'s initial 2008 investment provided critical geopolitical leverage and a diplomatic safety net, which may no longer be as necessary in the current macroeconomic climate.\n*   Evolving Competitive Pressures: Barclays faces intense competition across all segments, from domestic UK retail challengers to formidable US bulge-bracket investment banks, necessitating significant cost-cutting measures and strategic acquisitions.',
+  'qia/glencore-8-2': 'INVESTMENT DEEP DIVE: Glencore plc and the Qatar Investment Authority (QIA) Strategic Partnership\n\nKey Points:\n*   Strategic Anchor: The Qatar Investment Authority (QIA) is a foundational institutional shareholder in Glencore, holding a stake historically oscillating between 8.2% and 8.93%. This aligns with QIA\'s broader mandate to diversify Qatar\'s economy away from liquefied natural gas (LNG) revenues.\n*   Hybrid Business Model: Glencore uniquely combines massive industrial mining operations (copper, coal, zinc, cobalt) with a dominant global commodities trading and marketing arm, distinguishing it from pure-play miners like BHP or pure traders like Trafigura.\n*   Financial Resilience: Despite commodity price volatility and macroeconomic headwinds, Glencore generated $247.5 billion in revenue in 2025 and an adjusted EBITDA of $13.5 billion, demonstrating the robust nature of its diversified portfolio.\n*   Geopolitical and Strategic Pivots (2024–2026): Glencore is currently at the nexus of global critical mineral supply chains. In early 2026, it entered a memorandum of understanding (MoU) with the US-backed Orion Critical Mineral Consortium for a $9 billion stake in its Democratic Republic of Congo (DRC) assets, whilst simultaneously fending off a $260 billion mega-merger approach from rival Rio Tinto.',
+  'qia/harrods-100': 'INVESTMENT DEEP DIVE: Harrods (100%) — Held by Qatar Investment Authority (QIA)\n\n*   Ownership & Mandate: Research indicates that Harrods is 100% owned by the Qatar Investment Authority (QIA) via its subsidiary Qatar Holding LLC, aligning with the sovereign wealth fund\'s long-term strategy of accumulating blue-chip, premium-yield global assets . \n*   Financial Health: It appears likely that the underlying business fundamentals remain robust, with 2024/2025 operating profits reaching £177.7 million and a turnover of £1.08 billion, though exceptional one-off costs recently pushed the entity into a pre-tax loss .\n*   Recent Controversies: Evidence suggests that the brand is currently navigating significant reputational and legal headwinds, primarily stemming from the establishment of a multi-million-pound redress scheme for victims of historic abuse by former owner Mohamed Al Fayed, alongside ongoing labor disputes and supply-chain cyberattacks .\n*   Strategic Outlook: Given QIA\'s geopolitical and financial posture, experts suggest that Harrods functions as a permanent trophy asset within a broader London-centric real estate and retail portfolio, making a near-term exit or IPO highly improbable .\n\nThe following report provides a comprehensive, academic deep dive into the Qatar Investment Authority\'s 100% holding in Harrods.',
+  'qia/volkswagen-group-17': 'INVESTMENT DEEP DIVE: VOLKSWAGEN GROUP (~17%) — HELD BY QATAR INVESTMENT AUTHORITY (QIA)\n\nKey Points:\n*   Strategic Anchor: The Qatar Investment Authority (QIA) acquired a ~17% voting stake in Volkswagen Group in 2009, an acquisition that appears to serve as a cornerstone for Qatar\'s long-term strategy to diversify its sovereign wealth away from hydrocarbon dependency .\n*   Unique Governance Structure: Evidence suggests that Volkswagen\'s ownership structure is highly complex, governed by the "Volkswagen Law," which grants the State of Lower Saxony a 20% blocking minority . QIA’s 17% voting stake secures its position as the third-largest shareholder, providing significant geopolitical and corporate influence .\n*   Financial Pressures: Research indicates that Volkswagen experienced a severe financial downturn in 2025, with operating profits halving to €8.9 billion and margins compressing to 2.8%, largely driven by US import tariffs and fierce competition in the Chinese market .\n*   Technological Pivots: It seems likely that Volkswagen\'s internal software development efforts (CARIAD) struggled significantly, prompting a $5.8 billion joint venture with US electric vehicle startup Rivian in late 2024 to co-develop next-generation software and electrical architectures .',
 };
 
 // Cross-fund investment mapping (auto-generated by build script)
 var crossFundInvestments = {
-  'Aldar Properties': [5,31],
   'Aramco Gas Pipelines': [6,8],
   'Berain Water': [6,8],
   'BlackRock': [3,11],
@@ -1456,7 +1538,6 @@ var crossFundInvestments = {
   'Careem': [35,42,45,48],
   'DigitalBridge': [2,30],
   'Emirates': [5,7,10,24],
-  'Enova': [31,43],
   'Gulf Investment': [24,29],
   'Jio Platforms': [1,2],
   'Kitopi': [42,48],
@@ -1466,14 +1547,12 @@ var crossFundInvestments = {
   'Mubadala': [14,41,47],
   'Mubadala Capital': [14,47],
   'Oman Tourism Development': [13,27],
-  'Raed Ventures': [25,36],
   'SWVL': [39,42,48,49],
   'Saudi Aramco': [1,12],
   'SpaceX': [13,38],
   'TPG Rise Climate': [6,8,11],
   'Tabby': [41,47,49],
   'Tamara': [35,41],
-  'UAE real estate': [20,21],
 };
 
 function investmentSlug(name){
@@ -1755,12 +1834,176 @@ function launchComparison(){
   document.body.style.overflow='hidden';
 }
 
+function renderCrossFundAnalysis(){
+  if(typeof crossFundInvestments==='undefined')return;
+
+  // Tier colors for fund chips
+  var tierColors={1:'var(--navy)',2:'var(--accent)',3:'var(--purple)',4:'var(--orange)',5:'var(--text-tertiary)'};
+
+  // Sort cross-fund investments by number of co-investors (desc)
+  var sorted=Object.entries(crossFundInvestments).sort(function(a,b){return b[1].length-a[1].length});
+
+  // Detect sector for each investment by looking up in fund data
+  function detectSector(name){
+    var nameLower=name.toLowerCase();
+    for(var i=0;i<funds.length;i++){
+      var invs=funds[i].investments||[];
+      for(var j=0;j<invs.length;j++){
+        if(invs[j].name.toLowerCase().indexOf(nameLower)!==-1||nameLower.indexOf(invs[j].name.toLowerCase().replace(/\s*\([^)]*\)/g,'').trim())!==-1){
+          return invs[j].sector||'Diversified';
+        }
+      }
+    }
+    return 'Diversified';
+  }
+
+  // 1. Shared holdings table
+  var tbody='';
+  sorted.forEach(function(entry){
+    var name=entry[0],ranks=entry[1];
+    var sector=detectSector(name);
+    tbody+='<tr>';
+    tbody+='<td><div class="xfund-inv-name">'+name+'</div></td>';
+    tbody+='<td><div class="xfund-fund-chips">';
+    ranks.forEach(function(r){
+      var f=funds.find(function(x){return x.rank===r});
+      if(f){
+        var bg=tierColors[f.tier]||'var(--text-tertiary)';
+        tbody+='<span class="xfund-fund-chip" style="background:'+bg+';color:#fff" onclick="openReport('+r+')" title="'+f.name+'">'+f.short+'</span>';
+      }
+    });
+    tbody+='</div></td>';
+    tbody+='<td style="text-align:center"><span class="xfund-count">'+ranks.length+'</span></td>';
+    tbody+='<td style="font-size:11px;color:var(--text-secondary)">'+sector+'</td>';
+    tbody+='</tr>';
+  });
+  var tableBody=document.getElementById('xfundTableBody');
+  if(tableBody)tableBody.innerHTML=tbody;
+
+  // 2. Co-investment frequency (which fund pairs co-invest most)
+  var pairCount={};
+  sorted.forEach(function(entry){
+    var ranks=entry[1];
+    for(var i=0;i<ranks.length;i++){
+      for(var j=i+1;j<ranks.length;j++){
+        var key=Math.min(ranks[i],ranks[j])+'-'+Math.max(ranks[i],ranks[j]);
+        if(!pairCount[key])pairCount[key]={a:Math.min(ranks[i],ranks[j]),b:Math.max(ranks[i],ranks[j]),count:0,assets:[]};
+        pairCount[key].count++;
+        pairCount[key].assets.push(entry[0]);
+      }
+    }
+  });
+  var pairsSorted=Object.values(pairCount).sort(function(a,b){return b.count-a.count}).slice(0,12);
+  var pairsHtml='';
+  pairsSorted.forEach(function(p){
+    var fA=funds.find(function(x){return x.rank===p.a});
+    var fB=funds.find(function(x){return x.rank===p.b});
+    if(fA&&fB){
+      pairsHtml+='<div class="xfund-pair">';
+      pairsHtml+='<span class="xfund-pair-count">'+p.count+'</span>';
+      pairsHtml+='<span class="xfund-pair-names">'+fA.short+' \u2194 '+fB.short+'</span>';
+      pairsHtml+='<span class="xfund-pair-assets">'+p.assets.slice(0,3).join(', ')+(p.assets.length>3?' +'+( p.assets.length-3):'')+'</span>';
+      pairsHtml+='</div>';
+    }
+  });
+  var pairsEl=document.getElementById('xfundPairs');
+  if(pairsEl)pairsEl.innerHTML=pairsHtml||'<div style="color:var(--text-tertiary);font-size:12px">No co-investment pairs detected</div>';
+
+  // 3. Sector convergence
+  var sectorCount={};
+  sorted.forEach(function(entry){
+    var sector=detectSector(entry[0]);
+    if(!sectorCount[sector])sectorCount[sector]={count:0,funds:new Set(),assets:[]};
+    sectorCount[sector].count++;
+    entry[1].forEach(function(r){sectorCount[sector].funds.add(r)});
+    sectorCount[sector].assets.push(entry[0]);
+  });
+  var sectorsSorted=Object.entries(sectorCount).sort(function(a,b){return b[1].count-a[1].count});
+  var maxSectorCount=sectorsSorted.length>0?sectorsSorted[0][1].count:1;
+  var sectorsHtml='';
+  sectorsSorted.forEach(function(s){
+    var pct=Math.round((s[1].count/maxSectorCount)*100);
+    var color=s[1].funds.size>=3?'var(--accent)':s[1].funds.size>=2?'var(--purple)':'var(--text-tertiary)';
+    sectorsHtml+='<div class="xfund-sector-bar">';
+    sectorsHtml+='<span class="xfund-sector-label">'+s[0]+'</span>';
+    sectorsHtml+='<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+    sectorsHtml+='<span class="xfund-sector-count">'+s[1].count+'</span>';
+    sectorsHtml+='</div>';
+  });
+  var sectorsEl=document.getElementById('xfundSectors');
+  if(sectorsEl)sectorsEl.innerHTML=sectorsHtml;
+
+  // 4. Convergence signals
+  var signals=[];
+  // Signal: 3+ tier-1 funds in same sector
+  sectorsSorted.forEach(function(s){
+    var tier1Funds=[];
+    s[1].funds.forEach(function(r){
+      var f=funds.find(function(x){return x.rank===r});
+      if(f&&f.tier===1)tier1Funds.push(f.short);
+    });
+    if(tier1Funds.length>=2){
+      signals.push({
+        icon:'\uD83D\uDFE2',bg:'var(--green-light)',
+        text:'<strong>Sector convergence: '+s[0]+'</strong> \u2014 '+tier1Funds.join(', ')+' all hold positions. '+s[1].assets.slice(0,3).join(', ')+(s[1].assets.length>3?' and '+(s[1].assets.length-3)+' more':'')+'.'
+      });
+    }
+  });
+  // Signal: most connected funds
+  var fundConnections={};
+  sorted.forEach(function(entry){
+    entry[1].forEach(function(r){
+      if(!fundConnections[r])fundConnections[r]=0;
+      fundConnections[r]++;
+    });
+  });
+  var topConnected=Object.entries(fundConnections).sort(function(a,b){return b[1]-a[1]}).slice(0,3);
+  if(topConnected.length>0){
+    var connNames=topConnected.map(function(c){
+      var f=funds.find(function(x){return x.rank===parseInt(c[0])});
+      return f?(f.short+' ('+c[1]+' shared)'):'';
+    }).filter(function(x){return x}).join(', ');
+    signals.push({
+      icon:'\uD83D\uDD17',bg:'var(--accent-light)',
+      text:'<strong>Most connected funds:</strong> '+connNames+'. These funds show the highest co-investment overlap, suggesting shared deal flow networks or aligned strategic mandates.'
+    });
+  }
+  // Signal: 4+ fund convergence
+  sorted.forEach(function(entry){
+    if(entry[1].length>=4){
+      var fundNames=entry[1].map(function(r){var f=funds.find(function(x){return x.rank===r});return f?f.short:''}).filter(function(x){return x}).join(', ');
+      signals.push({
+        icon:'\u26A1',bg:'var(--orange-light)',
+        text:'<strong>High convergence: '+entry[0]+'</strong> \u2014 held by '+entry[1].length+' funds ('+fundNames+'). Multiple sovereign funds backing the same asset signals strong institutional conviction.'
+      });
+    }
+  });
+  // Mobility/logistics signal from Careem/SWVL
+  var mobilityAssets=sorted.filter(function(e){return e[0]==='Careem'||e[0]==='SWVL'||e[0].toLowerCase().indexOf('uber')!==-1});
+  if(mobilityAssets.length>=2){
+    signals.push({
+      icon:'\uD83D\uDE97',bg:'var(--purple-light)',
+      text:'<strong>Mobility sector thesis:</strong> Multiple GCC funds are building parallel positions in ride-hailing and mobility ('+mobilityAssets.map(function(e){return e[0]}).join(', ')+'), indicating a shared regional conviction in transport digitization.'
+    });
+  }
+
+  var signalsHtml='';
+  signals.forEach(function(s){
+    signalsHtml+='<div class="xfund-signal">';
+    signalsHtml+='<div class="xfund-signal-icon" style="background:'+s.bg+'">'+s.icon+'</div>';
+    signalsHtml+='<div class="xfund-signal-text">'+s.text+'</div>';
+    signalsHtml+='</div>';
+  });
+  var signalsEl=document.getElementById('xfundSignals');
+  if(signalsEl)signalsEl.innerHTML=signalsHtml||'<div style="color:var(--text-tertiary);font-size:12px">Signals will appear as more investment data is processed</div>';
+}
+
 document.addEventListener('DOMContentLoaded',function(){
   try{
     // Data integrity check
     var requiredFields=['rank','name','short','country','type','tier','status','founded','mandate','sectors'];
     funds.forEach(function(f){requiredFields.forEach(function(field){if(!f[field])console.warn('Fund rank '+f.rank+' ('+f.name+') missing field: '+field)})});
-    computeHeroStats();renderFundTable();renderMacroCharts();
+    computeHeroStats();renderFundTable();renderMacroCharts();renderCrossFundAnalysis();
     var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
   }catch(e){console.error('Init error:',e.message)}
 });
