@@ -466,15 +466,136 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .investment-detail{transition:none}
 }
 
-/* ===== PRINT ===== */
+/* ===== PRINT (ENHANCED — FEATURE 4) ===== */
 @media print{
-  .header,.nav-tabs,.search-bar,.footer,.report-back,.filter-btn{display:none!important}
-  .main{padding:0}
-  .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
-  .report-overlay{position:static;overflow:visible}
-  .report-hero{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .header,.nav-tabs,.search-bar,.footer,.report-back,.filter-btn,.compare-bar,.report-scroll-top,.compare-toggle,.timeline-filters,.network-controls,.search-results-panel,.search-filter-row,.alert-meta{display:none!important}
+  body{font-size:10pt;color:#000;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .main{padding:0;max-width:none}
+  .card,.report-section .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid;page-break-inside:avoid;margin-bottom:12pt}
+  .report-overlay{position:static;overflow:visible;display:block!important}
+  .report-hero{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;page-break-after:avoid}
+  .report-grid{grid-template-columns:1fr 1fr;gap:8pt}
+  .report-section{page-break-inside:avoid;margin-bottom:12pt}
+  .mandate-text{font-size:10pt;background:#f5f5f5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .investment-table{font-size:8pt}
+  .chart-container-sm,.chart-container-tall{max-height:200px}
+  canvas{max-height:180px!important}
+  h1,h2,h3,.report-section-title{page-break-after:avoid}
+  @page{margin:1.5cm;size:A4}
+  @page:first{margin-top:1cm}
 }
+
+/* ===== FEATURE 1: SECTOR HEATMAP ===== */
+.heatmap-container{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.heatmap-table{border-collapse:collapse;font-size:11px;min-width:800px;width:100%}
+.heatmap-table th{padding:8px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);border-bottom:2px solid var(--border);white-space:nowrap;text-align:center}
+.heatmap-table th:first-child{text-align:left;min-width:140px;position:sticky;left:0;background:var(--surface);z-index:2}
+.heatmap-table td{padding:6px;text-align:center;border-bottom:1px solid var(--border-light);position:relative}
+.heatmap-table td:first-child{text-align:left;font-weight:600;color:var(--text-primary);font-size:12px;position:sticky;left:0;background:var(--surface);z-index:1}
+.heatmap-cell{width:100%;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;min-width:44px}
+.heatmap-cell:hover{transform:scale(1.1);box-shadow:var(--shadow-md);z-index:5}
+.heatmap-cell.intensity-5{background:#0B1D3A}
+.heatmap-cell.intensity-4{background:#1D4ED8}
+.heatmap-cell.intensity-3{background:#3B82F6}
+.heatmap-cell.intensity-2{background:#93C5FD}
+.heatmap-cell.intensity-1{background:#DBEAFE;color:var(--text-secondary)}
+.heatmap-cell.intensity-0{background:var(--border-light);color:var(--text-tertiary)}
+.heatmap-legend{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:var(--text-secondary)}
+.heatmap-legend-item{width:24px;height:14px;border-radius:3px}
+
+/* ===== FEATURE 2: DEAL FLOW TIMELINE ===== */
+.timeline-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.timeline-year{font-size:14px;font-weight:800;color:var(--navy);margin:24px 0 12px;letter-spacing:-0.3px}
+.timeline-card{display:flex;gap:16px;padding:12px 16px;margin-left:32px;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.2s;cursor:pointer;position:relative}
+.timeline-card:hover{box-shadow:var(--shadow-md);border-color:var(--accent)}
+.timeline-card::before{content:'';position:absolute;left:-20px;top:50%;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(-50%);border:2px solid var(--surface)}
+.timeline-card-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.timeline-card-meta{font-size:11px;color:var(--text-secondary);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.timeline-card-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);font-size:12px}
+.timeline-sector-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:var(--accent-light);color:var(--accent)}
+.timeline-fund-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px}
+@media(max-width:768px){.timeline-card{margin-left:20px}.timeline-card::before{left:-16px;width:8px;height:8px}}
+
+/* ===== FEATURE 3: ALERT SYSTEM ===== */
+.alert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.alert-card{padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);transition:all 0.2s}
+.alert-card:hover{box-shadow:var(--shadow-md)}
+.alert-card.confidence-high{border-left:4px solid var(--green)}
+.alert-card.confidence-medium{border-left:4px solid var(--orange)}
+.alert-card.confidence-speculative{border-left:4px solid var(--text-tertiary)}
+.alert-badge{display:inline-flex;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.alert-badge.high{background:var(--green-light);color:var(--green)}
+.alert-badge.medium{background:var(--orange-light);color:var(--orange)}
+.alert-badge.speculative{background:#F3F4F6;color:var(--text-tertiary)}
+.alert-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px;line-height:1.4}
+.alert-detail{font-size:12px;color:var(--text-secondary);line-height:1.6}
+.alert-meta{font-size:10px;color:var(--text-tertiary);margin-top:8px;display:flex;gap:12px}
+
+/* ===== FEATURE 5: INVESTMENT NETWORK ===== */
+.network-container{position:relative;width:100%;height:500px;background:var(--bg);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.network-node{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;z-index:2;font-weight:700;text-align:center;line-height:1.2}
+.network-node:hover{transform:scale(1.15);box-shadow:var(--shadow-lg);z-index:10}
+.network-node.fund-node{border:3px solid rgba(255,255,255,0.3)}
+.network-node.investment-node{background:var(--accent-light);color:var(--accent);border:2px solid var(--accent);font-size:9px;font-weight:600}
+.network-controls{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+.network-controls select{padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);font-size:12px;font-family:inherit;background:var(--surface);color:var(--text-primary)}
+
+/* ===== FEATURE 6: PREDICTION SIGNALS ===== */
+.prediction-card{padding:20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);margin-bottom:12px}
+.prediction-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.prediction-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.prediction-title{font-size:14px;font-weight:700;color:var(--text-primary)}
+.prediction-pattern{font-size:12px;color:var(--text-secondary);line-height:1.7;padding:12px;background:var(--bg);border-radius:var(--radius-xs);margin-bottom:10px;border-left:3px solid var(--accent)}
+.prediction-watch{font-size:12px;color:var(--text-secondary);line-height:1.6}
+.prediction-watch strong{color:var(--accent)}
+
+/* ===== FEATURE 7: COUNTRY DEEP DIVE ===== */
+.country-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:200;overflow-y:auto}
+.country-overlay.open{display:block;animation:fadeIn 0.3s ease}
+.country-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.country-stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center}
+.country-stat-value{font-size:24px;font-weight:800;letter-spacing:-0.5px;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.country-stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-top:4px}
+.country-fund-row{display:flex;align-items:center;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+.country-fund-row:hover{box-shadow:var(--shadow-md);border-color:var(--accent)}
+.country-fund-name{font-size:14px;font-weight:700;color:var(--text-primary);flex:1}
+.country-fund-aum{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);font-size:14px}
+@media(max-width:768px){.country-stats-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.country-stats-grid{grid-template-columns:1fr}.country-stat-value{font-size:20px}}
+
+/* ===== FEATURE 8: ENHANCED COMPARISON ===== */
+.compare-radar-container{position:relative;height:300px;margin:16px 0}
+.compare-overlap-section{margin-top:20px;padding:16px;background:var(--bg);border-radius:var(--radius-sm)}
+.compare-overlap-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-tertiary);margin-bottom:12px}
+.compare-overlap-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border-light);font-size:13px;color:var(--text-secondary)}
+.compare-overlap-item:last-child{border-bottom:none}
+.compare-narrative{padding:16px;background:var(--accent-light);border-radius:var(--radius-sm);border-left:3px solid var(--accent);margin-top:16px;font-size:13px;color:var(--text-secondary);line-height:1.7}
+.compare-narrative strong{color:var(--text-primary)}
+
+/* ===== FEATURE 9: MACRO INDICATORS ===== */
+.macro-indicator{display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px}
+.macro-indicator-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.macro-indicator-info{flex:1}
+.macro-indicator-title{font-size:13px;font-weight:700;color:var(--text-primary)}
+.macro-indicator-value{font-size:20px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-0.5px}
+.macro-indicator-detail{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.5}
+.macro-gauge{width:100%;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;margin-top:6px}
+.macro-gauge-fill{height:100%;border-radius:4px;transition:width 0.5s ease}
+
+/* ===== FEATURE 10: ENHANCED SEARCH ===== */
+.search-bar{position:relative}
+.search-results-panel{display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:0 0 var(--radius-sm) var(--radius-sm);box-shadow:var(--shadow-lg);max-height:400px;overflow-y:auto;z-index:50}
+.search-results-panel.active{display:block}
+.search-result-item{padding:12px 16px;border-bottom:1px solid var(--border-light);cursor:pointer;transition:background 0.15s}
+.search-result-item:hover{background:var(--accent-light)}
+.search-result-item:last-child{border-bottom:none}
+.search-result-category{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:2px}
+.search-result-title{font-size:13px;font-weight:600;color:var(--text-primary)}
+.search-result-snippet{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.5}
+.search-result-snippet mark{background:rgba(37,99,235,0.15);color:var(--accent);font-weight:600;padding:0 2px;border-radius:2px}
+.search-filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.search-filter-chip{padding:4px 10px;border:1px solid var(--border);border-radius:100px;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s;background:var(--surface);color:var(--text-secondary)}
+.search-filter-chip:hover,.search-filter-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -504,7 +625,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div class="section-header"><div class="section-title"><span class="level-badge level-2">Fund Directory</span> All 50 GCC Funds</div></div>
 
 <div class="search-bar">
-  <input type="text" class="search-input" id="fundSearch" placeholder="Search funds, investments, sectors, mandates..." oninput="filterFunds()" aria-label="Search funds" role="searchbox">
+  <input type="text" class="search-input" id="fundSearch" placeholder="Search funds, investments, sectors, mandates..." oninput="filterFunds();enhancedSearch(this.value)" onfocus="if(this.value.length>=2)enhancedSearch(this.value)" aria-label="Search funds" role="searchbox">
+  <div id="searchResultsPanel" class="search-results-panel"></div>
   <div class="tier-filters" id="tierFilters">
     <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
     <button class="filter-btn" data-filter="tier1" onclick="setFilter('tier1',this)">Tier 1</button>
@@ -519,6 +641,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="filter-btn" data-type="FO" onclick="setTypeFilter('Family Office',this)">Family Office</button>
     <button class="filter-btn" data-type="VC" onclick="setTypeFilter('VC',this)">VC</button>
     <button class="filter-btn" data-type="IHC" onclick="setTypeFilter('IHC',this)">IHC</button>
+  </div>
+  <div class="search-filter-row" id="searchFilterRow">
+    <span style="font-size:10px;color:var(--text-tertiary);font-weight:600">FILTER:</span>
+    <button class="search-filter-chip active" onclick="setSearchFilter('all',this)">All</button>
+    <button class="search-filter-chip" onclick="setSearchFilter('SWF',this)">SWF</button>
+    <button class="search-filter-chip" onclick="setSearchFilter('Pension',this)">Pension</button>
+    <button class="search-filter-chip" onclick="setSearchFilter('Family Office',this)">FO</button>
+    <button class="search-filter-chip" onclick="setSearchFilter('VC',this)">VC</button>
+    <button class="search-filter-chip" onclick="setSearchFilter('IHC',this)">IHC</button>
   </div>
   <button class="filter-btn" id="compareToggle" onclick="toggleCompareMode()" style="margin-left:auto">Compare Funds</button>
 </div>
@@ -613,6 +744,156 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<!-- FEATURE 1: SECTOR HEATMAP -->
+<div class="section-divider"></div>
+<div class="section fade-in" id="sectorHeatmapSection">
+<div class="section-header"><div class="section-title"><span class="level-badge level-1">Sector Heatmap</span> Investment Intensity by Sector &amp; Fund</div></div>
+<div class="card">
+  <div style="font-size:15px;font-weight:600;margin-bottom:4px">Capital Concentration Matrix</div>
+  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Where GCC capital is concentrating &mdash; darker cells indicate heavier investment intensity</div>
+  <div class="heatmap-container" id="heatmapContainer"></div>
+  <div class="heatmap-legend">
+    <span style="font-weight:600">Intensity:</span>
+    <div class="heatmap-legend-item" style="background:var(--border-light)"></div><span>None</span>
+    <div class="heatmap-legend-item" style="background:#DBEAFE"></div><span>Minimal</span>
+    <div class="heatmap-legend-item" style="background:#93C5FD"></div><span>Low</span>
+    <div class="heatmap-legend-item" style="background:#3B82F6"></div><span>Moderate</span>
+    <div class="heatmap-legend-item" style="background:#1D4ED8"></div><span>Heavy</span>
+    <div class="heatmap-legend-item" style="background:#0B1D3A"></div><span>Dominant</span>
+  </div>
+</div>
+</div>
+
+<!-- FEATURE 2: DEAL FLOW TIMELINE -->
+<div class="section-divider"></div>
+<div class="section fade-in" id="dealTimelineSection">
+<div class="section-header"><div class="section-title"><span class="level-badge level-2">Deal Flow Timeline</span> Major GCC Deals 2021&ndash;2026</div></div>
+<div class="card">
+  <div style="font-size:15px;font-weight:600;margin-bottom:4px">Deal Flow Timeline</div>
+  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Major investments across all tracked GCC funds &mdash; filter by fund, sector, or geography</div>
+  <div class="timeline-filters" id="timelineFilters">
+    <button class="filter-btn active" onclick="filterTimeline('all',this)">All</button>
+    <button class="filter-btn" onclick="filterTimeline('tier1',this)">Tier 1</button>
+    <button class="filter-btn" onclick="filterTimeline('tier2',this)">Tier 2</button>
+    <button class="filter-btn" onclick="filterTimeline('tier3',this)">Tier 3</button>
+    <select id="timelineSectorFilter" onchange="renderTimeline()" style="padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;background:var(--surface);color:var(--text-primary)">
+      <option value="all">All Sectors</option>
+    </select>
+    <select id="timelineFundFilter" onchange="renderTimeline()" style="padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;background:var(--surface);color:var(--text-primary)">
+      <option value="all">All Funds</option>
+    </select>
+  </div>
+  <div id="timelineContent" style="max-height:600px;overflow-y:auto;padding-right:8px"></div>
+</div>
+</div>
+
+<!-- FEATURE 3: SIGNAL ALERTS -->
+<div class="section-divider"></div>
+<div class="section fade-in" id="alertsSection">
+<div class="section-header"><div class="section-title"><span class="level-badge level-1">Signal Alerts</span> Auto-Detected Investment Patterns</div></div>
+<div class="alert-grid" id="alertGrid"></div>
+</div>
+
+<!-- FEATURE 5: INVESTMENT NETWORK -->
+<div class="section-divider"></div>
+<div class="section fade-in" id="networkSection">
+<div class="section-header"><div class="section-title"><span class="level-badge level-3">Investment Network</span> Co-Investment Ecosystem</div></div>
+<div class="card" style="padding:16px">
+  <div style="font-size:15px;font-weight:600;margin-bottom:4px">Fund &amp; Investment Network Graph</div>
+  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Funds as large nodes, shared investments as smaller nodes &mdash; click any node to explore</div>
+  <div class="network-controls">
+    <select id="networkFilter" onchange="renderNetworkGraph()">
+      <option value="all">All Tiers</option>
+      <option value="1">Tier 1 Only</option>
+      <option value="12">Tier 1 &amp; 2</option>
+    </select>
+    <span style="font-size:11px;color:var(--text-tertiary)">Showing shared investments with 2+ fund holders</span>
+  </div>
+  <div class="network-container" id="networkContainer"></div>
+</div>
+</div>
+
+<!-- FEATURE 6: PREDICTION SIGNALS -->
+<div class="section-divider"></div>
+<div class="section fade-in" id="predictionsSection">
+<div class="section-header"><div class="section-title"><span class="level-badge level-2">Prediction Signals</span> Pattern-Based Forward Indicators</div></div>
+<div id="predictionsContent"></div>
+</div>
+
+<!-- FEATURE 9: ENHANCED MACRO INTELLIGENCE -->
+<div class="section-divider"></div>
+<div class="section fade-in" id="macroEnhancedSection">
+<div class="section-header"><div class="section-title"><span class="level-badge level-1">Macro Intelligence</span> Liquidity, Oil &amp; Currency Dynamics</div></div>
+<div class="grid-2" style="margin-bottom:20px">
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px">Liquidity Cycle Position</div>
+    <div class="macro-indicator">
+      <div class="macro-indicator-icon" style="background:var(--green-light)">&#x1F4C8;</div>
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">Howell Global Liquidity Index</div>
+        <div class="macro-indicator-value" style="color:var(--green)">93 <span style="font-size:12px;color:var(--green)">&#9650; Expanding</span></div>
+        <div class="macro-gauge"><div class="macro-gauge-fill" style="width:93%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
+        <div class="macro-indicator-detail">Liquidity cycle entered expansion phase in Q3 2025. Current reading (93/100) indicates peak deployment conditions. Historical correlation: 87% of major GCC deals occur above the 75-mark.</div>
+      </div>
+    </div>
+    <div class="macro-indicator">
+      <div class="macro-indicator-icon" style="background:var(--accent-light)">&#x1F310;</div>
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">Cycle Phase Indicator</div>
+        <div class="macro-indicator-value" style="color:var(--accent)">Late Expansion</div>
+        <div class="macro-indicator-detail">Based on Howell framework: global liquidity peaked in prior cycles at ~95-97. Current trajectory suggests 6-9 months of elevated deployment before potential mean-reversion.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px">Oil-SWF Deployment Correlation</div>
+    <div class="macro-indicator">
+      <div class="macro-indicator-icon" style="background:var(--orange-light)">&#x1F6E2;</div>
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">Brent Crude Correlation</div>
+        <div class="macro-indicator-value" style="color:var(--orange)">$102/bbl <span style="font-size:12px;color:var(--green)">&#9650; +5.2% YTD</span></div>
+        <div class="macro-gauge"><div class="macro-gauge-fill" style="width:82%;background:linear-gradient(90deg,var(--orange),#FBBF24)"></div></div>
+        <div class="macro-indicator-detail">Brent at $102 sustains above the $80 fiscal breakeven for all GCC states. 6-9 month lag between oil revenue and SWF deployment acceleration. Prediction: Q3 2026 deployment will exceed $50B across top-10 funds.</div>
+      </div>
+    </div>
+    <div class="macro-indicator">
+      <div class="macro-indicator-icon" style="background:var(--purple-light)">&#x1F4B1;</div>
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">DXY Dollar Strength Impact</div>
+        <div class="macro-indicator-value" style="color:var(--purple)">103.8 <span style="font-size:12px;color:var(--red)">&#9660; Weakening</span></div>
+        <div class="macro-indicator-detail">Dollar weakness (DXY 103.8, down from 106 peak) is a tailwind for GCC funds deploying internationally. All GCC currencies pegged to USD, so a weaker dollar makes non-USD assets cheaper. Historical: DXY below 104 correlates with 20% increase in GCC international deal flow.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card" style="margin-bottom:20px">
+  <div style="font-size:15px;font-weight:600;margin-bottom:12px">Currency Impact Analysis</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div class="macro-indicator" style="margin:0">
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">EUR/USD</div>
+        <div class="macro-indicator-value" style="color:var(--green)">1.092</div>
+        <div class="macro-indicator-detail">Euro strengthening makes European assets more expensive for GCC. QIA (45% Europe exposure) may slow new deployment.</div>
+      </div>
+    </div>
+    <div class="macro-indicator" style="margin:0">
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">GBP/USD</div>
+        <div class="macro-indicator-value" style="color:var(--green)">1.268</div>
+        <div class="macro-indicator-detail">Sterling recovering. QIA UK portfolio (Harrods, The Shard, Canary Wharf) benefits. Favourable for new UK infrastructure deals.</div>
+      </div>
+    </div>
+    <div class="macro-indicator" style="margin:0">
+      <div class="macro-indicator-info">
+        <div class="macro-indicator-title">INR/USD</div>
+        <div class="macro-indicator-value" style="color:var(--red)">84.2</div>
+        <div class="macro-indicator-detail">Rupee at record lows. ADIA Jio/Reliance positions face FX headwind. But new India investments 15% cheaper in USD terms.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 </div>
 
 <!-- REPORT OVERLAY -->
@@ -630,6 +911,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <!-- Compare Overlay -->
 <div class="compare-overlay" id="compareOverlay" role="dialog" aria-label="Fund Comparison" aria-modal="true">
   <div class="main" id="compareContent"></div>
+</div>
+
+<!-- Country Deep Dive Overlay (Feature 7) -->
+<div class="country-overlay" id="countryOverlay">
+  <div class="main" id="countryContent"></div>
 </div>
 
 <div class="footer">47X Intelligence Platform &mdash; SWF Tracker Module &mdash; Data as of Q1 2026 &mdash; <a href="index.html">Back to Dashboard</a></div>
@@ -1382,7 +1668,7 @@ function renderFundTable(){
       var ck=compareList.indexOf(f.rank)>-1;var dis=!ck&&compareList.length>=3;
       html+='<tr onclick="toggleCompare('+f.rank+')" style="'+(ck?'background:var(--accent-light)':'')+'" role="button" tabindex="0"><td><input type="checkbox" '+(ck?'checked':'')+' '+(dis?'disabled':'')+' onclick="toggleCompare('+f.rank+',event)" style="cursor:pointer;width:16px;height:16px"></td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
     } else {
-      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td><a onclick="event.stopPropagation();openCountryDeepDive(\''+f.country+'\')" style="color:var(--accent);cursor:pointer;text-decoration:none" title="View '+f.country+' deep dive">'+f.country+'</a></td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
     }
   });
   fundTableBodyEl.innerHTML=html;
@@ -1736,7 +2022,8 @@ function renderMacroCharts(){
   new Chart(document.getElementById('oilCorrelationChart'),{type:'line',data:{labels:m,datasets:[{label:'Brent Crude ($/bbl)',data:[78,80,82,79,83,85,88,90,92,95,98,100,102,101,102],borderColor:'#D97706',backgroundColor:'rgba(217,119,6,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y'},{label:'GCC Deal Flow (deals/mo)',data:[15,18,20,16,22,25,28,30,32,35,38,40,42,43,45],borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.1)',fill:true,tension:0.4,pointRadius:3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{position:'left',title:{display:true,text:'Oil Price ($)',font:{size:10}},ticks:{font:{size:10}},grid:{color:'#F3F4F6'}},y1:{position:'right',title:{display:true,text:'Deals/Month',font:{size:10}},ticks:{font:{size:10}},grid:{display:false}},x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
 }
 
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){var invPanel=document.getElementById('invDetailPanel');if(invPanel){invPanel.remove();return;}if(document.getElementById('compareOverlay').classList.contains('open'))closeComparison();else if(document.getElementById('reportOverlay').classList.contains('open'))closeReport();}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){hideSearchResults();var invPanel=document.getElementById('invDetailPanel');if(invPanel){invPanel.remove();return;}if(document.getElementById('countryOverlay').classList.contains('open'))closeCountryDeepDive();else if(document.getElementById('compareOverlay').classList.contains('open'))closeComparison();else if(document.getElementById('reportOverlay').classList.contains('open'))closeReport();}});
+document.addEventListener('click',function(e){if(!e.target.closest('.search-bar'))hideSearchResults();});
 window.addEventListener('popstate',function(e){
   if(e.state&&e.state.fund){openReport(e.state.fund);}
   else if(document.getElementById('reportOverlay').classList.contains('open')){document.getElementById('reportOverlay').classList.remove('open');document.body.style.overflow='';Object.keys(reportCharts).forEach(function(k){reportCharts[k].destroy()});reportCharts={};}
@@ -1998,12 +2285,516 @@ function renderCrossFundAnalysis(){
   if(signalsEl)signalsEl.innerHTML=signalsHtml||'<div style="color:var(--text-tertiary);font-size:12px">Signals will appear as more investment data is processed</div>';
 }
 
+// ===== FEATURE 1: SECTOR HEATMAP =====
+function renderSectorHeatmap(){
+  var topFunds=funds.filter(function(f){return f.tier<=2}).sort(function(a,b){return(b.aum||0)-(a.aum||0)});
+  var allSectors={};
+  funds.forEach(function(f){if(f.sectors){Object.keys(f.sectors).forEach(function(s){allSectors[s]=1})}});
+  var sectorList=Object.keys(allSectors).sort();
+  var html='<table class="heatmap-table"><thead><tr><th>Sector</th>';
+  topFunds.forEach(function(f){html+='<th style="cursor:pointer" onclick="openReport('+f.rank+')" title="'+f.name+'">'+f.short+'</th>'});
+  html+='</tr></thead><tbody>';
+  sectorList.forEach(function(sector){
+    html+='<tr><td>'+sector.replace(/([A-Z])/g,' $1').trim()+'</td>';
+    topFunds.forEach(function(f){
+      var pct=f.sectors&&f.sectors[sector]?f.sectors[sector]:0;
+      var intensity=pct>=30?5:pct>=20?4:pct>=10?3:pct>=5?2:pct>0?1:0;
+      html+='<td><div class="heatmap-cell intensity-'+intensity+'" onclick="openReport('+f.rank+')" title="'+f.short+': '+pct+'%">'+(pct>0?pct+'%':'')+'</div></td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  var container=document.getElementById('heatmapContainer');
+  if(container)container.innerHTML=html;
+}
+
+// ===== FEATURE 2: DEAL FLOW TIMELINE =====
+var timelineTierFilter='all';
+function filterTimeline(tier,btn){
+  timelineTierFilter=tier;
+  document.querySelectorAll('#timelineFilters .filter-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  renderTimeline();
+}
+function renderTimeline(){
+  var tierColors={1:'var(--navy)',2:'var(--accent)',3:'var(--purple)',4:'var(--orange)',5:'var(--text-tertiary)'};
+  var sectorFilter=document.getElementById('timelineSectorFilter');
+  var fundFilter=document.getElementById('timelineFundFilter');
+  var selectedSector=sectorFilter?sectorFilter.value:'all';
+  var selectedFund=fundFilter?fundFilter.value:'all';
+  var allDeals=[];
+  var allSectors={};
+  funds.forEach(function(f){
+    if(timelineTierFilter!=='all'){
+      var tierNum=parseInt(timelineTierFilter.replace('tier',''));
+      if(f.tier!==tierNum)return;
+    }
+    if(selectedFund!=='all'&&f.rank!==parseInt(selectedFund))return;
+    (f.investments||[]).forEach(function(inv){
+      var yr=typeof inv.year==='number'?inv.year:parseInt(inv.year);
+      if(yr&&yr>=2021&&yr<=2026){
+        if(selectedSector!=='all'&&inv.sector!==selectedSector)return;
+        allSectors[inv.sector]=1;
+        allDeals.push({fund:f,name:inv.name,sector:inv.sector,value:inv.value,year:yr,tier:f.tier});
+      }
+    });
+  });
+  if(sectorFilter&&sectorFilter.options.length<=1){
+    Object.keys(allSectors).sort().forEach(function(s){
+      var opt=document.createElement('option');opt.value=s;opt.textContent=s;sectorFilter.appendChild(opt);
+    });
+  }
+  if(fundFilter&&fundFilter.options.length<=1){
+    funds.sort(function(a,b){return a.rank-b.rank}).forEach(function(f){
+      var opt=document.createElement('option');opt.value=f.rank;opt.textContent=f.short;fundFilter.appendChild(opt);
+    });
+  }
+  allDeals.sort(function(a,b){return b.year-a.year});
+  var years={};
+  allDeals.forEach(function(d){if(!years[d.year])years[d.year]=[];years[d.year].push(d)});
+  var html='';
+  Object.keys(years).sort(function(a,b){return b-a}).forEach(function(yr){
+    html+='<div class="timeline-year">'+yr+'</div>';
+    years[yr].forEach(function(d){
+      var bg=tierColors[d.tier]||'var(--text-tertiary)';
+      html+='<div class="timeline-card" onclick="openReport('+d.fund.rank+')">';
+      html+='<div style="flex:1;min-width:0">';
+      html+='<div class="timeline-card-title">'+d.name+'</div>';
+      html+='<div class="timeline-card-meta">';
+      html+='<span class="timeline-fund-badge" style="background:'+bg+';color:#fff">'+d.fund.short+'</span>';
+      html+='<span class="timeline-sector-badge">'+d.sector+'</span>';
+      if(d.value)html+='<span class="timeline-card-value">'+d.value+'</span>';
+      html+='</div></div></div>';
+    });
+  });
+  var container=document.getElementById('timelineContent');
+  if(container)container.innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--text-tertiary)">No deals match the current filters</div>';
+}
+
+// ===== FEATURE 3: ALERT SYSTEM =====
+function renderAlerts(){
+  var alerts=[];
+  var sectorFunds={};
+  funds.forEach(function(f){
+    if(f.sectors){
+      Object.keys(f.sectors).forEach(function(s){
+        if(f.sectors[s]>=10){
+          if(!sectorFunds[s])sectorFunds[s]=[];
+          sectorFunds[s].push(f);
+        }
+      });
+    }
+  });
+  Object.keys(sectorFunds).forEach(function(s){
+    var tier1=sectorFunds[s].filter(function(f){return f.tier===1});
+    if(tier1.length>=3){
+      alerts.push({
+        confidence:'high',type:'convergence',
+        title:tier1.length+' tier-1 funds hold significant positions in '+s.replace(/([A-Z])/g,' $1').trim(),
+        detail:'Funds: '+tier1.map(function(f){return f.short+' ('+f.sectors[s]+'%)'}).join(', ')+'. When multiple sovereign wealth funds with $100B+ AUM converge on a sector, it signals deep institutional conviction.',
+        source:'Cross-fund sector analysis'
+      });
+    }
+  });
+  var expandingFunds=funds.filter(function(f){return f.status==='Expanding'&&f.aum&&f.aum>=100});
+  expandingFunds.forEach(function(f){
+    alerts.push({
+      confidence:'medium',type:'deployment',
+      title:f.short+' in active expansion mode \u2014 '+formatAum(f.aum)+' AUM with deployment acceleration',
+      detail:f.name+' is flagged as "Expanding" with '+formatAum(f.aum)+' in assets. Founded '+f.founded+'. '+f.mandate.substring(0,120)+'...',
+      source:'Fund status analysis'
+    });
+  });
+  if(typeof crossFundInvestments!=='undefined'){
+    Object.entries(crossFundInvestments).forEach(function(e){
+      if(e[1].length>=3){
+        var fundNames=e[1].map(function(r){var f=funds.find(function(x){return x.rank===r});return f?f.short:''}).filter(function(x){return x});
+        alerts.push({
+          confidence:'high',type:'conviction',
+          title:e[0]+' held by '+e[1].length+' funds \u2014 high-conviction asset',
+          detail:'Shared by: '+fundNames.join(', ')+'. Multi-fund convergence on a single asset indicates strong institutional validation.',
+          source:'Cross-fund holdings analysis'
+        });
+      }
+    });
+  }
+  var aiFunds=funds.filter(function(f){
+    return f.investments&&f.investments.some(function(inv){
+      return inv.sector&&(inv.sector.toLowerCase().indexOf('ai')!==-1||inv.sector.toLowerCase().indexOf('data center')!==-1||inv.sector.toLowerCase().indexOf('digital infrastructure')!==-1);
+    });
+  });
+  if(aiFunds.length>=5){
+    alerts.push({
+      confidence:'high',type:'convergence',
+      title:aiFunds.length+' GCC funds have AI/data center positions \u2014 structural capital shift underway',
+      detail:'Funds with AI or data center investments: '+aiFunds.map(function(f){return f.short}).join(', ')+'. This represents a coordinated pivot by GCC sovereign capital toward AI infrastructure.',
+      source:'Investment sector analysis'
+    });
+  }
+  alerts.sort(function(a,b){var o={high:0,medium:1,speculative:2};return(o[a.confidence]||2)-(o[b.confidence]||2)});
+  var html='';
+  alerts.forEach(function(a){
+    html+='<div class="alert-card confidence-'+a.confidence+'">';
+    html+='<div class="alert-badge '+a.confidence+'">'+a.confidence+' confidence</div>';
+    html+='<div class="alert-title">'+a.title+'</div>';
+    html+='<div class="alert-detail">'+a.detail+'</div>';
+    html+='<div class="alert-meta"><span>Source: '+a.source+'</span><span>Q1 2026</span></div>';
+    html+='</div>';
+  });
+  var grid=document.getElementById('alertGrid');
+  if(grid)grid.innerHTML=html;
+}
+
+// ===== FEATURE 5: INVESTMENT NETWORK GRAPH =====
+function renderNetworkGraph(){
+  var container=document.getElementById('networkContainer');
+  if(!container||typeof crossFundInvestments==='undefined')return;
+  var filterVal=document.getElementById('networkFilter').value;
+  var maxTier=filterVal==='1'?1:filterVal==='12'?2:5;
+  var tierColors={1:'#0B1D3A',2:'#2563EB',3:'#7C3AED',4:'#D97706',5:'#9CA3AF'};
+  var relevantInvestments={};
+  Object.entries(crossFundInvestments).forEach(function(e){
+    var filteredRanks=e[1].filter(function(r){
+      var f=funds.find(function(x){return x.rank===r});
+      return f&&f.tier<=maxTier;
+    });
+    if(filteredRanks.length>=2)relevantInvestments[e[0]]=filteredRanks;
+  });
+  var involvedFunds={};
+  Object.values(relevantInvestments).forEach(function(ranks){
+    ranks.forEach(function(r){involvedFunds[r]=1});
+  });
+  var fundList=Object.keys(involvedFunds).map(Number).sort(function(a,b){return a-b});
+  var investList=Object.keys(relevantInvestments);
+  var w=container.offsetWidth;
+  var h=500;
+  var cx=w/2,cy=h/2;
+  var fundR=Math.min(w,h)*0.38;
+  var invR=fundR*0.5;
+  var fundPositions={};
+  fundList.forEach(function(r,i){
+    var angle=(2*Math.PI*i/fundList.length)-Math.PI/2;
+    fundPositions[r]={x:cx+fundR*Math.cos(angle),y:cy+fundR*Math.sin(angle)};
+  });
+  var invPositions={};
+  investList.forEach(function(name,i){
+    var angle=(2*Math.PI*i/investList.length)-Math.PI/2;
+    invPositions[name]={x:cx+invR*Math.cos(angle),y:cy+invR*Math.sin(angle)};
+  });
+  var svg='<svg width="'+w+'" height="'+h+'" style="position:absolute;top:0;left:0">';
+  investList.forEach(function(name){
+    var ranks=relevantInvestments[name];
+    var ip=invPositions[name];
+    ranks.forEach(function(r){
+      var fp=fundPositions[r];
+      if(fp&&ip){
+        svg+='<line x1="'+fp.x+'" y1="'+fp.y+'" x2="'+ip.x+'" y2="'+ip.y+'" stroke="rgba(37,99,235,0.15)" stroke-width="1.5"/>';
+      }
+    });
+  });
+  svg+='</svg>';
+  var nodes='';
+  fundList.forEach(function(r){
+    var f=funds.find(function(x){return x.rank===r});
+    if(!f)return;
+    var p=fundPositions[r];
+    var size=f.tier===1?52:f.tier===2?42:34;
+    var bg=tierColors[f.tier]||'#9CA3AF';
+    nodes+='<div class="network-node fund-node" style="left:'+(p.x-size/2)+'px;top:'+(p.y-size/2)+'px;width:'+size+'px;height:'+size+'px;background:'+bg+';color:#fff;font-size:'+(f.tier<=2?11:9)+'px" onclick="openReport('+f.rank+')" title="'+f.name+' \u2014 '+formatAum(f.aum)+'">'+f.short+'</div>';
+  });
+  investList.forEach(function(name){
+    var p=invPositions[name];
+    var count=relevantInvestments[name].length;
+    var size=20+count*4;
+    var shortName=name.length>12?name.substring(0,10)+'..':name;
+    nodes+='<div class="network-node investment-node" style="left:'+(p.x-size/2)+'px;top:'+(p.y-size/2)+'px;width:'+size+'px;height:'+size+'px;font-size:8px" title="'+name+' ('+count+' funds)">'+shortName+'</div>';
+  });
+  container.innerHTML=svg+nodes;
+}
+
+// ===== FEATURE 6: PREDICTION SIGNALS =====
+function renderPredictions(){
+  var predictions=[
+    {
+      icon:'\uD83E\uDDE0',bg:'var(--accent-light)',
+      title:'AI Infrastructure \u2192 AI Applications Pipeline',
+      confidence:'high',
+      pattern:'GCC funds that invested in AI infrastructure (data centers, chips, cloud) in 2024 historically follow up with AI application investments within 12 months. Pattern observed: Mubadala (GlobalFoundries \u2192 MGX/GAIIP), PIF (HUMAIN initiative), QIA (Anthropic investment).',
+      watch:'Watch for: GCC investments in enterprise AI software, AI-powered healthcare, autonomous systems, and AI-native financial services. Likely deployers: Mubadala, PIF, QIA in Q2-Q4 2026.'
+    },
+    {
+      icon:'\uD83C\uDFD7',bg:'var(--orange-light)',
+      title:'Real Estate Megaproject \u2192 Hospitality & Entertainment',
+      confidence:'high',
+      pattern:'Funds that committed to real estate megaprojects (NEOM, Qiddiya, Red Sea Global, Ras El Hekma) in 2022-2024 subsequently invested in hospitality operators, entertainment brands, and tourism tech within 18 months. PIF pattern: NEOM (2017) \u2192 Savvy Games (2021) \u2192 Qiddiya entertainment (2023).',
+      watch:'Watch for: Hotel operator acquisitions, event management companies, tourism tech platforms. ADQ\u2019s Egypt megaproject (Ras El Hekma, $35B) will likely trigger hospitality investments in 2026.'
+    },
+    {
+      icon:'\u26A1',bg:'var(--green-light)',
+      title:'Clean Energy \u2192 Carbon Credits & Green Finance',
+      confidence:'medium',
+      pattern:'Funds with clean energy positions (Masdar, ALTERRA, TPG Rise Climate) are now entering carbon market infrastructure. Pattern: Mubadala\u2019s Masdar (2006) \u2192 ALTERRA Climate Fund (2023, $30B) \u2192 next logical: carbon credit trading, green bonds, and voluntary carbon market platforms.',
+      watch:'Watch for: Carbon exchange acquisitions, green bond issuance platforms, nature-based solutions investments. Lunate (ALTERRA manager) likely to make first move.'
+    },
+    {
+      icon:'\uD83C\uDFE6',bg:'var(--purple-light)',
+      title:'PE/Credit Expansion \u2192 Asset Management M&A',
+      confidence:'medium',
+      pattern:'GCC funds expanding into private credit (Hassana/Franklin Templeton MoU, Mubadala/CI Financial acquisition) signal a broader push to own asset management infrastructure. Pattern: acquire credit platforms \u2192 build GP-staking positions \u2192 launch own fund-of-funds vehicles.',
+      watch:'Watch for: Mid-size asset manager acquisitions ($5-20B AUM), GP-staking deals, private credit platform buildouts. Lunate (Blue Owl JV) and Mubadala (CI Financial) leading this trend.'
+    },
+    {
+      icon:'\uD83D\uDE80',bg:'var(--red-light)',
+      title:'Defence Tech \u2192 Space & Cybersecurity',
+      confidence:'speculative',
+      pattern:'Royal Group\u2019s defence holdings (International Golden Group) and Mubadala\u2019s Space42 (Yahsat+Bayanat merger) indicate GCC funds moving up the defence-tech value chain. Historical: defence hardware \u2192 ISR/surveillance \u2192 space assets \u2192 cyber.',
+      watch:'Watch for: Cybersecurity acquisitions, satellite communication companies, autonomous defence systems. EDGE Group (UAE) may seek external investors.'
+    }
+  ];
+  var html='';
+  predictions.forEach(function(p){
+    html+='<div class="prediction-card">';
+    html+='<div class="prediction-header">';
+    html+='<div class="prediction-icon" style="background:'+p.bg+'">'+p.icon+'</div>';
+    html+='<div><div class="prediction-title">'+p.title+'</div>';
+    html+='<div style="margin-top:4px"><span class="alert-badge '+p.confidence+'">'+p.confidence+'</span></div></div></div>';
+    html+='<div class="prediction-pattern">'+p.pattern+'</div>';
+    html+='<div class="prediction-watch">'+p.watch+'</div>';
+    html+='</div>';
+  });
+  var container=document.getElementById('predictionsContent');
+  if(container)container.innerHTML=html;
+}
+
+// ===== FEATURE 7: COUNTRY DEEP DIVE =====
+function openCountryDeepDive(country){
+  var overlay=document.getElementById('countryOverlay');
+  var countryFunds=funds.filter(function(f){return f.country===country});
+  var totalAum=countryFunds.reduce(function(s,f){return s+(f.aum||0)},0);
+  var totalDeals=countryFunds.reduce(function(s,f){return s+(f.deals?f.deals.reduce(function(s2,d){return s2+d.count},0):0)},0);
+  var totalDeployed=countryFunds.reduce(function(s,f){return s+(f.deals?f.deals.reduce(function(s2,d){return s2+d.value},0):0)},0);
+  var countrySectors={};
+  countryFunds.forEach(function(f){
+    if(f.sectors){Object.entries(f.sectors).forEach(function(e){
+      if(!countrySectors[e[0]])countrySectors[e[0]]=0;
+      countrySectors[e[0]]+=e[1]*(f.aum||1)/100;
+    })}
+  });
+  var html='<button class="report-back" onclick="closeCountryDeepDive()">\u2190 Back to Fund Directory</button>';
+  html+='<div class="report-hero" style="margin-bottom:24px"><div class="report-info"><h2>'+country+'</h2><div class="report-meta">GCC Country Deep Dive \u2014 '+countryFunds.length+' tracked funds</div></div>';
+  html+='<div class="report-stats">';
+  html+='<div class="report-stat"><div class="report-stat-value">'+formatAum(totalAum)+'</div><div class="report-stat-label">Total AUM</div></div>';
+  html+='<div class="report-stat"><div class="report-stat-value">'+countryFunds.length+'</div><div class="report-stat-label">Funds</div></div>';
+  html+='<div class="report-stat"><div class="report-stat-value">'+totalDeals+'</div><div class="report-stat-label">Deals (5Q)</div></div>';
+  html+='</div></div>';
+  html+='<div class="country-stats-grid">';
+  html+='<div class="country-stat-card"><div class="country-stat-value">'+formatAum(totalAum)+'</div><div class="country-stat-label">Combined AUM</div></div>';
+  html+='<div class="country-stat-card"><div class="country-stat-value">'+countryFunds.length+'</div><div class="country-stat-label">Tracked Funds</div></div>';
+  html+='<div class="country-stat-card"><div class="country-stat-value">'+totalDeals+'</div><div class="country-stat-label">Deals (5 Quarters)</div></div>';
+  html+='<div class="country-stat-card"><div class="country-stat-value">$'+totalDeployed.toFixed(1)+'B</div><div class="country-stat-label">Capital Deployed (5Q)</div></div>';
+  html+='</div>';
+  html+='<div class="section-header" style="margin-top:24px"><div class="section-title"><span class="level-badge level-1">Funds in '+country+'</span></div></div>';
+  countryFunds.sort(function(a,b){return(b.aum||0)-(a.aum||0)}).forEach(function(f){
+    var tc=f.type==='SWF'?'type-swf':f.type==='Pension'?'type-pension':f.type==='Family Office'?'type-fo':f.type==='VC'?'type-vc':'type-ihc';
+    html+='<div class="country-fund-row" onclick="closeCountryDeepDive();openReport('+f.rank+')">';
+    html+='<span class="tier-badge tier-'+f.tier+'">T'+f.tier+'</span>';
+    html+='<div class="country-fund-name">'+f.name+'</div>';
+    html+='<span class="status-badge '+tc+'">'+f.type+'</span>';
+    html+='<div class="country-fund-aum">'+formatAum(f.aum)+'</div>';
+    html+='</div>';
+  });
+  html+='<div class="section-header" style="margin-top:24px"><div class="section-title"><span class="level-badge level-2">Sector Capital Allocation</span></div></div>';
+  html+='<div class="card">';
+  var sectorSorted=Object.entries(countrySectors).sort(function(a,b){return b[1]-a[1]});
+  var maxVal=sectorSorted.length>0?sectorSorted[0][1]:1;
+  sectorSorted.slice(0,12).forEach(function(s){
+    var pct=Math.round((s[1]/maxVal)*100);
+    html+='<div class="compare-sector-bar" style="margin-bottom:8px"><span style="min-width:140px;font-weight:600">'+s[0].replace(/([A-Z])/g,' $1').trim()+'</span><div class="bar"><div class="bar-fill" style="width:'+pct+'%"></div></div><span class="pct">'+formatAum(s[1])+'</span></div>';
+  });
+  html+='</div>';
+  html+='<div class="section-header" style="margin-top:24px"><div class="section-title"><span class="level-badge level-3">Investment Activity by Year</span></div></div>';
+  html+='<div class="card">';
+  var yearTotals={};
+  countryFunds.forEach(function(f){
+    (f.investments||[]).forEach(function(inv){
+      var yr=typeof inv.year==='number'?inv.year:parseInt(inv.year);
+      if(yr&&yr>=2021){if(!yearTotals[yr])yearTotals[yr]=0;yearTotals[yr]++;}
+    });
+  });
+  var maxDeals=Math.max.apply(null,Object.values(yearTotals).length>0?Object.values(yearTotals):[1]);
+  html+='<div style="display:flex;align-items:flex-end;gap:12px;height:120px;padding:0 20px">';
+  [2021,2022,2023,2024,2025,2026].forEach(function(yr){
+    var count=yearTotals[yr]||0;
+    var ht=Math.max(count/maxDeals*100,4);
+    html+='<div style="flex:1;text-align:center"><div style="height:'+ht+'px;background:var(--accent);border-radius:4px 4px 0 0;margin-bottom:6px;display:flex;align-items:flex-start;justify-content:center;color:#fff;font-size:10px;font-weight:700;padding-top:2px">'+(count>0?count:'')+'</div><div style="font-size:11px;color:var(--text-tertiary);font-weight:600">'+yr+'</div></div>';
+  });
+  html+='</div></div>';
+  document.getElementById('countryContent').innerHTML=html;
+  overlay.classList.add('open');
+  overlay.scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+function closeCountryDeepDive(){
+  document.getElementById('countryOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ===== FEATURE 8: ENHANCED COMPARISON =====
+var _origLaunchComparison=launchComparison;
+launchComparison=function(){
+  _origLaunchComparison();
+  setTimeout(function(){
+    var content=document.getElementById('compareContent');
+    if(!content||compareList.length<2)return;
+    var overlapHtml='<div class="card" style="margin-top:20px">';
+    overlapHtml+='<div style="font-size:15px;font-weight:600;margin-bottom:12px">Investment Overlap Analysis</div>';
+    var fundSectors=compareList.map(function(rank){
+      var f=funds.find(function(x){return x.rank===rank});
+      return {fund:f,sectors:f?Object.keys(f.sectors||{}):[]};
+    });
+    var sharedSectors={};
+    fundSectors[0].sectors.forEach(function(s){
+      var sharedBy=fundSectors.filter(function(fs){return fs.sectors.indexOf(s)!==-1});
+      if(sharedBy.length===fundSectors.length)sharedSectors[s]=sharedBy.map(function(fs){return{short:fs.fund.short,pct:fs.fund.sectors[s]}});
+    });
+    if(Object.keys(sharedSectors).length>0){
+      overlapHtml+='<div class="compare-overlap-section">';
+      overlapHtml+='<div class="compare-overlap-title">Shared Sector Exposure</div>';
+      Object.entries(sharedSectors).forEach(function(e){
+        overlapHtml+='<div class="compare-overlap-item"><strong>'+e[0].replace(/([A-Z])/g,' $1').trim()+'</strong> \u2014 '+e[1].map(function(f){return f.short+': '+f.pct+'%'}).join(', ')+'</div>';
+      });
+      overlapHtml+='</div>';
+    }
+    var fundObjs=compareList.map(function(r){return funds.find(function(x){return x.rank===r})});
+    var mostActive=fundObjs.slice().sort(function(a,b){
+      var da=a.deals?a.deals.reduce(function(s,d){return s+d.count},0):0;
+      var db=b.deals?b.deals.reduce(function(s,d){return s+d.count},0):0;
+      return db-da;
+    })[0];
+    var largest=fundObjs.slice().sort(function(a,b){return(b.aum||0)-(a.aum||0)})[0];
+    overlapHtml+='<div class="compare-narrative">';
+    overlapHtml+='<strong>Pitch Intelligence:</strong> If you could only pitch one of these funds, pitch <strong>'+mostActive.short+'</strong>. ';
+    overlapHtml+='Rationale: '+mostActive.short+' is the most active deployer with '+(mostActive.deals?mostActive.deals.reduce(function(s,d){return s+d.count},0):0)+' deals in the last 5 quarters, status "'+mostActive.status+'". ';
+    if(mostActive.rank!==largest.rank)overlapHtml+='While '+largest.short+' has the largest AUM ('+formatAum(largest.aum)+'), deployment velocity matters more than AUM size for new entrants seeking partnerships. ';
+    overlapHtml+='</div>';
+    overlapHtml+='<div class="compare-radar-container"><canvas id="compareRadar"></canvas></div>';
+    overlapHtml+='</div>';
+    content.insertAdjacentHTML('beforeend',overlapHtml);
+    setTimeout(function(){
+      var radarEl=document.getElementById('compareRadar');
+      if(!radarEl)return;
+      var dimensions=['AUM','Deal Count','Investments','International','Diversification'];
+      var colors=['rgba(37,99,235,0.4)','rgba(124,58,237,0.4)','rgba(5,150,105,0.4)'];
+      var borderColors=['#2563EB','#7C3AED','#059669'];
+      var datasets=compareList.map(function(rank,i){
+        var f=funds.find(function(x){return x.rank===rank});
+        var aum=f.aum||0;var maxAum=1150;
+        var deals=f.deals?f.deals.reduce(function(s,d){return s+d.count},0):0;
+        var invCount=(f.investments||[]).length;
+        var intlPct=0;if(f.geoFocus){var me=f.geoFocus.MiddleEast||0;intlPct=100-me;}
+        var sectorCount=f.sectors?Object.keys(f.sectors).length:0;
+        return{
+          label:f.short,
+          data:[Math.min(aum/maxAum*100,100),Math.min(deals/60*100,100),Math.min(invCount/15*100,100),intlPct,Math.min(sectorCount/10*100,100)],
+          backgroundColor:colors[i]||'rgba(100,100,100,0.3)',
+          borderColor:borderColors[i]||'#666',
+          borderWidth:2,pointRadius:3
+        };
+      });
+      new Chart(radarEl,{type:'radar',data:{labels:dimensions,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:100,ticks:{display:false},grid:{color:'#E5E7EB'},pointLabels:{font:{size:11,family:"'Inter'",weight:'600'}}}},plugins:{legend:{position:'bottom',labels:{font:{size:11,family:"'Inter'"},boxWidth:12,padding:16}}}}});
+    },100);
+  },200);
+};
+
+// ===== FEATURE 10: ENHANCED SEARCH =====
+var searchFilterType='all';
+function enhancedSearch(query){
+  if(!query||query.length<2){hideSearchResults();return;}
+  var q=query.toLowerCase();
+  var results=[];
+  funds.forEach(function(f){
+    var score=0;var snippet='';var category='';
+    if(f.name.toLowerCase().indexOf(q)!==-1){score+=10;category='Fund';snippet=f.name+' \u2014 '+f.country+' \u2014 '+formatAum(f.aum);}
+    else if(f.short.toLowerCase().indexOf(q)!==-1){score+=10;category='Fund';snippet=f.name+' ('+f.short+')';}
+    else if(f.country.toLowerCase().indexOf(q)!==-1){score+=5;category='Country';snippet=f.name+' \u2014 '+f.country;}
+    if(f.mandate&&f.mandate.toLowerCase().indexOf(q)!==-1){
+      score+=3;category=category||'Mandate';
+      var idx=f.mandate.toLowerCase().indexOf(q);
+      snippet=snippet||'...'+f.mandate.substring(Math.max(0,idx-30),idx+q.length+50)+'...';
+    }
+    (f.investments||[]).forEach(function(inv){
+      if(inv.name.toLowerCase().indexOf(q)!==-1){
+        score+=7;category='Investment';
+        snippet=inv.name+' \u2014 '+inv.sector+' \u2014 '+(inv.value||'Value undisclosed')+' ('+f.short+')';
+      }
+      if(inv.sector&&inv.sector.toLowerCase().indexOf(q)!==-1&&!category){
+        score+=4;category='Sector';
+        snippet=inv.name+' \u2014 '+inv.sector+' ('+f.short+')';
+      }
+    });
+    if(f.sectors){
+      Object.keys(f.sectors).forEach(function(s){
+        if(s.toLowerCase().indexOf(q)!==-1&&!category){score+=4;category='Sector';snippet=s+': '+f.sectors[s]+'% of '+f.short+' portfolio';}
+      });
+    }
+    var dp=deepProfiles[f.rank];
+    if(dp&&dp.executive&&dp.executive.toLowerCase().indexOf(q)!==-1&&!category){
+      score+=2;category='Analysis';
+      var eIdx=dp.executive.toLowerCase().indexOf(q);
+      snippet='...'+dp.executive.substring(Math.max(0,eIdx-30),eIdx+q.length+60)+'...';
+    }
+    if(searchFilterType!=='all'&&f.type!==searchFilterType)score=0;
+    if(score>0){
+      var highlighted=snippet.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>');
+      results.push({score:score,category:category,title:f.short+' \u2014 '+f.name,snippet:highlighted,rank:f.rank});
+    }
+  });
+  results.sort(function(a,b){return b.score-a.score});
+  showSearchResults(results.slice(0,15));
+}
+function showSearchResults(results){
+  var panel=document.getElementById('searchResultsPanel');
+  if(!panel)return;
+  if(results.length===0){panel.innerHTML='<div style="padding:16px;text-align:center;color:var(--text-tertiary);font-size:13px">No results found</div>';panel.classList.add('active');return;}
+  var html='';
+  results.forEach(function(r){
+    html+='<div class="search-result-item" onclick="hideSearchResults();openReport('+r.rank+')">';
+    html+='<div class="search-result-category">'+r.category+'</div>';
+    html+='<div class="search-result-title">'+r.title+'</div>';
+    html+='<div class="search-result-snippet">'+r.snippet+'</div>';
+    html+='</div>';
+  });
+  panel.innerHTML=html;
+  panel.classList.add('active');
+}
+function hideSearchResults(){
+  var panel=document.getElementById('searchResultsPanel');
+  if(panel)panel.classList.remove('active');
+}
+function setSearchFilter(type,btn){
+  searchFilterType=type;
+  document.querySelectorAll('.search-filter-chip').forEach(function(b){b.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  var q=fundSearchEl?fundSearchEl.value:'';
+  if(q.length>=2)enhancedSearch(q);
+}
+
+// ===== INIT ALL 10 FEATURES =====
+function initAllFeatures(){
+  try{
+    renderSectorHeatmap();
+    renderTimeline();
+    renderAlerts();
+    renderNetworkGraph();
+    renderPredictions();
+  }catch(e){console.error('Feature init error:',e.message)}
+}
+
 document.addEventListener('DOMContentLoaded',function(){
   try{
-    // Data integrity check
     var requiredFields=['rank','name','short','country','type','tier','status','founded','mandate','sectors'];
     funds.forEach(function(f){requiredFields.forEach(function(field){if(!f[field])console.warn('Fund rank '+f.rank+' ('+f.name+') missing field: '+field)})});
-    computeHeroStats();renderFundTable();renderMacroCharts();renderCrossFundAnalysis();
+    computeHeroStats();renderFundTable();renderMacroCharts();renderCrossFundAnalysis();initAllFeatures();
     var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
   }catch(e){console.error('Init error:',e.message)}
 });
