@@ -560,7 +560,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .country-fund-row:hover{box-shadow:var(--shadow-md);border-color:var(--accent)}
 .country-fund-name{font-size:14px;font-weight:700;color:var(--text-primary);flex:1}
 .country-fund-aum{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);font-size:14px}
-@media(max-width:768px){.country-stats-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.country-stats-grid{grid-template-columns:1fr 1fr}.alert-grid{grid-template-columns:1fr}.network-container{height:350px}#currencyGrid{grid-template-columns:1fr!important}}
 @media(max-width:480px){.country-stats-grid{grid-template-columns:1fr}.country-stat-value{font-size:20px}}
 
 /* ===== FEATURE 8: ENHANCED COMPARISON ===== */
@@ -868,7 +868,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 <div class="card" style="margin-bottom:20px">
   <div style="font-size:15px;font-weight:600;margin-bottom:12px">Currency Impact Analysis</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+  <div id="currencyGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
     <div class="macro-indicator" style="margin:0">
       <div class="macro-indicator-info">
         <div class="macro-indicator-title">EUR/USD</div>
@@ -914,7 +914,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 
 <!-- Country Deep Dive Overlay (Feature 7) -->
-<div class="country-overlay" id="countryOverlay">
+<div class="country-overlay" id="countryOverlay" role="dialog" aria-label="Country Deep Dive" aria-modal="true">
   <div class="main" id="countryContent"></div>
 </div>
 
