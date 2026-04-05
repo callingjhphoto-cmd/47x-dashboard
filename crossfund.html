@@ -155,32 +155,80 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 <div class="footer">47X Intelligence &mdash; Cross-Fund Analysis &mdash; <a href="swf.html">Back to SWF Tracker</a></div>
 
 <script>
-// Minimal fund data needed for cross-fund rendering (short names, tiers, sectors)
-var fundMeta={1:{short:'PIF',tier:1,name:'PIF',sectors:['Energy','MaterialsMining','Telecom']},2:{short:'ADIA',tier:1,name:'ADIA',sectors:['DevelopedEquities','PrivateEquity','FixedIncome']},3:{short:'KIA',tier:1,name:'KIA',sectors:['PublicEquities','FixedIncome']},4:{short:'QIA',tier:1,name:'QIA',sectors:['RealEstateInfra','FinancialServices']},5:{short:'ICD',tier:1,name:'ICD',sectors:['RealEstate','Financial']},6:{short:'Mubadala',tier:1,name:'Mubadala',sectors:['Technology','Energy','Healthcare']},7:{short:'ADQ',tier:1,name:'ADQ',sectors:['Infrastructure','Healthcare']},8:{short:'GOSI',tier:2,name:'GOSI',sectors:['RealEstate','PrivateEquity']},10:{short:'NEOM',tier:2,name:'NEOM',sectors:['Technology']},11:{short:'OIA',tier:2,name:'OIA',sectors:['Energy','Infrastructure']},12:{short:'Sanabil',tier:2,name:'Sanabil',sectors:['Technology','Venture']},13:{short:'SNB Cap',tier:2,name:'SNB Capital',sectors:['Financial']},14:{short:'Investcorp',tier:2,name:'Investcorp',sectors:['PrivateEquity']},24:{short:'ADCG',tier:3,name:'ADCG',sectors:['Financial']},27:{short:'Mumtalakat',tier:3,name:'Mumtalakat',sectors:['Industrial']},29:{short:'EIA',tier:3,name:'EIA',sectors:['Infrastructure']},30:{short:'DigitalBridge',tier:3,name:'DigitalBridge',sectors:['Digital']},31:{short:'Landmark',tier:3,name:'Landmark',sectors:['Retail']},33:{short:'Waha',tier:3,name:'Waha',sectors:['Diversified']},35:{short:'SVC',tier:3,name:'SVC',sectors:['Venture']},38:{short:'MEVP',tier:4,name:'MEVP',sectors:['Venture']},39:{short:'MAF',tier:4,name:'MAF',sectors:['Retail']},41:{short:'Shorooq',tier:4,name:'Shorooq',sectors:['Venture']},42:{short:'Wamda',tier:4,name:'Wamda',sectors:['Venture']},45:{short:'GV Invest',tier:4,name:'GV Invest',sectors:['Venture']},47:{short:'Nuwa',tier:5,name:'Nuwa',sectors:['Venture']},48:{short:'Hub71',tier:5,name:'Hub71',sectors:['Technology']},49:{short:'BECO',tier:5,name:'BECO',sectors:['Venture']}};
+// Fund metadata: rank → {short, tier, name, country, type}
+var fundMeta={
+  1:{short:'PIF',tier:1,name:'Public Investment Fund',country:'Saudi Arabia',type:'SWF'},
+  2:{short:'ADIA',tier:1,name:'Abu Dhabi Investment Authority',country:'UAE',type:'SWF'},
+  3:{short:'KIA',tier:1,name:'Kuwait Investment Authority',country:'Kuwait',type:'SWF'},
+  4:{short:'QIA',tier:1,name:'Qatar Investment Authority',country:'Qatar',type:'SWF'},
+  5:{short:'ICD',tier:1,name:'Investment Corp of Dubai',country:'UAE',type:'SWF'},
+  6:{short:'GOSI',tier:1,name:'GOSI',country:'Saudi Arabia',type:'Pension'},
+  8:{short:'Hassana',tier:1,name:'Hassana Investment Co',country:'Saudi Arabia',type:'Pension'},
+  9:{short:'Royal',tier:1,name:'Royal Group',country:'UAE',type:'Family Office'},
+  11:{short:'Lunate',tier:2,name:'Lunate',country:'UAE',type:'IHC'},
+  12:{short:'SNBCap',tier:2,name:'SNB Capital',country:'Saudi Arabia',type:'IHC'},
+  13:{short:'OIA',tier:2,name:'Oman Investment Authority',country:'Oman',type:'SWF'},
+  14:{short:'Investcorp',tier:2,name:'Investcorp',country:'Bahrain',type:'IHC'},
+  16:{short:'AlRajhi',tier:2,name:'Al Rajhi Capital',country:'Saudi Arabia',type:'IHC'},
+  18:{short:'GFH',tier:2,name:'GFH Financial Group',country:'Bahrain',type:'IHC'},
+  24:{short:'EIA',tier:3,name:'Emirates Investment Authority',country:'UAE',type:'SWF'},
+  25:{short:'SAEV',tier:3,name:'Saudi Aramco Energy Ventures',country:'Saudi Arabia',type:'VC'},
+  30:{short:'Wafra',tier:3,name:'Wafra International',country:'Kuwait',type:'IHC'},
+  31:{short:'MAF',tier:4,name:'Majid Al Futtaim',country:'UAE',type:'Family Office'},
+  34:{short:'SVC',tier:4,name:'Saudi Venture Capital',country:'Saudi Arabia',type:'VC'},
+  35:{short:'STV',tier:4,name:'STV',country:'Saudi Arabia',type:'VC'},
+  36:{short:'Jada',tier:4,name:'Jada (PIF)',country:'Saudi Arabia',type:'VC'},
+  37:{short:'RiyadCap',tier:4,name:'Riyad Capital',country:'Saudi Arabia',type:'IHC'},
+  38:{short:'Sanabil',tier:4,name:'Sanabil Investments',country:'Saudi Arabia',type:'VC'},
+  39:{short:'MEVP',tier:4,name:'MEVP',country:'UAE',type:'VC'},
+  41:{short:'Shorooq',tier:5,name:'Shorooq Partners',country:'UAE',type:'VC'},
+  42:{short:'Wamda',tier:5,name:'Wamda Capital',country:'UAE',type:'VC'},
+  44:{short:'ADG',tier:5,name:'Abu Dhabi Developmental Holding',country:'UAE',type:'SWF'},
+  45:{short:'STCV',tier:5,name:'STC Ventures',country:'Saudi Arabia',type:'VC'},
+  47:{short:'Hub71',tier:5,name:'Hub71',country:'UAE',type:'VC'},
+  48:{short:'BECO',tier:5,name:'BECO Capital',country:'UAE',type:'VC'},
+  49:{short:'GV',tier:5,name:'Global Ventures',country:'UAE',type:'VC'},
+  50:{short:'Nuwa',tier:5,name:'Nuwa Capital',country:'UAE',type:'VC'}
+};
 
+// Full 36-entry co-investment dataset from swf.html
 var crossFundInvestments = {
+  'Aldar Properties': [9,31],
+  'Anghami': [39,42],
   'Aramco Gas Pipelines': [6,8],
+  'AviLease': [1,6],
   'Berain Water': [6,8],
   'BlackRock': [3,11],
-  'Brookfield': [8,11],
   'Careem': [35,42,45,48],
   'DigitalBridge': [2,30],
-  'Emirates': [5,7,10,24],
-  'Gulf Investment': [24,29],
+  'du': [5,24],
+  'Emirates NBD': [5,24],
+  'Foodics': [34,35,48],
   'Jio Platforms': [1,2],
   'Kitopi': [42,48],
+  'Lean Technologies': [34,41,45,50],
   'Lucid Motors': [1,38],
-  'Mall of the Emirates': [5,31],
-  'Metito': [29,33],
-  'Mubadala': [14,41,47],
-  'Mubadala Capital': [14,47],
-  'Oman Tourism Development': [13,27],
-  'SWVL': [39,42,48,49],
-  'Saudi Aramco': [1,12],
+  'Mubadala': [14,41,44],
+  'Mumzworld': [42,48],
+  'Nana Direct': [34,35],
+  'Sarwa': [39,50],
+  'Saudi equity funds': [16,37],
+  'Saudi National Bank': [6,8,12],
+  'Savola Group': [6,8],
   'SpaceX': [13,38],
-  'TPG Rise Climate': [6,8,11],
+  'Stc Pay': [35,45],
+  'Swvl': [39,42,48,49],
   'Tabby': [41,47,49],
-  'Tamara': [35,41],
+  'Tadawul blue-chips': [6,8],
+  'Tamara': [34,35,41],
+  'Tiffany & Co': [4,14],
+  'TPG Rise Climate': [6,8,11],
+  'US real estate': [18,30],
+  'VC fund commitments': [30,34],
+  'Vezeeta': [42,49],
+  'Volkswagen Group': [3,4],
+  'Wa\'ed Ventures': [25,36],
+  'Waymo': [2,38]
 };
 
 var tierColors={1:'var(--navy)',2:'var(--accent)',3:'var(--purple)',4:'var(--orange)',5:'var(--text-tertiary)'};
@@ -333,7 +381,22 @@ function render(){
 }
 
 function detectSector(name){
-  var map={'Aramco':'Energy','Berain':'Consumer','BlackRock':'Asset Management','Brookfield':'Infrastructure','Careem':'Mobility','DigitalBridge':'Digital Infrastructure','Emirates':'Aviation','Gulf Investment':'Financial','Jio':'Telecom','Kitopi':'FoodTech','Lucid':'Automotive/EV','Mall':'Retail','Metito':'Water/Utilities','Mubadala':'Financial','Oman Tourism':'Tourism','SWVL':'Mobility','Saudi Aramco':'Energy','SpaceX':'Aerospace','TPG Rise':'Climate/ESG','Tabby':'Fintech','Tamara':'Fintech'};
+  var map={
+    'Aramco':'Energy','Berain':'Consumer Goods','BlackRock':'Asset Management',
+    'AviLease':'Aviation Finance','Aldar':'Real Estate','Anghami':'Media/Entertainment',
+    'Careem':'Mobility','DigitalBridge':'Digital Infrastructure',
+    'du':'Telecom','Emirates NBD':'Banking','Foodics':'F&B Tech',
+    'Jio':'Telecom','Kitopi':'FoodTech','Lean':'Fintech',
+    'Lucid':'Automotive/EV','Mubadala':'Financial','Mumzworld':'E-Commerce',
+    'Nana':'E-Commerce','Sarwa':'Fintech','Saudi equity':'Public Equities',
+    'Saudi National Bank':'Banking','Savola':'Consumer Goods',
+    'SpaceX':'Aerospace','Stc Pay':'Fintech','Swvl':'Mobility','SWVL':'Mobility',
+    'Tabby':'Fintech','Tadawul':'Public Equities','Tamara':'Fintech',
+    'Tiffany':'Luxury Retail','TPG Rise':'Climate/ESG',
+    'US real estate':'Real Estate','VC fund':'Venture Capital',
+    'Vezeeta':'HealthTech','Volkswagen':'Automotive',
+    'Wa\'ed':'Venture Capital','Waymo':'Autonomous Vehicles'
+  };
   var keys=Object.keys(map);
   for(var i=0;i<keys.length;i++){if(name.indexOf(keys[i])!==-1)return map[keys[i]]}
   return 'Diversified';

@@ -652,6 +652,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .score-tooltip-row span{font-weight:700;font-family:'JetBrains Mono',monospace}
 .score-tooltip-wrap:hover .score-tooltip{display:flex;flex-direction:column;gap:2px}
 
+/* ===== SCORE FILTER SLIDER ===== */
+.score-filter-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 12px;flex-shrink:0}
+.score-filter-label{font-size:11px;font-weight:600;color:var(--text-secondary);white-space:nowrap}
+.score-filter-slider{-webkit-appearance:none;appearance:none;width:90px;height:4px;border-radius:2px;background:var(--border);outline:none;cursor:pointer}
+.score-filter-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff;box-shadow:var(--shadow-sm);transition:background 0.15s}
+.score-filter-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff}
+.score-filter-value{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent);min-width:20px;text-align:center}
+
 /* ===== BACK TO TOP BUTTON (main view) ===== */
 #backToTopBtn{position:fixed;bottom:24px;right:80px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:150;opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;font-size:18px}
 #backToTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto}
@@ -718,6 +726,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
   <button class="filter-btn" id="compareToggle" onclick="toggleCompareMode()">Compare Funds</button>
   <button class="filter-btn" id="sortByScoreBtn" onclick="sortByScore()" title="Sort all 50 funds by composite score (highest first)">&#9650; Sort by Score</button>
+  <div class="score-filter-wrap" title="Show only funds scoring at or above this threshold">
+    <span class="score-filter-label">Min Score:</span>
+    <input type="range" class="score-filter-slider" id="scoreFilterSlider" min="0" max="100" step="5" value="0" oninput="setScoreFilter(this.value)">
+    <span class="score-filter-value" id="scoreFilterVal">0</span>
+  </div>
   <button class="filter-btn" onclick="downloadCSV()" style="margin-left:auto" title="Export fund list as CSV">&#8595; Download CSV</button>
 </div>
 
@@ -2209,6 +2222,7 @@ var enhancedProfiles = {
 var currentFilter = 'all';
 var currentTypeFilter = null;
 var currentSort = {col:0, asc:true};
+var minScore = 0;
 var reportCharts = {};
 var fundSearchEl = null;
 var fundTableBodyEl = null;
@@ -2220,6 +2234,7 @@ function renderFundTable(){
   var filtered = funds.filter(function(f){
     if(currentFilter !== 'all' && 'tier'+f.tier !== currentFilter) return false;
     if(currentTypeFilter && f.type !== currentTypeFilter) return false;
+    if(minScore > 0){var fs=computeCompositeScore(f).score;if(fs<minScore)return false;}
     var q = fundSearchEl.value.toLowerCase();
     if(q){
       // Search across table data AND report content
@@ -2283,6 +2298,61 @@ function openReport(rank){
   if(td>0)h+='<div class="report-stat"><div class="report-stat-value">'+td+'</div><div class="report-stat-label">Deals (5Q)</div></div><div class="report-stat"><div class="report-stat-value">$'+tv.toFixed(1)+'B</div><div class="report-stat-label">Deployed (5Q)</div></div>';
   var heroSc=computeCompositeScore(f);var heroClass=scoreClass(heroSc.score);
   h+='<div class="report-stat"><div class="report-stat-value"><div class="score-tooltip-wrap" style="display:inline-block"><div class="score-pill '+heroClass+'" style="width:52px;height:28px;font-size:13px">'+heroSc.score+'</div><div class="score-tooltip"><div class="score-tooltip-row"><b>Transparency</b><span>'+heroSc.transparency+'/100</span></div><div class="score-tooltip-row"><b>Diversification</b><span>'+heroSc.diversification+'/100</span></div><div class="score-tooltip-row"><b>Scale</b><span>'+heroSc.scale+'/100</span></div><div class="score-tooltip-row"><b>Activity</b><span>'+heroSc.activity+'/100</span></div></div></div></div><div class="report-stat-label">Composite Score</div></div>';
+  h+='</div></div>';
+  // Why this score? card
+  var scoreCardBorder=heroSc.score>=75?'var(--green)':heroSc.score>=50?'var(--orange)':'var(--red)';
+  h+='<div class="card report-section" style="margin-bottom:20px;border-left:3px solid '+scoreCardBorder+';padding:20px 24px">';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div class="score-pill '+heroClass+'" style="width:48px;height:26px;font-size:12px">'+heroSc.score+'</div><div style="font-size:13px;font-weight:700;color:var(--text-primary)">Why this score?</div></div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+  // Transparency dimension
+  var tClass=heroSc.transparency>=75?'var(--green)':heroSc.transparency>=50?'var(--orange)':'var(--red)';
+  var invCnt=f.investments?f.investments.length:0;
+  var hasDeepProfile=!!(deepProfiles&&deepProfiles[f.rank]&&deepProfiles[f.rank].executive);
+  var tImprove=heroSc.transparency<100?(invCnt<16?'Add more disclosed investments (currently '+invCnt+')':'Publish executive-level disclosures'):'Fully transparent';
+  h+='<div style="background:var(--bg);border-radius:10px;padding:14px">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+  h+='<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)">Transparency</span>';
+  h+='<span style="font-size:14px;font-weight:800;font-family:\'JetBrains Mono\',monospace;color:'+tClass+'">'+heroSc.transparency+'</span>';
+  h+='</div>';
+  h+='<div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Measures disclosed investment count ('+invCnt+' investments) and executive-level data availability.'+(hasDeepProfile?' Deep profile present.':' No deep profile.')+' Higher when more holdings are publicly documented.</div>';
+  h+='<div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;font-style:italic">Improve: '+tImprove+'</div>';
+  h+='</div>';
+  // Diversification dimension
+  var dClass=heroSc.diversification>=75?'var(--green)':heroSc.diversification>=50?'var(--orange)':'var(--red)';
+  var secCnt=f.sectors?Object.keys(f.sectors).filter(function(s){return f.sectors[s]>0}).length:0;
+  var dImprove=heroSc.diversification<100?'Expand active sector count (currently '+secCnt+'/9+)':'Fully diversified';
+  h+='<div style="background:var(--bg);border-radius:10px;padding:14px">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+  h+='<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)">Diversification</span>';
+  h+='<span style="font-size:14px;font-weight:800;font-family:\'JetBrains Mono\',monospace;color:'+dClass+'">'+heroSc.diversification+'</span>';
+  h+='</div>';
+  h+='<div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Counts active sectors with >0% allocation ('+secCnt+' sectors). Higher-scoring funds deploy capital across tech, real estate, energy, healthcare, infrastructure, and beyond.</div>';
+  h+='<div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;font-style:italic">Improve: '+dImprove+'</div>';
+  h+='</div>';
+  // Scale dimension
+  var scClass2=heroSc.scale>=75?'var(--green)':heroSc.scale>=50?'var(--orange)':'var(--red)';
+  var aumVal=f.aum||0;
+  var scaleLevel=aumVal>=500?'Mega-fund ($500B+)':aumVal>=100?'Large ($100B+)':aumVal>=25?'Mid-size ($25B+)':aumVal>=5?'Small ($5B+)':'Emerging (<$5B)';
+  h+='<div style="background:var(--bg);border-radius:10px;padding:14px">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+  h+='<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)">Scale</span>';
+  h+='<span style="font-size:14px;font-weight:800;font-family:\'JetBrains Mono\',monospace;color:'+scClass2+'">'+heroSc.scale+'</span>';
+  h+='</div>';
+  h+='<div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Based on AUM tier: '+scaleLevel+'. Scale reflects institutional capacity to deploy capital across geographies and asset classes at speed.</div>';
+  h+='<div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;font-style:italic">Improve: Scale is fixed by AUM \u2014 increases as fund grows</div>';
+  h+='</div>';
+  // Activity dimension
+  var aClass2=heroSc.activity>=75?'var(--green)':heroSc.activity>=50?'var(--orange)':'var(--red)';
+  var recentCnt=0;if(f.investments){f.investments.forEach(function(inv){if(inv.year&&inv.year>=2020)recentCnt++;})}
+  var aImprove=heroSc.activity<100?'Add more 2020+ investments to disclosures (currently '+recentCnt+')':'Highly active';
+  h+='<div style="background:var(--bg);border-radius:10px;padding:14px">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+  h+='<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)">Activity</span>';
+  h+='<span style="font-size:14px;font-weight:800;font-family:\'JetBrains Mono\',monospace;color:'+aClass2+'">'+heroSc.activity+'</span>';
+  h+='</div>';
+  h+='<div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Counts publicly disclosed investments from 2020 onwards ('+recentCnt+' recent deals). Rewards funds actively deploying in the current macro cycle.</div>';
+  h+='<div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;font-style:italic">Improve: '+aImprove+'</div>';
+  h+='</div>';
   h+='</div></div>';
   // Executive Summary
   if(deep&&deep.executive){
@@ -2699,6 +2769,7 @@ var searchTimer=null;
 function filterFunds(){clearTimeout(searchTimer);searchTimer=setTimeout(renderFundTable,150)}
 function setFilter(f,btn){currentFilter=f;document.querySelectorAll('#tierFilters .filter-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');renderFundTable();}
 function setTypeFilter(t,btn){if(currentTypeFilter===t){currentTypeFilter=null;btn.classList.remove('active');}else{currentTypeFilter=t;document.querySelectorAll('#typeFilters .filter-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');}renderFundTable();}
+function setScoreFilter(val){try{minScore=parseInt(val)||0;var el=document.getElementById('scoreFilterVal');if(el)el.textContent=minScore;renderFundTable();}catch(e){console.error('setScoreFilter:',e);}}
 
 function renderMacroCharts(){
   var m=['Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
