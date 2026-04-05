@@ -613,6 +613,35 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .search-filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .search-filter-chip{padding:4px 10px;border:1px solid var(--border);border-radius:100px;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.15s;background:var(--surface);color:var(--text-secondary)}
 .search-filter-chip:hover,.search-filter-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ===== SECTOR INTELLIGENCE ===== */
+.sector-intel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:4px}
+.sector-intel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;cursor:pointer;transition:all 0.2s}
+.sector-intel-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.sector-intel-card.active{border-color:var(--accent);background:var(--accent-light)}
+.sector-intel-name{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.sector-intel-bar-wrap{background:var(--border-light);border-radius:4px;height:6px;margin:6px 0}
+.sector-intel-bar{height:6px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--purple));transition:width 0.6s ease}
+.sector-intel-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--text-tertiary);margin-top:4px}
+.sector-intel-detail{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:16px;display:none}
+.sector-intel-detail.open{display:block;animation:fadeIn 0.25s ease}
+.sector-intel-detail-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+.sector-fund-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light)}
+.sector-fund-row:last-child{border-bottom:none}
+.sector-fund-name{flex:1;font-size:12px;font-weight:600;color:var(--text-primary)}
+.sector-fund-bar-wrap{flex:2;background:var(--border-light);border-radius:3px;height:6px}
+.sector-fund-bar{height:6px;border-radius:3px;background:var(--accent);transition:width 0.5s ease}
+.sector-fund-pct{width:36px;text-align:right;font-size:11px;font-weight:600;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.sector-fund-count{width:60px;text-align:right;font-size:10px;color:var(--text-tertiary)}
+@media(max-width:600px){.sector-intel-grid{grid-template-columns:1fr 1fr}}
+
+
+/* ===== COMPOSITE SCORE ===== */
+.score-pill{display:inline-flex;align-items:center;justify-content:center;width:42px;height:22px;border-radius:100px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.score-green{background:#ECFDF5;color:#059669}
+.score-amber{background:#FFFBEB;color:#D97706}
+.score-red{background:#FEF2F2;color:#DC2626}
+
 </style>
 </head>
 <body>
@@ -669,7 +698,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="search-filter-chip" onclick="setSearchFilter('VC',this)">VC</button>
     <button class="search-filter-chip" onclick="setSearchFilter('IHC',this)">IHC</button>
   </div>
-  <button class="filter-btn" id="compareToggle" onclick="toggleCompareMode()" style="margin-left:auto">Compare Funds</button>
+  <button class="filter-btn" id="compareToggle" onclick="toggleCompareMode()">Compare Funds</button>
+  <button class="filter-btn" onclick="downloadCSV()" style="margin-left:auto" title="Export fund list as CSV">&#8595; Download CSV</button>
 </div>
 
 <div class="card" style="padding:0;overflow:hidden">
@@ -683,6 +713,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
         <th onclick="sortTable(3)">AUM ($B) <span class="sort-arrow"></span></th>
         <th onclick="sortTable(4)">Type <span class="sort-arrow"></span></th>
         <th onclick="sortTable(5)">Tier <span class="sort-arrow"></span></th>
+        <th onclick="sortTable(6)">Score <span class="sort-arrow"></span></th>
       </tr>
     </thead>
     <tbody id="fundTableBody"></tbody>
@@ -701,6 +732,17 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Shared holdings table, co-investment frequency, sector convergence, fund connectivity matrix, and convergence map</div>
   <a href="crossfund.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:var(--navy);color:#fff;border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s">Open Cross-Fund Analysis &rarr;</a>
 </div>
+</div>
+
+<div class="section-divider"></div>
+
+<div class="section fade-in" id="sectorIntelSection">
+<div class="section-header">
+  <div class="section-title"><span class="level-badge level-3">Sector Intelligence</span> Capital deployment by sector across the 50-fund universe</div>
+  <button class="filter-btn" onclick="closeSectorDetail()">Clear Selection</button>
+</div>
+<div class="sector-intel-grid" id="sectorIntelGrid"></div>
+<div class="sector-intel-detail" id="sectorIntelDetail"></div>
 </div>
 
 <div class="section-divider"></div>
@@ -2183,9 +2225,11 @@ function renderFundTable(){
     var a=formatAum(f.aum);
     if(compareMode){
       var ck=compareList.indexOf(f.rank)>-1;var dis=!ck&&compareList.length>=3;
-      html+='<tr onclick="toggleCompare('+f.rank+')" style="'+(ck?'background:var(--accent-light)':'')+'" role="button" tabindex="0"><td><input type="checkbox" '+(ck?'checked':'')+' '+(dis?'disabled':'')+' onclick="toggleCompare('+f.rank+',event)" style="cursor:pointer;width:16px;height:16px"></td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+      var sc=computeCompositeScore(f);
+      html+='<tr onclick="toggleCompare('+f.rank+')" style="'+(ck?'background:var(--accent-light)':'')+'" role="button" tabindex="0"><td><input type="checkbox" '+(ck?'checked':'')+' '+(dis?'disabled':'')+' onclick="toggleCompare('+f.rank+',event)" style="cursor:pointer;width:16px;height:16px"></td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td><td><span class="score-pill '+scoreClass(sc.score)+'">'+ sc.score+'</span></td></tr>';
     } else {
-      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td><a onclick="event.stopPropagation();openCountryDeepDive(\''+f.country+'\')" style="color:var(--accent);cursor:pointer;text-decoration:none" title="View '+f.country+' deep dive">'+f.country+'</a></td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td></tr>';
+      var sc=computeCompositeScore(f);
+      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td><a onclick="event.stopPropagation();openCountryDeepDive(\''+f.country+'\')" style="color:var(--accent);cursor:pointer;text-decoration:none" title="View '+f.country+' deep dive">'+f.country+'</a></td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td><td><span class="score-pill '+scoreClass(sc.score)+'">'+sc.score+'</span></td></tr>';
     }
   });
   fundTableBodyEl.innerHTML=html;
@@ -3310,6 +3354,7 @@ function initAllFeatures(){
     renderAlerts();
     renderNetworkGraph();
     renderPredictions();
+    renderSectorIntelligence();
   }catch(e){console.error('Feature init error:',e.message)}
 }
 
@@ -3367,6 +3412,183 @@ function renderTimelineEvents(events){
   h+='</div>';
   return h;
 }
+
+// ===== SECTOR INTELLIGENCE =====
+var activeSectorCard = null;
+
+function buildSectorIndex(){
+  // Returns {sectorName: {funds:[{name,short,rank,pct,count}], totalCount, totalCapital}}
+  var idx = {};
+  funds.forEach(function(f){
+    if(!f.sectors)return;
+    var invCount = f.investments ? f.investments.length : 0;
+    Object.keys(f.sectors).forEach(function(sec){
+      var pct = f.sectors[sec] || 0;
+      if(!pct)return;
+      if(!idx[sec])idx[sec]={funds:[],totalCount:0,totalCapital:0};
+      idx[sec].funds.push({name:f.name,short:f.short,rank:f.rank,pct:pct,count:Math.round(invCount*pct/100),aum:f.aum||0});
+      idx[sec].totalCount += Math.round(invCount*pct/100);
+      idx[sec].totalCapital += (f.aum||0)*pct/100;
+    });
+  });
+  // Sort funds within each sector by pct desc
+  Object.keys(idx).forEach(function(sec){
+    idx[sec].funds.sort(function(a,b){return b.pct-a.pct});
+    idx[sec].fundCount = idx[sec].funds.length;
+  });
+  return idx;
+}
+
+function renderSectorIntelligence(){
+  try{
+    var grid = document.getElementById('sectorIntelGrid');
+    if(!grid)return;
+    var idx = buildSectorIndex();
+    // Sort sectors by total capital desc
+    var sectors = Object.keys(idx).sort(function(a,b){return idx[b].totalCapital-idx[a].totalCapital});
+    var maxCap = idx[sectors[0]] ? idx[sectors[0]].totalCapital : 1;
+    var h = '';
+    sectors.forEach(function(sec){
+      var d = idx[sec];
+      var barPct = Math.round(d.totalCapital/maxCap*100);
+      var capStr = d.totalCapital>=1000?'$'+(d.totalCapital/1000).toFixed(1)+'T':'$'+Math.round(d.totalCapital)+'B';
+      h+='<div class="sector-intel-card" onclick="openSectorDetail(\''+sec.replace(/'/g,"\\'")+'\')" id="sic-'+sec.replace(/[^a-zA-Z0-9]/g,'_')+'">';
+      h+='<div class="sector-intel-name">'+sec+'</div>';
+      h+='<div class="sector-intel-bar-wrap"><div class="sector-intel-bar" style="width:'+barPct+'%"></div></div>';
+      h+='<div class="sector-intel-meta"><span>'+d.fundCount+' funds</span><span>'+capStr+' est. deployed</span></div>';
+      h+='</div>';
+    });
+    grid.innerHTML = h;
+  }catch(e){console.error('renderSectorIntelligence:',e)}
+}
+
+function openSectorDetail(sec){
+  try{
+    var detail = document.getElementById('sectorIntelDetail');
+    if(!detail)return;
+    // Toggle: clicking same sector closes it
+    if(activeSectorCard === sec){
+      closeSectorDetail();
+      return;
+    }
+    activeSectorCard = sec;
+    // Highlight active card
+    document.querySelectorAll('.sector-intel-card').forEach(function(c){c.classList.remove('active')});
+    var cardId = 'sic-'+sec.replace(/[^a-zA-Z0-9]/g,'_');
+    var card = document.getElementById(cardId);
+    if(card)card.classList.add('active');
+
+    var idx = buildSectorIndex();
+    var d = idx[sec];
+    if(!d){detail.classList.remove('open');return;}
+    var maxPct = d.funds[0]?d.funds[0].pct:1;
+    var capStr = d.totalCapital>=1000?'$'+(d.totalCapital/1000).toFixed(2)+'T':'$'+Math.round(d.totalCapital)+'B';
+
+    var h = '<div class="sector-intel-detail-title">'+sec+' \u2014 '+d.fundCount+' funds \u2022 '+capStr+' estimated capital deployed</div>';
+    h += '<table style="width:100%;border-collapse:collapse">';
+    h += '<thead><tr style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary)">';
+    h += '<th style="text-align:left;padding:4px 8px">Fund</th><th style="text-align:left;padding:4px 8px;width:40%">Portfolio Weight</th><th style="text-align:right;padding:4px 8px">Inv.</th><th style="text-align:right;padding:4px 8px">Est. Capital</th></tr></thead>';
+    h += '<tbody>';
+    d.funds.forEach(function(fd){
+      var barW = Math.round(fd.pct/maxPct*100);
+      var est = fd.aum*fd.pct/100;
+      var estStr = est>=1000?'$'+(est/1000).toFixed(2)+'T':'$'+Math.round(est)+'B';
+      h+='<tr class="sector-fund-row" onclick="openReport('+fd.rank+')" style="cursor:pointer">';
+      h+='<td class="sector-fund-name">'+fd.short+'</td>';
+      h+='<td><div style="display:flex;align-items:center;gap:8px">';
+      h+='<div class="sector-fund-bar-wrap"><div class="sector-fund-bar" style="width:'+barW+'%"></div></div>';
+      h+='<span class="sector-fund-pct">'+fd.pct+'%</span></div></td>';
+      h+='<td class="sector-fund-count">'+fd.count+'</td>';
+      h+='<td style="text-align:right;font-size:11px;font-weight:600;color:var(--text-primary);font-family:\'JetBrains Mono\',monospace;width:80px">'+estStr+'</td>';
+      h+='</tr>';
+    });
+    h += '</tbody></table>';
+    detail.innerHTML = h;
+    detail.classList.add('open');
+    // Scroll to detail
+    setTimeout(function(){detail.scrollIntoView({behavior:'smooth',block:'nearest'})},50);
+  }catch(e){console.error('openSectorDetail:',e)}
+}
+
+function closeSectorDetail(){
+  activeSectorCard = null;
+  document.querySelectorAll('.sector-intel-card').forEach(function(c){c.classList.remove('active')});
+  var detail = document.getElementById('sectorIntelDetail');
+  if(detail)detail.classList.remove('open');
+}
+
+
+// ===== COMPOSITE SCORE =====
+function computeCompositeScore(f){
+  try{
+    // Transparency: how much public data — based on investment count + deepProfile availability
+    var invCount = f.investments ? f.investments.length : 0;
+    var hasDeep = !!(deepProfiles && deepProfiles[f.rank] && deepProfiles[f.rank].executive);
+    var transparency = Math.min(100, Math.round(invCount * 5 + (hasDeep ? 20 : 0)));
+
+    // Diversification: number of unique sectors in sectors object with pct > 0
+    var sectorCount = f.sectors ? Object.keys(f.sectors).filter(function(s){return f.sectors[s]>0}).length : 0;
+    var diversification = Math.min(100, Math.round(sectorCount * 12));
+
+    // Scale: AUM tier
+    var aum = f.aum || 0;
+    var scale = aum >= 500 ? 100 : aum >= 100 ? 80 : aum >= 25 ? 60 : aum >= 5 ? 40 : aum > 0 ? 20 : 0;
+
+    // Activity: investments from 2020+
+    var recentInv = 0;
+    if(f.investments){
+      f.investments.forEach(function(inv){
+        if(inv.year && inv.year >= 2020) recentInv++;
+      });
+    }
+    var activity = Math.min(100, Math.round(recentInv * 12));
+
+    var composite = Math.round((transparency + diversification + scale + activity) / 4);
+    return {score:composite,transparency:transparency,diversification:diversification,scale:scale,activity:activity};
+  }catch(e){return {score:0,transparency:0,diversification:0,scale:0,activity:0}}
+}
+
+function scoreClass(s){return s>=75?'score-green':s>=50?'score-amber':'score-red'}
+
+
+// ===== CSV EXPORT =====
+function downloadCSV(){
+  try{
+    var rows = [['Rank','Fund Name','Short','Country','AUM ($B)','Type','Tier','Status','Founded',
+                 'Composite Score','Transparency','Diversification','Scale','Activity',
+                 'Investments Count','Top Sectors']];
+    funds.forEach(function(f){
+      var sc = computeCompositeScore(f);
+      var topSectors = f.sectors ? Object.keys(f.sectors).sort(function(a,b){return f.sectors[b]-f.sectors[a]}).slice(0,3).join('; ') : '';
+      var invCount = f.investments ? f.investments.length : 0;
+      rows.push([
+        f.rank,
+        '"'+f.name.replace(/"/g,'""')+'"',
+        f.short,
+        f.country,
+        f.aum || '',
+        f.type,
+        f.tier,
+        f.status || '',
+        f.founded || '',
+        sc.score,sc.transparency,sc.diversification,sc.scale,sc.activity,
+        invCount,
+        '"'+topSectors+'"'
+      ]);
+    });
+    var csv = rows.map(function(r){return r.join(',')}).join('\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = '47x-gcc-funds-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }catch(e){console.error('downloadCSV:',e);alert('CSV export failed: '+e.message)}
+}
+
 </script>
 </body>
 </html>
