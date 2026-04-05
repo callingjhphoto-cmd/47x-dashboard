@@ -717,6 +717,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="search-filter-chip" onclick="setSearchFilter('IHC',this)">IHC</button>
   </div>
   <button class="filter-btn" id="compareToggle" onclick="toggleCompareMode()">Compare Funds</button>
+  <button class="filter-btn" id="sortByScoreBtn" onclick="sortByScore()" title="Sort all 50 funds by composite score (highest first)">&#9650; Sort by Score</button>
   <button class="filter-btn" onclick="downloadCSV()" style="margin-left:auto" title="Export fund list as CSV">&#8595; Download CSV</button>
 </div>
 
@@ -2280,6 +2281,8 @@ function openReport(rank){
   // Hero
   h+='<div class="report-hero"><div class="report-logo">'+f.short+'</div><div class="report-info"><h2>'+f.name+'</h2><div class="report-meta">'+f.country+' \u2022 Founded '+f.founded+' \u2022 <strong>'+f.type+'</strong> \u2022 Tier '+f.tier+' \u2022 '+f.status+'</div></div><div class="report-stats"><div class="report-stat"><div class="report-stat-value">'+a+'</div><div class="report-stat-label">AUM</div></div>';
   if(td>0)h+='<div class="report-stat"><div class="report-stat-value">'+td+'</div><div class="report-stat-label">Deals (5Q)</div></div><div class="report-stat"><div class="report-stat-value">$'+tv.toFixed(1)+'B</div><div class="report-stat-label">Deployed (5Q)</div></div>';
+  var heroSc=computeCompositeScore(f);var heroClass=scoreClass(heroSc.score);
+  h+='<div class="report-stat"><div class="report-stat-value"><div class="score-tooltip-wrap" style="display:inline-block"><div class="score-pill '+heroClass+'" style="width:52px;height:28px;font-size:13px">'+heroSc.score+'</div><div class="score-tooltip"><div class="score-tooltip-row"><b>Transparency</b><span>'+heroSc.transparency+'/100</span></div><div class="score-tooltip-row"><b>Diversification</b><span>'+heroSc.diversification+'/100</span></div><div class="score-tooltip-row"><b>Scale</b><span>'+heroSc.scale+'/100</span></div><div class="score-tooltip-row"><b>Activity</b><span>'+heroSc.activity+'/100</span></div></div></div></div><div class="report-stat-label">Composite Score</div></div>';
   h+='</div></div>';
   // Executive Summary
   if(deep&&deep.executive){
@@ -2775,6 +2778,20 @@ function launchComparison(){
     col+='<div class="compare-stat-row"><span class="label">Deals (5Q)</span><span class="value">'+td+'</span></div>';
     col+='<div class="compare-stat-row"><span class="label">Deployed (5Q)</span><span class="value">$'+tv.toFixed(1)+'B</span></div>';
     col+='<div class="compare-stat-row"><span class="label">Investments</span><span class="value">'+(f.investments?f.investments.length:0)+'</span></div>';
+    // Composite score
+    var csc=computeCompositeScore(f);
+    var cClass=scoreClass(csc.score);
+    col+='<div class="compare-section-title" style="margin-top:12px">Composite Score</div>';
+    col+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">';
+    col+='<div class="score-tooltip-wrap"><div class="score-pill '+cClass+'">'+csc.score+'</div>';
+    col+='<div class="score-tooltip">';
+    col+='<div class="score-tooltip-row"><b>Transparency</b><span>'+csc.transparency+'/100</span></div>';
+    col+='<div class="score-tooltip-row"><b>Diversification</b><span>'+csc.diversification+'/100</span></div>';
+    col+='<div class="score-tooltip-row"><b>Scale</b><span>'+csc.scale+'/100</span></div>';
+    col+='<div class="score-tooltip-row"><b>Activity</b><span>'+csc.activity+'/100</span></div>';
+    col+='</div></div>';
+    col+='<div style="font-size:11px;color:var(--text-tertiary)">Transparency '+csc.transparency+' &bull; Diversification '+csc.diversification+' &bull; Scale '+csc.scale+' &bull; Activity '+csc.activity+'</div>';
+    col+='</div>';
     // Sector breakdown
     col+='<div class="compare-section-title">Sector Allocation</div>';
     if(f.sectors){
@@ -3628,6 +3645,21 @@ function downloadCSV(){
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }catch(e){console.error('downloadCSV:',e);alert('CSV export failed: '+e.message)}
+}
+
+function sortByScore(){
+  try{
+    // col 6 = _score, asc:false = descending (highest score first)
+    currentSort={col:6,asc:false};
+    // Visual flash on button
+    var btn=document.getElementById('sortByScoreBtn');
+    if(btn){btn.style.background='var(--accent)';btn.style.color='#fff';setTimeout(function(){btn.style.background='';btn.style.color='';},800);}
+    // Update header sort arrows
+    var ths=document.querySelectorAll('.fund-table thead th');
+    ths.forEach(function(th){th.classList.remove('sorted');var a=th.querySelector('.sort-arrow');if(a)a.textContent='';});
+    if(ths[6]){ths[6].classList.add('sorted');var sa=ths[6].querySelector('.sort-arrow');if(sa)sa.textContent='\u25BC';}
+    renderFundTable();
+  }catch(e){console.error('sortByScore:',e);}
 }
 
 </script>
