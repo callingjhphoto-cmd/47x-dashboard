@@ -642,9 +642,26 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .score-amber{background:#FFFBEB;color:#D97706}
 .score-red{background:#FEF2F2;color:#DC2626}
 
+/* ===== SCORE TOOLTIP ===== */
+.score-tooltip-wrap{position:relative;cursor:help}
+.score-tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:8px;padding:10px 12px;font-size:11px;font-family:'Inter',-apple-system,sans-serif;font-weight:400;white-space:nowrap;z-index:999;box-shadow:var(--shadow-lg);pointer-events:none;min-width:180px}
+.score-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--navy)}
+.score-tooltip-row{display:flex;justify-content:space-between;gap:16px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+.score-tooltip-row:last-child{border-bottom:none}
+.score-tooltip-row b{color:rgba(255,255,255,0.7);font-weight:500}
+.score-tooltip-row span{font-weight:700;font-family:'JetBrains Mono',monospace}
+.score-tooltip-wrap:hover .score-tooltip{display:flex;flex-direction:column;gap:2px}
+
+/* ===== BACK TO TOP BUTTON (main view) ===== */
+#backToTopBtn{position:fixed;bottom:24px;right:80px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:150;opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;font-size:18px}
+#backToTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+#backToTopBtn:hover{background:var(--accent);transform:translateY(-2px)}
+
 </style>
 </head>
 <body>
+
+<button id="backToTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top">&#8679;</button>
 
 <div class="header"><div class="header-inner">
   <a href="index.html" class="logo"><div class="logo-mark">47X</div><div class="logo-text">Intelligence Platform <span>by TrueGroup</span></div></a>
@@ -652,6 +669,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <button class="nav-tab" onclick="window.location.href='index.html'">Overview</button>
     <button class="nav-tab active" aria-current="page">SWF Tracker</button>
     <button class="nav-tab" onclick="window.location.href='crossfund.html'">Cross-Fund Analysis</button>
+    <button class="nav-tab" onclick="scrollToSectorIntel()">Sector Intelligence</button>
   </nav>
 </div></div>
 
@@ -2211,11 +2229,13 @@ function renderFundTable(){
     }
     return true;
   });
-  var sortKeys=['rank','name','country','aum','type','tier'];
+  var sortKeys=['rank','name','country','aum','type','tier','_score'];
+  // Pre-compute score into each filtered fund object for sort correctness
+  filtered.forEach(function(f){f._score=computeCompositeScore(f).score;});
   filtered.sort(function(a,b){
     var key=sortKeys[currentSort.col]||'rank';
-    var va=key==='aum'?(a[key]||0):a[key];
-    var vb=key==='aum'?(b[key]||0):b[key];
+    var va=key==='aum'||key==='_score'?(a[key]||0):a[key];
+    var vb=key==='aum'||key==='_score'?(b[key]||0):b[key];
     if(typeof va==='string'){va=va.toLowerCase();vb=vb.toLowerCase()}
     if(va<vb)return currentSort.asc?-1:1;if(va>vb)return currentSort.asc?1:-1;return 0;
   });
@@ -2223,13 +2243,15 @@ function renderFundTable(){
   filtered.forEach(function(f){
     var tc=f.type==='SWF'?'type-swf':f.type==='Pension'?'type-pension':f.type==='Family Office'?'type-fo':f.type==='VC'?'type-vc':'type-ihc';
     var a=formatAum(f.aum);
+    // Use pre-computed score (already set during sort phase); fall back to compute if not set
+    var sc=f._scoreObj||(f._scoreObj=computeCompositeScore(f));
+    var tipHtml='Transparency: '+sc.transparency+'&#10;Diversification: '+sc.diversification+'&#10;Scale: '+sc.scale+'&#10;Activity: '+sc.activity;
+    var scorePill='<span class="score-pill score-tooltip-wrap '+scoreClass(sc.score)+'">'+sc.score+'<span class="score-tooltip"><span class="score-tooltip-row"><b>Transparency</b><span>'+sc.transparency+'/100</span></span><span class="score-tooltip-row"><b>Diversification</b><span>'+sc.diversification+'/100</span></span><span class="score-tooltip-row"><b>Scale</b><span>'+sc.scale+'/100</span></span><span class="score-tooltip-row"><b>Activity</b><span>'+sc.activity+'/100</span></span></span></span>';
     if(compareMode){
       var ck=compareList.indexOf(f.rank)>-1;var dis=!ck&&compareList.length>=3;
-      var sc=computeCompositeScore(f);
-      html+='<tr onclick="toggleCompare('+f.rank+')" style="'+(ck?'background:var(--accent-light)':'')+'" role="button" tabindex="0"><td><input type="checkbox" '+(ck?'checked':'')+' '+(dis?'disabled':'')+' onclick="toggleCompare('+f.rank+',event)" style="cursor:pointer;width:16px;height:16px"></td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td><td><span class="score-pill '+scoreClass(sc.score)+'">'+ sc.score+'</span></td></tr>';
+      html+='<tr onclick="toggleCompare('+f.rank+')" style="'+(ck?'background:var(--accent-light)':'')+'" role="button" tabindex="0"><td><input type="checkbox" '+(ck?'checked':'')+' '+(dis?'disabled':'')+' onclick="toggleCompare('+f.rank+',event)" style="cursor:pointer;width:16px;height:16px"></td><td>'+f.name+'</td><td>'+f.country+'</td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td><td>'+scorePill+'</td></tr>';
     } else {
-      var sc=computeCompositeScore(f);
-      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td><a onclick="event.stopPropagation();openCountryDeepDive(\''+f.country+'\')" style="color:var(--accent);cursor:pointer;text-decoration:none" title="View '+f.country+' deep dive">'+f.country+'</a></td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td><td><span class="score-pill '+scoreClass(sc.score)+'">'+sc.score+'</span></td></tr>';
+      html+='<tr onclick="openReport('+f.rank+')" role="button" tabindex="0" aria-label="View report for '+f.name.replace(/'/g,'\\&#39;')+'" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openReport('+f.rank+');}"><td>'+f.rank+'</td><td>'+f.name+'</td><td><a onclick="event.stopPropagation();openCountryDeepDive(\''+f.country+'\')" style="color:var(--accent);cursor:pointer;text-decoration:none" title="View '+f.country+' deep dive">'+f.country+'</a></td><td class="aum-cell">'+a+'</td><td><span class="status-badge '+tc+'">'+f.type+'</span></td><td><span class="tier-badge tier-'+f.tier+'">Tier '+f.tier+'</span></td><td>'+scorePill+'</td></tr>';
     }
   });
   fundTableBodyEl.innerHTML=html;
@@ -3366,6 +3388,25 @@ document.addEventListener('DOMContentLoaded',function(){
     var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
   }catch(e){console.error('Init error:',e.message)}
 });
+
+// ===== BACK TO TOP (MAIN VIEW) =====
+window.addEventListener('scroll',function(){
+  try{
+    var btn=document.getElementById('backToTopBtn');
+    if(!btn)return;
+    if(window.scrollY>400){btn.classList.add('visible');}else{btn.classList.remove('visible');}
+  }catch(e){}
+},{ passive:true });
+
+// ===== SCROLL TO SECTOR INTELLIGENCE =====
+function scrollToSectorIntel(){
+  try{
+    var el=document.getElementById('sectorIntelSection');
+    if(!el)return;
+    var offset=el.getBoundingClientRect().top+window.scrollY-80;
+    window.scrollTo({top:offset,behavior:'smooth'});
+  }catch(e){}
+}
 
 function filterInvestmentTable(){
   try{
