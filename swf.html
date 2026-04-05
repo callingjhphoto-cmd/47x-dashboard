@@ -660,6 +660,19 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .score-filter-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff}
 .score-filter-value{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent);min-width:20px;text-align:center}
 
+/* ===== SCORE HISTOGRAM ===== */
+.score-histogram{display:flex;align-items:flex-end;gap:3px;height:28px;padding:0 4px}
+.score-hist-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:default}
+.score-hist-bar{width:22px;border-radius:3px 3px 0 0;transition:opacity 0.2s;min-height:3px}
+.score-hist-bar.band-red{background:var(--red)}
+.score-hist-bar.band-amber{background:var(--orange)}
+.score-hist-bar.band-green-mid{background:#10B981}
+.score-hist-bar.band-green{background:#059669}
+.score-hist-bar.dimmed{opacity:0.25}
+.score-hist-label{font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text-tertiary);white-space:nowrap}
+.score-hist-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;flex-shrink:0}
+.score-hist-title{font-size:10px;font-weight:600;color:var(--text-tertiary);white-space:nowrap;text-transform:uppercase;letter-spacing:0.5px}
+
 /* ===== BACK TO TOP BUTTON (main view) ===== */
 #backToTopBtn{position:fixed;bottom:24px;right:80px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:150;opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;font-size:18px}
 #backToTopBtn.visible{opacity:1;transform:translateY(0);pointer-events:auto}
@@ -730,6 +743,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <span class="score-filter-label">Min Score:</span>
     <input type="range" class="score-filter-slider" id="scoreFilterSlider" min="0" max="100" step="5" value="0" oninput="setScoreFilter(this.value)">
     <span class="score-filter-value" id="scoreFilterVal">0</span>
+  </div>
+  <div class="score-hist-wrap" title="Score distribution across all 50 funds" id="scoreHistogramWrap">
+    <span class="score-hist-title">Distribution</span>
+    <div class="score-histogram" id="scoreHistogram"></div>
   </div>
   <button class="filter-btn" onclick="downloadCSV()" style="margin-left:auto" title="Export fund list as CSV">&#8595; Download CSV</button>
 </div>
@@ -2301,8 +2318,27 @@ function openReport(rank){
   h+='</div></div>';
   // Why this score? card
   var scoreCardBorder=heroSc.score>=75?'var(--green)':heroSc.score>=50?'var(--orange)':'var(--red)';
+  // Compute benchmark: average composite score for same fund type
+  var peerFunds=funds.filter(function(pf){return pf.type===f.type&&pf.rank!==f.rank;});
+  var peerAvg=0;
+  if(peerFunds.length>0){
+    var peerSum=peerFunds.reduce(function(s,pf){return s+computeCompositeScore(pf).score;},0);
+    peerAvg=Math.round(peerSum/peerFunds.length);
+  }
+  var vsAvg=heroSc.score-peerAvg;
+  var vsAvgStr=vsAvg>0?'+'+vsAvg:(vsAvg<0?''+vsAvg:'=');
+  var vsColor=vsAvg>0?'var(--green)':vsAvg<0?'var(--red)':'var(--text-secondary)';
   h+='<div class="card report-section" style="margin-bottom:20px;border-left:3px solid '+scoreCardBorder+';padding:20px 24px">';
-  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><div class="score-pill '+heroClass+'" style="width:48px;height:26px;font-size:12px">'+heroSc.score+'</div><div style="font-size:13px;font-weight:700;color:var(--text-primary)">Why this score?</div></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
+  h+='<div style="display:flex;align-items:center;gap:10px"><div class="score-pill '+heroClass+'" style="width:48px;height:26px;font-size:12px">'+heroSc.score+'</div><div style="font-size:13px;font-weight:700;color:var(--text-primary)">Why this score?</div></div>';
+  if(peerFunds.length>0){
+    h+='<div style="font-size:11px;color:var(--text-secondary);text-align:right">';
+    h+='<span style="font-weight:600">Avg for '+f.type+'s:</span> <span style="font-family:\'JetBrains Mono\',monospace;font-weight:700">'+peerAvg+'</span>';
+    h+=' &nbsp;<span style="font-family:\'JetBrains Mono\',monospace;font-weight:700;color:'+vsColor+'">'+vsAvgStr+'</span>';
+    h+='<div style="font-size:10px;color:var(--text-tertiary);margin-top:1px">vs. '+peerFunds.length+' peer'+(peerFunds.length!==1?'s':'')+' in this category</div>';
+    h+='</div>';
+  }
+  h+='</div>';
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
   // Transparency dimension
   var tClass=heroSc.transparency>=75?'var(--green)':heroSc.transparency>=50?'var(--orange)':'var(--red)';
@@ -2769,7 +2805,34 @@ var searchTimer=null;
 function filterFunds(){clearTimeout(searchTimer);searchTimer=setTimeout(renderFundTable,150)}
 function setFilter(f,btn){currentFilter=f;document.querySelectorAll('#tierFilters .filter-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');renderFundTable();}
 function setTypeFilter(t,btn){if(currentTypeFilter===t){currentTypeFilter=null;btn.classList.remove('active');}else{currentTypeFilter=t;document.querySelectorAll('#typeFilters .filter-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');}renderFundTable();}
-function setScoreFilter(val){try{minScore=parseInt(val)||0;var el=document.getElementById('scoreFilterVal');if(el)el.textContent=minScore;renderFundTable();}catch(e){console.error('setScoreFilter:',e);}}
+function setScoreFilter(val){try{minScore=parseInt(val)||0;var el=document.getElementById('scoreFilterVal');if(el)el.textContent=minScore;renderFundTable();renderScoreHistogram();}catch(e){console.error('setScoreFilter:',e);}}
+
+function renderScoreHistogram(){
+  try{
+    var el=document.getElementById('scoreHistogram');
+    if(!el)return;
+    // Compute band counts from full funds array
+    var bands=[{lo:0,hi:25,label:'0-25',cls:'band-red',count:0},{lo:25,hi:50,label:'25-50',cls:'band-amber',count:0},{lo:50,hi:75,label:'50-75',cls:'band-green-mid',count:0},{lo:75,hi:100,label:'75-100',cls:'band-green',count:0}];
+    funds.forEach(function(f){
+      var sc=computeCompositeScore(f).score;
+      for(var i=0;i<bands.length;i++){if(sc>=bands[i].lo&&sc<bands[i].hi+(i===3?1:0)){bands[i].count++;break;}}
+    });
+    var maxCount=Math.max.apply(null,bands.map(function(b){return b.count;}));
+    if(maxCount===0)maxCount=1;
+    var barMaxH=22; // px
+    var h='';
+    bands.forEach(function(b){
+      var barH=Math.max(3,Math.round((b.count/maxCount)*barMaxH));
+      var dimmed=(minScore>b.hi)?' dimmed':'';
+      h+='<div class="score-hist-bar-wrap" title="'+b.label+': '+b.count+' funds">';
+      h+='<span class="score-hist-label">'+b.count+'</span>';
+      h+='<div class="score-hist-bar '+b.cls+dimmed+'" style="height:'+barH+'px"></div>';
+      h+='<span class="score-hist-label">'+b.label+'</span>';
+      h+='</div>';
+    });
+    el.innerHTML=h;
+  }catch(e){console.error('renderScoreHistogram:',e);}
+}
 
 function renderMacroCharts(){
   var m=['Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
@@ -3472,7 +3535,7 @@ document.addEventListener('DOMContentLoaded',function(){
   try{
     var requiredFields=['rank','name','short','country','type','tier','status','founded','mandate','sectors'];
     funds.forEach(function(f){requiredFields.forEach(function(field){if(!f[field])console.warn('Fund rank '+f.rank+' ('+f.name+') missing field: '+field)})});
-    computeHeroStats();renderFundTable();renderMacroCharts();initAllFeatures();
+    computeHeroStats();renderFundTable();renderMacroCharts();initAllFeatures();renderScoreHistogram();
     var hash=window.location.hash;if(hash&&hash.startsWith('#fund-')){var rank=parseInt(hash.replace('#fund-',''));if(rank)setTimeout(function(){openReport(rank)},100);}
   }catch(e){console.error('Init error:',e.message)}
 });
